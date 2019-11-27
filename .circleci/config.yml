@@ -23,7 +23,7 @@ build_and_test: &build_and_test
   <<: *defaults
   steps:
     - checkout
-    - run: composer install -n --prefer-dist
+    - run: composer install --no-dev
     - run: phpunit
     - run: npm run prod
     # Run linting here
