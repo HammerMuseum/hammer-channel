@@ -25,6 +25,7 @@ build_and_test: &build_and_test
     - checkout
     - run: composer install
     - run: vendor/bin/phpunit
+    - run: npm install
     - run: npm run prod
     # Run linting here
 
