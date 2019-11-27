@@ -35,7 +35,7 @@ build_and_test: &build_and_test
         paths:
           - hammer/build
 
-deploy:
+deploy: &deploy
   <<: *defaults
   steps:
     - run: echo "Deploy stage"
