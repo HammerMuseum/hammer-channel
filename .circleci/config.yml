@@ -10,7 +10,7 @@ defaults: &defaults
     - image: selenium/standalone-chrome-debug:3.141.59-oxygen
     - image: mariadb:10.3
 
-  working_directory: /home/circleci/hammer
+  working_directory: /home/circleci/video-archive
 
 ## Defines the cache restoring mechanism.
 restore_cache: &restore_cache
@@ -33,7 +33,7 @@ build_and_test: &build_and_test
     - persist_to_workspace:
         root: /home/circleci
         paths:
-          - hammer/build
+          - video-archive/build
 
 deploy: &deploy
   <<: *defaults
