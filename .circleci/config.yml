@@ -20,16 +20,6 @@ restore_cache: &restore_cache
   # fallback to using the latest cache if no exact match is found
   - v1-dependencies-
 
-## Defines the cache saving mechanism.
-save_cache: &save_cache
-  paths:
-    - ./vendor
-  key: v1-dependencies-{{ checksum "composer.lock" }}
-  - persist_to_workspace:
-      root: /home/circleci
-      paths:
-        - hammer
-
 # Jobs
 build_and_test: &build_and_test
   <<: *defaults
