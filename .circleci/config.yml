@@ -10,8 +10,6 @@ defaults: &defaults
     - image: selenium/standalone-chrome-debug:3.141.59-oxygen
     - image: mariadb:10.3
 
-  working_directory: /home/circleci/video-archive
-
 ## Defines the cache restoring mechanism.
 restore_cache: &restore_cache
   # We use the composer.lock as a way to determine if we can cache our build.
@@ -24,16 +22,10 @@ restore_cache: &restore_cache
 build_and_test: &build_and_test
   <<: *defaults
   steps:
-    - attach_workspace:
-        at: /home/circleci
     - run: composer install -n --prefer-dist
     - run: phpunit
     - run: npm run prod
     # Run linting here
-    - persist_to_workspace:
-        root: /home/circleci
-        paths:
-          - video-archive/build
 
 deploy: &deploy
   <<: *defaults
