@@ -1,58 +1,76 @@
+
 # PHP CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
+## Defines images and working directory.
+defaults: &defaults
+  docker:
+    - image: circleci/php:7.2-stretch-node-browsers
+    - image: selenium/standalone-chrome-debug:3.141.59-oxygen
+    - image: mariadb:10.3
+
+  working_directory: /home/circleci/hammer
+
+## Defines the cache restoring mechanism.
+restore_cache: &restore_cache
+  # We use the composer.lock as a way to determine if we can cache our build.
+  keys:
+  - v1-dependencies-{{ checksum "composer.lock" }}
+  # fallback to using the latest cache if no exact match is found
+  - v1-dependencies-
+
+## Defines the cache saving mechanism.
+save_cache: &save_cache
+  paths:
+    - ./vendor
+  key: v1-dependencies-{{ checksum "composer.lock" }}
+  - persist_to_workspace:
+      root: /home/circleci
+      paths:
+        - hammer
+
+# Jobs
+build_and_test: &build_and_test
+  <<: *defaults
+  steps:
+    - attach_workspace:
+        at: /home/circleci
+    - run: composer install -n --prefer-dist
+    - run: phpunit
+    - run: npm run prod
+    # Run linting here
+    - persist_to_workspace:
+        root: /home/circleci
+        paths:
+          - hammer/build
+
+deploy:
+  <<: *defaults
+  steps:
+    - run: echo "Deploy stage"
+#    - attach_workspace:
+#        at: /home/circleci
+#    - add_ssh_keys:
+#        fingerprints:
+#          - "27:ff:5a:fa:94:df:d0:94:7c:dd:0f:0a:17:15:61:72"
+#    - run: echo '$FINGERPRINT' >> ~/.ssh/known_hosts
+#    - run: scp /home/circleci/hammer/build ssh -o $USER@$HOST:/$PATH
+
+
+# Declare all of the jobs we should run.
 version: 2
 jobs:
-  build:
-    docker:
-      # Specify the version you desire here
-      - image: circleci/php:7.2-stretch-node-browsers
+  build_and_test:
+     <<: *build_and_test
+  deploy:
+     <<: *deploy
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
-
-    steps:
-      - checkout
-
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo docker-php-ext-install zip
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            # "composer.lock" can be used if it is committed to the repo
-            - v1-dependencies-{{ checksum "composer.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: composer install -n --prefer-dist
-
-      - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      - run: yarn install
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-
-      # prepare the database
-      - run: touch storage/testing.sqlite
-      - run: php artisan migrate --env=testing --database=sqlite_testing --force
-
-      # run tests with phpunit or codecept
-      #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_and_test
+      - deploy:
+          requires:
+            - build_and_test
