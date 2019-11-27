@@ -1,24 +1,36 @@
-
 # PHP CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-## Defines images and working directory.
-defaults: &defaults
-  docker:
-    - image: circleci/php:7.2-stretch-node-browsers
-    - image: selenium/standalone-chrome-debug:3.141.59-oxygen
-    - image: mariadb:10.3
+version: 2
+jobs:
+  build:
+    docker:
+      # Specify the version you desire here
+      - image: circleci/php:7.2-stretch-node-browsers
 
-  working_directory: ~/video-archive
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # Using the RAM variation mitigates I/O contention
+      # for database intensive operations.
+      # - image: circleci/mysql:5.7-ram
+      #
+      # - image: redis:2.8.19
 
-## Defines the cache restoring mechanism.
-restore_cache: &restore_cache
-  # We use the composer.lock as a way to determine if we can cache our build.
-  keys:
-  - v1-dependencies-{{ checksum "composer.lock" }}
-  # fallback to using the latest cache if no exact match is found
-  - v1-dependencies-
+    steps:
+      - checkout
+
+      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo docker-php-ext-install zip
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # "composer.lock" can be used if it is committed to the repo
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
 # Jobs
 build_and_test: &build_and_test
