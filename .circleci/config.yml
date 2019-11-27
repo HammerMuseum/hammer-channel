@@ -24,7 +24,7 @@ build_and_test: &build_and_test
   steps:
     - checkout
     - run: composer install --no-dev
-    - run: ./vendor/bin/phpunit
+    - run: vendor/bin/phpunit
     - run: npm run prod
     # Run linting here
 
