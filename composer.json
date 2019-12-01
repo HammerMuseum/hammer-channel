@@ -21,7 +21,8 @@
         "lorisleiva/laravel-deployer": "^0.2.16",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "config": {
         "optimize-autoloader": true,
