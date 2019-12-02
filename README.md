@@ -36,7 +36,7 @@ Note the double `php` in the second command above. The first `php` refers to the
 
 **Not Docker**
 
-Install `PHP 7.3+` on the host machine or use a tool such as [Laravel Valet](https://laravel.com/docs/6.x/valet).
+Install `PHP 7.2+` on the host machine or use a tool such as [Laravel Valet](https://laravel.com/docs/6.x/valet).
 
 ### Build
 
