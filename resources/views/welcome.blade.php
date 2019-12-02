@@ -17,7 +17,7 @@
                 <div class="title m-b-md">
                     Naomi Klein: The Case for a Green New Deal
                 </div>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/qTgBSkqyYZs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <video controls nocontrols type="video/mp4" src="<?php echo $contentUrl; ?>" />
             </div>
         </div>
     </body>
