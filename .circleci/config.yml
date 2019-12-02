@@ -43,7 +43,7 @@ build_and_test: &build_and_test
   <<: *defaults
   steps:
     - checkout
-    
+
     # Install Composer dependencies.
     - restore_cache: *restore_cache
     - run: composer install -n -q
@@ -59,7 +59,7 @@ build_and_test: &build_and_test
     - run: touch storage/testing.sqlite
     - run: php artisan key:generate --env=testing
     - run: php artisan migrate --env=testing --database=sqlite_testing --force
-    
+
     # Run tests
     - run: ./vendor/bin/phpunit
 
@@ -79,10 +79,13 @@ deploy: &deploy
     - checkout
     - add_ssh_keys:
         fingerprints:
-          - "a2:22:da:24:fd:c3:76:8d:80:de:ae:af:a3:00:c3:3e" 
+          - "a2:22:da:24:fd:c3:76:8d:80:de:ae:af:a3:00:c3:3e"
     - attach_workspace:
         at: /home/circleci/project
-    - run: 
+    - run:
+        name: Install deploy dependency rsync
+        command: sudo apt install rsync
+    - run:
         name: Run Composer with production settings.
         command: composer install --optimize-autoloader --no-dev
     - aws-cli/setup
@@ -90,10 +93,10 @@ deploy: &deploy
         port: 22
         tag-key: group
         tag-value: bastion
-    - run: 
+    - run:
         name: Add host to known hosts
         command: ssh-keyscan -H $(echo "$HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: 
+    - run:
         name: Deploy to $HOST_URL
         command: php artisan deploy $HOST_URL
     - aws-white-list-circleci-ip/remove:
@@ -107,7 +110,10 @@ deploy_stage: &deploy_stage
     - checkout
     - attach_workspace:
         at: /home/circleci/project
-    - run: 
+    - run:
+        name: Install deploy dependency rsync
+        command: sudo apt install rsync
+    - run:
         name: Run Composer with production settings.
         command: composer install --optimize-autoloader --no-dev
     - aws-cli/setup
@@ -118,10 +124,10 @@ deploy_stage: &deploy_stage
     - add_ssh_keys:
         fingerprints:
           - "a2:22:da:24:fd:c3:76:8d:80:de:ae:af:a3:00:c3:3e"
-    - run: 
+    - run:
         name: Add staging host to known hosts
         command: ssh-keyscan -H $(echo "$STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: 
+    - run:
         name: Deploy to $STAGE_HOST_URL
         command: php artisan deploy $STAGE_HOST_URL
     - aws-white-list-circleci-ip/remove:
