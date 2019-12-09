@@ -22,7 +22,7 @@ class VideoController extends Controller
     {
         $api = new Api();
 
-        $data = $api->request('video', $id);
+        $data = $api->request('videos', $id);
 
         if (isset($data['success']) && $data['success']) {
             return view('video', [

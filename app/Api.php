@@ -27,7 +27,7 @@ class Api
         ]);
 
         try {
-            $response = $client->request('GET', $type . '/id/' . $id);
+            $response = $client->request('GET', $type . '/' . $id);
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody());
