@@ -6,10 +6,30 @@ use GuzzleHttp\Client;
 
 class Api
 {
-    protected $restUrl = 'https://datastore.rufio.office.cogapp.com/api/';
+    protected $restUrl = 'http://datastore.rufio.office.cogapp.com/api/';
 
     public function request($type, $id)
     {
-        // make the request
+        $client = new Client([
+            'base_uri' => $this->restUrl
+        ]);
+
+        try {
+            $response = $client->request('GET', $type . '/id/' . $id);
+            $status = $response->getStatusCode();
+            if ($status == 200) {
+                $data = json_decode($response->getBody());
+                return [
+                  'success' => true,
+                  'data' => $data
+                ];
+            }
+        } catch (\Exception $e) {
+            //@todo Implement more descriptive/friendly exception messages
+            return [
+              'success' => false,
+              'message' => 'Video asset not found.'
+            ];
+        }
     }
 }
