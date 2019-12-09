@@ -4,8 +4,8 @@
 # Video page: video description
 
 ## Related documentation
-- [Making POST/PUT/DELETE requests to the Datastore API](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api/cud.md)
-- [Authenticating requests to the Datastore API](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api/authentication.md)
+- [Making POST/PUT/DELETE requests to the Datastore API](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api.md#CRUD)
+- [Authenticating requests to the Datastore API](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api.md#Authentication)
 
 ## Pivotal Story
 
@@ -35,7 +35,7 @@
 ## Test Plan
 - Add a video to the datastore by following these steps:
     1. Locate a video in the DAMS
-    2. Make a request to the Datastore API (see Datastore API documentation for [POST/PUT/DELETE](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api/cud.md) and [authentication](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api/authentication.md)) to add your video to it.
+    2. Make a request to the Datastore API (see Datastore API documentation for [POST/PUT/DELETE](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api.md#CRUD) and [authentication](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api.md#Authentication)) to add your video to it.
     3. Once the video has been added to the Datastore, the response should provide an `id`. Make a note of this.
 - Navigate to your video page on the frontend e.g `https://stage.video.hammer.cogapp.com/video/[YOUR VIDEO'S DATASTORE ID]`.
 - The video's description should display underneath the title in full.
