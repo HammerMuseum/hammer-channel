@@ -4,10 +4,22 @@ namespace App;
 
 use GuzzleHttp\Client;
 
+/**
+ * Class Api
+ * @package App
+ */
 class Api
 {
-    protected $restUrl = 'http://datastore.rufio.office.cogapp.com/api/';
+    /** @var string */
+    protected $restUrl = '[POPULATE WITH REST URL]';
 
+    /**
+     * Request data from the API
+     *
+     * @param $type
+     * @param $id
+     * @return array
+     */
     public function request($type, $id)
     {
         $client = new Client([
