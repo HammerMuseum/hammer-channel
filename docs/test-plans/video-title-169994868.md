@@ -32,7 +32,7 @@ Update the controller and template to output the title of the video being reques
 - A method of making POST requests to the datastore API e.g Postman or cURL.
 
 
-**n.b.** As there is no data pipeline yet, the penultimate acceptance criteria can't be met.
+**n.b.** As there is no data pipeline yet, the penultimate acceptance criteria can't be met. See end of test plan for replacement steps for when the data pipeline is in place.
 
 ## Test Plan
 - Add a video to the datastore by following these steps:
@@ -46,3 +46,10 @@ Update the controller and template to output the title of the video being reques
 - Refresh the video page.
 - The title should now reflect your change.
 - The video's title should be encased in an `<h1>` and this should be the only `<h1>` on the page.
+
+
+## Extended test steps
+**Only use once the data pipeline is in place**
+- Edit the title of your selected video in the DAMS.
+- Run the data harvester[?]
+- The title should reflect the change.
