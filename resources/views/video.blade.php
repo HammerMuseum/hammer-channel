@@ -10,15 +10,13 @@
 
     <div class="main">
 
-        @if ($data !== false)
-            <div class="title">
-                <h1><?php echo $data->title ?></h1>
+        @if ($data !== false && !is_null($data))
+            <div class="video">
+                <video controls type="video/mp4" src="<?php echo $data->video_url; ?>" width="250"></video>
             </div>
 
-            <div class="video">
-                <video controls type="video/mp4" src="<?php echo $data->video_url; ?>" width="250">
-
-                </video>
+            <div class="title">
+                <h1><?php echo $data->title ?></h1>
             </div>
 
             <div class="duration">

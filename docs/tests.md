@@ -13,7 +13,7 @@ Run unit tests with
 
     phpunit
     
-##Browser tests
+## Browser tests
 Create browser test classes by running:
 
     php artisan dusk:make MyTest
