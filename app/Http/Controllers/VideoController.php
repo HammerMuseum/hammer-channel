@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ApiInterface;
+use App\Api;
 use Illuminate\Http\Request;
 
 /**
@@ -14,7 +14,7 @@ class VideoController extends Controller
     protected $api;
 
     public function __construct(
-        ApiInterface $api
+        Api $api
     ) {
         $this->api = $api;
     }
@@ -28,7 +28,6 @@ class VideoController extends Controller
     public function view(Request $request, $id)
     {
         $data = $this->api->request('videos', $id);
-
         if (isset($data['success']) && $data['success']) {
             return view('video', [
                 'data' => $data['data'],
