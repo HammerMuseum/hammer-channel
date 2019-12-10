@@ -16,7 +16,8 @@
             </div>
 
             <div class="video">
-                <video controls type="video/mp4" src="<?php echo $data->video_url; ?>" width="250">
+                <video class="video-js" controls type="video/mp4" width="250">
+                    <source src="<?php echo $data->video_url; ?>" type="video/mp4" />
 
                 </video>
             </div>
