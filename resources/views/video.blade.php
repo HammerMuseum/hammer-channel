@@ -19,16 +19,16 @@
                 <h1><?php echo $data->title ?></h1>
             </div>
 
+            <div class="description">
+                <?php echo $data->description; ?>
+            </div>
+
             <div class="duration">
                 <?php echo $data->duration; ?>
             </div>
 
             <div class="date">
                 <?php echo $data->date_recorded; ?>
-            </div>
-
-            <div class="description">
-                <?php echo $data->description; ?>
             </div>
         @else
             <div class="message">
