@@ -10,7 +10,7 @@
 
     <div class="main">
 
-        @if ($data !== false)
+        @if ($data !== false && !is_null($data))
             <div class="video">
                 <video controls type="video/mp4" src="<?php echo $data->video_url; ?>" width="250"></video>
             </div>

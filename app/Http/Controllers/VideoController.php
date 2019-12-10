@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\ApiInterface;
 use Illuminate\Http\Request;
-use App\Api;
 
 /**
  * Class VideoController
@@ -11,6 +11,13 @@ use App\Api;
  */
 class VideoController extends Controller
 {
+    protected $api;
+
+    public function __construct(
+        ApiInterface $api
+    ) {
+        $this->api = $api;
+    }
     /**
      * View an individual video by calling the API by ID
      *
@@ -20,9 +27,7 @@ class VideoController extends Controller
      */
     public function view(Request $request, $id)
     {
-        $api = new Api();
-
-        $data = $api->request('video', $id);
+        $data = $this->api->request('videos', $id);
 
         if (isset($data['success']) && $data['success']) {
             return view('video', [
