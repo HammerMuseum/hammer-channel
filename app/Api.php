@@ -31,9 +31,15 @@ class Api
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody());
+                if (!is_null($data)) {
+                    return [
+                        'success' => true,
+                        'data' => $data
+                    ];
+                }
                 return [
-                  'success' => true,
-                  'data' => $data
+                  'success' => false,
+                  'message' => 'Video asset not found.'
                 ];
             }
         } catch (\Exception $e) {

@@ -38,8 +38,8 @@ Update the controller and template to output the title of the video being reques
 - Add a video to the datastore by following these steps:
     1. Locate a video in the DAMS
     2. Make a request to the Datastore API (see Datastore API documentation for [POST/PUT/DELETE](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api/cud.md) and [authentication](https://github.com/HammerMuseum/hammer-datastore/blob/video-endpoint-170053908/docs/api/authentication.md)) to add your video to it.
-    3. Once the video has been added to the Datastore, the response should provide a `data_id`. Make a note of this.
-- Navigate to your video page on the frontend e.g `https://stage.video.hammer.cogapp.com/video/[YOUR VIDEO'S DATA ID]`.
+    3. Once the video has been added to the Datastore, the response should indicate success with a status code of 201.
+- Navigate to your video page on the frontend e.g `https://video.hammer.cogapp.com/video/[YOUR VIDEO'S ASSET ID]`.
 - The video's title should display underneath the video in full.
 - The title should match exactly what is in the DAMS.
 - Make an update to your video in the Datastore via the API to change the title.
