@@ -23,10 +23,6 @@
                 <?php echo $data->description; ?>
             </div>
 
-            <div class="duration">
-                <?php echo $data->duration; ?>
-            </div>
-
             <div class="date">
                 <?php echo $data->date_recorded; ?>
             </div>
