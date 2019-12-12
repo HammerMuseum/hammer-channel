@@ -13,7 +13,7 @@
 
 ## Git branch
 
-* [video-description-169994866](https://github.com/HammerMuseum/hammer-video/tree/video-description-169994866)
+* [video-page-elements](https://github.com/HammerMuseum/hammer-video/tree/video-page-elements)
 
 ## Description
 
