@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+VIDEOJS_NO_BASE_THEME = true;
 require('video.js');
 
 window.Vue = require('vue');

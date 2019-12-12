@@ -3,6 +3,7 @@
 
 /* Variables */
 @import 'variables.css';
+@import '../../node_modules/video.js/dist/video-js.css';
 
 html, body {
     background-color: #fff;
