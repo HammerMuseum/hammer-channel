@@ -14,3 +14,12 @@ html, body {
     height: 100vh;
     margin: 0;
 }
+
+.grid {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+}
+
+.listing > .title {
+    grid-column: 2;
+}

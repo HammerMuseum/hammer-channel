@@ -2,5 +2,10 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 50%;
+    grid-column: 2;
+}
+
+.result-item {
+    max-width: 30%;
+    padding: 20px 0;
 }

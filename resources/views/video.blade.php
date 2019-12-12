@@ -7,31 +7,34 @@
 @extends('app')
 
 @section('content')
-    @if ($data !== false)
-        <div class="title">
-            <h1>{{ $data->title }}</h1>
-        </div>
+    <div class="video-content">
+        @if ($data !== false)
+            <div class="title">
+                <h1>{{ $data->title }}</h1>
+            </div>
 
-        <div class="video">
-            <video controls type="video/mp4" src="{{ $data->video_url }}" width="250">
+            <div class="video">
+                <video controls type="video/mp4" src="{{ $data->video_url }}" width="250">
 
-            </video>
-        </div>
+                </video>
+            </div>
 
-        <div class="duration">
-            {{ $data->duration }}
-        </div>
+            <div class="duration">
+                {{ $data->duration }}
+            </div>
 
-        <div class="date">
-            {{ $data->date_recorded }}
-        </div>
+            <div class="date">
+                {{ $data->date_recorded }}
+            </div>
 
-        <div class="description">
-            {{ $data->description }}
-        </div>
-    @else
-        <div class="message">
-            <?php echo $message; ?>
-        </div>
-    @endif
+            <div class="description">
+                {{ $data->description }}
+            </div>
+        @else
+            <div class="message">
+                <?php echo $message; ?>
+            </div>
+        @endif
+    </div>
+
 @endsection

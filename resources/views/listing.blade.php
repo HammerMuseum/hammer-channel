@@ -2,11 +2,10 @@
 
 @section('content')
 
-    <div class="title">
-        <h1>All Videos</h1>
-    </div>
-
-    <div class="listing">
+    <div class="listing grid">
+        <div class="title">
+            <h1>All Videos</h1>
+        </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])
         @elseif ($message)
