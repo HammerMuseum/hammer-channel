@@ -17,6 +17,9 @@
 
             <div class="title">
                 <h1><?php echo $data->title ?></h1>
+                <video class="video-js" id="hammer-video" controls type="video/mp4">
+                    <source src="<?php echo $data->video_url; ?>" type="video/mp4" />
+                </video>
             </div>
 
             <div class="description">

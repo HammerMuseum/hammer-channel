@@ -11,7 +11,7 @@ use GuzzleHttp\Client;
 class Api
 {
     /** @var string */
-    protected $restUrl = 'https://datastore.hammer.cogapp.com/api/';
+    protected $restUrl = 'http://datastore.rufio.office.cogapp.com/api/';
 
     /**
      * Request data from the API
@@ -20,14 +20,19 @@ class Api
      * @param $id
      * @return array
      */
-    public function request($type, $id)
+    public function request($type, $id = false)
     {
         $client = new Client([
             'base_uri' => $this->restUrl
         ]);
 
+        $appendId = '';
+        if ($id) {
+            $appendId = '/' . $id;
+        }
+
         try {
-            $response = $client->request('GET', $type . '/' . $id);
+            $response = $client->request('GET', $type . $appendId);
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody());
