@@ -11,8 +11,5 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/video/{id}', 'VideoController@view');
+Route::get('/', 'ListingController@index');

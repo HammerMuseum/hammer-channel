@@ -4,10 +4,15 @@
 
     <head>
         <title>Hammer Video Archive</title>
+        <link rel="stylesheet" type="text/css" href="/css/app.css" />
     </head>
 
     <body>
-        @yield('content')
+
+        <div class="main">
+            @yield('content')
+        </div>
+
     </body>
 
 </html>
