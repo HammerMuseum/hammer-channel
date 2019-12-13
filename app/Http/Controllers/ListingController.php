@@ -34,13 +34,15 @@ class ListingController extends Controller
 
         if (isset($videos['success']) && $videos['success']) {
             return view('listing', [
-               'videos' => $videos['data']->data,
-               'message' => false
+               'videos' => $videos['data']['data'],
+               'message' => false,
+               'title' => 'All Videos'
             ]);
         }
         return view('listing', [
            'videos' => false,
-           'message' => 'No videos available.'
+           'message' => 'No videos available.',
+           'title' => ''
         ]);
     }
 }

@@ -30,18 +30,24 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-        $searchTerm = $request->get('search');
+        $searchTerm = $request->get('term');
         $results = $this->search->search($searchTerm);
 
         if ($results) {
+            $videos = new \stdClass();
+            foreach ($results as $key => $value) {
+                $videos->$key = $value;
+            }
             return view('listing', [
-                'videos' => $results,
-                'message' => false
+                'videos' => $videos,
+                'message' => false,
+                'title' => ucfirst($searchTerm)
             ]);
         }
         return view('listing', [
             'videos' => false,
-            'message' => 'No results found'
+            'message' => 'No results found',
+            'title' => ''
         ]);
     }
 }

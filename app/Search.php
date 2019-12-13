@@ -27,11 +27,11 @@ class Search
                 ]
             ]
         ];
+        $params['client']['verbose'] = true;
         $result = $client->search($params);
-        var_dump($result);
         $response = [];
-        if (isset($result['hits']['total']) && $result['hits']['total'] > 0) {
-            foreach ($result['hits']['hits'] as $hit) {
+        if (isset($result['body']['hits']['total']) && $result['body']['hits']['total'] > 0) {
+            foreach ($result['body']['hits']['hits'] as $hit) {
                 if (isset($hit['_source'])) {
                     $response[] = $hit['_source'];
                 }
@@ -47,7 +47,7 @@ class Search
     public function initElasticSearch()
     {
         $hosts = [
-            env('ES_ENDPOINT')
+            'host' => env('ES_ENDPOINT'),
         ];
         $client = ClientBuilder::create()
             ->setHosts($hosts)

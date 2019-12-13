@@ -32,7 +32,7 @@ class Api
             $response = $client->request('GET', $type . $appendId);
             $status = $response->getStatusCode();
             if ($status == 200) {
-                $data = json_decode($response->getBody());
+                $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
                     return [
                         'success' => true,
