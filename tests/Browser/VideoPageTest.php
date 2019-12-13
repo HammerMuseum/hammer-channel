@@ -2,12 +2,13 @@
 
 namespace Tests\Browser;
 
-use App\FakeApi;
-use Tests\CreatesApplication;
 use Tests\DuskTestCase;
-use App\Api;
-use Mockery;
 
+/**
+ * Class VideoPageTest
+ *
+ * @package Tests\Browser
+ */
 class VideoPageTest extends DuskTestCase
 {
     /**

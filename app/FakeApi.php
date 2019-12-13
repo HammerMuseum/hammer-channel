@@ -2,8 +2,20 @@
 
 namespace App;
 
+/**
+ * Class FakeApi
+ *
+ * A fake class used for mocking an API response in dusk tests.
+ *
+ * @package App
+ */
 class FakeApi extends Api
 {
+    /**
+     * @param $type
+     * @param bool $id
+     * @return array
+     */
     public function request($type, $id = false)
     {
         $returnData = [
@@ -13,6 +25,9 @@ class FakeApi extends Api
         return $returnData;
     }
 
+    /**
+     * @return string
+     */
     public function getJsonData()
     {
         return '{
