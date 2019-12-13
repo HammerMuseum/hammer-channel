@@ -10,9 +10,6 @@ use GuzzleHttp\Client;
  */
 class Api
 {
-    /** @var string */
-    protected $restUrl = 'https://datastore.hammer.cogapp.com/api/';
-
     /**
      * Request data from the API
      *
@@ -23,7 +20,7 @@ class Api
     public function request($type, $id = false)
     {
         $client = new Client([
-            'base_uri' => $this->restUrl
+            'base_uri' => env('DATASTORE_URL')
         ]);
 
         $appendId = '';
