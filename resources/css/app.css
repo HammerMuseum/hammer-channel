@@ -23,3 +23,7 @@ html, body {
 .listing > .title {
     grid-column: 2;
 }
+
+.search {
+    grid-column: 2;
+}

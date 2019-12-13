@@ -13,3 +13,4 @@
 
 Route::get('/video/{id}', 'VideoController@view');
 Route::get('/', 'ListingController@index');
+Route::get('/search', 'SearchController@search');
