@@ -1,39 +1,22 @@
 <?php
 
-namespace Tests\Browser;
+namespace App;
 
-use App\FakeApi;
-use Tests\CreatesApplication;
-use Tests\DuskTestCase;
-use App\Api;
-use Mockery;
-
-class VideoPageTest extends DuskTestCase
+class FakeApi extends Api
 {
-    public function setUp(): void
+    public function request($type, $id = false)
     {
-        parent::setup();
-
-    }
-
-    /**
-     * @throws \Throwable
-     */
-    public function testVideoPage()
-    {
-//        $this->app->bind(\App\Api::class, function() {
-//            return new FakeApi();
-//        });
-        $this->browse(function ($first) {
-            $first->visit('/video/1')
-                ->assertPresent('.title');
-        });
+        $returnData = [
+            'success' => true,
+            'data' => json_decode($this->getJsonData())
+        ];
+        return $returnData;
     }
 
     public function getJsonData()
     {
         return '{
-        "asset_id": 204,
+        "asset_id": 100,
   "title": "Mark Bradford\'s Finding Barry",
   "description": "Since 1999, the museum has commissioned artists to create site-specific projects for the Hammer Museum Lobby Wall. Mark Bradford created Finding Barry by excavating through 100 layers of paint on the wall. Barry refers to Barry McGee, one of the earliest Lobby Wall artists. Bradford\'s rendering of a U.S. map shows the population of people diagnosed with AIDS per 100,000 in each state as of 2009.",
   "thumbnail_url": null,

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Providers\DuskServiceProvider;
+use Laravel\Dusk\DuskServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment('dusk', 'testing')) {
+            $this->app->register(DuskServiceProvider::class);
+            $this->app->bind(
+              'App\Api',
+              'App\FakeApi'
+            );
+        }
     }
 
     /**
