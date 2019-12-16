@@ -11,8 +11,13 @@ use App\Api;
  */
 class VideoController extends Controller
 {
+    /** @var Api */
     protected $api;
 
+    /**
+     * VideoController constructor.
+     * @param Api $api
+     */
     public function __construct(
         Api $api
     ) {

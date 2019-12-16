@@ -11,7 +11,7 @@ use GuzzleHttp\Client;
 class Api
 {
     /** @var string */
-    protected $restUrl = 'http://datastore.hammer.cogapp.com/api/';
+    protected $restUrl = 'https://datastore.hammer.cogapp.com/api/';
 
     /**
      * Request data from the API
