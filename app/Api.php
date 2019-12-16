@@ -20,7 +20,7 @@ class Api
     public function request($type, $id = false)
     {
         $client = new Client([
-            'base_uri' => env('DATASTORE_URL')
+            'base_uri' => config('app.datastore_url')
         ]);
 
         $appendId = '';

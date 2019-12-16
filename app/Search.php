@@ -18,7 +18,7 @@ class Search
     {
         $client = $this->initElasticSearch();
         $params = [
-            'index' => env('ES_INDEX'),
+            'index' => config('app.es_index'),
             'body'  => [
                 'query' => [
                     'match' => [
@@ -47,7 +47,7 @@ class Search
     public function initElasticSearch()
     {
         $hosts = [
-            'host' => env('ES_ENDPOINT'),
+            'host' => config('app.es_endpoint'),
         ];
         $client = ClientBuilder::create()
             ->setHosts($hosts)
