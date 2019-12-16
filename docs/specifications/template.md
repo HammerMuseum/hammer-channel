@@ -1,5 +1,5 @@
 <!-- Generate a new file using -->
-<!-- sed -e "s/\${title}/My story/" -e "s/\${number}/156128780/" -e "s/\${branch}/`git_current_branch`/g" spec-template.md | tee "`git_current_branch`.md" -->
+<!-- sed -e "s/\${title}/My story/" -e "s/\${number}/156128780/" -e "s/\${branch}/`git_current_branch`/g" template.md | tee "`git_current_branch`.md" -->
 
 # ${title}
 

@@ -10,9 +10,6 @@ use GuzzleHttp\Client;
  */
 class Api
 {
-    /** @var string */
-    protected $restUrl = 'https://datastore.hammer.cogapp.com/api/';
-
     /**
      * Request data from the API
      *
@@ -23,7 +20,7 @@ class Api
     public function request($type, $id = false)
     {
         $client = new Client([
-            'base_uri' => $this->restUrl
+            'base_uri' => env('DATASTORE_URL')
         ]);
 
         $appendId = '';
@@ -35,7 +32,7 @@ class Api
             $response = $client->request('GET', $type . $appendId);
             $status = $response->getStatusCode();
             if ($status == 200) {
-                $data = json_decode($response->getBody());
+                $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
                     return [
                         'success' => true,
@@ -43,15 +40,15 @@ class Api
                     ];
                 }
                 return [
-                  'success' => false,
-                  'message' => 'Video asset not found.'
+                    'success' => false,
+                    'message' => 'Video asset not found.'
                 ];
             }
         } catch (\Exception $e) {
             //@todo Implement more descriptive/friendly exception messages
             return [
-              'success' => false,
-              'message' => 'Video asset not found.'
+                'success' => false,
+                'message' => 'Video asset not found.'
             ];
         }
     }

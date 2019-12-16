@@ -7,26 +7,24 @@
 @extends('app')
 
 @section('content')
+    <div class="video-content">
+        @if ($data !== false)
+            <div class="title">
+                <h1>{{ $data['title'] }}</h1>
+            </div>
 
-    <div class="main">
-
-        @if ($data !== false && !is_null($data))
             <div class="video">
-                <video class="video-js" id="hammer-video" controls type="video/mp4">
-                    <source src="<?php echo $data->video_url; ?>" type="video/mp4" />
+                <video controls type="video/mp4" src="{{ $data['video_url'] }}" width="250">
+
                 </video>
             </div>
 
-            <div class="title">
-                <h1><?php echo $data->title ?></h1>
+            <div class="date">
+                {{ $data['date_recorded'] }}
             </div>
 
             <div class="description">
-                <?php echo $data->description; ?>
-            </div>
-
-            <div class="date">
-                <?php echo $data->date_recorded; ?>
+                {{ $data['description'] }}
             </div>
         @else
             <div class="message">

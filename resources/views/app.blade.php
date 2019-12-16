@@ -8,8 +8,11 @@
     </head>
 
     <body>
-        @yield('content')
-        <script src="/js/app.js"></script>
+
+        <div class="main grid">
+            @yield('content')
+        </div>
+
     </body>
 
 </html>

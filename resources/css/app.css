@@ -3,7 +3,7 @@
 
 /* Variables */
 @import 'variables.css';
-@import '../../node_modules/video.js/dist/video-js.css';
+@import 'result-grid.css';
 
 html, body {
     background-color: #fff;
@@ -13,4 +13,25 @@ html, body {
     font-weight: 200;
     height: 100vh;
     margin: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+}
+
+.video-content {
+    grid-column: 2;
+}
+
+.listing {
+    grid-column: 2;
+}
+
+.listing > .title {
+    grid-column: 2;
+}
+
+.search {
+    grid-column: 2;
 }
