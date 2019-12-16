@@ -33,6 +33,12 @@ class Api
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
+
+                // Use AWS storage URL
+                $videoUrl = $data['video_url'] . '/url';
+                $contentUrl = $this->getPlaybackUrl($videoUrl);
+
+                $data['video_url'] = $contentUrl;
                 if (!is_null($data)) {
                     return [
                         'success' => true,
@@ -51,5 +57,16 @@ class Api
                 'message' => 'Video asset not found.'
             ];
         }
+    }
+
+    /**
+     * @param $contentUrl
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    public function getPlaybackUrl($contentUrl)
+    {
+        $client = new Client();
+        $response = $client->request('GET', $contentUrl);
+        return $response->getBody();
     }
 }
