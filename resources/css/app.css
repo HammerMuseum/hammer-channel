@@ -4,6 +4,7 @@
 /* Variables */
 @import 'variables.css';
 @import 'result-grid.css';
+@import 'video.css';
 
 html, body {
     background-color: #fff;
@@ -18,10 +19,6 @@ html, body {
 .grid {
     display: grid;
     grid-template-columns: 0.5fr 1fr 0.5fr;
-}
-
-.video-content {
-    grid-column: 2;
 }
 
 .listing {
