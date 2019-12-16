@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="listing grid">
+    <div class="listing">
         <div class="title">
             @if ($title)
                 <h1>{{ $title }}</h1>

@@ -20,6 +20,14 @@ html, body {
     grid-template-columns: 0.5fr 1fr 0.5fr;
 }
 
+.video-content {
+    grid-column: 2;
+}
+
+.listing {
+    grid-column: 2;
+}
+
 .listing > .title {
     grid-column: 2;
 }

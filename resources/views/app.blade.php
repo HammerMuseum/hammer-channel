@@ -9,7 +9,7 @@
 
     <body>
 
-        <div class="main">
+        <div class="main grid">
             @yield('content')
         </div>
 
