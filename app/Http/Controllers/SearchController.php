@@ -35,12 +35,8 @@ class SearchController extends Controller
             $results = $this->search->search($searchTerm);
 
             if ($results) {
-                $videos = new \stdClass();
-                foreach ($results as $key => $value) {
-                    $videos->$key = $value;
-                }
                 return view('listing', [
-                    'videos' => $videos,
+                    'videos' => $results,
                     'message' => false,
                     'title' => ucfirst($searchTerm)
                 ]);
