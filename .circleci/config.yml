@@ -47,7 +47,7 @@ build_and_test: &build_and_test
         name: Install missing packages
         command: |
           sudo apt-get update
-          sudo apt-get install -y libnss3 chromium-browser
+          sudo apt-get install -y libnss3 chromium
 
     # Install Composer dependencies.
     - restore_cache: *restore_cache
@@ -70,15 +70,10 @@ build_and_test: &build_and_test
 
     # Run linting
     - run: ./vendor/bin/phpcs
-
+    
     - run: cp .env.dusk.testing .env
     - run: php artisan key:generate
-
-    - run:
-        name: Start Chrome Driver
-        command: DISPLAY=:0 ./vendor/laravel/dusk/bin/chromedriver-linux
-        background: true
-
+    
     - run:
         name: Run Laravel Server
         command: php artisan serve
@@ -86,7 +81,9 @@ build_and_test: &build_and_test
 
     - run:
         name: Run Laravel Dusk Tests
-        command: php artisan dusk
+        command: |
+          php artisan dusk:chrome-driver
+          php artisan dusk
 
     - persist_to_workspace:
         root: /home/circleci/project
