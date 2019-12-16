@@ -20,20 +20,31 @@ class Api
      * @param $id
      * @return array
      */
-    public function request($type, $id)
+    public function request($type, $id = false)
     {
         $client = new Client([
             'base_uri' => $this->restUrl
         ]);
 
+        $appendId = '';
+        if ($id) {
+            $appendId = '/' . $id;
+        }
+
         try {
-            $response = $client->request('GET', $type . '/' . $id);
+            $response = $client->request('GET', $type . $appendId);
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody());
+                if (!is_null($data)) {
+                    return [
+                        'success' => true,
+                        'data' => $data
+                    ];
+                }
                 return [
-                  'success' => true,
-                  'data' => $data
+                  'success' => false,
+                  'message' => 'Video asset not found.'
                 ];
             }
         } catch (\Exception $e) {
