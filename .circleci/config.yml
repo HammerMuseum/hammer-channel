@@ -6,7 +6,7 @@
 ## Defines images and working directory.
 defaults: &defaults
   docker:
-    - image: circleci/php:7.2-buster-node-browsers
+    - image: circleci/php:7.2-buster-node
       environment:
         HOST_URL: video.hammer.cogapp.com
         STAGE_HOST_URL: stage.video.hammer.cogapp.com
@@ -43,17 +43,21 @@ build_and_test: &build_and_test
   <<: *defaults
   steps:
     - checkout
-    - run: sudo apt-get install -y libsqlite3-dev
-    
+    - run:
+        name: Install missing packages
+        command: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 chromium-browser
+
     # Install Composer dependencies.
     - restore_cache: *restore_cache
     - run: composer install -n -q
     - save_cache: *save_cache
 
     # Install Node dependencies.
-    - restore_cache: *restore_cache
+    - restore_cache: *restore_node_cache
     - run: npm install
-    - save_cache: *save_cache
+    - save_cache: *save_node_cache
     - run: npm run prod
 
     # prepare database
@@ -67,19 +71,22 @@ build_and_test: &build_and_test
     # Run linting
     - run: ./vendor/bin/phpcs
 
+    - run: cp .env.dusk.testing .env
+    - run: php artisan key:generate
+
     - run:
-      name: Start Chrome Driver
-      command: ./vendor/laravel/dusk/bin/chromedriver-linux
-      background: true
+        name: Start Chrome Driver
+        command: DISPLAY=:0 ./vendor/laravel/dusk/bin/chromedriver-linux
+        background: true
 
-  - run:
-      name: Run Laravel Server
-      command: php artisan serve
-      background: true
+    - run:
+        name: Run Laravel Server
+        command: php artisan serve
+        background: true
 
-  - run:
-      name: Run Laravel Dusk Tests
-      command: php artisan dusk
+    - run:
+        name: Run Laravel Dusk Tests
+        command: php artisan dusk
 
     - persist_to_workspace:
         root: /home/circleci/project
