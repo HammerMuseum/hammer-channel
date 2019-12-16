@@ -43,7 +43,8 @@ build_and_test: &build_and_test
   <<: *defaults
   steps:
     - checkout
-
+    - run: sudo apt-get install -y libsqlite3-dev
+    
     # Install Composer dependencies.
     - restore_cache: *restore_cache
     - run: composer install -n -q
@@ -65,6 +66,20 @@ build_and_test: &build_and_test
 
     # Run linting
     - run: ./vendor/bin/phpcs
+
+    - run:
+      name: Start Chrome Driver
+      command: ./vendor/laravel/dusk/bin/chromedriver-linux
+      background: true
+
+  - run:
+      name: Run Laravel Server
+      command: php artisan serve
+      background: true
+
+  - run:
+      name: Run Laravel Dusk Tests
+      command: php artisan dusk
 
     - persist_to_workspace:
         root: /home/circleci/project
