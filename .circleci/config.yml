@@ -103,7 +103,9 @@ deploy: &deploy
         at: /home/circleci/project
     - run:
         name: Install deploy dependency rsync
-        command: sudo apt install rsync
+        command: |
+          sudo apt-get update
+          sudo apt-get install rsync
     - run:
         name: Run Composer with production settings.
         command: composer install --optimize-autoloader --no-dev
@@ -132,7 +134,9 @@ deploy_stage: &deploy_stage
         at: /home/circleci/project
     - run:
         name: Install deploy dependency rsync
-        command: sudo apt install rsync
+        command: |
+          sudo apt-get update
+          sudo apt-get install rsync
     - run:
         name: Run Composer with production settings.
         command: composer install --optimize-autoloader --no-dev
