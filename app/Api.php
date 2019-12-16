@@ -33,13 +33,13 @@ class Api
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
-
-                // Use AWS storage URL
-                $videoUrl = $data['video_url'] . '/url';
-                $contentUrl = $this->getPlaybackUrl($videoUrl);
-
-                $data['video_url'] = $contentUrl;
                 if (!is_null($data)) {
+                    if (isset($data['video_url'])) {
+                        // Use AWS storage URL
+                        $videoUrl = $data['video_url'] . '/url';
+                        $contentUrl = $this->getPlaybackUrl($videoUrl);
+                        $data['video_url'] = $contentUrl;
+                    }
                     return [
                         'success' => true,
                         'data' => $data
