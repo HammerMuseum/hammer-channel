@@ -13,25 +13,16 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
  |
  */
 
-mix.webpackConfig({
-  plugins: [
-    new StyleLintPlugin({
-      files: '**/*.css',
-      context: 'resources/css',
-      quiet: true
-    }),
-  ],
-});
-
-// mix.options({
-//   postCss: [
-//     require("stylelint")(),
-//   ]
-// })
-
 mix
-  .js('resources/js/app.js', 'public/js');
-
-mix
+  .js('resources/js/app.js', 'public/js')
   .postCss('resources/css/app.css', 'public/css')
-  .postCssConfig();
+  .postCssConfig()
+  .webpackConfig({
+    plugins: [
+      new StyleLintPlugin({
+        files: '**/*.css',
+        context: 'resources/css',
+        quiet: true
+      }),
+    ],
+  });

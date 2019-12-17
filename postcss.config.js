@@ -1,4 +1,3 @@
-console.log('IN THE CONFIG');
 module.exports = ctx => ({
     map: !ctx.env || ctx.env !== 'production' ? { inline: false } : false,
     plugins: [
