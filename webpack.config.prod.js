@@ -7,12 +7,12 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '../css/main.css',
-      chunkFilename: '[id].css'
+      chunkFilename: '[id].css',
     }),
     new StyleLintPlugin({
       files: '**/*.pcss',
       context: 'resources/css',
-      quiet: true
+      quiet: true,
     }),
     new VueLoaderPlugin(),
   ],
@@ -22,7 +22,7 @@ module.exports = {
   },
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'public/js')
+    path: path.resolve(__dirname, 'public/js'),
   },
   module: {
     rules: [
@@ -30,7 +30,7 @@ module.exports = {
         test: /\.pcss$/,
         use: [
           {
-            loader: MiniCssExtractPlugin.loader
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
@@ -40,13 +40,13 @@ module.exports = {
             },
           },
           {
-            loader:'postcss-loader',
-          }
-        ]
+            loader: 'postcss-loader',
+          },
+        ],
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
       },
       {
         test: /\.m?js$/,
@@ -61,9 +61,9 @@ module.exports = {
           },
           {
             loader: 'eslint-loader',
-          }
-        ]
+          },
+        ],
       },
     ],
-  }
+  },
 };
