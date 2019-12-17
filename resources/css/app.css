@@ -3,6 +3,8 @@
 
 /* Variables */
 @import 'variables.css';
+@import 'result-grid.css';
+@import 'video.css';
 
 html, body {
     background-color: #fff;
@@ -14,44 +16,19 @@ html, body {
     margin: 0;
 }
 
-.full-height {
-    height: 100vh;
+.grid {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
 }
 
-.flex-center {
-    align-items: center;
-    display: flex;
-    justify-content: center;
+.listing {
+    grid-column: 2;
 }
 
-.position-ref {
-    position: relative;
+.listing > .title {
+    grid-column: 2;
 }
 
-.top-right {
-    position: absolute;
-    right: 10px;
-    top: 18px;
-}
-
-.content {
-    text-align: center;
-}
-
-.title {
-    font-size: 35px;
-}
-
-.links > a {
-    color: #636b6f;
-    padding: 0 25px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: .1rem;
-    text-decoration: none;
-    text-transform: uppercase;
-}
-
-.m-b-md {
-    margin-bottom: 30px;
+.search {
+    grid-column: 2;
 }

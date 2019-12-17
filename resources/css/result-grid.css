@@ -1,0 +1,10 @@
+.result-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    grid-column: 2;
+}
+
+.result-item {
+    padding: 20px 0;
+}
