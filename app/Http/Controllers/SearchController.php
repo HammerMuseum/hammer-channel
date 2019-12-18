@@ -34,7 +34,7 @@ class SearchController extends Controller
         if (!is_null($searchTerm)) {
             $results = $this->search->search($searchTerm);
 
-            if ($results) {
+            if ($results && !isset($results['error'])) {
                 return view('listing', [
                     'videos' => $results,
                     'message' => false,
