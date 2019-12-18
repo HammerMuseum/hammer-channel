@@ -6,3 +6,15 @@
 .hammer-video {
     width: 100%;
 }
+
+.hammer-video-player-dimensions {
+    height: 400px;
+}
+
+.hammer-video > .vjs-big-play-button {
+    display: none;
+}
+
+.hammer-video > .vjs-control-bar {
+    display: flex;
+}

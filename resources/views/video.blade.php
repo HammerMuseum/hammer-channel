@@ -10,7 +10,7 @@
     <div class="video-content">
         @if ($data !== false)
             <div class="video">
-                <video id="hammer-video-player" class="video-js hammer-video" controls type="video/mp4">
+                <video id="hammer-video-player" class="video-js hammer-video vjs-default-skin" controls type="video/mp4">
                     <source src="{{ $data['video_url'] }}" />
                 </video>
             </div>

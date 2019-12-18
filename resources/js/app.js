@@ -7,21 +7,22 @@
 import vjs from 'video.js';
 require('./bootstrap');
 // VIDEOJS_NO_BASE_THEME = true;
-require('video.js');
 require('videojs-overlay');
 
 (function(window, videojs) {
     var player = vjs('hammer-video-player');
-    var overlay_content = '<div class="myOverlay"><h2>Title of Video</h2></div>';
+    var overlay_content = $('.title').text();
     player.overlay({
         overlays: [{
-            start: 'playing',
-            end: 'pause'
-        }, {
-            start: 'pause',
+            start: 'loadedmetadata',
             content: overlay_content,
             end: 'playing',
             align: 'top'
+        }, {
+            start: 'pause',
+            content: overlay_content,
+            align: 'top',
+            end: 'playing'
         }]
     });
 }(window, window.videojs));

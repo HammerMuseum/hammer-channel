@@ -1,5 +1,7 @@
 /* Fonts */
 @import url('https://fonts.googleapis.com/css?family=Nunito');
+@import "../../node_modules/video.js/dist/video-js.min.css";
+@import "../../node_modules/videojs-overlay/dist/videojs-overlay.css";
 
 /* Variables */
 @import 'variables.css';
