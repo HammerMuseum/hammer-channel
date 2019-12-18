@@ -10,7 +10,7 @@
     <div class="video-content">
         @if ($data !== false)
             <div class="video">
-                <video class="video-js hammer-video" controls type="video/mp4">
+                <video id="hammer-video-player" class="video-js hammer-video" controls type="video/mp4">
                     <source src="{{ $data['video_url'] }}" />
                 </video>
             </div>
@@ -31,5 +31,36 @@
             </div>
         @endif
     </div>
+
+    {{--<script>--}}
+        {{--(function(window, videojs) {--}}
+            {{--var player = window.player = videojs('hammer-video-player');--}}
+            {{--console.log('running');--}}
+            {{--player.overlay({--}}
+                {{--content: 'Default overlay content',--}}
+                {{--debug: true,--}}
+                {{--overlays: [{--}}
+                    {{--content: 'The video is playing!',--}}
+                    {{--start: 'play',--}}
+                    {{--end: 'pause'--}}
+                {{--}, {--}}
+                    {{--start: 0,--}}
+                    {{--end: 15,--}}
+                    {{--align: 'bottom-left'--}}
+                {{--}, {--}}
+                    {{--start: 15,--}}
+                    {{--end: 30,--}}
+                    {{--align: 'bottom'--}}
+                {{--}, {--}}
+                    {{--start: 30,--}}
+                    {{--end: 45,--}}
+                    {{--align: 'bottom-right'--}}
+                {{--}, {--}}
+                    {{--start: 20,--}}
+                    {{--end: 'pause'--}}
+                {{--}]--}}
+            {{--});--}}
+        {{--}(window, window.videojs));--}}
+    {{--</script>--}}
 
 @endsection

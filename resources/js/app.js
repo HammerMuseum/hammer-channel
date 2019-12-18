@@ -4,9 +4,27 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import vjs from 'video.js';
 require('./bootstrap');
-VIDEOJS_NO_BASE_THEME = true;
+// VIDEOJS_NO_BASE_THEME = true;
 require('video.js');
+require('videojs-overlay');
+
+(function(window, videojs) {
+    var player = vjs('hammer-video-player');
+    var overlay_content = '<div class="myOverlay"><h2>Title of Video</h2></div>';
+    player.overlay({
+        overlays: [{
+            start: 'playing',
+            end: 'pause'
+        }, {
+            start: 'pause',
+            content: overlay_content,
+            end: 'playing',
+            align: 'top'
+        }]
+    });
+}(window, window.videojs));
 
 window.Vue = require('vue');
 
