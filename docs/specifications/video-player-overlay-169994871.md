@@ -32,4 +32,5 @@ Acceptance Criteria:
 - Configure plugin to accept title of video
 - Configure plugin behaviour
 - Styling
+- Convert to a Vue component.
 
