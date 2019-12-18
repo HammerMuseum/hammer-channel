@@ -28,5 +28,8 @@ Acceptance Criteria:
 
 
 ## Implementation
+- Install video JS overlay plugin
+- Configure plugin to accept title of video
+- Configure plugin behaviour
+- Styling
 
-## Documentation required
