@@ -4,28 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import vjs from 'video.js';
 require('./bootstrap');
-// VIDEOJS_NO_BASE_THEME = true;
 require('videojs-overlay');
-
-(function(window, videojs) {
-    var player = vjs('hammer-video-player');
-    var overlay_content = $('.title').text();
-    player.overlay({
-        overlays: [{
-            start: 'loadedmetadata',
-            content: overlay_content,
-            end: 'playing',
-            align: 'top'
-        }, {
-            start: 'pause',
-            content: overlay_content,
-            align: 'top',
-            end: 'playing'
-        }]
-    });
-}(window, window.videojs));
 
 window.Vue = require('vue');
 
@@ -40,10 +20,15 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('video-component', require('./components/VideoComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+new Vue({
+    el: '#main-content',
+    data: {}
+});
