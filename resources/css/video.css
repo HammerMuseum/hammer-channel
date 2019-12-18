@@ -18,3 +18,12 @@
 .hammer-video > .vjs-control-bar {
     display: flex;
 }
+
+.hammer-video > .vjs-overlay-top {
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+    top: 0;
+    font-size: 18px;
+    text-align: center;
+}
