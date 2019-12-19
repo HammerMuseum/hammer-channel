@@ -137,6 +137,10 @@ return [
             'deploy_path' => '/var/www/stage.video.hammer.cogapp.com',
             'user' => 'deploy',
         ],
+        'dev.video.hammer.cogapp.com' => [
+            'deploy_path' => '/var/www/dev.video.hammer.cogapp.com',
+            'user' => 'deploy',
+        ]
     ],
 
     /*
