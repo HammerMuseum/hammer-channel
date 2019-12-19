@@ -21,7 +21,8 @@ class VideoPageTest extends DuskTestCase
                 ->assertPresent('.title')
                 ->assertPresent('.description')
                 ->assertPresent('.date')
-                ->assertPresent('video');
+                ->assertPresent('video')
+                ->assertPresent('.breadcrumb');
         });
     }
 }
