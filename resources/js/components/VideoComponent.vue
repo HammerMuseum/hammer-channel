@@ -13,7 +13,7 @@
         mounted() {
             (function(window, videojs) {
                 var player = vjs('hammer-video-player');
-                var overlay_content = $('.title').text();
+                var overlay_content = '<p>' + $('.title').text() + '</p>';
                 player.overlay({
                     overlays: [{
                         start: 'loadedmetadata',
