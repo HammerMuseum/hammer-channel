@@ -17,14 +17,14 @@
                 player.overlay({
                     overlays: [{
                         start: 'loadedmetadata',
+                        'class': 'hammer-video-overlay',
                         content: overlay_content,
-                        end: 'userinactive',
+                        end: function() {
+                            if (player.controlBar.hasClass('vjs-user-inactive')) {
+                                $('.vjs-overlay').addClass('vjs-user-inactive');
+                            }
+                        },
                         align: 'top'
-                    }, {
-                        start: 'useractive',
-                        content: overlay_content,
-                        align: 'top',
-                        end: 'userinactive'
                     }]
                 });
                 $('.vjs-overlay').addClass('vjs-control-bar');
