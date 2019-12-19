@@ -10,3 +10,7 @@
 .breadcrumb {
     padding: 18px 0;
 }
+
+.breadcrumb__icon svg {
+    transform: rotate(180deg);
+}
