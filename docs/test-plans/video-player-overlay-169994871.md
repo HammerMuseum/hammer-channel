@@ -23,8 +23,8 @@ The video player should display a title overlay which follows the show/hide beha
 2. On page load, along with the main controls, you should see an overlay at the top centre of the player.
     * The overlay should correctly display the title of the video you are viewing.
 3. Hit the play button on the video.
-    * The title overlay should disappear.
+    * The title overlay should disappear momentarily.
 4. Hit the full-screen button on the player.
-    * The title overlay should still be hidden.
+    * The title overlay should show again, but disappear momentarily.
 5. While in full-screen, hit the pause button.
     * The title overlay should show again. 
