@@ -27,9 +27,7 @@
                         end: 'userinactive'
                     }]
                 });
-
                 $('.vjs-overlay').addClass('vjs-control-bar');
-
             }(window, window.videojs));
         }
     }
