@@ -24,7 +24,7 @@ class ListingController extends Controller
     }
 
     /**
-     * Return all videos from API
+     * Fetches all videos from API and returns the template listing.blade.php
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -34,7 +34,7 @@ class ListingController extends Controller
 
         if (isset($videos['success']) && $videos['success']) {
             return view('listing', [
-               'videos' => $videos['data']['data'],
+               'videos' => $videos['data'],
                'message' => false,
                'title' => 'All Videos'
             ]);
