@@ -43,8 +43,8 @@ Note that the tags field is being created in #168787722
     - the `tags` field should be a `keyword` multi-valued field
 - Update mappings as required
 - *n.b as of writing this, the tags data is not in the system, so will need to be faked for the purpose of this story*
+- Adjust boosts to ensure that title and description are weighted heavier than transcriptions.
 - Update the search query in the backend `Search` class to search across all relevant fields.
-
 
 ## Documentation required
 - Documentation for field mappings
