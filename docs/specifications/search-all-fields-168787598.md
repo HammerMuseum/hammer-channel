@@ -36,18 +36,18 @@ Note that the tags field is being created in #168787722
 - Does searching for a phrase or word return relevant results for videos with that term/phrase in the description/title/transcript? 
 
 ## Implementation
-- Add a new Elastic Search mapping to version control:
-    - A `search_config` directory
+- Add a new Elasticsearch mapping to version control in the https://github.com/HammerMuseum/hammer-configuration repo:
+    - An `elasticsearch` directory.
     - a `mapping.json` file listing the fields in the index
     - the `description`, `transcription` and `title` fields should be of type `text`
     - the `tags` field should be a `keyword` multi-valued field
 - Update mappings as required
-- *n.b as of writing this, the tags data is not in the system, so will need to be faked for the purpose of this story*
+- *n.b as of writing this, the tags data is not in the system, so will need to be mocked for the purpose of this story*
 - Adjust boosts to ensure that title and description are weighted heavier than transcriptions.
 - Update the search query in the backend `Search` class to search across all relevant fields.
 
 
-- As part of this story, update the frontent to output tags. This will involve:
+- As part of this story, update the frontend to output tags. This will involve:
     - Adding tags to the API response (the backend Resource Model, factory class and anywhere else where the structure is declared or used, including automated tests)
     - Adding tags to the template
 
