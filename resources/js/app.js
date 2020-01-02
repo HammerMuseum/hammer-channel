@@ -30,7 +30,7 @@ Vue.component('video-component', require('./components/VideoComponent.vue').defa
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-new Vue({
-    el: '#main-content',
-    data: {}
-});
+(() => new Vue({
+  el: '#main-content',
+  data: {},
+}))();
