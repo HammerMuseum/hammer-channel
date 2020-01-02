@@ -34,12 +34,17 @@ class Api
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
-                    if (isset($data['data']['video_url'])) {
-                        // Use AWS storage URL
-                        $videoUrl = $data['data']['video_url'] . '/url';
-                        $contentUrl = $this->getPlaybackUrl($videoUrl);
-                        $data['data']['video_url'] = $contentUrl;
+                    if (isset($data['data'])) {
+                        foreach ($data['data'] as $key => $item) {
+                            if (isset($item['video_url'])) {
+                                // Use AWS storage URL
+                                $videoUrl = $item['video_url'] . '/url';
+                                $contentUrl = $this->getPlaybackUrl($videoUrl);
+                                $data['data'][$key]['video_url'] = $contentUrl;
+                            }
+                        }
                     }
+
                     return [
                         'success' => true,
                         'data' => $data['data']

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Search;
+use App\Api;
 
 /**
  * Class SearchController
@@ -11,32 +11,28 @@ use App\Search;
  */
 class SearchController extends Controller
 {
-    /** @var Search */
-    protected $search;
+    /** @var Api */
+    protected $api;
 
     /**
      * SearchController constructor.
-     * @param Search $search
+     * @param Api $api
      */
     public function __construct(
-        Search $search
+        Api $api
     ) {
-        $this->search = $search;
+        $this->api = $api;
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public function search(Request $request)
     {
         $searchTerm = $request->get('term');
         if (!is_null($searchTerm)) {
-            $results = $this->search->search($searchTerm);
+            $results = $this->api->request('search', $searchTerm);
 
             if ($results && !isset($results['error'])) {
                 return view('listing', [
-                    'videos' => $results,
+                    'videos' => $results['data'],
                     'message' => false,
                     'title' => ucfirst($searchTerm)
                 ]);
