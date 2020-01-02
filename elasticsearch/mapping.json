@@ -1,16 +1,21 @@
 {
-  "properties": {
-    "title": {
-      "type": "text"
-    },
-    "description": {
-      "type": "text"
-    },
-    "transcription": {
-      "type": "text"
-    },
-    "tags": {
-      "type": "keyword"
+  "_doc": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "analyzer": "english"
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "english"
+      },
+      "transcription": {
+        "type": "text",
+        "analyzer": "english"
+      },
+      "tags": {
+        "type": "keyword"
+      }
     }
   }
 }
