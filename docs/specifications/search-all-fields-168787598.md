@@ -46,5 +46,10 @@ Note that the tags field is being created in #168787722
 - Adjust boosts to ensure that title and description are weighted heavier than transcriptions.
 - Update the search query in the backend `Search` class to search across all relevant fields.
 
+
+- As part of this story, update the frontent to output tags. This will involve:
+    - Adding tags to the API response (the backend Resource Model, factory class and anywhere else where the structure is declared or used, including automated tests)
+    - Adding tags to the template
+
 ## Documentation required
 - Documentation for field mappings
