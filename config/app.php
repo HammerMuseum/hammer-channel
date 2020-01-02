@@ -134,10 +134,6 @@ return [
 
     'datastore_url' => env('DATASTORE_URL'),
 
-    'es_endpoint' => env('ES_ENDPOINT'),
-
-    'es_index' => env('ES_INDEX'),
-
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

@@ -3,9 +3,11 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
 require('./bootstrap');
 require('videojs-overlay');
+require('video.js');
+
+window.VIDEOJS_NO_BASE_THEME = true;
 
 window.Vue = require('vue');
 
