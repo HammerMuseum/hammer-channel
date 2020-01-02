@@ -28,11 +28,11 @@ class SearchController extends Controller
     {
         $searchTerm = $request->get('term');
         if (!is_null($searchTerm)) {
-            $result = $this->api->request('search', $searchTerm);
+            $results = $this->api->request('search', $searchTerm);
 
-            if (isset($result['data']) && isset($result['data']['result'])) {
+            if ($results && !isset($results['error'])) {
                 return view('listing', [
-                    'videos' => $result['data']['result'],
+                    'videos' => $results['data'],
                     'message' => false,
                     'title' => ucfirst($searchTerm)
                 ]);

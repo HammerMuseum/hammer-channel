@@ -1,4 +1,6 @@
 const mix = require('laravel-mix');
+require('laravel-mix-postcss-config');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +13,16 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-  .postCss('resources/css/app.css', 'public/css');
+mix
+  .js('resources/js/app.js', 'public/js')
+  .postCss('resources/css/app.css', 'public/css')
+  .postCssConfig()
+  .webpackConfig({
+    plugins: [
+      new StyleLintPlugin({
+        files: '**/*.css',
+        context: 'resources/css',
+        quiet: true
+      }),
+    ],
+  });

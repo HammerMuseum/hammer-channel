@@ -53,5 +53,13 @@ php artisan key:generate key
 npm install
 
 # Build frontend and watch for changes.
-npm run watch
+npm run watch-dev
 ```
+
+### Front-end notes
+
+Most of the time during development you'll likely just want to run `npm run watch-dev`, but a full list of commands is located in the `scripts` section of the `package.json`.
+
+Please don't bypass or disable the linting rules or webpack configuration we have setup yourself. They are there for everyone's benefit (including the user), but if they do become particularly annoying please feel free to suggest changes.
+
+Stylelint is currently enforcing a rule aimed at reducing nesting and encourages BEM style classes. [If you aren't familiar in writing BEM, you should read the supporting documentation](./docs/BEM.md).
