@@ -8,6 +8,11 @@
 
 @section('content')
     <div class="video-content">
+        <div class="breadcrumb">
+            <a href="/" class="breadcrumb__link">
+                <span class="breadcrumb__text">Back to All Videos</span>
+            </a>
+        </div>
         @if ($data !== false)
 
             <video-component video_url="{{ $data['video_url'] }}"></video-component>
