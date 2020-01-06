@@ -14,11 +14,9 @@
             </a>
         </div>
         @if ($data !== false)
-            <div class="video">
-                <video class="video-js hammer-video" controls type="video/mp4">
-                    <source src="{{ $data['video_url'] }}" />
-                </video>
-            </div>
+
+            <video-component video_url="{{ $data['video_url'] }}"></video-component>
+
             <div class="hammer-video__information">
                 <div class="title">
                     <h1>{{ $data['title'] }}</h1>
@@ -36,5 +34,4 @@
             </div>
         @endif
     </div>
-
 @endsection
