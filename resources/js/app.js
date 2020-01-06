@@ -1,3 +1,7 @@
+// TODO: Is there a way we can use the runtime only build?
+import Vue from 'vue/dist/vue.esm';
+import VideoComponent from './components/VideoComponent.vue';
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -9,8 +13,6 @@ require('video.js');
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
-window.Vue = require('vue');
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21,8 +23,7 @@ window.Vue = require('vue');
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('video-component', require('./components/VideoComponent.vue').default);
+Vue.component('video-component', VideoComponent);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
