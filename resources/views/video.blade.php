@@ -22,10 +22,18 @@
                     <h1>{{ $data['title'] }}</h1>
                 </div>
                 <div class="date">
-                    {{ $data['date_recorded'] }}
+                    <?php $date = new DateTime($data['date_recorded']); ?>
+                    {{ $date->format('l, F j, Y') }}
                 </div>
                 <div class="description">
                     {{ $data['description'] }}
+                </div>
+                <div class="keywords">
+                    @if (isset($data['tags']) && !empty($data['tags']))
+                        @foreach ($data['tags'] as $key => $tag)
+                            <a href="/topics/{{ $tag }}">{{ $tag }}</a>@if ($key + 1 < count($data['tags'])), @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
         @else

@@ -3,7 +3,7 @@
 The archive frontend system utilises Laravel Dusk browser tests.
 
 ## Testing environment
-When running tests, Dusk will use the `.env.dusk.local` environment file. The `AppServiceProvider` will detect this. To enforce any special behaviours to the testing environment, add them in `AppServiceProvider`'s `register()` method.
+When running tests, Dusk will use the `.env.dusk.local` environment file. An example file has been provided - make a copy of this with the name above. The `AppServiceProvider` will detect this. To enforce any special behaviours to the testing environment, add them in `AppServiceProvider`'s `register()` method.
 
 ### Current behaviours
 ####FakeApi.php

@@ -36,7 +36,7 @@ class VideoController extends Controller
         $data = $this->api->request('videos', $id);
         if (isset($data['success']) && $data['success']) {
             return view('video', [
-                'data' => $data['data'],
+                'data' => $data['data'][0],
                 'message' => false
             ]);
         }
