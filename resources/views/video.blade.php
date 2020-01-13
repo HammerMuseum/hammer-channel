@@ -22,7 +22,8 @@
                     <h1>{{ $data['title'] }}</h1>
                 </div>
                 <div class="date">
-                    {{ $data['date_recorded'] }}
+                    <?php $date = new DateTime($data['date_recorded']); ?>
+                    {{ $date->format('l, F j, Y') }}
                 </div>
                 <div class="description">
                     {{ $data['description'] }}
