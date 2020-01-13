@@ -45,4 +45,25 @@ class ListingController extends Controller
            'title' => ''
         ]);
     }
+
+    /**
+     * @param $keyword
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function topic($keyword)
+    {
+        $result = $this->api->request('search', 'tags/' . $keyword);
+        if (isset($result['success']) && $result['success']) {
+            return view('listing', [
+                'videos' => $result['data'],
+                'message' => false,
+                'title' => 'All Videos'
+            ]);
+        }
+        return view('listing', [
+            'videos' => false,
+            'message' => 'No videos available.',
+            'title' => ''
+        ]);
+    }
 }
