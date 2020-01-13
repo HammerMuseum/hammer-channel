@@ -13,7 +13,9 @@
                 <input type="search" name="term" />
                 <button type="submit">Search</button>
             </form>
-            <a href="/">Clear</a>
+            @if ($show_clear)
+                <a href="/">Clear</a>
+            @endif
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])

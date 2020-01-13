@@ -28,9 +28,11 @@
                     {{ $data['description'] }}
                 </div>
                 <div class="keywords">
-                    @foreach ($data['tags'] as $key => $tag)
-                        <a href="">{{ $tag }}</a>@if ($key + 1 < count($data['tags'])), @endif
-                    @endforeach
+                    @if (isset($data['tags']) && !empty($data['tags']))
+                        @foreach ($data['tags'] as $key => $tag)
+                            <a href="/topics/{{ $tag }}">{{ $tag }}</a>@if ($key + 1 < count($data['tags'])), @endif
+                        @endforeach
+                    @endif
                 </div>
             </div>
         @else
