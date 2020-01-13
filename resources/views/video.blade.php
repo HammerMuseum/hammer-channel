@@ -28,8 +28,8 @@
                     {{ $data['description'] }}
                 </div>
                 <div class="keywords">
-                    @foreach ($data['tags'] as $tag)
-                        {{ $tag }}
+                    @foreach ($data['tags'] as $key => $tag)
+                        <a href="">{{ $tag }}</a>@if ($key + 1 < count($data['tags'])), @endif
                     @endforeach
                 </div>
             </div>
