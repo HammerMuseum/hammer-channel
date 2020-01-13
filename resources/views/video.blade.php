@@ -27,6 +27,11 @@
                 <div class="description">
                     {{ $data['description'] }}
                 </div>
+                <div class="keywords">
+                    @foreach ($data['tags'] as $tag)
+                        {{ $tag }}
+                    @endforeach
+                </div>
             </div>
         @else
             <div class="message">
