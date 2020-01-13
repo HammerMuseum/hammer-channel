@@ -41,10 +41,6 @@ class Api
                                 $videoUrl = $item['video_url'] . '/url';
                                 $contentUrl = $this->getPlaybackUrl($videoUrl);
                                 $data['data'][$key]['video_url'] = $contentUrl;
-                            } elseif ($key == 'video_url') {
-                                $videoUrl = $data['data']['video_url'] . '/url';
-                                $contentUrl = $this->getPlaybackUrl($videoUrl);
-                                $data['data']['video_url'] = $contentUrl;
                             }
                         }
                     }
