@@ -31,15 +31,40 @@ class SearchController extends Controller
             $results = $this->api->request('search', $searchTerm);
 
             if ($results && !isset($results['error'])) {
-                return view('listing', [
+                return view('result', [
                     'videos' => $results['data'],
+                    'term' => $searchTerm,
                     'message' => false,
                     'title' => ucfirst($searchTerm)
                 ]);
             }
         }
-        return view('listing', [
+        return view('result', [
             'videos' => false,
+            'term' => false,
+            'message' => 'No results found',
+            'title' => ''
+        ]);
+    }
+
+    public function sort(Request $request, $term, $field)
+    {
+        $order = $request->get('order');
+
+        if (!is_null($order)) {
+            $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
+            if ($results && !isset($results['error'])) {
+                return view('result', [
+                    'videos' => $results['data'],
+                    'term' => $term,
+                    'message' => false,
+                    'title' => ucfirst($term)
+                ]);
+            }
+        }
+        return view('result', [
+            'videos' => false,
+            'term' => false,
             'message' => 'No results found',
             'title' => ''
         ]);
