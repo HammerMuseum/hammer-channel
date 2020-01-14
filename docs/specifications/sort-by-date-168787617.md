@@ -28,7 +28,7 @@ Add the ability to sort videos by date.
 
 ## Implementation
 - Update search API's `matchAll` method to sort by `date_recorded` by default.
-- Optional URL parameters to search controller's `term` route and method for sort field and direction (ASC/DESC)
+- Optional URL parameters to search controller's `match` route and method for sort field and direction (ASC/DESC)
 - Append sort parameters to Elasticsearch query in `match` method when specified.
 - New controller action to frontend search controller for sorting
     - Accepts a sort field and a direction
