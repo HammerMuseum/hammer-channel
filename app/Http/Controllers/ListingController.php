@@ -24,7 +24,7 @@ class ListingController extends Controller
     }
 
     /**
-     * Return all videos from API
+     * Fetches all videos from API and returns the template listing.blade.php
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -34,15 +34,42 @@ class ListingController extends Controller
 
         if (isset($videos['success']) && $videos['success']) {
             return view('listing', [
-               'videos' => $videos['data']['data'],
+               'videos' => $videos['data'],
                'message' => false,
-               'title' => 'All Videos'
+               'title' => 'All Videos',
+               'show_clear' => true
             ]);
         }
         return view('listing', [
            'videos' => false,
            'message' => 'No videos available.',
-           'title' => ''
+           'title' => '',
+           'show_clear' => false
+        ]);
+    }
+
+    /**
+     * List videos by topic
+     *
+     * @param $keyword
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function topic($keyword)
+    {
+        $result = $this->api->request('search', 'tags/' . $keyword);
+        if (isset($result['success']) && $result['success']) {
+            return view('listing', [
+                'videos' => $result['data'],
+                'message' => false,
+                'title' => ucfirst($keyword),
+                'show_clear' => false
+            ]);
+        }
+        return view('listing', [
+            'videos' => false,
+            'message' => 'No videos available.',
+            'title' => '',
+            'show_clear' => false
         ]);
     }
 }

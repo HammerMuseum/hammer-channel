@@ -21,7 +21,7 @@ class FakeApi extends Api
     {
         $returnData = [
             'success' => true,
-            'data' => json_decode($this->getJsonData(), true)
+            'data' => [json_decode($this->getJsonData(), true)]
         ];
 
         return $returnData;
