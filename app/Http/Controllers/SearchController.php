@@ -24,6 +24,10 @@ class SearchController extends Controller
         $this->api = $api;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function search(Request $request)
     {
         $searchTerm = $request->get('term');
@@ -47,6 +51,18 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     *  The request from the form submission
+     *
+     * @param $term string
+     *  The original search term
+     *
+     * @param $field string
+     *  The field to sort by
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function sort(Request $request, $term, $field)
     {
         $order = $request->get('order');
