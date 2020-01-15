@@ -33,6 +33,14 @@
                     <button type="submit">Sort</button>
                 </form>
             </div>
+            @foreach ($facets as $facetLabel => $facet)
+                @foreach ($facet as $option)
+                    @if ($facetLabel == 'Year Recorded')
+                        <?php $date = new DateTime($option['key_as_string']); ?>
+                        {{ $date->format('Y') }}
+                    @endif
+                @endforeach
+            @endforeach
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])

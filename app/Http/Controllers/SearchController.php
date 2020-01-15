@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api;
+use App\Library\Facets;
 use Illuminate\Support\Str;
 
 /**
@@ -15,14 +16,18 @@ class SearchController extends Controller
     /** @var Api */
     protected $api;
 
+    protected $facetHandler;
+
     /**
      * SearchController constructor.
      * @param Api $api
      */
     public function __construct(
-        Api $api
+        Api $api,
+        Facets $facetHandler
     ) {
         $this->api = $api;
+        $this->facetHandler = $facetHandler;
     }
 
     /**
@@ -34,13 +39,14 @@ class SearchController extends Controller
         $searchTerm = $request->get('term');
         if (!is_null($searchTerm)) {
             $results = $this->api->request('search', $searchTerm);
-
+            $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
             if ($results && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
                     'term' => $searchTerm,
                     'message' => false,
-                    'title' => ucfirst($searchTerm)
+                    'title' => ucfirst($searchTerm),
+                    'facets' => $facets
                 ]);
             }
         }
@@ -48,7 +54,8 @@ class SearchController extends Controller
             'videos' => false,
             'term' => false,
             'message' => 'No results found',
-            'title' => ''
+            'title' => '',
+            'facets' => false
         ]);
     }
 
@@ -72,6 +79,7 @@ class SearchController extends Controller
             $order = Str::before($orderValue, $field . '_');
             $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
             if ($results && !isset($results['error'])) {
+
                 return view('result', [
                     'videos' => $results['data'],
                     'term' => $term,
