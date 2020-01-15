@@ -69,7 +69,7 @@ class SearchController extends Controller
         $orderValue = $request->get('order');
 
         if (!is_null($orderValue)) {
-            $order = Str::before($orderValue, $field . '_');
+            $order = Str::after($orderValue, $field . '_');
             $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
             if ($results && !isset($results['error'])) {
                 return view('result', [
