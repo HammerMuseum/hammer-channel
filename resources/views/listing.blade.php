@@ -13,7 +13,7 @@
                 <input type="search" name="term" />
                 <button type="submit">Search</button>
             </form>
-            @if ($show_clear)
+            @if ($show_clear ?? '')
                 <a href="/">Clear</a>
             @endif
         </div>
