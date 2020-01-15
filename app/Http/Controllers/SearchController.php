@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api;
+use Illuminate\Support\Str;
 
 /**
  * Class SearchController
@@ -65,9 +66,10 @@ class SearchController extends Controller
      */
     public function sort(Request $request, $term, $field)
     {
-        $order = $request->get('order');
+        $orderValue = $request->get('order');
 
-        if (!is_null($order)) {
+        if (!is_null($orderValue)) {
+            $order = Str::before($orderValue, $field . '_');
             $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
             if ($results && !isset($results['error'])) {
                 return view('result', [

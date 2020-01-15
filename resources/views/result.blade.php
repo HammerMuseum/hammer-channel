@@ -27,8 +27,8 @@
             <div class="date">
                 <form action="/search/sort/{{ $term }}/date_recorded">
                     <select type="dropdown" name="order">
-                        <option value="asc">Date (ASC)</option>
-                        <option value="desc">Date (DESC)</option>
+                        <option value="date_recorded_asc">Date (ASC)</option>
+                        <option value="date_recorded_desc">Date (DESC)</option>
                     </select>
                     <button type="submit">Sort</button>
                 </form>
