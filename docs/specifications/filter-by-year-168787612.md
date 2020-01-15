@@ -28,10 +28,6 @@ Specification for adding the ability to filter videos by year.
 - Can search results be narrowed by date using a control on the UI?
 
 ## Implementation
-- The `date_recorded` field in Elasticsearch will need to be changed to a date field so that date-based aggregations can be used.
-    - Update the mapping in version control, including the format e.g
-            
-            "format": "yyyy-MM-dd"
 - Create a new API endpoint for the filter functionality
     - Should accept the filter type and the value as arguments
     - Should construct params to request similarly to the following:
