@@ -59,6 +59,31 @@ class SearchController extends Controller
         ]);
     }
 
+    public function filter(Request $request, $term)
+    {
+        $queryParams = $request->all();
+        if (!empty($queryParams)) {
+            $results = $this->api->request('search/filter/' . $term . '?' . http_build_query($queryParams));
+            $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
+            if ($results['success'] && !isset($results['error'])) {
+                return view('result', [
+                    'videos' => $results['data'],
+                    'term' => $term,
+                    'message' => false,
+                    'title' => ucfirst($term),
+                    'facets' => $facets
+                ]);
+            }
+        }
+        return view('result', [
+            'videos' => false,
+            'term' => false,
+            'message' => 'No results found',
+            'title' => '',
+            'facets' => false
+        ]);
+    }
+
     /**
      * @param Request $request
      *  The request from the form submission

@@ -33,20 +33,23 @@
                     <button type="submit">Sort</button>
                 </form>
             </div>
-            @foreach ($facets as $facetLabel => $facet)
-                @if ($facetLabel == 'Year Recorded')
-                    <form action="/search/{{ $term }}">
-                        <label for="date_recorded">{{ $facetLabel }}</label>
-                        <select name="date_recorded" id="year">
-                            @foreach ($facet as $option)
-                                <?php $date = new DateTime($option['key_as_string']) ?>
-                                <option value="{{ $date->format('Y') }}">{{ $date->format('Y') }}</option>
-                            @endforeach
-                        </select>
-                        <button type="submit">Filter</button>
-                    </form>
-                @endif
-            @endforeach
+            @if ($facets)
+                @foreach ($facets as $facetLabel => $facet)
+                    @if ($facetLabel == 'Year Recorded')
+                        <form action="/search/filter/{{ $term }}">
+                            <label for="date_recorded">{{ $facetLabel }}</label>
+                            <select name="date_recorded" id="year">
+                                @foreach ($facet as $option)
+                                    <?php $date = new DateTime($option['key_as_string']) ?>
+                                    <option value="{{ $date->format('Y') }}">{{ $date->format('Y') }}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit">Filter</button>
+                            <a href="/search?term={{ $term }}">Clear filter</a>
+                        </form>
+                    @endif
+                @endforeach
+            @endif
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])
