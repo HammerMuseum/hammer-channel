@@ -56,7 +56,7 @@ class ListingController extends Controller
      */
     public function topic($keyword)
     {
-        $result = $this->api->request('search-term', 'tags/' . $keyword);
+        $result = $this->api->request('search', 'tags/' . $keyword);
         if (isset($result['success']) && $result['success']) {
             return view('listing', [
                 'videos' => $result['data'],
