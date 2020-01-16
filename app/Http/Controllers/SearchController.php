@@ -70,7 +70,11 @@ class SearchController extends Controller
 
         if (!is_null($orderValue)) {
             $order = Str::after($orderValue, $field . '_');
-            $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
+            $queryParams = http_build_query([
+               'sort' => $field,
+               'direction' => $order
+            ]);
+            $results = $this->api->request('search', $term . '?' . $queryParams);
             if ($results && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
