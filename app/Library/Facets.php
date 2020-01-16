@@ -12,15 +12,16 @@ class Facets
 
     public function getFacetOptions($aggregations)
     {
+        $facetOptions = [];
         foreach ($aggregations as $facet => $aggregation) {
             if (isset($this->facetMap[$facet])) {
                 foreach ($aggregation['buckets'] as $bucket) {
                     if ($bucket['doc_count'] > 0) {
-                        $this->facetOptions[$this->facetMap[$facet]][] = $bucket;
+                        $facetOptions[$this->facetMap[$facet]][] = $bucket;
                     }
                }
             }
         }
-        return $this->facetOptions;
+        return $facetOptions;
     }
 }

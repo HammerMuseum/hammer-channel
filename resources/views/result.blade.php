@@ -34,12 +34,18 @@
                 </form>
             </div>
             @foreach ($facets as $facetLabel => $facet)
-                @foreach ($facet as $option)
-                    @if ($facetLabel == 'Year Recorded')
-                        <?php $date = new DateTime($option['key_as_string']); ?>
-                        {{ $date->format('Y') }}
-                    @endif
-                @endforeach
+                @if ($facetLabel == 'Year Recorded')
+                    <form action="/search/{{ $term }}">
+                        <label for="date_recorded">{{ $facetLabel }}</label>
+                        <select name="date_recorded" id="year">
+                            @foreach ($facet as $option)
+                                <?php $date = new DateTime($option['key_as_string']) ?>
+                                <option value="{{ $date->format('Y') }}">{{ $date->format('Y') }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit">Filter</button>
+                    </form>
+                @endif
             @endforeach
         </div>
         @if ($videos)
