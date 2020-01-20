@@ -59,6 +59,11 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param $term
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function filter(Request $request, $term)
     {
         $queryParams = $request->all();

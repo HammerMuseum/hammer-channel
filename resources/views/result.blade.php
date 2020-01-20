@@ -34,21 +34,23 @@
                 </form>
             </div>
             @if ($facets)
-                @foreach ($facets as $facetLabel => $facet)
-                    @if ($facetLabel == 'Year Recorded')
-                        <form action="/search/filter/{{ $term }}">
-                            <label for="date_recorded">{{ $facetLabel }}</label>
-                            <select name="date_recorded" id="year">
-                                @foreach ($facet as $option)
-                                    <?php $date = new DateTime($option['key_as_string']) ?>
-                                    <option value="{{ $date->format('Y') }}">{{ $date->format('Y') }}</option>
-                                @endforeach
-                            </select>
-                            <button type="submit">Filter</button>
-                            <a href="/search?term={{ $term }}">Clear filter</a>
-                        </form>
-                    @endif
-                @endforeach
+                <div class="facets">
+                    @foreach ($facets as $facetLabel => $facet)
+                        @if ($facetLabel == 'Year Recorded')
+                            <form action="/search/filter/{{ $term }}">
+                                <label for="date_recorded">{{ $facetLabel }}</label>
+                                <select name="date_recorded" id="year">
+                                    @foreach ($facet as $option)
+                                        <?php $date = new DateTime($option['key_as_string']) ?>
+                                        <option value="{{ $date->format('Y') }}">{{ $date->format('Y') }}</option>
+                                    @endforeach
+                                </select>
+                                <button type="submit">Filter</button>
+                                <a href="/search?term={{ $term }}">Clear filter</a>
+                            </form>
+                        @endif
+                    @endforeach
+                </div>
             @endif
         </div>
         @if ($videos)
