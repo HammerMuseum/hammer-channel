@@ -44,7 +44,6 @@ class Api
                             }
                         }
                     }
-
                     return [
                         'success' => true,
                         'data' => $data['data']

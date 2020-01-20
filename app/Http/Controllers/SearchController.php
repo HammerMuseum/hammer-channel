@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api;
+use Illuminate\Support\Str;
 
 /**
  * Class SearchController
@@ -24,6 +25,10 @@ class SearchController extends Controller
         $this->api = $api;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function search(Request $request)
     {
         $searchTerm = $request->get('term');
@@ -31,15 +36,57 @@ class SearchController extends Controller
             $results = $this->api->request('search', $searchTerm);
 
             if ($results && !isset($results['error'])) {
-                return view('listing', [
+                return view('result', [
                     'videos' => $results['data'],
+                    'term' => $searchTerm,
                     'message' => false,
                     'title' => ucfirst($searchTerm)
                 ]);
             }
         }
-        return view('listing', [
+        return view('result', [
             'videos' => false,
+            'term' => false,
+            'message' => 'No results found',
+            'title' => ''
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *  The request from the form submission
+     *
+     * @param $term string
+     *  The original search term
+     *
+     * @param $field string
+     *  The field to sort by
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function sort(Request $request, $term, $field)
+    {
+        $orderValue = $request->get('order');
+
+        if (!is_null($orderValue)) {
+            $order = Str::after($orderValue, $field . '_');
+            $queryParams = http_build_query([
+               'sort' => $field,
+               'direction' => $order
+            ]);
+            $results = $this->api->request('search', $term . '?' . $queryParams);
+            if ($results && !isset($results['error'])) {
+                return view('result', [
+                    'videos' => $results['data'],
+                    'term' => $term,
+                    'message' => false,
+                    'title' => ucfirst($term)
+                ]);
+            }
+        }
+        return view('result', [
+            'videos' => false,
+            'term' => false,
             'message' => 'No results found',
             'title' => ''
         ]);
