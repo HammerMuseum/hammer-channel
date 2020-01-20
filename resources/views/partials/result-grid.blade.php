@@ -4,14 +4,8 @@
             @if (isset($video['asset_id']))
                 <div class="result-item">
                     <a href="/video/{{ $video['asset_id'] }}">
-                        <div class="result-item__thubmnail">
-                            <img src="{{ $video['thumbnail_url'] }}" />
-                        </div>
-                        <div class="result-item__information">
-                            <div class="result-item__title">
-                                {{ $video['title'] }}
-                            </div>
-                        </div>
+                        <img class="result-item__image" src="{{ $video['thumbnail_url'] }}" />
+                        <span class="result-item__title">{{ $video['title'] }}</span>
                     </a>
                 </div>
             @endif

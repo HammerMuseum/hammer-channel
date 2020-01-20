@@ -38,17 +38,18 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-        $searchTerm = $request->get('term');
-        if (!is_null($searchTerm)) {
-            $results = $this->api->request('search', $searchTerm);
+        $term = $request->get('term');
+        if (!is_null($term)) {
+            $results = $this->api->request('search', $term);
             $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
             if ($results && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
-                    'term' => $searchTerm,
+                    'term' => $term,
                     'message' => false,
-                    'title' => ucfirst($searchTerm),
-                    'facets' => $facets
+                    'title' => 'Results for "' . ucfirst($term) . '"',
+                    'facets' => $facets,
+                    'show_clear' => true,
                 ]);
             }
         }
@@ -77,7 +78,7 @@ class SearchController extends Controller
                     'videos' => $results['data'],
                     'term' => $term,
                     'message' => false,
-                    'title' => ucfirst($term),
+                    'title' => 'Results for "' . ucfirst($term) . '"',
                     'facets' => $facets
                 ]);
             }

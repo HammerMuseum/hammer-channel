@@ -36,7 +36,7 @@ class ListingController extends Controller
             return view('listing', [
                'videos' => $videos['data'],
                'message' => false,
-               'title' => 'All Videos',
+               'title' => '',
                'show_clear' => true
             ]);
         }
