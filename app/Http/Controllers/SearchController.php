@@ -106,8 +106,12 @@ class SearchController extends Controller
         $orderValue = $request->get('order');
 
         if (!is_null($orderValue)) {
-            $order = Str::before($orderValue, $field . '_');
-            $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
+            $order = Str::after($orderValue, $field . '_');
+            $queryParams = http_build_query([
+               'sort' => $field,
+               'direction' => $order
+            ]);
+            $results = $this->api->request('search', $term . '?' . $queryParams);
             if ($results && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
