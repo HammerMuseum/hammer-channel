@@ -16,11 +16,13 @@ class SearchController extends Controller
     /** @var Api */
     protected $api;
 
+    /** @var Facets */
     protected $facetHandler;
 
     /**
      * SearchController constructor.
      * @param Api $api
+     * @param Facets $facetHandler
      */
     public function __construct(
         Api $api,
@@ -112,12 +114,14 @@ class SearchController extends Controller
                'direction' => $order
             ]);
             $results = $this->api->request('search', $term . '?' . $queryParams);
+            $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
             if ($results && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
                     'term' => $term,
                     'message' => false,
-                    'title' => ucfirst($term)
+                    'title' => ucfirst($term),
+                    'facets' => $facets
                 ]);
             }
         }
@@ -125,7 +129,8 @@ class SearchController extends Controller
             'videos' => false,
             'term' => false,
             'message' => 'No results found',
-            'title' => ''
+            'title' => '',
+            'facets' => false
         ]);
     }
 }
