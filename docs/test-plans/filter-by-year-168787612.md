@@ -26,6 +26,9 @@ Access to the testing environment.
 - On this page, you should see a 'Filter by year' option.
 - Select a year from the dropdown and click 'Filter'
     - Do the results now shown match your year selection?
+    - Check by clicking on an individual video and seeing the date displayed beneath the title.
 - From the same results page, do the same for another year.
     - Do the results show your new selection?
+- Click 'Clear filter'
+    - Is your filter cleared and are you returned to the original search result page?
 - Repeat for at least one other search term.
