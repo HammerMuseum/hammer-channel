@@ -2,14 +2,21 @@
 
 namespace App\Library;
 
+/**
+ * Class Facets
+ * @package App\Library
+ */
 class Facets
 {
+    /** @var array */
     protected $facetMap = [
         'date' => 'Year Recorded'
     ];
 
-    protected $facetOptions = [];
-
+    /**
+     * @param $aggregations
+     * @return array
+     */
     public function getFacetOptions($aggregations)
     {
         $facetOptions = [];
@@ -19,7 +26,7 @@ class Facets
                     if ($bucket['doc_count'] > 0) {
                         $facetOptions[$this->facetMap[$facet]][] = $bucket;
                     }
-               }
+                }
             }
         }
         return $facetOptions;

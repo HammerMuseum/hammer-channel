@@ -109,7 +109,6 @@ class SearchController extends Controller
             $order = Str::before($orderValue, $field . '_');
             $results = $this->api->request('search', $term . '/' . $field . '/' . $order);
             if ($results && !isset($results['error'])) {
-
                 return view('result', [
                     'videos' => $results['data'],
                     'term' => $term,
