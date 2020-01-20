@@ -13,16 +13,31 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
  |
  */
 
+mix.options({
+  hmrOptions: {
+    host: 'localhost',
+    port: 8222,
+  },
+});
+
 mix
   .js('resources/js/app.js', 'public/js')
-  .postCss('resources/css/app.css', 'public/css')
+  .postCss('resources/css/app.pcss', 'public/css')
   .postCssConfig()
   .webpackConfig({
+    // add any webpack dev server config here
+    devServer: {
+      disableHostCheck: true,
+      proxy: {
+        host: 'localhost',
+        port: 8999,
+      },
+    },
     plugins: [
       new StyleLintPlugin({
-        files: '**/*.css',
+        files: '**/*.pcss',
         context: 'resources/css',
-        quiet: true
+        quiet: true,
       }),
     ],
   });
