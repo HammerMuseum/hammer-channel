@@ -37,8 +37,10 @@ class ListingController extends Controller
         $requestUrl = $request->url();
 
         if (isset($videos['success']) && $videos['success']) {
-            $prevLink = $videos['data']['_links']['prev'] !== '' ? rtrim($requestUrl, '/\\') . $videos['data']['_links']['prev'] : false;
-            $nextLink = $videos['data']['_links']['next'] !== '' ? rtrim($requestUrl, '/\\') . $videos['data']['_links']['next'] : false;
+            $prevLink = $videos['data']['_links']['prev'] !== ''?
+                rtrim($requestUrl, '/\\') . $videos['data']['_links']['prev'] : false;
+            $nextLink = $videos['data']['_links']['next'] !== '' ?
+                rtrim($requestUrl, '/\\') . $videos['data']['_links']['next'] : false;
             return view('listing', [
                'videos' => $videos['data'],
                'nextLink' => $nextLink,
