@@ -80,11 +80,11 @@ build_and_test: &build_and_test
         command: php artisan serve
         background: true
 
-    # - run:
-    #     name: Run Laravel Dusk Tests
-    #     command: |
-    #       php artisan dusk:chrome-driver
-    #       php artisan dusk
+    - run:
+        name: Run Laravel Dusk Tests
+        command: |
+          php artisan dusk:chrome-driver
+          php artisan dusk
 
     - persist_to_workspace:
         root: /home/circleci/project
