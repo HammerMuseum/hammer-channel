@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Api;
+use Illuminate\Http\Request;
 
 /**
  * Class ListingController
@@ -26,15 +27,24 @@ class ListingController extends Controller
     /**
      * Fetches all videos from API and returns the template listing.blade.php
      *
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $videos = $this->api->request('videos', false);
+        $params = $request->all();
+        $videos = $this->api->request('videos', false, '?' . http_build_query($params));
+        $requestUrl = $request->url();
 
         if (isset($videos['success']) && $videos['success']) {
+            $prevLink = $videos['data']['_links']['prev'] !== ''?
+                rtrim($requestUrl, '/\\') . $videos['data']['_links']['prev'] : false;
+            $nextLink = $videos['data']['_links']['next'] !== '' ?
+                rtrim($requestUrl, '/\\') . $videos['data']['_links']['next'] : false;
             return view('listing', [
                'videos' => $videos['data'],
+               'nextLink' => $nextLink,
+               'prevLink' => $prevLink,
                'message' => false,
                'title' => '',
                'show_clear' => true
@@ -43,6 +53,9 @@ class ListingController extends Controller
         return view('listing', [
            'videos' => false,
            'message' => 'No videos available.',
+           'pages' => false,
+           'nextLink' => false,
+           'prevLink' => false,
            'title' => '',
            'show_clear' => false
         ]);
@@ -57,12 +70,14 @@ class ListingController extends Controller
     public function topic($keyword)
     {
         $queryString = http_build_query(['tags' => $keyword]);
-        $result = $this->api->request('search', '?' . $queryString);
+        $result = $this->api->request('search', false, '?' . $queryString);
         if (isset($result['success']) && $result['success']) {
             return view('listing', [
                 'videos' => $result['data'],
                 'message' => false,
                 'title' => ucfirst($keyword),
+                'nextLink' => false,
+                'prevLink' => false,
                 'show_clear' => false
             ]);
         }
@@ -70,7 +85,9 @@ class ListingController extends Controller
             'videos' => false,
             'message' => 'No videos available.',
             'title' => '',
-            'show_clear' => false
+            'nextLink' => false,
+            'prevLink' => false,
+            'show_clear' => false,
         ]);
     }
 }
