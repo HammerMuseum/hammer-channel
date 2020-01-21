@@ -33,7 +33,7 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        $videos = $this->api->request('videos?' . http_build_query($params));
+        $videos = $this->api->request('videos', false, '?' . http_build_query($params));
         $requestUrl = $request->url();
 
         if (isset($videos['success']) && $videos['success']) {
@@ -70,12 +70,14 @@ class ListingController extends Controller
     public function topic($keyword)
     {
         $queryString = http_build_query(['tags' => $keyword]);
-        $result = $this->api->request('search', '?' . $queryString);
+        $result = $this->api->request('search', false, '?' . $queryString);
         if (isset($result['success']) && $result['success']) {
             return view('listing', [
                 'videos' => $result['data'],
                 'message' => false,
                 'title' => ucfirst($keyword),
+                'nextLink' => false,
+                'prevLink' => false,
                 'show_clear' => false
             ]);
         }
@@ -83,7 +85,9 @@ class ListingController extends Controller
             'videos' => false,
             'message' => 'No videos available.',
             'title' => '',
-            'show_clear' => false
+            'nextLink' => false,
+            'prevLink' => false,
+            'show_clear' => false,
         ]);
     }
 }

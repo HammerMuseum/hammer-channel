@@ -15,6 +15,7 @@ class Api
      *
      * @param $type
      * @param $id
+     * @param $queryString
      * @return array
      */
     public function request($type, $id = false, $queryString = '')

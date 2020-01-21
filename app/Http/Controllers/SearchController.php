@@ -41,7 +41,7 @@ class SearchController extends Controller
         $searchTerm = $request->get('term');
         $params = $request->all();
         if (!is_null($searchTerm)) {
-            $results = $this->api->request('search', $searchTerm . '?' . http_build_query($params));
+            $results = $this->api->request('search', $searchTerm, '?' . http_build_query($params));
             $requestUrl = $request->url();
             if ($results && !isset($results['error'])) {
                 // Construct next and previous links with the original searched term
@@ -81,12 +81,12 @@ class SearchController extends Controller
     {
         $queryParams = $request->all();
         if (!empty($queryParams)) {
-            $results = $this->api->request('search/filter/' . $term . '?' . http_build_query($queryParams));
+            $results = $this->api->request('search/filter', $term, '?' . http_build_query($queryParams));
             $requestUrl = $request->url();
             $prevLink = $results['data']['_links']['prev'] !== '' ?
-                rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $searchTerm : false;
+                rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
             $nextLink = $results['data']['_links']['next'] !== '' ?
-                rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $searchTerm : false;
+                rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
             $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
             if ($results['success'] && !isset($results['error'])) {
                 return view('result', [
@@ -133,7 +133,7 @@ class SearchController extends Controller
                'sort' => $field,
                'direction' => $order
             ]);
-            $results = $this->api->request('search', $term . '?' . $queryParams);
+            $results = $this->api->request('search', $term, '?' . $queryParams);
             $requestUrl = $request->url();
             $prevLink = $results['data']['_links']['prev'] !== '' ?
                 rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
