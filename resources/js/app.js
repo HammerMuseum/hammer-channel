@@ -1,6 +1,8 @@
 // TODO: Is there a way we can use the runtime only build?
 import Vue from 'vue/dist/vue.esm';
+import VueFilterDateFormat from 'vue-filter-date-format';
 import VideoComponent from './components/VideoComponent.vue';
+import VideoPlayer from './components/VideoPlayer.vue';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -21,9 +23,12 @@ window.VIDEOJS_NO_BASE_THEME = true;
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
+Vue.use(VueFilterDateFormat);
+
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 Vue.component('video-component', VideoComponent);
+Vue.component('video-player', VideoPlayer);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

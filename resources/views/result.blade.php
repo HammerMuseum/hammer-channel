@@ -11,30 +11,10 @@
 @section('content')
 
     <div class="listing">
-        <div class="title">
-            @if ($title)
-                <h1>{{ $title }}</h1>
-            @endif
-        </div>
-        <div class="search">
-            <form class="search-box" action="/search">
-                <input type="search" name="term" />
-                <button type="submit">Search</button>
-            </form>
-            <a href="/">Clear</a>
-        </div>
         <div class="filters">
-            <div class="date">
-                <form action="/search/sort/{{ $term }}/date_recorded">
-                    <select type="dropdown" name="order">
-                        <option value="date_recorded_asc">Date (ASC)</option>
-                        <option value="date_recorded_desc">Date (DESC)</option>
-                    </select>
-                    <button type="submit">Sort</button>
-                </form>
-            </div>
             @if ($facets)
                 <div class="facets">
+                    <h2>Filter by</h2>
                     @foreach ($facets as $facetLabel => $facet)
                         @if ($facetLabel == 'Year Recorded')
                             <form action="/search/filter/{{ $term }}">
@@ -52,6 +32,16 @@
                     @endforeach
                 </div>
             @endif
+            <div class="date">
+                <form action="/search/sort/{{ $term }}/date_recorded">
+                    <label for="order">Order by</label>
+                    <select type="dropdown" name="order">
+                        <option value="date_recorded_asc">Date (ASC)</option>
+                        <option value="date_recorded_desc">Date (DESC)</option>
+                    </select>
+                    <button type="submit">Sort</button>
+                </form>
+            </div>
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])

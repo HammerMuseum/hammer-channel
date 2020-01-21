@@ -18,10 +18,10 @@ class VideoPageTest extends DuskTestCase
     {
         $this->browse(function ($first) {
             $first->visit('/video/1')
-                ->assertPresent('.title')
+                ->assertPresent('video')
+                ->assertVue('videoTitle', 'Mark Bradford\'s Finding Barry', '@video-component')
                 ->assertPresent('.description')
                 ->assertPresent('.date')
-                ->assertPresent('video')
                 ->assertPresent('.breadcrumb');
         });
     }

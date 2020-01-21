@@ -1,23 +1,11 @@
 @extends('app')
 
-@section('content')
-
+@section('content')    
     <div class="listing">
-        <div class="title">
-            @if ($title)
-                <h1>{{ $title }}</h1>
-            @endif
-        </div>
-        <div class="search">
-            <form class="search-box" action="/search">
-                <input type="search" name="term" />
-                <button type="submit">Search</button>
-            </form>
-            @if ($show_clear ?? '')
-                <a href="/">Clear</a>
-            @endif
-        </div>
         @if ($videos)
+            @if ($title)
+                <h1 class='title'>{{ $title }}</h1>
+            @endif
             @include('partials.result-grid', ['videos' => $videos])
             @if ($prevLink)
                 <a href="{{ $prevLink }}">Previous</a>

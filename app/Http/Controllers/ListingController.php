@@ -46,7 +46,7 @@ class ListingController extends Controller
                'nextLink' => $nextLink,
                'prevLink' => $prevLink,
                'message' => false,
-               'title' => 'All Videos',
+               'title' => '',
                'show_clear' => true
             ]);
         }

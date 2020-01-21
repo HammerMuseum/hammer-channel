@@ -14,28 +14,37 @@
             </a>
         </div>
         @if ($data !== false)
+            <video-component 
+                dusk="video-component"
+                url="{{ $data['video_url'] }}"
+                aid="{{ $data['asset_id'] }}"
+                title="{{ $data['title'] }}"
+                date="{{ $data['date_recorded'] }}"
+                description="{{ $data['description'] }}"
+                :tags='@json($data['tags'])'>
+            </video-component>
 
-            <video-component video_url="{{ $data['video_url'] }}"></video-component>
-
-            <div class="hammer-video__information">
-                <div class="title">
-                    <h1>{{ $data['title'] }}</h1>
+            <noscript>
+                <div class="hammer-video__information">
+                    <div class="title">
+                        <h1>{{ $data['title'] }}</h1>
+                    </div>
+                    <div class="date">
+                        <?php $date = new DateTime($data['date_recorded']); ?>
+                        {{ $date->format('l, F j, Y') }}
+                    </div>
+                    <div class="description">
+                        {{ $data['description'] }}
+                    </div>
+                    <div class="keywords">
+                        @if (isset($data['tags']) && !empty($data['tags']))
+                            @foreach ($data['tags'] as $key => $tag)
+                                <a href="/topics/{{ $tag }}">{{ $tag }}</a>@if ($key + 1 < count($data['tags'])), @endif
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
-                <div class="date">
-                    <?php $date = new DateTime($data['date_recorded']); ?>
-                    {{ $date->format('l, F j, Y') }}
-                </div>
-                <div class="description">
-                    {{ $data['description'] }}
-                </div>
-                <div class="keywords">
-                    @if (isset($data['tags']) && !empty($data['tags']))
-                        @foreach ($data['tags'] as $key => $tag)
-                            <a href="/topics/{{ $tag }}">{{ $tag }}</a>@if ($key + 1 < count($data['tags'])), @endif
-                        @endforeach
-                    @endif
-                </div>
-            </div>
+            </noscript>
         @else
             <div class="message">
                 <?php echo $message; ?>

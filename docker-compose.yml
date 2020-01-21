@@ -65,6 +65,8 @@ services:
       NGINX_BACKEND_HOST: php
       NGINX_VHOST_PRESET: php
       NGINX_SERVER_ROOT: /var/www/html/public
+    ports:
+        - 8999:80
     volumes:
       - ./:/var/www/html:cached
 # Options for macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)

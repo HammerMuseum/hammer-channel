@@ -38,26 +38,27 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-        $searchTerm = $request->get('term');
+        $term = $request->get('term');
         $params = $request->all();
-        if (!is_null($searchTerm)) {
-            $results = $this->api->request('search', $searchTerm, '?' . http_build_query($params));
+        if (!is_null($term)) {
+            $results = $this->api->request('search', $term, '?' . http_build_query($params));
             $requestUrl = $request->url();
             if ($results && !isset($results['error'])) {
                 // Construct next and previous links with the original searched term
                 $prevLink = $results['data']['_links']['prev'] !== '' ?
-                    rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $searchTerm : false;
+                    rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
                 $nextLink = $results['data']['_links']['next'] !== '' ?
-                    rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $searchTerm : false;
+                    rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
                 $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
                 return view('result', [
                     'videos' => $results['data'],
                     'nextLink' => $nextLink,
                     'prevLink' => $prevLink,
-                    'term' => $searchTerm,
+                    'term' => $term,
                     'message' => false,
-                    'title' => ucfirst($searchTerm),
-                    'facets' => $facets
+                    'title' => 'Results for "' . ucfirst($term) . '"',
+                    'facets' => $facets,
+                    'show_clear' => true,
                 ]);
             }
         }
@@ -95,7 +96,7 @@ class SearchController extends Controller
                     'prevLink' => $prevLink,
                     'term' => $term,
                     'message' => false,
-                    'title' => ucfirst($term),
+                    'title' => 'Results for "' . ucfirst($term) . '"',
                     'facets' => $facets
                 ]);
             }
