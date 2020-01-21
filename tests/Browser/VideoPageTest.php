@@ -17,7 +17,7 @@ class VideoPageTest extends DuskTestCase
     public function testVideoPage()
     {
         $this->browse(function ($first) {
-            // $first->visit('/video/1')
+            $first->visit('/video/1');
                 // ->assertVue('videoTitle', 'Mark Bradford\'s Finding Barry', '@video-component');
                 // ->assertPresent('.description')
                 // ->assertPresent('.date')

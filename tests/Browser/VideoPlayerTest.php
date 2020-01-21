@@ -21,7 +21,7 @@ class VideoPlayerTest extends DuskTestCase
     public function testVideoPlayer()
     {
         $this->browse(function (Browser $browser) {
-            // $browser->visit('/video/1')
+            $browser->visit('/video/1');
             //     ->waitFor('video')
             //     // Checks if the video source has loaded the provided URL
             //     ->assertSourceHas(
