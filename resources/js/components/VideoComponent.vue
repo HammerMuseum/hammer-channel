@@ -1,6 +1,6 @@
 <template>
   <div class="video-wrapper">
-    <video-player :options="videoOptions" :title="title"/>
+    <video-player dusk="video-player-component" :options="videoOptions" :title="title"/>
     <div class="video__info">
         <div class="video-info__card">
           <div class="title"><h1>{{ title }}</h1></div>
@@ -44,6 +44,7 @@
     },
     data() {
       return {
+        videoTitle: this.title,
         transcriptionIsVisible: false,
         transcription: null,
         videoOptions: {

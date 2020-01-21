@@ -15,6 +15,7 @@
         </div>
         @if ($data !== false)
             <video-component 
+                dusk="video-component"
                 url="{{ $data['video_url'] }}"
                 aid="{{ $data['asset_id'] }}"
                 title="{{ $data['title'] }}"
