@@ -12,7 +12,7 @@ This class creates a fake API response in the expected format and is registered 
 ## Running tests
 Run from the project root:
 
-    php artisan dusk
+    php artisan dusk --env=local
 
 
 ## Creating tests
