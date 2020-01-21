@@ -15,9 +15,10 @@ class Api
      *
      * @param $type
      * @param $id
+     * @param $queryString
      * @return array
      */
-    public function request($type, $id = false)
+    public function request($type, $id = false, $queryString = '')
     {
         $client = new Client([
             'base_uri' => config('app.datastore_url')
@@ -29,7 +30,7 @@ class Api
         }
 
         try {
-            $response = $client->request('GET', $type . $appendId);
+            $response = $client->request('GET', $type . $appendId . $queryString);
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
@@ -51,14 +52,18 @@ class Api
                 }
                 return [
                     'success' => false,
-                    'message' => 'Video asset not found.'
+                    'message' => 'Video asset not found.',
+                    'error' => true,
+                    'data' => []
                 ];
             }
         } catch (\Exception $e) {
             //@todo Implement more descriptive/friendly exception messages
             return [
                 'success' => false,
-                'message' => 'Video asset not found.'
+                'message' => 'Video asset not found.',
+                'error' => true,
+                'data' => []
             ];
         }
     }

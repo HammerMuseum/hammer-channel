@@ -39,12 +39,21 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $searchTerm = $request->get('term');
+        $params = $request->all();
         if (!is_null($searchTerm)) {
-            $results = $this->api->request('search', $searchTerm);
-            $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
+            $results = $this->api->request('search', $searchTerm, '?' . http_build_query($params));
+            $requestUrl = $request->url();
             if ($results && !isset($results['error'])) {
+                // Construct next and previous links with the original searched term
+                $prevLink = $results['data']['_links']['prev'] !== '' ?
+                    rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $searchTerm : false;
+                $nextLink = $results['data']['_links']['next'] !== '' ?
+                    rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $searchTerm : false;
+                $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
                 return view('result', [
                     'videos' => $results['data'],
+                    'nextLink' => $nextLink,
+                    'prevLink' => $prevLink,
                     'term' => $searchTerm,
                     'message' => false,
                     'title' => ucfirst($searchTerm),
@@ -55,6 +64,8 @@ class SearchController extends Controller
         return view('result', [
             'videos' => false,
             'term' => false,
+            'nextLink' => false,
+            'prevLink' => false,
             'message' => 'No results found',
             'title' => '',
             'facets' => false
@@ -70,11 +81,18 @@ class SearchController extends Controller
     {
         $queryParams = $request->all();
         if (!empty($queryParams)) {
-            $results = $this->api->request('search/filter/' . $term . '?' . http_build_query($queryParams));
+            $results = $this->api->request('search/filter', $term, '?' . http_build_query($queryParams));
+            $requestUrl = $request->url();
+            $prevLink = $results['data']['_links']['prev'] !== '' ?
+                rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
+            $nextLink = $results['data']['_links']['next'] !== '' ?
+                rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
             $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
             if ($results['success'] && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
+                    'nextLink' => $nextLink,
+                    'prevLink' => $prevLink,
                     'term' => $term,
                     'message' => false,
                     'title' => ucfirst($term),
@@ -85,6 +103,8 @@ class SearchController extends Controller
         return view('result', [
             'videos' => false,
             'term' => false,
+            'nextLink' => false,
+            'prevLink' => false,
             'message' => 'No results found',
             'title' => '',
             'facets' => false
@@ -113,12 +133,19 @@ class SearchController extends Controller
                'sort' => $field,
                'direction' => $order
             ]);
-            $results = $this->api->request('search', $term . '?' . $queryParams);
+            $results = $this->api->request('search', $term, '?' . $queryParams);
+            $requestUrl = $request->url();
+            $prevLink = $results['data']['_links']['prev'] !== '' ?
+                rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
+            $nextLink = $results['data']['_links']['next'] !== '' ?
+                rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
             $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
             if ($results && !isset($results['error'])) {
                 return view('result', [
                     'videos' => $results['data'],
                     'term' => $term,
+                    'nextLink' => $nextLink,
+                    'prevLink' => $prevLink,
                     'message' => false,
                     'title' => ucfirst($term),
                     'facets' => $facets
@@ -128,6 +155,8 @@ class SearchController extends Controller
         return view('result', [
             'videos' => false,
             'term' => false,
+            'nextLink' => false,
+            'prevLink' => false,
             'message' => 'No results found',
             'title' => '',
             'facets' => false

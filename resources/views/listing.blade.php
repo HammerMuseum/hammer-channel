@@ -19,6 +19,12 @@
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])
+            @if ($prevLink)
+                <a href="{{ $prevLink }}">Previous</a>
+            @endif
+            @if ($nextLink)
+                <a href="{{ $nextLink }}">Next</a>
+            @endif
         @elseif ($message)
             <div class="message">
                 <?php echo $message; ?>
