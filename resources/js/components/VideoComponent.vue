@@ -9,7 +9,7 @@
           <div class="keywords">
             <ul>
               <li v-bind:key="item.id" v-for="item in tags">
-                <a href="`/topics/${item}`">{{ item }}</a>
+                <a :href="`/topics/${item}`">{{ item }}</a>
               </li>
             </ul>
           </div>
