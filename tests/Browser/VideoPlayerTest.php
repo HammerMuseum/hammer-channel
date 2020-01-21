@@ -27,6 +27,6 @@ class VideoPlayerTest extends DuskTestCase
                         'src="https://trial10-8.assetbank-server.com/assetbank-trial10/rest/assets/232/content"'
                     );
                 });
-            });
+        });
     }
 }
