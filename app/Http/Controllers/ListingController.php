@@ -33,7 +33,7 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        $videos = $this->api->request('videos', false, '?' . http_build_query($params));
+        $videos = $this->api->request('videos', http_build_query($params));
         $requestUrl = $request->url();
 
         if (isset($videos['success']) && $videos['success']) {
