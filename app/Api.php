@@ -16,6 +16,10 @@ class Api
      * @param $type
      * @param $queryString
      * @return array
+     *  success
+     *  data
+     *  pages
+     *
      */
     public function request($type, $queryString = '')
     {
@@ -40,13 +44,15 @@ class Api
                     }
                     return [
                         'success' => true,
-                        'data' => $data['data']
+                        'data' => $data['data'],
+                        'pages' => $data['pages']
                     ];
                 }
                 return [
                     'success' => false,
                     'message' => 'Video asset not found.',
                     'error' => true,
+                    'pages' => [],
                     'data' => []
                 ];
             }
@@ -56,7 +62,8 @@ class Api
                 'success' => false,
                 'message' => 'Video asset not found.',
                 'error' => true,
-                'data' => []
+                'data' => [],
+                'pages' => []
             ];
         }
     }

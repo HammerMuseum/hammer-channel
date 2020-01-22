@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Api;
+use App\Library\Pagination;
 use Illuminate\Http\Request;
 
 /**
@@ -14,14 +15,20 @@ class ListingController extends Controller
     /** @var Api */
     protected $api;
 
+    /** @var Pagination */
+    protected $pagination;
+
     /**
      * ListingController constructor.
      * @param Api $api
+     * @param Pagination $pagination
      */
     public function __construct(
-        Api $api
+        Api $api,
+        Pagination $pagination
     ) {
         $this->api = $api;
+        $this->pagination = $pagination;
     }
 
     /**
@@ -37,14 +44,14 @@ class ListingController extends Controller
         $requestUrl = $request->url();
 
         if (isset($videos['success']) && $videos['success']) {
-            $prevLink = $videos['data']['_links']['prev'] !== ''?
-                rtrim($requestUrl, '/\\') . $videos['data']['_links']['prev'] : false;
-            $nextLink = $videos['data']['_links']['next'] !== '' ?
-                rtrim($requestUrl, '/\\') . $videos['data']['_links']['next'] : false;
+            $pagerLinks = [];
+            if (!empty($videos['pages'])) {
+                $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
+            }
+
             return view('listing', [
                'videos' => $videos['data'],
-               'nextLink' => $nextLink,
-               'prevLink' => $prevLink,
+               'pagerLinks' => $pagerLinks,
                'message' => false,
                'title' => '',
                'show_clear' => true
@@ -54,8 +61,7 @@ class ListingController extends Controller
            'videos' => false,
            'message' => 'No videos available.',
            'pages' => false,
-           'nextLink' => false,
-           'prevLink' => false,
+           'pagerLinks' => [],
            'title' => '',
            'show_clear' => false
         ]);

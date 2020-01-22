@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Api;
 use App\Library\Facets;
+use App\Library\Pagination;
 use Illuminate\Support\Str;
 
 /**
@@ -19,17 +20,23 @@ class SearchController extends Controller
     /** @var Facets */
     protected $facetHandler;
 
+    /** @var Pagination */
+    protected $pagination;
+
     /**
      * SearchController constructor.
      * @param Api $api
      * @param Facets $facetHandler
+     * @param Pagination $pagination
      */
     public function __construct(
         Api $api,
-        Facets $facetHandler
+        Facets $facetHandler,
+        Pagination $pagination
     ) {
         $this->api = $api;
         $this->facetHandler = $facetHandler;
+        $this->pagination = $pagination;
     }
 
     /**
@@ -41,19 +48,17 @@ class SearchController extends Controller
         $term = $request->get('term');
         $params = $request->all();
         if (!is_null($term)) {
-            $results = $this->api->request('search', $term, '?' . http_build_query($params));
-            $requestUrl = $request->url();
-            if ($results && !isset($results['error'])) {
-                // Construct next and previous links with the original searched term
-                $prevLink = $results['data']['_links']['prev'] !== '' ?
-                    rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
-                $nextLink = $results['data']['_links']['next'] !== '' ?
-                    rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
+            $results = $this->api->request('search/' . $term, http_build_query($params));
+            if ($results && !isset($results['error']) && isset($results['data'])) {
+                $pagerLinks = [];
+                $requestUrl = $request->url();
+                if (!empty($videos['pages'])) {
+                    $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
+                }
                 $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
                 return view('result', [
                     'videos' => $results['data'],
-                    'nextLink' => $nextLink,
-                    'prevLink' => $prevLink,
+                    'pagerLinks' => $pagerLinks,
                     'term' => $term,
                     'message' => false,
                     'title' => 'Results for "' . ucfirst($term) . '"',
@@ -61,16 +66,61 @@ class SearchController extends Controller
                     'show_clear' => true,
                 ]);
             }
+
+
+
+
+
+
+
         }
-        return view('result', [
-            'videos' => false,
-            'term' => false,
-            'nextLink' => false,
-            'prevLink' => false,
-            'message' => 'No results found',
-            'title' => '',
-            'facets' => false
-        ]);
+        // api/search?q=hammer&facets[0]date=2014:facets[1]speaker=lad&sort=date&order=desc
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        $term = $request->get('term');
+//        $params = $request->all();
+//        if (!is_null($term)) {
+//            $results = $this->api->request('search', $term, '?' . http_build_query($params));
+//            $requestUrl = $request->url();
+//            if ($results && !isset($results['error'])) {
+//                // Construct next and previous links with the original searched term
+//                $prevLink = $results['data']['_links']['prev'] !== '' ?
+//                    rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
+//                $nextLink = $results['data']['_links']['next'] !== '' ?
+//                    rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
+//                $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
+//                return view('result', [
+//                    'videos' => $results['data'],
+//                    'nextLink' => $nextLink,
+//                    'prevLink' => $prevLink,
+//                    'term' => $term,
+//                    'message' => false,
+//                    'title' => 'Results for "' . ucfirst($term) . '"',
+//                    'facets' => $facets,
+//                    'show_clear' => true,
+//                ]);
+//            }
+//        }
+//        return view('result', [
+//            'videos' => false,
+//            'term' => false,
+//            'nextLink' => false,
+//            'prevLink' => false,
+//            'message' => 'No results found',
+//            'title' => '',
+//            'facets' => false
+//        ]);
     }
 
     /**
