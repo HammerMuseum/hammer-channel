@@ -1,4 +1,10 @@
-version: "3"
+version: "3.5"
+
+networks:
+  db:
+  default:
+    external:
+      name: hammer-datastore_default
 
 services:
   mariadb:
@@ -10,21 +16,11 @@ services:
       MYSQL_DATABASE: $DB_NAME
       MYSQL_USER: $DB_USER
       MYSQL_PASSWORD: $DB_PASSWORD
+    networks:
+      - db
 #    volumes:
 #      - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
 #      - /path/to/mariadb/data/on/host:/var/lib/mysql # I want to manage volumes manually.
-
-#  postgres:
-#    image: wodby/postgres:$POSTGRES_TAG
-#    container_name: "${PROJECT_NAME}_postgres"
-#    stop_grace_period: 30s
-#    environment:
-#      POSTGRES_PASSWORD: $DB_PASSWORD
-#      POSTGRES_DB: $DB_NAME
-#      POSTGRES_USER: $DB_USER
-#    volumes:
-#      - ./postgres-init:/docker-entrypoint-initdb.d # Place init file(s) here.
-#      - /path/to/postgres/data/on/host:/var/lib/postgresql/data # I want to manage volumes manually.
 
   php:
     image: wodby/php:$PHP_TAG
@@ -37,6 +33,9 @@ services:
       DB_NAME: $DB_NAME
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
+    networks:
+      - db
+      - default
 ## Read instructions at https://wodby.com/docs/stacks/php/local/#xdebug
 #      PHP_XDEBUG: 1
 #      PHP_XDEBUG_DEFAULT_ENABLE: 1
@@ -48,6 +47,8 @@ services:
 #      PHP_XDEBUG_REMOTE_HOST: 10.0.75.1 # Windows
     volumes:
       - ./:/var/www/html:cached
+    # networks:
+    #   - hammer-datastore_default
 ## For macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)
 #      - ./:/var/www/html:cached # User-guided caching
 #      - docker-sync:/var/www/html # Docker-sync
@@ -65,14 +66,16 @@ services:
       NGINX_BACKEND_HOST: php
       NGINX_VHOST_PRESET: php
       NGINX_SERVER_ROOT: /var/www/html/public
-    ports:
-        - 8999:80
     volumes:
       - ./:/var/www/html:cached
+    networks:
+      - default
+      - db
 # Options for macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)
 #      - ./:/var/www/html:cached # User-guided caching
 #      - docker-sync:/var/www/html # Docker-sync
     labels:
+      - "traefik.docker.network=hammer-datastore_default"
       - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
 
 #  apache:
@@ -225,24 +228,24 @@ services:
 #    labels:
 #      - "traefik.http.routers.${PROJECT_NAME}_xhprof.rule=Host(`xhprof.${PROJECT_BASE_URL}`)"
 
-  portainer:
-    image: portainer/portainer
-    container_name: "${PROJECT_NAME}_portainer"
-    command: --no-auth -H unix:///var/run/docker.sock
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-     - "traefik.http.routers.${PROJECT_NAME}_portainer.rule=Host(`portainer.${PROJECT_BASE_URL}`)"
+  # portainer:
+  #   image: portainer/portainer
+  #   container_name: "${PROJECT_NAME}_portainer"
+  #   command: --no-auth -H unix:///var/run/docker.sock
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   labels:
+  #    - "traefik.http.routers.${PROJECT_NAME}_portainer.rule=Host(`portainer.${PROJECT_BASE_URL}`)"
 
-  traefik:
-    image: traefik:v2.0
-    container_name: "${PROJECT_NAME}_traefik"
-    command: --api.insecure=true --providers.docker
-    ports:
-      - '8000:80'
-      # - '8080:8080' # Dashboard
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+  # traefik:
+  #   image: traefik:v2.0
+  #   container_name: "${PROJECT_NAME}_traefik"
+  #   command: --api.insecure=true --providers.docker
+  #   ports:
+  #     - '8000:80'
+  #     # - '8080:8080' # Dashboard
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
 
 #volumes:
 ## Docker-sync for macOS users
