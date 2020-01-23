@@ -11,15 +11,15 @@ class Pagination
     /**
      * Constructs pager links
      *
-     * @param $requestUrl string
-     * @param $pager array
+     * @param array $pager
+     * @param array $params
      * @return mixed
      */
-    public function pagerLinks($requestUrl, $pager)
+    public function pagerLinks($pager, $params = [])
     {
         foreach ($pager as $key => $pagerLink) {
             if ($pagerLink !== '') {
-                $pager[$key] = rtrim($requestUrl, '/\\') . $pagerLink;
+                $pager[$key] = empty($params) ? '?' . $pagerLink : '&' . $pagerLink;
             } else {
                 $pager[$key] = false;
             }

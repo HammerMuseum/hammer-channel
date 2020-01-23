@@ -29,20 +29,19 @@
                     @endforeach
                     <div class="facets__sort">
                         <span class="facets__label">Order by</span>
-                        <a href="{{ $query }}&sort=date_recorded&order=asc">Date (ASC)</a>
-                        <a href="{{ $query }}&sort=date_recorded&order=desc">Date (DESC)</a>
+                        <a href="{{ $clearedQuery }}&sort=date_recorded&order=asc">Date (ASC)</a>
+                        <a href="{{ $clearedQuery }}&sort=date_recorded&order=desc">Date (DESC)</a>
                     </div>
                 </div>
             @endif
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])
-            {{--@if ($prevLink)--}}
-                {{--<a href="{{ $prevLink }}">Previous</a>--}}
-            {{--@endif--}}
-            {{--@if ($nextLink)--}}
-                {{--<a href="{{ $nextLink }}">Next</a>--}}
-            {{--@endif--}}
+            @foreach ($pagerLinks as $label => $pagerLink)
+                @if ($pagerLink)
+                    <a href="{{ $query }}{{ $pagerLink }}">{{ $label }}</a>
+                @endif
+            @endforeach
         @elseif ($message)
             <div class="message">
                 <?php echo $message; ?>

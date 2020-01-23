@@ -46,7 +46,7 @@ class ListingController extends Controller
             $requestUrl = $request->url();
             $pagerLinks = [];
             if (!empty($videos['pages'])) {
-                $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
+                $pagerLinks = $this->pagination->pagerLinks($videos['pages']['pager']);
             }
 
             return view('listing', [

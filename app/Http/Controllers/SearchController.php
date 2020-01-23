@@ -56,14 +56,13 @@ class SearchController extends Controller
             } else {
                 $results = $this->api->request('search/' . $term, http_build_query($params));
             }
+            $clearedParams = $this->clearParams($params);
             if ($results && !isset($results['error']) && isset($results['data'])) {
                 $pagerLinks = [];
-
-                if (!empty($videos['pages'])) {
-                    $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
+                if (!empty($results['pages'])) {
+                    $pagerLinks = $this->pagination->pagerLinks($results['pages']['pager'], $params);
                 }
                 $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
-                $clearedParams = $this->clearSort($params);
                 return view('result', [
                     'videos' => $results['data'],
                     'pagerLinks' => $pagerLinks,
@@ -72,7 +71,8 @@ class SearchController extends Controller
                     'title' => 'Results for "' . ucfirst($term) . '"',
                     'facets' => $facets,
                     'url' => $requestUrl,
-                    'query' => $requestUrl . '?' . http_build_query($clearedParams),
+                    'query' => $request->fullUrl(),
+                    'clearedQuery' => $requestUrl . '?' . http_build_query($clearedParams),
                     'show_clear' => true,
                 ]);
             }
@@ -105,11 +105,14 @@ class SearchController extends Controller
      * @param $params
      * @return mixed
      */
-    public function clearSort($params)
+    public function clearParams($params)
     {
         if (isset($params['sort']) && isset($params['order'])) {
             unset($params['sort']);
             unset($params['order']);
+        }
+        if (isset($params['start'])) {
+            unset($params['start']);
         }
         return $params;
     }
