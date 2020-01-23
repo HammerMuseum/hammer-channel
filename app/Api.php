@@ -45,7 +45,8 @@ class Api
                     return [
                         'success' => true,
                         'data' => $data['data'],
-                        'pages' => $data['pages']
+                        'pages' => $data['pages'],
+                        'aggregations' => $data['aggregations']
                     ];
                 }
                 return [
@@ -53,7 +54,8 @@ class Api
                     'message' => 'Video asset not found.',
                     'error' => true,
                     'pages' => [],
-                    'data' => []
+                    'data' => [],
+                    'aggregations' => []
                 ];
             }
         } catch (\Exception $e) {
@@ -63,7 +65,8 @@ class Api
                 'message' => 'Video asset not found.',
                 'error' => true,
                 'data' => [],
-                'pages' => []
+                'pages' => [],
+                'aggregations' => []
             ];
         }
     }

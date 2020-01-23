@@ -55,7 +55,7 @@ class SearchController extends Controller
                 if (!empty($videos['pages'])) {
                     $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
                 }
-                $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
+                $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
                 return view('result', [
                     'videos' => $results['data'],
                     'pagerLinks' => $pagerLinks,
@@ -66,61 +66,24 @@ class SearchController extends Controller
                     'show_clear' => true,
                 ]);
             }
-
-
-
-
-
-
-
+            return view('result', [
+                'videos' => false,
+                'term' => false,
+                'pagerLinks' => [],
+                'message' => 'No results found',
+                'title' => '',
+                'facets' => false
+            ]);
         }
-        // api/search?q=hammer&facets[0]date=2014:facets[1]speaker=lad&sort=date&order=desc
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        $term = $request->get('term');
-//        $params = $request->all();
-//        if (!is_null($term)) {
-//            $results = $this->api->request('search', $term, '?' . http_build_query($params));
-//            $requestUrl = $request->url();
-//            if ($results && !isset($results['error'])) {
-//                // Construct next and previous links with the original searched term
-//                $prevLink = $results['data']['_links']['prev'] !== '' ?
-//                    rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
-//                $nextLink = $results['data']['_links']['next'] !== '' ?
-//                    rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
-//                $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
-//                return view('result', [
-//                    'videos' => $results['data'],
-//                    'nextLink' => $nextLink,
-//                    'prevLink' => $prevLink,
-//                    'term' => $term,
-//                    'message' => false,
-//                    'title' => 'Results for "' . ucfirst($term) . '"',
-//                    'facets' => $facets,
-//                    'show_clear' => true,
-//                ]);
-//            }
-//        }
-//        return view('result', [
-//            'videos' => false,
-//            'term' => false,
-//            'nextLink' => false,
-//            'prevLink' => false,
-//            'message' => 'No results found',
-//            'title' => '',
-//            'facets' => false
-//        ]);
+        return view('result', [
+            'videos' => false,
+            'term' => false,
+            'pagerLinks' => [],
+            'message' => 'No search term entered.',
+            'title' => '',
+            'facets' => false
+        ]);
+        // api/search/hammer?facets[0]date=2014:facets[1]speaker=lad&sort=date&order=desc
     }
 
     /**
@@ -132,18 +95,17 @@ class SearchController extends Controller
     {
         $queryParams = $request->all();
         if (!empty($queryParams)) {
-            $results = $this->api->request('search/filter', $term, '?' . http_build_query($queryParams));
+            $results = $this->api->request('search/filter/' . $term, http_build_query($queryParams));
+            $pagerLinks = [];
             $requestUrl = $request->url();
-            $prevLink = $results['data']['_links']['prev'] !== '' ?
-                rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
-            $nextLink = $results['data']['_links']['next'] !== '' ?
-                rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
-            $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
+            if (!empty($videos['pages'])) {
+                $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
+            }
             if ($results['success'] && !isset($results['error'])) {
+                $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
                 return view('result', [
                     'videos' => $results['data'],
-                    'nextLink' => $nextLink,
-                    'prevLink' => $prevLink,
+                    'pagerLinks' => $pagerLinks,
                     'term' => $term,
                     'message' => false,
                     'title' => 'Results for "' . ucfirst($term) . '"',
@@ -154,8 +116,7 @@ class SearchController extends Controller
         return view('result', [
             'videos' => false,
             'term' => false,
-            'nextLink' => false,
-            'prevLink' => false,
+            'pagerLinks' => [],
             'message' => 'No results found',
             'title' => '',
             'facets' => false
@@ -195,8 +156,7 @@ class SearchController extends Controller
                 return view('result', [
                     'videos' => $results['data'],
                     'term' => $term,
-                    'nextLink' => $nextLink,
-                    'prevLink' => $prevLink,
+                    'pagerLinks' => [],
                     'message' => false,
                     'title' => ucfirst($term),
                     'facets' => $facets
