@@ -14,6 +14,8 @@ class Facets
     ];
 
     /**
+     * Build an array of available facet options for filtering
+     *
      * @param $aggregations
      * @return array
      */
@@ -33,7 +35,8 @@ class Facets
     }
 
     /**
-     * Deconstruct URL parameters to build a querystring for the API
+     * Deconstruct URL parameters to build a query string for the API
+     *
      * @param $params
      * @return string
      */

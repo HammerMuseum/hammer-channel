@@ -58,12 +58,11 @@ class ListingController extends Controller
             ]);
         }
         return view('listing', [
-           'videos' => false,
-           'message' => 'No videos available.',
-           'pages' => false,
-           'pagerLinks' => [],
-           'title' => '',
-           'show_clear' => false
+            'videos' => false,
+            'pagerLinks' => [],
+            'message' => 'No videos available.',
+            'title' => '',
+            'show_clear' => false
         ]);
     }
 

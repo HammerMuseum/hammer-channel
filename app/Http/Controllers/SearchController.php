@@ -40,8 +40,9 @@ class SearchController extends Controller
     }
 
     /**
+     * Perform a search or sorted/filtered search
+     *
      * @param Request $request
-     * @param string $term
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function search(Request $request)
@@ -78,24 +79,28 @@ class SearchController extends Controller
             }
             return view('result', [
                 'videos' => false,
-                'term' => false,
                 'pagerLinks' => [],
+                'term' => false,
                 'message' => 'No results found',
                 'title' => '',
                 'url' => $requestUrl,
                 'query' => $request->fullUrl(),
-                'facets' => false
+                'clearedQuery' => $requestUrl,
+                'facets' => false,
+                'show_clear' => true
             ]);
         }
         return view('result', [
             'videos' => false,
-            'term' => false,
             'pagerLinks' => [],
+            'term' => false,
             'message' => 'No search term entered.',
             'title' => '',
             'url' => $requestUrl,
             'query' => $request->fullUrl(),
-            'facets' => false
+            'clearedQuery' => $requestUrl,
+            'facets' => false,
+            'show_clear' => true
         ]);
     }
 

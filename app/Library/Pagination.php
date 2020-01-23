@@ -19,6 +19,7 @@ class Pagination
     {
         foreach ($pager as $key => $pagerLink) {
             if ($pagerLink !== '') {
+                // If there are already query parameters, use the correct concatenation
                 $pager[$key] = empty($params) ? '?' . $pagerLink : '&' . $pagerLink;
             } else {
                 $pager[$key] = false;
