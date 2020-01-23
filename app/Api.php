@@ -33,7 +33,7 @@ class Api
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
-                    if (isset($data['data'])) {
+                    if (isset($data['data']) && !empty($data['data'])) {
                         foreach ($data['data'] as $key => $item) {
                             if (isset($item['video_url'])) {
                                 $videoUrl = $item['video_url'] . '/url';
