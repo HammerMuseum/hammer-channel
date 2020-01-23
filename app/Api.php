@@ -13,12 +13,9 @@ class Api
     /**
      * Request data from the API
      *
-     * @param $type
-     * @param $queryString
+     * @param string $type
+     * @param string $queryString
      * @return array
-     *  success
-     *  data
-     *  pages
      *
      */
     public function request($type, $queryString = '')
@@ -50,8 +47,9 @@ class Api
                     ];
                 }
                 return [
+                    //@todo Implement more descriptive/friendly error messages
                     'success' => false,
-                    'message' => 'Video asset not found.',
+                    'message' => isset($data['message']) ? $data['message'] : 'An error occurred',
                     'error' => true,
                     'pages' => [],
                     'data' => [],
@@ -59,10 +57,10 @@ class Api
                 ];
             }
         } catch (\Exception $e) {
-            //@todo Implement more descriptive/friendly exception messages
+            //@todo Implement more descriptive/friendly error messages
             return [
                 'success' => false,
-                'message' => 'Video asset not found.',
+                'message' => 'An error occurred.',
                 'error' => true,
                 'data' => [],
                 'pages' => [],
@@ -72,7 +70,7 @@ class Api
     }
 
     /**
-     * @param $contentUrl
+     * @param string $contentUrl
      * @return \Psr\Http\Message\StreamInterface
      */
     public function getPlaybackUrl($contentUrl)
