@@ -13,29 +13,24 @@ class Api
     /**
      * Request data from the API
      *
-     * @param $type
-     * @param $id
-     * @param $queryString
+     * @param string $type
+     * @param string $queryString
      * @return array
+     *
      */
-    public function request($type, $id = false, $queryString = '')
+    public function request($type, $queryString = '')
     {
         $client = new Client([
             'base_uri' => config('app.datastore_url')
         ]);
 
-        $appendId = '';
-        if ($id) {
-            $appendId = '/' . $id;
-        }
-
         try {
-            $response = $client->request('GET', $type . $appendId . $queryString);
+            $response = $client->request('GET', $type . '?' . $queryString);
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
-                    if (isset($data['data']) && $id) {
+                    if (isset($data['data']) && !empty($data['data'])) {
                         foreach ($data['data'] as $key => $item) {
                             if (isset($item['video_url'])) {
                                 $videoUrl = $item['video_url'] . '/url';
@@ -46,29 +41,36 @@ class Api
                     }
                     return [
                         'success' => true,
-                        'data' => $data['data']
+                        'data' => $data['data'],
+                        'pages' => $data['pages'],
+                        'aggregations' => $data['aggregations']
                     ];
                 }
                 return [
+                    //@todo Implement more descriptive/friendly error messages
                     'success' => false,
-                    'message' => 'Video asset not found.',
+                    'message' => isset($data['message']) ? $data['message'] : 'An error occurred',
                     'error' => true,
-                    'data' => []
+                    'pages' => [],
+                    'data' => [],
+                    'aggregations' => []
                 ];
             }
         } catch (\Exception $e) {
-            //@todo Implement more descriptive/friendly exception messages
+            //@todo Implement more descriptive/friendly error messages
             return [
                 'success' => false,
-                'message' => 'Video asset not found.',
+                'message' => 'An error occurred.',
                 'error' => true,
-                'data' => []
+                'data' => [],
+                'pages' => [],
+                'aggregations' => []
             ];
         }
     }
 
     /**
-     * @param $contentUrl
+     * @param string $contentUrl
      * @return \Psr\Http\Message\StreamInterface
      */
     public function getPlaybackUrl($contentUrl)
