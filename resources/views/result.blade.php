@@ -29,8 +29,8 @@
                     @endforeach
                     <div class="facets__sort">
                         <span class="facets__label">Order by</span>
-                        <a href="{{ $clearedQuery }}&sort=date_recorded&order=asc">Date (ASC)</a>
-                        <a href="{{ $clearedQuery }}&sort=date_recorded&order=desc">Date (DESC)</a>
+                        <a href="{{ $clearedSortQuery }}&sort=date_recorded&order=asc">Date (ASC)</a>
+                        <a href="{{ $clearedSortQuery }}&sort=date_recorded&order=desc">Date (DESC)</a>
                     </div>
                 </div>
             @endif
@@ -39,7 +39,7 @@
             @include('partials.result-grid', ['videos' => $videos])
             @foreach ($pagerLinks as $label => $pagerLink)
                 @if ($pagerLink)
-                    <a href="{{ $query }}{{ $pagerLink }}">{{ $label }}</a>
+                    <a href="{{ $clearedPageQuery }}{{ $pagerLink }}">{{ $label }}</a>
                 @endif
             @endforeach
         @elseif ($message)

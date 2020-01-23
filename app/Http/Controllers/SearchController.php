@@ -57,13 +57,13 @@ class SearchController extends Controller
             } else {
                 $results = $this->api->request('search/' . $term, http_build_query($params));
             }
-            $clearedParams = $this->clearParams($params);
             if ($results && !isset($results['error']) && isset($results['data'])) {
                 $pagerLinks = [];
                 if (!empty($results['pages'])) {
                     $pagerLinks = $this->pagination->pagerLinks($results['pages']['pager'], $params);
                 }
                 $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
+                $clearedParams = $this->clearParams($params, ['sort', 'order', 'start']);
                 return view('result', [
                     'videos' => $results['data'],
                     'pagerLinks' => $pagerLinks,
@@ -73,7 +73,8 @@ class SearchController extends Controller
                     'facets' => $facets,
                     'url' => $requestUrl,
                     'query' => $request->fullUrl(),
-                    'clearedQuery' => $requestUrl . '?' . http_build_query($clearedParams),
+                    'clearedPageQuery' => $requestUrl . '?' . $this->clearParams($params, ['start']),
+                    'clearedSortQuery' => $requestUrl . '?' . $this->clearParams($params, ['sort', 'order']),
                     'show_clear' => true,
                 ]);
             }
@@ -85,7 +86,8 @@ class SearchController extends Controller
                 'title' => '',
                 'url' => $requestUrl,
                 'query' => $request->fullUrl(),
-                'clearedQuery' => $requestUrl,
+                'clearedPageQuery' => $requestUrl,
+                'clearedSortQuery' => $requestUrl,
                 'facets' => false,
                 'show_clear' => true
             ]);
@@ -98,7 +100,8 @@ class SearchController extends Controller
             'title' => '',
             'url' => $requestUrl,
             'query' => $request->fullUrl(),
-            'clearedQuery' => $requestUrl,
+            'clearedPageQuery' => $requestUrl,
+            'clearedSortQuery' => $requestUrl,
             'facets' => false,
             'show_clear' => true
         ]);
@@ -110,15 +113,13 @@ class SearchController extends Controller
      * @param $params
      * @return mixed
      */
-    public function clearParams($params)
+    public function clearParams($params, $keys = [])
     {
-        if (isset($params['sort']) && isset($params['order'])) {
-            unset($params['sort']);
-            unset($params['order']);
+        foreach ($keys as $key) {
+            if (isset($params[$key])) {
+                unset($params[$key]);
+            }
         }
-        if (isset($params['start'])) {
-            unset($params['start']);
-        }
-        return $params;
+        return http_build_query($params);
     }
 }
