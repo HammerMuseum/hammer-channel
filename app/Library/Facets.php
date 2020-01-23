@@ -31,4 +31,26 @@ class Facets
         }
         return $facetOptions;
     }
+
+    /**
+     * Deconstruct URL parameters to build a querystring for the API
+     * @param $params
+     * @return string
+     */
+    public function getFacetQueryString($params)
+    {
+        $queryString = '';
+        $facetQueryString = 'facets=';
+        foreach ($params as $key => $value) {
+            if ($key == 'facets') {
+                $query = explode(':', substr($value, 3));
+                $query = $query[0] . ':' . $query[1] . ';';
+                $facetQueryString .= $query;
+            } else {
+                $queryString .= "&$key=$value";
+            }
+        }
+        $facetQueryString .= $queryString;
+        return $facetQueryString;
+    }
 }

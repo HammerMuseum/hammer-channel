@@ -17,31 +17,23 @@
                     <h2>Filter by</h2>
                     @foreach ($facets as $facetLabel => $facet)
                         @if ($facetLabel == 'Year Recorded')
-                            <form action="/search/filter/{{ $term }}">
-                                <label for="date_recorded">{{ $facetLabel }}</label>
-                                <select name="date_recorded" id="year">
-                                    @foreach ($facet as $option)
-                                        <?php $date = new DateTime($option['key_as_string']) ?>
-                                        <option value="{{ $date->format('Y') }}">{{ $date->format('Y') }}</option>
-                                    @endforeach
-                                </select>
-                                <button type="submit">Filter</button>
-                                <a href="/search?term={{ $term }}">Clear filter</a>
-                            </form>
+                            <span class="facets__label">{{ $facetLabel }}</span>
+                            @foreach ($facet as $option)
+                                <?php $date = new DateTime($option['key_as_string']) ?>
+                                <a href="{{ $url }}?term={{ $term }}&facets=[0]date_recorded:{{ $date->format('Y') }}">
+                                    {{ $date->format('Y') }}
+                                </a>
+                            @endforeach
+                            <a href="/search?term={{ $term }}">Clear filter</a>
                         @endif
                     @endforeach
+                    <div class="facets__sort">
+                        <span class="facets__label">Order by</span>
+                        <a href="{{ $query }}&sort=date_recorded&order=asc">Date (ASC)</a>
+                        <a href="{{ $query }}&sort=date_recorded&order=desc">Date (DESC)</a>
+                    </div>
                 </div>
             @endif
-            <div class="date">
-                <form action="/search/sort/{{ $term }}/date_recorded">
-                    <label for="order">Order by</label>
-                    <select type="dropdown" name="order">
-                        <option value="date_recorded_asc">Date (ASC)</option>
-                        <option value="date_recorded_desc">Date (DESC)</option>
-                    </select>
-                    <button type="submit">Sort</button>
-                </form>
-            </div>
         </div>
         @if ($videos)
             @include('partials.result-grid', ['videos' => $videos])

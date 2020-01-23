@@ -41,21 +41,29 @@ class SearchController extends Controller
 
     /**
      * @param Request $request
+     * @param string $term
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function search(Request $request)
     {
-        $term = $request->get('term');
         $params = $request->all();
+        $term = $request->get('term');
+        $requestUrl = $request->url();
         if (!is_null($term)) {
-            $results = $this->api->request('search/' . $term, http_build_query($params));
+            if (array_key_exists('facets', $params)) {
+                $queryString = $this->facetHandler->getFacetQueryString($params);
+                $results = $this->api->request('search/filter/' . $term, $queryString);
+            } else {
+                $results = $this->api->request('search/' . $term, http_build_query($params));
+            }
             if ($results && !isset($results['error']) && isset($results['data'])) {
                 $pagerLinks = [];
-                $requestUrl = $request->url();
+
                 if (!empty($videos['pages'])) {
                     $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
                 }
                 $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
+                $clearedParams = $this->clearSort($params);
                 return view('result', [
                     'videos' => $results['data'],
                     'pagerLinks' => $pagerLinks,
@@ -63,6 +71,8 @@ class SearchController extends Controller
                     'message' => false,
                     'title' => 'Results for "' . ucfirst($term) . '"',
                     'facets' => $facets,
+                    'url' => $requestUrl,
+                    'query' => $requestUrl . '?' . http_build_query($clearedParams),
                     'show_clear' => true,
                 ]);
             }
@@ -72,6 +82,8 @@ class SearchController extends Controller
                 'pagerLinks' => [],
                 'message' => 'No results found',
                 'title' => '',
+                'url' => $requestUrl,
+                'query' => $request->fullUrl(),
                 'facets' => false
             ]);
         }
@@ -81,96 +93,24 @@ class SearchController extends Controller
             'pagerLinks' => [],
             'message' => 'No search term entered.',
             'title' => '',
-            'facets' => false
-        ]);
-        // api/search/hammer?facets[0]date=2014:facets[1]speaker=lad&sort=date&order=desc
-    }
-
-    /**
-     * @param Request $request
-     * @param $term
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function filter(Request $request, $term)
-    {
-        $queryParams = $request->all();
-        if (!empty($queryParams)) {
-            $results = $this->api->request('search/filter/' . $term, http_build_query($queryParams));
-            $pagerLinks = [];
-            $requestUrl = $request->url();
-            if (!empty($videos['pages'])) {
-                $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
-            }
-            if ($results['success'] && !isset($results['error'])) {
-                $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
-                return view('result', [
-                    'videos' => $results['data'],
-                    'pagerLinks' => $pagerLinks,
-                    'term' => $term,
-                    'message' => false,
-                    'title' => 'Results for "' . ucfirst($term) . '"',
-                    'facets' => $facets
-                ]);
-            }
-        }
-        return view('result', [
-            'videos' => false,
-            'term' => false,
-            'pagerLinks' => [],
-            'message' => 'No results found',
-            'title' => '',
+            'url' => $requestUrl,
+            'query' => $request->fullUrl(),
             'facets' => false
         ]);
     }
 
     /**
-     * @param Request $request
-     *  The request from the form submission
+     * Clear unwanted sorting parameters
      *
-     * @param $term string
-     *  The original search term
-     *
-     * @param $field string
-     *  The field to sort by
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param $params
+     * @return mixed
      */
-    public function sort(Request $request, $term, $field)
+    public function clearSort($params)
     {
-        $orderValue = $request->get('order');
-
-        if (!is_null($orderValue)) {
-            $order = Str::after($orderValue, $field . '_');
-            $queryParams = http_build_query([
-               'sort' => $field,
-               'direction' => $order
-            ]);
-            $results = $this->api->request('search', $term, '?' . $queryParams);
-            $requestUrl = $request->url();
-            $prevLink = $results['data']['_links']['prev'] !== '' ?
-                rtrim($requestUrl, '/\\') . $results['data']['_links']['prev'] . '&term=' . $term : false;
-            $nextLink = $results['data']['_links']['next'] !== '' ?
-                rtrim($requestUrl, '/\\') . $results['data']['_links']['next'] . '&term=' . $term : false;
-            $facets = $this->facetHandler->getFacetOptions($results['data']['aggregations']);
-            if ($results && !isset($results['error'])) {
-                return view('result', [
-                    'videos' => $results['data'],
-                    'term' => $term,
-                    'pagerLinks' => [],
-                    'message' => false,
-                    'title' => ucfirst($term),
-                    'facets' => $facets
-                ]);
-            }
+        if (isset($params['sort']) && isset($params['order'])) {
+            unset($params['sort']);
+            unset($params['order']);
         }
-        return view('result', [
-            'videos' => false,
-            'term' => false,
-            'nextLink' => false,
-            'prevLink' => false,
-            'message' => 'No results found',
-            'title' => '',
-            'facets' => false
-        ]);
+        return $params;
     }
 }

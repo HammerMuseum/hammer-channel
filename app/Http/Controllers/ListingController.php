@@ -41,9 +41,9 @@ class ListingController extends Controller
     {
         $params = $request->all();
         $videos = $this->api->request('videos', http_build_query($params));
-        $requestUrl = $request->url();
 
         if (isset($videos['success']) && $videos['success']) {
+            $requestUrl = $request->url();
             $pagerLinks = [];
             if (!empty($videos['pages'])) {
                 $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
@@ -70,20 +70,25 @@ class ListingController extends Controller
     /**
      * List videos by topic
      *
+     * @param Request $request
      * @param $keyword
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function topic($keyword)
+    public function topic(Request $request, $keyword)
     {
         $queryString = http_build_query(['tags' => $keyword]);
         $result = $this->api->request('search', $queryString);
         if (isset($result['success']) && $result['success']) {
+            $requestUrl = $request->url();
+            $pagerLinks = [];
+            if (!empty($videos['pages'])) {
+                $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
+            }
             return view('listing', [
                 'videos' => $result['data'],
                 'message' => false,
                 'title' => ucfirst($keyword),
-                'nextLink' => false,
-                'prevLink' => false,
+                'pagerLinks' => $pagerLinks,
                 'show_clear' => false
             ]);
         }
@@ -91,8 +96,7 @@ class ListingController extends Controller
             'videos' => false,
             'message' => 'No videos available.',
             'title' => '',
-            'nextLink' => false,
-            'prevLink' => false,
+            'pagerLinks' => [],
             'show_clear' => false,
         ]);
     }
