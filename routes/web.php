@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/video/{id}', 'VideoController@view');
+Route::get('/video/{slug}', 'VideoController@view');
 Route::get('/', 'ListingController@index');
 Route::get('/search', 'SearchController@search');
 Route::get('/topics/{keyword}', 'ListingController@topic');
