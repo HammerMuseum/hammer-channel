@@ -13,13 +13,13 @@
   <body>
     
     @include('header')
-    
+
     <div class="main" id="main-content">
         @yield('content')
     </div>
 
-    <script type="text/javascript" src="/js/main.js"></script>
-    {{-- <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : '/js/main.js' }}"></script> --}}
+    {{--<script type="text/javascript" src="/js/main.js"></script>--}}
+     <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : 'http://localhost:8080/js/app.js' }}"></script>
 
   </body>
 </html>

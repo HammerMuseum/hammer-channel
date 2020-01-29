@@ -22,7 +22,7 @@ class Pagination
                 // If there are already query parameters, use the correct concatenation
                 $pager[$key] = empty($params) ? '?' . $pagerLink : '&' . $pagerLink;
             } else {
-                $pager[$key] = false;
+                $pager[$key] = '';
             }
         }
         return $pager;

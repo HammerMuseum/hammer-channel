@@ -64,7 +64,7 @@ class SearchController extends Controller
                 }
                 $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
                 $clearedParams = $this->clearParams($params, ['sort', 'order', 'start']);
-                return view('result', [
+                return view('app/search', [
                     'videos' => $results['data'],
                     'pagerLinks' => $pagerLinks,
                     'term' => $term,
@@ -78,7 +78,7 @@ class SearchController extends Controller
                     'show_clear' => true,
                 ]);
             }
-            return view('result', [
+            return view('app/search', [
                 'videos' => false,
                 'pagerLinks' => [],
                 'term' => false,
@@ -92,7 +92,7 @@ class SearchController extends Controller
                 'show_clear' => true
             ]);
         }
-        return view('result', [
+        return view('app/search', [
             'videos' => false,
             'pagerLinks' => [],
             'term' => false,

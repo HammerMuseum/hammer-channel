@@ -43,13 +43,12 @@ class ListingController extends Controller
         $videos = $this->api->request('videos', http_build_query($params));
 
         if (isset($videos['success']) && $videos['success']) {
-            $requestUrl = $request->url();
             $pagerLinks = [];
             if (!empty($videos['pages'])) {
                 $pagerLinks = $this->pagination->pagerLinks($videos['pages']['pager']);
             }
 
-            return view('listing', [
+            return view('app/home', [
                'videos' => $videos['data'],
                'pagerLinks' => $pagerLinks,
                'message' => false,
@@ -57,7 +56,7 @@ class ListingController extends Controller
                'show_clear' => true
             ]);
         }
-        return view('listing', [
+        return view('app/home', [
             'videos' => false,
             'pagerLinks' => [],
             'message' => 'No videos available.',
