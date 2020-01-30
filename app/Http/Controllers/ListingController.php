@@ -43,11 +43,6 @@ class ListingController extends Controller
         $videos = $this->api->request('videos', http_build_query($params));
 
         if (isset($videos['success']) && $videos['success']) {
-            $pagerLinks = [];
-            if (!empty($videos['pages'])) {
-                $pagerLinks = $this->pagination->pagerLinks($videos['pages']['pager']);
-            }
-
             return view('app', [
                'state' => response()->json($this->getAppState($videos))
             ]);
@@ -63,9 +58,8 @@ class ListingController extends Controller
         $videos = $this->api->request('videos', http_build_query($params));
 
         if (isset($videos['success']) && $videos['success']) {
-            return [
-                'state' => response()->json($this->getAppState($videos))
-            ];
+            $state = $this->getAppState($videos);
+            return response()->json($state);
         }
     }
 

@@ -1,19 +1,18 @@
 <template>
   <div class="video-wrapper">
     <video-player dusk="video-player-component"
-       :options="videoOptions"
+       :options="this.videoOptions"
        :title="title"
-       :trackList="trackList"
        @error="onPlayerError()">
     </video-player>
     <div class="video__info">
         <div class="video-info__card">
-          <div class="title"><h1>{{ this.title }}</h1></div>
+          <div class="title"><h1>{{ title }}</h1></div>
           <div class="date">{{ new Date(this.date) | dateFormat('dddd, DD MMMM, YYYY') }}</div>
           <div class="description">{{ this.description }}</div>
           <div class="keywords">
             <ul>
-              <li v-bind:key="item.id" v-for="item in this.tags">
+              <li v-bind:key="item.id" v-for="item in this.keywords">
                 <a :href="`/topics/${item}`">{{ item }}</a>
               </li>
             </ul>
@@ -32,14 +31,6 @@
   import VideoPlayer from "./VideoPlayer.vue";
   export default {
     name: 'VideoComponent',
-    props: {
-      url: String,
-      aid: String,
-      title: String,
-      date: String,
-      description: String,
-      tags: Array,
-    },
     components: {
       VideoPlayer
     },
@@ -50,19 +41,14 @@
     },
     data() {
       return {
-        videoTitle: this.title,
+        title: this.title,
+        description: this.description,
+        date: this.date,
         transcriptionIsVisible: false,
         transcription: null,
-        videoOptions: {
-          autoplay: false,
-          controls: true,
-          sources: [
-            {
-              src: this.url,
-              type: "video/mp4"
-            }
-          ]
-        }
+        videoUrl: this.videoUrl,
+        keywords: this.keywords,
+        videoOptions: this.videoOptions
       };
     },
     mounted() {
@@ -70,20 +56,32 @@
         axios
             .get(`http://video.rufio.office.cogapp.com/viewJson/${asset_id}`)
             .then((response) => {
-                console.log(response)
-                this.title = response.data.state.data.title;
-                this.description = response.data.state.data.description;
-                this.asset_id = response.data.state.data.asset_id;
-                this.date = response.data.state.data.date_recorded;
-                this.thumbnail_url = response.data.state.data.thumbnail_url;
-                this.videos = response.data.state.data.videos;
+                this.title = response.data.data.title;
+                this.description = response.data.data.description;
+                this.asset_id = response.data.data.asset_id;
+                this.date = response.data.data.date_recorded;
+                this.thumbnail_url = response.data.data.thumbnail_url;
+                this.videoUrl = response.data.data.video_url;
+                this.keywords = response.data.data.tags;
+
+                this.videoOptions = {
+                    autoplay: false,
+                        controls: true,
+                        sources: [
+                        {
+                            src: this.videoUrl,
+                            type: "video/mp4"
+                        }
+                    ]
+                }
             });
 
-      axios
-        .get(`https://datastore.hammer.cogapp.com/api/videos/${this.aid}/transcript`)
-        .then((response) => {
-          this.transcription = response.data.data[0].transcription;
-        });
+
+      // axios
+        // .get(`https://datastore.hammer.cogapp.com/api/videos/${this.aid}/transcript`)
+        // .then((response) => {
+        //   this.transcription = response.data.data[0].transcription;
+        // });
     }
   }
 </script>

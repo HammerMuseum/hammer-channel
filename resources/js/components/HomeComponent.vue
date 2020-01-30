@@ -5,7 +5,11 @@
         <div class="pager">
             <ul>
                 <li v-for="(item, index) in pager">
-                    <a :href="`${item}`">{{ index }}</a>
+                    <router-link v-if="item" :to="{name: 'app'}" v-on:click.native="getPageData(item)">
+                        {{ index }}
+                    </router-link>
+
+                    <!--<a :href="`${item}`">{{ index }}</a>-->
                 </li>
             </ul>
         </div>
@@ -25,14 +29,19 @@
                 pager: this.pager
             }
         },
+        methods: {
+            getPageData(params = '') {
+                axios
+                    .get(`http://video.rufio.office.cogapp.com/json${params}`)
+                    .then((response) => {
+                        this.title = response.data.title;
+                        this.pager = response.data.pager;
+                        this.videos = response.data.videos;
+                    });
+            }
+        },
         mounted() {
-            axios
-                .get(`http://video.rufio.office.cogapp.com/json`)
-                .then((response) => {
-                    this.title = response.data.state.original.title;
-                    this.pager = response.data.state.original.pager;
-                    this.videos = response.data.state.original.videos;
-                });
+            this.getPageData()
         }
     }
 </script>

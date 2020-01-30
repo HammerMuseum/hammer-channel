@@ -25,9 +25,6 @@
         name: "ResultGrid",
         props: {
             videos: Array
-        },
-        mounted() {
-            console.log('Result grid component mounted.')
         }
     }
 </script>

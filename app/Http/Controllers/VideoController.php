@@ -35,39 +35,31 @@ class VideoController extends Controller
     {
         $data = $this->api->request('videos/' . $id);
         if (isset($data['success']) && $data['success']) {
-            return view('app/video', [
-                'state' => $this->viewJson($request, $id),
-                'path' => 'viewJson',
-                'data' => $data['data'][0],
-                'message' => false
+            return view('app', [
+                'state' => $this->viewJson($request, $id)
             ]);
         }
-        return view('app/video', [
-            'state' => $this->viewJson($request, $id),
-            'path' => 'viewJson',
-            'data' => false,
-            'message' => $data['message']
+        return view('app', [
+            'state' => $this->viewJson($request, $id)
         ]);
     }
 
     public function viewJson(Request $request, $id)
     {
         $data = $this->api->request('videos/' . $id);
+
         if (isset($data['success']) && $data['success']) {
-            return response()->json([
-                'state' => [
-                    'path' => 'viewJson',
-                    'data' => $data['data'][0],
-                    'message' => false
-                ]
-            ]);
+            $state = $this->getAppState($data);
+            return response()->json($state);
         }
-        return response()->json([
-            'state' => response()->json([
-                'path' => 'viewJson',
-                'data' => false,
-                'message' => $data['message']
-            ])
-        ]);
+    }
+
+    public function getAppState($data)
+    {
+        return [
+            'path' => '/viewJson',
+            'data' => isset($data['data'][0]) ? $data['data'][0] : [],
+            'message' => isset($data['message']) ? $data['message'] : false,
+        ];
     }
 }
