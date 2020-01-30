@@ -48,21 +48,41 @@ class ListingController extends Controller
                 $pagerLinks = $this->pagination->pagerLinks($videos['pages']['pager']);
             }
 
-            return view('app/home', [
-               'videos' => $videos['data'],
-               'pagerLinks' => $pagerLinks,
-               'message' => false,
-               'title' => '',
-               'show_clear' => true
+            return view('app', [
+               'state' => response()->json($this->getAppState($videos))
             ]);
         }
-        return view('app/home', [
-            'videos' => false,
-            'pagerLinks' => [],
-            'message' => 'No videos available.',
+        return view('app', [
+            'state' => response()->json($this->getAppState([]))
+        ]);
+    }
+
+    public function indexJson(Request $request)
+    {
+        $params = $request->all();
+        $videos = $this->api->request('videos', http_build_query($params));
+
+        if (isset($videos['success']) && $videos['success']) {
+            return [
+                'state' => response()->json($this->getAppState($videos))
+            ];
+        }
+    }
+
+    public function getAppState($data)
+    {
+        $pagerLinks = [];
+        if (!empty($data['pages'])) {
+            $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager']);
+        }
+        return [
+            'path' => '/json',
+            'videos' => isset($data['data']) ? $data['data'] : [],
+            'pager' => $pagerLinks,
+            'message' => isset($data['message']) ? $data['message'] : false,
             'title' => '',
             'show_clear' => false
-        ]);
+        ];
     }
 
     /**

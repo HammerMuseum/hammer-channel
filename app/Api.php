@@ -32,11 +32,11 @@ class Api
                 if (!is_null($data)) {
                     if (isset($data['data']) && !empty($data['data'])) {
                         foreach ($data['data'] as $key => $item) {
-                            if (isset($item['video_url'])) {
-                                $videoUrl = $item['video_url'] . '/url';
-                                $contentUrl = $this->getPlaybackUrl($videoUrl);
-                                $data['data'][$key]['video_url'] = $contentUrl;
-                            }
+//                            if (isset($item['video_url'])) {
+//                                $videoUrl = $item['video_url'] . '/url';
+//                                $contentUrl = $this->getPlaybackUrl($videoUrl);
+//                                $data['data'][$key]['video_url'] = $contentUrl;
+//                            }
                         }
                     }
                     return [

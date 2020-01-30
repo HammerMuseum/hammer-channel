@@ -1,24 +1,24 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Search Component</div>
-
-                    <div class="card-body">
-                        I'm a Search component.
-                        <a href="/">Go home</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="listing">
+        search boi
+        <result-grid :videos="results"></result-grid>
     </div>
 </template>
 
 <script>
+    import ResultGrid from "./ResultGridComponent.vue";
     export default {
+        name: 'Search',
+        props: {
+            results: Array
+        },
+        data() {
+            return {
+                results: this.results
+            }
+        },
         mounted() {
-            console.log('Component mounted.')
+            console.log('Search component mounted.')
         }
     }
 </script>

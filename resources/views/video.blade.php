@@ -4,9 +4,9 @@
  */
 ?>
 
-@extends('app')
+{{--@extends('app')--}}
 
-@section('content')
+{{--@section('content')--}}
     <div class="video-content">
         <div class="breadcrumb">
             <a href="/" class="breadcrumb__link">
@@ -51,4 +51,4 @@
             </div>
         @endif
     </div>
-@endsection
+{{--@endsection--}}

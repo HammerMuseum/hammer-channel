@@ -8,6 +8,7 @@ import VideoPlayer from './components/VideoPlayer.vue';
 import Home from './components/HomeComponent.vue';
 import ResultGrid from './components/ResultGridComponent.vue';
 import Search from './components/SearchComponent.vue';
+import App from './components/App.vue';
 
 
 /**
@@ -43,9 +44,9 @@ Vue.component('search-component', Search);
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/', component: Home },
-        { path: '/search', component: Search },
-        { path: '/video/{id}', component: VideoComponent }
+        { path: '/', name: 'app', component: Home },
+        { path: '/search', name: 'search', component: Search },
+        { path: '/video/:id', name: 'video', component: VideoComponent, props: true }
     ]
 });
 /**

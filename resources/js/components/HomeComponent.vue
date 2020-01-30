@@ -14,21 +14,25 @@
 
 <script>
     import ResultGrid from "./ResultGridComponent.vue";
+    import mixin  from '../mixin';
     export default {
         name: 'Home',
-        props: {
-            title: String,
-            pager: Object,
-            message: String,
-            videos: Array
-        },
+        mixins: [ mixin ],
         data() {
             return {
-                videos: this.videos
+                title: this.title,
+                videos: this.videos,
+                pager: this.pager
             }
         },
         mounted() {
-            console.log('Component mounted.')
+            axios
+                .get(`http://video.rufio.office.cogapp.com/json`)
+                .then((response) => {
+                    this.title = response.data.state.original.title;
+                    this.pager = response.data.state.original.pager;
+                    this.videos = response.data.state.original.videos;
+                });
         }
     }
 </script>

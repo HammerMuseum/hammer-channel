@@ -35,14 +35,39 @@ class VideoController extends Controller
     {
         $data = $this->api->request('videos/' . $id);
         if (isset($data['success']) && $data['success']) {
-            return view('video', [
+            return view('app/video', [
+                'state' => $this->viewJson($request, $id),
+                'path' => 'viewJson',
                 'data' => $data['data'][0],
                 'message' => false
             ]);
         }
-        return view('video', [
-           'data' => false,
-           'message' => $data['message']
+        return view('app/video', [
+            'state' => $this->viewJson($request, $id),
+            'path' => 'viewJson',
+            'data' => false,
+            'message' => $data['message']
+        ]);
+    }
+
+    public function viewJson(Request $request, $id)
+    {
+        $data = $this->api->request('videos/' . $id);
+        if (isset($data['success']) && $data['success']) {
+            return response()->json([
+                'state' => [
+                    'path' => 'viewJson',
+                    'data' => $data['data'][0],
+                    'message' => false
+                ]
+            ]);
+        }
+        return response()->json([
+            'state' => response()->json([
+                'path' => 'viewJson',
+                'data' => false,
+                'message' => $data['message']
+            ])
         ]);
     }
 }
