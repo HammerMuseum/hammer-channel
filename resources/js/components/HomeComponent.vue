@@ -1,5 +1,6 @@
 <template>
     <div class="listing">
+        <router-link :to="{name: 'search'}">Search</router-link>
         <h1 class="title">{{ title }}</h1>
         <result-grid :videos="videos"></result-grid>
         <div class="pager">
@@ -8,8 +9,6 @@
                     <router-link v-if="item" :to="{name: 'app'}" v-on:click.native="getPageData(item)">
                         {{ index }}
                     </router-link>
-
-                    <!--<a :href="`${item}`">{{ index }}</a>-->
                 </li>
             </ul>
         </div>

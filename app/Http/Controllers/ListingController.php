@@ -44,11 +44,11 @@ class ListingController extends Controller
 
         if (isset($videos['success']) && $videos['success']) {
             return view('app', [
-               'state' => response()->json($this->getAppState($videos))
+               'state' => $this->getAppState($videos)
             ]);
         }
         return view('app', [
-            'state' => response()->json($this->getAppState([]))
+            'state' => $this->getAppState($videos)
         ]);
     }
 

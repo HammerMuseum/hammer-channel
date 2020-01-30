@@ -14,9 +14,6 @@
   </head>
 
   <body>
-    
-    @include('header')
-
     <div class="main" id="main-content">
       <router-view></router-view>
     </div>

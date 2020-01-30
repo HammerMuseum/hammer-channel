@@ -49,7 +49,6 @@ class SearchController extends Controller
     {
         $params = $request->all();
         $term = $request->get('term');
-        $requestUrl = $request->url();
         if (!is_null($term)) {
             if (array_key_exists('facets', $params)) {
                 $queryString = $this->facetHandler->getFacetQueryString($params);
@@ -57,54 +56,69 @@ class SearchController extends Controller
             } else {
                 $results = $this->api->request('search/' . $term, http_build_query($params));
             }
+            $state = $this->getAppState($results, $request, $params, $term);
             if ($results && !isset($results['error']) && isset($results['data'])) {
-                $pagerLinks = [];
-                if (!empty($results['pages'])) {
-                    $pagerLinks = $this->pagination->pagerLinks($results['pages']['pager'], $params);
-                }
-                $facets = $this->facetHandler->getFacetOptions($results['aggregations']);
-                $clearedParams = $this->clearParams($params, ['sort', 'order', 'start']);
                 return view('app/search', [
-                    'videos' => $results['data'],
-                    'pagerLinks' => $pagerLinks,
-                    'term' => $term,
-                    'message' => false,
-                    'title' => 'Results for "' . ucfirst($term) . '"',
-                    'facets' => $facets,
-                    'url' => $requestUrl,
-                    'query' => $request->fullUrl(),
-                    'clearedPageQuery' => $requestUrl . '?' . $this->clearParams($params, ['start']),
-                    'clearedSortQuery' => $requestUrl . '?' . $this->clearParams($params, ['sort', 'order']),
-                    'show_clear' => true,
+                    'state' => $state
                 ]);
             }
-            return view('app/search', [
-                'videos' => false,
-                'pagerLinks' => [],
-                'term' => false,
-                'message' => 'No results found',
-                'title' => '',
-                'url' => $requestUrl,
-                'query' => $request->fullUrl(),
-                'clearedPageQuery' => $requestUrl,
-                'clearedSortQuery' => $requestUrl,
-                'facets' => false,
-                'show_clear' => true
+            return view('app', [
+                'state' => $state
             ]);
         }
-        return view('app/search', [
-            'videos' => false,
-            'pagerLinks' => [],
-            'term' => false,
-            'message' => 'No search term entered.',
-            'title' => '',
+        return view('app', [
+            'state' => $this->getAppState([], $request, $params, $term)
+        ]);
+    }
+
+    public function searchJson(Request $request)
+    {
+        $params = $request->all();
+        $term = $request->get('term');
+        if (!is_null($term)) {
+            if (array_key_exists('facets', $params)) {
+                $queryString = $this->facetHandler->getFacetQueryString($params);
+                $results = $this->api->request('search/filter/' . $term, $queryString);
+            } else {
+                $results = $this->api->request('search/' . $term, http_build_query($params));
+            }
+            $state = $this->getAppState($results, $request, $params, $term);
+            return response()->json($state);
+        }
+    }
+
+    /**
+     * @param array $data
+     * @param Request $request
+     * @param array $params
+     * @param string $term
+     * @return array
+     */
+    public function getAppState($data, $request, $params, $term)
+    {
+        $requestUrl = $request->url();
+        $pagerLinks = [];
+        if (!empty($data['pages'])) {
+            $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager'], $params);
+        }
+        $facets = [];
+        if (isset($data['aggregations'])) {
+            $facets = $this->facetHandler->getFacetOptions($data['aggregations']);
+        }
+        return [
+            'path' => 'searchJson',
+            'videos' => isset($data['data']) ? $data['data'] : [],
+            'pager' => $pagerLinks,
+            'term' => $term,
+            'message' => false,
+            'title' => 'Results for "' . ucfirst($term) . '"',
+            'facets' => $facets,
             'url' => $requestUrl,
             'query' => $request->fullUrl(),
-            'clearedPageQuery' => $requestUrl,
-            'clearedSortQuery' => $requestUrl,
-            'facets' => false,
+            'clearedPageQuery' => '?' . $this->clearParams($params, ['start']),
+            'clearedSortQuery' => '?' . $this->clearParams($params, ['sort', 'order']),
             'show_clear' => true
-        ]);
+        ];
     }
 
     /**

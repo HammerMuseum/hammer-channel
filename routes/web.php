@@ -16,17 +16,6 @@ Route::get('/viewJson/{id}', 'VideoController@viewJson');
 Route::get('/', 'ListingController@index');
 Route::get('/json', 'ListingController@indexJson');
 Route::get('/search', 'SearchController@search');
+Route::get('/searchJson', 'SearchController@searchJson');
 //Route::get('/topics/{keyword}', 'ListingController@topic');
 //Route::get('/search/sort/{term}/{field}', 'SearchController@sort');
-
-//Route::get('/', function() {
-//    return view('app/home');
-//});
-
-//Route::get('/search', function() {
-//    return view('app/search');
-//});
-
-//Route::get('/video/{id}', function() {
-//    return view('app/video');
-//});
