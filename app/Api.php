@@ -31,11 +31,15 @@ class Api
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
                     if (isset($data['data']) && !empty($data['data'])) {
-                        foreach ($data['data'] as $key => $item) {
-                            if (isset($item['video_url'])) {
-                                $videoUrl = $item['video_url'] . '/url';
-                                $contentUrl = $this->getPlaybackUrl($videoUrl);
-                                $data['data'][$key]['video_url'] = $contentUrl;
+                        $dataCount = count($data['data']);
+                        // Only retrieve AWS URLs for videos if this is an individual video page
+                        if ($dataCount == 1) {
+                            foreach ($data['data'] as $key => $item) {
+                                if (isset($item['video_url'])) {
+                                    $videoUrl = $item['video_url'] . '/url';
+                                    $contentUrl = $this->getPlaybackUrl($videoUrl);
+                                    $data['data'][$key]['video_url'] = $contentUrl;
+                                }
                             }
                         }
                     }
