@@ -99,7 +99,6 @@ export default {
     },
     watch: {
         options: function() {
-            console.log('running')
             this.initVideoPlayer();
         }
     },
