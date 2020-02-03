@@ -76,14 +76,14 @@ class SearchController extends Controller
         $params = $request->all();
         $term = $request->get('term');
 //        if (!is_null($term)) {
-            if (array_key_exists('facets', $params)) {
-                $queryString = $this->facetHandler->getFacetQueryString($params);
-                $results = $this->api->request('search/filter/' . $term, $queryString);
-            } else {
-                $results = $this->api->request('search/' . $term, http_build_query($params));
-            }
-            $state = $this->getAppState($results, $request, $params, $term);
-            return response()->json($state);
+        if (array_key_exists('facets', $params)) {
+            $queryString = $this->facetHandler->getFacetQueryString($params);
+            $results = $this->api->request('search/filter/' . $term, $queryString);
+        } else {
+            $results = $this->api->request('search/' . $term, http_build_query($params));
+        }
+        $state = $this->getAppState($results, $request, $params, $term);
+        return response()->json($state);
 //        }
     }
 
