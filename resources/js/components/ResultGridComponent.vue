@@ -8,7 +8,7 @@
       date: video.date_recorded,
       description: video.description,
       tags: video.tags,
-    }, params: {id: video.asset_id}}">
+    }, params: {id: video.title_slug}}">
                 <img class="result-item__image" :src="`${ video.thumbnail_url }`" />
                 <span class="result-item__title">{{ video['title'] }}</span>
             </router-link>

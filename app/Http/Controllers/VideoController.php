@@ -49,9 +49,9 @@ class VideoController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function viewJson(Request $request, $id)
+    public function viewJson(Request $request, $slug)
     {
-        $data = $this->api->request('videos/' . $id);
+        $data = $this->api->request('videos/' . $slug);
 
         if (isset($data['success']) && $data['success']) {
             $state = $this->getAppState($data);
