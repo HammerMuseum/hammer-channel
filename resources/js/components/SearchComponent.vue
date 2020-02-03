@@ -20,6 +20,7 @@
                             {{ getYear(option.key_as_string) }}
                         </router-link>
                     </span>
+                    <router-link :to="{name: 'search'}" v-on:click.native="search()">Clear filter</router-link>
                 </span>
             </div>
             <div class="facets__sort">

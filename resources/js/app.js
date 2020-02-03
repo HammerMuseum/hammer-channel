@@ -47,13 +47,13 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/', name: 'app', component: Home
+      path: '/', name: 'app', component: Home,
     },
     {
-      path: '/search', name: 'search', component: Search
+      path: '/search', name: 'search', component: Search,
     },
     {
-      path: '/video/:id', name: 'video', component: VideoComponent, props: true
+      path: '/video/:id', name: 'video', component: VideoComponent, props: true,
     },
   ]
 });
@@ -63,7 +63,7 @@ const router = new VueRouter({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
+new Vue({
   el: '#main-content',
   router: router,
 });
