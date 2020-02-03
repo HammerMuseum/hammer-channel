@@ -12,10 +12,6 @@
                 <img class="result-item__image" :src="`${ video.thumbnail_url }`" />
                 <span class="result-item__title">{{ video['title'] }}</span>
             </router-link>
-            <!--<a :href="`video/${ video.asset_id }`">-->
-                <!--<img class="result-item__image" :src="`${ video.thumbnail_url }`" />-->
-                <!--<span class="result-item__title">{{ video['title'] }}</span>-->
-            <!--</a>-->
         </div>
     </div>
 </template>

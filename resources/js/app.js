@@ -59,5 +59,6 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#main-content',
-    router: router
+    router: router,
+    rootUrl: "{{ Config::get('app.url') }}"
 });
