@@ -17,7 +17,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     getData(to).then((data) => {
       next(
-        (vm) => Object.assign(vm.$data, data)
+        (vm) => Object.assign(vm.$data, data),
       );
     });
   },

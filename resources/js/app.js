@@ -9,8 +9,6 @@ import VideoPlayer from './components/VideoPlayer.vue';
 import Home from './components/HomeComponent.vue';
 import ResultGrid from './components/ResultGridComponent.vue';
 import Search from './components/SearchComponent.vue';
-import App from './components/App.vue';
-
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -55,7 +53,7 @@ const router = new VueRouter({
     {
       path: '/video/:id', name: 'video', component: VideoComponent, props: true,
     },
-  ]
+  ],
 });
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -63,7 +61,8 @@ const router = new VueRouter({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-new Vue({
+//
+const app = new Vue({ // eslint-disable-line
   el: '#main-content',
-  router: router,
+  router,
 });
