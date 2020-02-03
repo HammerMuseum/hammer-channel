@@ -31,9 +31,9 @@ class VideoController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function view(Request $request, $id)
+    public function view(Request $request, $slug)
     {
-        $data = $this->api->request('videos/' . $id);
+        $data = $this->api->request('videos/' . $slug);
         if (isset($data['success']) && $data['success']) {
             return view('app', [
                 'state' => $this->getAppState($data)
