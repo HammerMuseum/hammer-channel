@@ -31,7 +31,7 @@
         methods: {
             getPageData(params = '') {
                 axios
-                    .get(`http://video.rufio.office.cogapp.com/json${params}`)
+                    .get(`/json${params}`)
                     .then((response) => {
                         this.title = response.data.title;
                         this.pager = response.data.pager;

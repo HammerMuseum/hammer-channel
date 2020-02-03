@@ -68,13 +68,13 @@
             getPageData(params = '') {
                 if (params == '') {
                     axios
-                        .get(`http://video.rufio.office.cogapp.com/json${params}`)
+                        .get(`/json${params}`)
                         .then((response) => {
                             this.setVars(response)
                         });
                 } else {
                     axios
-                        .get(`http://video.rufio.office.cogapp.com/searchJson${params}`)
+                        .get(`/searchJson${params}`)
                         .then((response) => {
                             this.setVars(response)
                         });
@@ -88,7 +88,7 @@
                 searchParams += '?term=' + searchTerm.value;
                 console.log(searchParams);
                 axios
-                    .get(`http://video.rufio.office.cogapp.com/searchJson${searchParams}`)
+                    .get(`/searchJson${searchParams}`)
                     .then((response) => {
                         this.setVars(response)
                     });
@@ -100,7 +100,7 @@
                 filterParams += '&facets=[0]' + queryString;
                 console.log(filterParams);
                 axios
-                    .get(`http://video.rufio.office.cogapp.com/searchJson${filterParams}`)
+                    .get(`/searchJson${filterParams}`)
                     .then((response) => {
                         this.setVars(response)
                     });
@@ -110,7 +110,7 @@
                 var sortParams = '';
                 sortParams += queryString;
                 axios
-                    .get(`http://video.rufio.office.cogapp.com/searchJson${sortParams}`)
+                    .get(`/searchJson${sortParams}`)
                     .then((response) => {
                         this.setVars(response)
                     });

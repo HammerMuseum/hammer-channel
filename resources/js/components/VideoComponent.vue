@@ -54,7 +54,7 @@
     mounted() {
         var asset_id = this.$route.params.id;
         axios
-            .get(`http://video.rufio.office.cogapp.com/viewJson/${asset_id}`)
+            .get(`/viewJson/${asset_id}`)
             .then((response) => {
                 this.title = response.data.data.title;
                 this.description = response.data.data.description;
