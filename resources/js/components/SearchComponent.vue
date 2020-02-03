@@ -66,16 +66,26 @@
         methods: {
             // Initially, AJAX request the search JSON endpoint and set results on component
             getPageData(params = '') {
-                axios
-                    .get(`http://video.rufio.office.cogapp.com/searchJson${params}`)
-                    .then((response) => {
-                        this.setVars(response)
-                    });
+                if (params == '') {
+                    axios
+                        .get(`http://video.rufio.office.cogapp.com/json${params}`)
+                        .then((response) => {
+                            this.setVars(response)
+                        });
+                } else {
+                    axios
+                        .get(`http://video.rufio.office.cogapp.com/searchJson${params}`)
+                        .then((response) => {
+                            this.setVars(response)
+                        });
+                }
+
             },
             // Perform a search
             search() {
                 var searchParams = '';
-                searchParams += '?term=' + this.term;
+                var searchTerm = document.querySelector("[name=term]");
+                searchParams += '?term=' + searchTerm.value;
                 console.log(searchParams);
                 axios
                     .get(`http://video.rufio.office.cogapp.com/searchJson${searchParams}`)
@@ -123,7 +133,7 @@
         },
         mounted() {
             //@todo make this use the actual search term
-            this.getPageData('?term=poetry');
+            this.getPageData('');
         }
     }
 </script>
