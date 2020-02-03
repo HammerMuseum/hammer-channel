@@ -1,5 +1,8 @@
 <template>
   <div class="video-wrapper">
+    <div class="breadcrumb">
+      <router-link :to="{name: 'app'}">Back to All Videos</router-link>
+    </div>
     <video-player dusk="video-player-component"
        :options="this.videoOptions"
        :title="title"
