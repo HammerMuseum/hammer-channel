@@ -16,7 +16,8 @@
           <div class="keywords">
             <ul>
               <li v-bind:key="item.id" v-for="item in this.keywords">
-                <a :href="`/topics/${item}`">{{ item }}</a>
+                {{ item }}
+                <!--<a :href="`/topics/${item}`">{{ item }}</a>-->
               </li>
             </ul>
           </div>
