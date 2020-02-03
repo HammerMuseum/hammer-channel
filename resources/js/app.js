@@ -44,12 +44,18 @@ Vue.component('search-component', Search);
 Vue.component('header-component', Header);
 
 const router = new VueRouter({
-    mode: 'history',
-    routes: [
-        { path: '/', name: 'app', component: Home },
-        { path: '/search', name: 'search', component: Search },
-        { path: '/video/:id', name: 'video', component: VideoComponent, props: true }
-    ]
+  mode: 'history',
+  routes: [
+    {
+      path: '/', name: 'app', component: Home
+    },
+    {
+      path: '/search', name: 'search', component: Search
+    },
+    {
+      path: '/video/:id', name: 'video', component: VideoComponent, props: true
+    },
+  ]
 });
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -58,7 +64,6 @@ const router = new VueRouter({
  */
 
 const app = new Vue({
-    el: '#main-content',
-    router: router,
-    rootUrl: "{{ Config::get('app.url') }}"
+  el: '#main-content',
+  router: router,
 });

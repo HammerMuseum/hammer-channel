@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <title>Hammer Museum | Video Archive</title>
     <script type="text/javascript">
-        window.__INITIAL_STATE__ = "{!! addslashes(json_encode($state)) !!}";
+        window._INITIAL_STATE_ = "{!! addslashes(json_encode($state)) !!}";
     </script>
   </head>
 
