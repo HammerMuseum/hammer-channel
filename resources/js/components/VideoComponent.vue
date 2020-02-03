@@ -1,6 +1,11 @@
 <template>
   <div class="video-wrapper">
-    <video-player dusk="video-player-component" :options="videoOptions" :title="title"/>
+    <video-player dusk="video-player-component" 
+                  :options="videoOptions" 
+                  :title="title" 
+                  :trackList="trackList"
+                  @error="onPlayerError()">
+    </video-player>
     <div class="video__info">
         <div class="video-info__card">
           <div class="title"><h1>{{ title }}</h1></div>
@@ -23,6 +28,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import VideoPlayer from "./VideoPlayer.vue";
   export default {
     name: 'VideoComponent',
@@ -38,12 +44,21 @@
       VideoPlayer
     },
     methods:{
-      toggleTranscription: function(){
+      toggleTranscription() {
         this.transcriptionIsVisible = !this.transcriptionIsVisible
-      }
+      },
     },
     data() {
       return {
+        trackList: [
+          {
+            src: `https://datastore.hammer.cogapp.com/api/videos/205/transcript`,
+            kind: "captions",
+            label: "English",
+            srcLang: 'en',
+            default: true
+          }
+        ],
         videoTitle: this.title,
         transcriptionIsVisible: false,
         transcription: null,
@@ -60,12 +75,6 @@
       };
     },
     mounted() {
-      axios
-        .get(`https://datastore.hammer.cogapp.com/api/videos/${this.aid}/transcript`)
-        .then((response) => {
-          console.log(response);
-          this.transcription = response.data.data[0].transcription;
-        });
     }
   }
 </script>

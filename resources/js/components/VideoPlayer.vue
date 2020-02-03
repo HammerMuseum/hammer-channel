@@ -1,6 +1,14 @@
 <template>
     <div class="video-js-responsive-container vjs-hd">
-        <video ref="videoPlayer" class="video-js hammer-video-player vjs-default-skin"></video>
+        <video ref="videoPlayer" class="video-js hammer-video-player vjs-default-skin">
+            <track v-bind:key="track.id"
+                v-for="track in trackList"
+                :kind="track.kind"
+                :label="track.label"
+                :src="track.src"
+                :srcLang="track.srcLang"
+                :default="track.default">
+        </video>
     </div>
 </template>
 
@@ -16,7 +24,13 @@ export default {
             default() {
                 return {};
             }
-        }
+        },
+        trackList: {
+            type: Array,
+            default() { 
+                return [];
+            },
+        },
     },
     data() {
         return {
@@ -24,9 +38,46 @@ export default {
         }
     },
     mounted() {
-      this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady() {
-          console.log('onPlayerReady', this);
+        const DEFAULT_EVENTS = [
+          'loadeddata',
+          'canplay',
+          'canplaythrough',
+          'play',
+          'pause',
+          'waiting',
+          'playing',
+          'ended',
+          'error'
+        ]
+          
+      const self = this;
+
+      this.player = videojs(this.$refs.videoPlayer, this.options, function() {
+        // events
+        const events = DEFAULT_EVENTS;
+        // watch events
+        const onEdEvents = {}
+        for (let i = 0; i < events.length; i++) {
+          if (typeof events[i] === 'string' && onEdEvents[events[i]] === undefined) {
+            (event => {
+              onEdEvents[event] = null
+              this.on(event, () => {
+                self.$emit(event, self.player)
+              })
+            })(events[i])
+          }
+        }
+
+        // watch timeupdate
+        this.on('timeupdate', function() {
+          self.$smit('timeupdate', this.currentTime())
+        })
+
+        // player readied
+        self.$emit('ready', this)
       })
+    
+      // Setup overlay content. Move up to parent?
       const overlay_content = `<p>${this.title}</p>`;
       this.player.overlay({
         overlays: [{
