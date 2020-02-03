@@ -60,6 +60,7 @@
         axios
             .get(`/viewJson/${asset_id}`)
             .then((response) => {
+              console.log(response);
                 this.title = response.data.data.title;
                 this.description = response.data.data.description;
                 this.asset_id = response.data.data.asset_id;

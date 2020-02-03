@@ -5,7 +5,6 @@
             <div class="search__item-wrapper">
                 <input type="search" value="" id="search-main" name="term" title="Search" aria-controls="" placeholder="Search" class="search__item search__input" v-on:keyup.enter="search()">
                 <div class="search__item search__submit-wrapper">
-                    <!--<button type="submit" >Search</button>-->
                     <button @click='search()' class="search__submit">Search</button>
                 </div>
             </div>
@@ -13,15 +12,21 @@
         <div class="filters">
             <div class="facets">
                 <h2>Filter by</h2>
-                <span v-for="(facet, label) in this.facets">
-                    <span class="facets__label" v-if="label == 'Year Recorded'">{{ label }}</span>
+                <p v-for="(facet, label) in this.facets">
+                    <span class="facets__label">{{ label }}</span>
                     <span v-for="option in facet">
-                        <router-link :to="{name: 'search'}" v-on:click.native="filter(`date_recorded:${getYear(option.key_as_string)}`)">
+                        <router-link v-if="label == 'Year Recorded'" :to="{name: 'search'}" v-on:click.native="filter(`date_recorded:${getYear(option.key_as_string)}`)">
                             {{ getYear(option.key_as_string) }}
+                        </router-link>
+                        <router-link v-if="label == 'Program Series'" :to="{name: 'search'}" v-on:click.native="filter(`program_series:${option.key}`)">
+                            {{ option.key }}
+                        </router-link>
+                         <router-link v-if="label == 'Speakers'" :to="{name: 'search'}" v-on:click.native="filter(`speakers:${option.key}`)">
+                            {{ option.key }}
                         </router-link>
                     </span>
                     <router-link :to="{name: 'search'}" v-on:click.native="search()">Clear filter</router-link>
-                </span>
+                </p>
             </div>
             <div class="facets__sort">
                 <span class="facets__label">Order by</span>
@@ -37,7 +42,7 @@
         <result-grid :videos="this.videos"></result-grid>
         <div class="pager">
             <ul>
-                <li v-for="(item, index) in this.pager">
+                <li v-for="(item, index) in this.pager" v-if="item !== ''">
                     <router-link v-if="item" :to="{name: 'search'}" v-on:click.native="getPageData(clearPageQuery + item)">
                         {{ index }}
                     </router-link>
@@ -87,7 +92,6 @@
                 var searchParams = '';
                 var searchTerm = document.querySelector("[name=term]");
                 searchParams += '?term=' + searchTerm.value;
-                console.log(searchParams);
                 axios
                     .get(`/searchJson${searchParams}`)
                     .then((response) => {
@@ -99,7 +103,6 @@
                 var filterParams = '';
                 filterParams += '?term=' + this.term;
                 filterParams += '&facets=[0]' + queryString;
-                console.log(filterParams);
                 axios
                     .get(`/searchJson${filterParams}`)
                     .then((response) => {
@@ -118,13 +121,13 @@
             },
             // Use whatever response current in the application to populate the page
             setVars(response) {
-                this.title = response.data.title;
-                this.pager = response.data.pager;
-                this.videos = response.data.videos;
-                this.facets = response.data.facets;
-                this.term = response.data.term;
-                this.clearPageQuery = response.data.clearedPageQuery;
-                this.clearedSortQuery = response.data.clearedSortQuery;
+              this.title = response.data.title;
+              this.pager = response.data.pager;
+              this.videos = response.data.videos;
+              this.facets = response.data.facets;
+              this.term = response.data.term;
+              this.clearPageQuery = response.data.clearedPageQuery;
+              this.clearedSortQuery = response.data.clearedSortQuery;
             },
             // Extract year from date string
             getYear(dateString) {
@@ -135,6 +138,7 @@
         mounted() {
             //@todo make this use the actual search term
             this.getPageData('');
+            this.clearedSortQuery = '?';
         }
     }
 </script>

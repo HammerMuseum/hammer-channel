@@ -5,8 +5,8 @@
         <result-grid :videos="videos"></result-grid>
         <div class="pager">
             <ul>
-                <li v-for="(item, index) in pager">
-                    <router-link v-if="item" :to="{name: 'app'}" v-on:click.native="getPageData(item)">
+                <li v-for="(item, index) in pager" v-if="item !== ''">
+                    <router-link :to="{name: 'app'}" v-on:click.native="getPageData(item)">
                         {{ index }}
                     </router-link>
                 </li>

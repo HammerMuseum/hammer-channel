@@ -44,26 +44,32 @@ class ListingController extends Controller
 
         if (isset($videos['success']) && $videos['success']) {
             return view('app', [
-               'state' => $this->getAppState($videos)
+               'state' => $this->getAppState($videos, $params)
             ]);
         }
         return view('app', [
-            'state' => $this->getAppState($videos)
+            'state' => $this->getAppState($videos, $params)
         ]);
     }
 
+    /**
+     * Return a JSON version of the index action
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function indexJson(Request $request)
     {
         $params = $request->all();
         $videos = $this->api->request('videos', http_build_query($params));
 
         if (isset($videos['success']) && $videos['success']) {
-            $state = $this->getAppState($videos);
+            $state = $this->getAppState($videos, $params);
             return response()->json($state);
         }
     }
 
-    public function getAppState($data)
+    public function getAppState($data, $params)
     {
         $pagerLinks = [];
         if (!empty($data['pages'])) {
@@ -75,7 +81,9 @@ class ListingController extends Controller
             'pager' => $pagerLinks,
             'message' => isset($data['message']) ? $data['message'] : false,
             'title' => '',
-            'show_clear' => false
+            'show_clear' => false,
+            'clearedPageQuery' => '?' . $this->pagination->clearParams($params, ['start']),
+            'clearedSortQuery' => '?' . $this->pagination->clearParams($params, ['sort', 'order']),
         ];
     }
 

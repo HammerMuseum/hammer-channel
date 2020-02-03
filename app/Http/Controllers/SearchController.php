@@ -75,7 +75,7 @@ class SearchController extends Controller
     {
         $params = $request->all();
         $term = $request->get('term');
-        if (!is_null($term)) {
+//        if (!is_null($term)) {
             if (array_key_exists('facets', $params)) {
                 $queryString = $this->facetHandler->getFacetQueryString($params);
                 $results = $this->api->request('search/filter/' . $term, $queryString);
@@ -84,7 +84,7 @@ class SearchController extends Controller
             }
             $state = $this->getAppState($results, $request, $params, $term);
             return response()->json($state);
-        }
+//        }
     }
 
     /**
@@ -115,25 +115,9 @@ class SearchController extends Controller
             'facets' => $facets,
             'url' => $requestUrl,
             'query' => $request->fullUrl(),
-            'clearedPageQuery' => '?' . $this->clearParams($params, ['start']),
-            'clearedSortQuery' => '?' . $this->clearParams($params, ['sort', 'order']),
+            'clearedPageQuery' => '?' . $this->pagination->clearParams($params, ['start']),
+            'clearedSortQuery' => '?' . $this->pagination->clearParams($params, ['sort', 'order']),
             'show_clear' => true
         ];
-    }
-
-    /**
-     * Clear unwanted sorting parameters
-     *
-     * @param $params
-     * @return mixed
-     */
-    public function clearParams($params, $keys = [])
-    {
-        foreach ($keys as $key) {
-            if (isset($params[$key])) {
-                unset($params[$key]);
-            }
-        }
-        return http_build_query($params);
     }
 }

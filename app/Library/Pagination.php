@@ -27,4 +27,20 @@ class Pagination
         }
         return $pager;
     }
+
+    /**
+     * Clear unwanted sorting parameters
+     *
+     * @param $params
+     * @return mixed
+     */
+    public function clearParams($params, $keys = [])
+    {
+        foreach ($keys as $key) {
+            if (isset($params[$key])) {
+                unset($params[$key]);
+            }
+        }
+        return http_build_query($params);
+    }
 }

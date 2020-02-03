@@ -10,7 +10,9 @@ class Facets
 {
     /** @var array */
     protected $facetMap = [
-        'date' => 'Year Recorded'
+        'date' => 'Year Recorded',
+        'series' => 'Program Series',
+        'speakers' => 'Speakers'
     ];
 
     /**
@@ -25,7 +27,7 @@ class Facets
         foreach ($aggregations as $facet => $aggregation) {
             if (isset($this->facetMap[$facet])) {
                 foreach ($aggregation['buckets'] as $bucket) {
-                    if ($bucket['doc_count'] > 0) {
+                    if (count($aggregation['buckets']) > 0) {
                         $facetOptions[$this->facetMap[$facet]][] = $bucket;
                     }
                 }
