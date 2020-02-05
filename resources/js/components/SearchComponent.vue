@@ -98,7 +98,6 @@
                 }
                 filterParams += queryString;
                 filterParams += this.currentQuery;
-                console.log(filterParams);
                 axios
                     .get(`/searchJson?${filterParams}`)
                     .then((response) => {
