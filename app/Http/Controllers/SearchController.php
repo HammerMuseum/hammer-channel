@@ -48,43 +48,32 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $params = $request->all();
-        $term = $request->get('term');
-        if (!is_null($term)) {
-            if (array_key_exists('facets', $params)) {
-                $queryString = $this->facetHandler->getFacetQueryString($params);
-                $results = $this->api->request('search/filter/' . $term, $queryString);
-            } else {
-                $results = $this->api->request('search/' . $term, http_build_query($params));
-            }
-            $state = $this->getAppState($results, $request, $params, $term);
-            if ($results && !isset($results['error']) && isset($results['data'])) {
-                return view('app/search', [
-                    'state' => $state
-                ]);
-            }
+        if (array_key_exists('facets', $params)) {
+            $queryString = $this->facetHandler->getFacetQueryString($params);
+        } else {
+            $queryString = http_build_query($params);
+        }
+            $results = $this->api->request('search', $queryString);
+            $state = $this->getAppState($results, $request, $params, $queryString);
             return view('app', [
                 'state' => $state
             ]);
-        }
-        return view('app', [
-            'state' => $this->getAppState([], $request, $params, $term)
-        ]);
     }
 
     public function searchJson(Request $request)
     {
         $params = $request->all();
-        $term = $request->get('term');
-//        if (!is_null($term)) {
+        $originalQuery = '';
         if (array_key_exists('facets', $params)) {
+            $originalQuery = $params['facets'];
             $queryString = $this->facetHandler->getFacetQueryString($params);
-            $results = $this->api->request('search/filter/' . $term, $queryString);
         } else {
-            $results = $this->api->request('search/' . $term, http_build_query($params));
+            $queryString = http_build_query($params);
         }
-        $state = $this->getAppState($results, $request, $params, $term);
+
+        $results = $this->api->request('search', $queryString);
+        $state = $this->getAppState($results, $request, $params, $originalQuery);
         return response()->json($state);
-//        }
     }
 
     /**
@@ -94,7 +83,7 @@ class SearchController extends Controller
      * @param string $term
      * @return array
      */
-    public function getAppState($data, $request, $params, $term)
+    public function getAppState($data, $request, $params, $originalQuery)
     {
         $requestUrl = $request->url();
         $pagerLinks = [];
@@ -105,16 +94,17 @@ class SearchController extends Controller
         if (isset($data['aggregations'])) {
             $facets = $this->facetHandler->getFacetOptions($data['aggregations']);
         }
+        $term = $request->get('term');
         return [
             'path' => 'searchJson',
             'videos' => isset($data['data']) ? $data['data'] : [],
             'pager' => $pagerLinks,
             'term' => $term,
             'message' => false,
-            'title' => 'Results for "' . ucfirst($term) . '"',
+            'title' => !is_null($term) ? 'Results for "' . ucfirst($term) . '"' : '""',
             'facets' => $facets,
             'url' => $requestUrl,
-            'query' => $request->fullUrl(),
+            'currentQuery' => $originalQuery,
             'clearedPageQuery' => '?' . $this->pagination->clearParams($params, ['start']),
             'clearedSortQuery' => '?' . $this->pagination->clearParams($params, ['sort', 'order']),
             'show_clear' => true

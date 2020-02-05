@@ -15,13 +15,13 @@
                 <p v-for="(facet, label) in this.facets">
                     <span class="facets__label">{{ label }}</span>
                     <span v-for="option in facet">
-                        <router-link v-if="label == 'Year Recorded'" :to="{name: 'search'}" v-on:click.native="filter(`date_recorded:${getYear(option.key_as_string)}`)">
+                        <router-link v-if="label == 'Year Recorded'" :to="{name: 'search'}" v-on:click.native="filter(`facets=[0]date_recorded:${getYear(option.key_as_string)}`)">
                             {{ getYear(option.key_as_string) }}
                         </router-link>
-                        <router-link v-if="label == 'Program Series'" :to="{name: 'search'}" v-on:click.native="filter(`program_series:${option.key}`)">
+                        <router-link v-if="label == 'Program Series'" :to="{name: 'search'}" v-on:click.native="filter(`facets=[1]program_series:${option.key}`)">
                             {{ option.key }}
                         </router-link>
-                         <router-link v-if="label == 'Speakers'" :to="{name: 'search'}" v-on:click.native="filter(`speakers:${option.key}`)">
+                         <router-link v-if="label == 'Speakers'" :to="{name: 'search'}" v-on:click.native="filter(`facets=[2]speakers:${option.key}`)">
                             {{ option.key }}
                         </router-link>
                     </span>
@@ -66,26 +66,18 @@
                 term: this.term,
                 facets: this.facets,
                 clearPageQuery: this.clearPageQuery,
-                clearedSortQuery: this.clearedSortQuery
+                clearedSortQuery: this.clearedSortQuery,
+                currentQuery: this.currentQuery
             }
         },
         methods: {
             // Initially, AJAX request the search JSON endpoint and set results on component
             getPageData(params = '') {
-                if (params == '') {
-                    axios
-                        .get(`/json${params}`)
-                        .then((response) => {
-                            this.setVars(response)
-                        });
-                } else {
-                    axios
-                        .get(`/searchJson${params}`)
-                        .then((response) => {
-                            this.setVars(response)
-                        });
-                }
-
+                axios
+                    .get(`/searchJson${params}`)
+                    .then((response) => {
+                        this.setVars(response)
+                    });
             },
             // Perform a search
             search() {
@@ -101,10 +93,14 @@
             // Expected querystring format: field_name:value
             filter(queryString) {
                 var filterParams = '';
-                filterParams += '?term=' + this.term;
-                filterParams += '&facets=[0]' + queryString;
+                if (this.term != null) {
+                  filterParams += 'term=' + this.term + '&';
+                }
+                filterParams += queryString;
+                filterParams += this.currentQuery;
+                console.log(filterParams);
                 axios
-                    .get(`/searchJson${filterParams}`)
+                    .get(`/searchJson?${filterParams}`)
                     .then((response) => {
                         this.setVars(response)
                     });
@@ -128,6 +124,7 @@
               this.term = response.data.term;
               this.clearPageQuery = response.data.clearedPageQuery;
               this.clearedSortQuery = response.data.clearedSortQuery;
+              this.currentQuery = response.data.currentQuery;
             },
             // Extract year from date string
             getYear(dateString) {

@@ -18,8 +18,8 @@
       <router-view></router-view>
     </div>
 
-    <script type="text/javascript" src="/js/main.js"></script>
-{{--     <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : 'http://localhost:8080/js/app.js' }}"></script>--}}
+    {{--<script type="text/javascript" src="/js/main.js"></script>--}}
+     <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : 'http://localhost:8080/js/app.js' }}"></script>
 
   </body>
 </html>
