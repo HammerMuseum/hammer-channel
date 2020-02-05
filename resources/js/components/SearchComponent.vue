@@ -1,66 +1,138 @@
 <template>
-    <div class="listing">
-        <div class="search">
-            <label for="search-main" class="search__label"></label>
-            <div class="search__item-wrapper">
-                <input type="search" value="" id="search-main" name="term" title="Search" aria-controls="" placeholder="Search" class="search__item search__input" v-on:keyup.enter="search()">
-                <div class="search__item search__submit-wrapper">
-                    <button @click='search()' class="search__submit">Search</button>
-                </div>
-            </div>
+  <div class="listing">
+    <div class="search">
+      <label
+        for="search-main"
+        class="search__label"
+      />
+      <div class="search__item-wrapper">
+        <input
+          id="search-main"
+          type="search"
+          value=""
+          name="term"
+          title="Search"
+          aria-controls=""
+          placeholder="Search"
+          class="search__item search__input"
+          @keyup.enter="search()"
+        >
+        <div class="search__item search__submit-wrapper">
+          <button
+            class="search__submit"
+            @click="search()"
+          >
+            Search
+          </button>
         </div>
-        <div class="filters">
-            <div class="facets">
-                <h2>Filter by</h2>
-                <p v-for="(facet, label) in this.facets">
-                    <span class="facets__label">{{ label }}</span>
-                    <span v-for="option in facet">
-                        <router-link v-if="label == 'Year Recorded'" :to="{name: 'search'}" v-on:click.native="filter(`facets=[0]date_recorded:${getYear(option.key_as_string)}`)">
-                            {{ getYear(option.key_as_string) }}
-                        </router-link>
-                        <router-link v-if="label == 'Program Series'" :to="{name: 'search'}" v-on:click.native="filter(`facets=[1]program_series:${option.key}`)">
-                            {{ option.key }}
-                        </router-link>
-                         <router-link v-if="label == 'Speakers'" :to="{name: 'search'}" v-on:click.native="filter(`facets=[2]speakers:${option.key}`)">
-                            {{ option.key }}
-                        </router-link>
-                    </span>
-                    <router-link :to="{name: 'search'}" v-on:click.native="search()">Clear filter</router-link>
-                </p>
-            </div>
-            <div class="facets__sort">
-                <span class="facets__label">Order by</span>
-                <router-link :to="{name: 'search'}" v-on:click.native="sort(
-                `${clearedSortQuery}&sort=date_recorded&order=asc`
-                )">Date (ASC)</router-link>
-                <router-link :to="{name: 'search'}" v-on:click.native="sort(
-                `${clearedSortQuery}&sort=date_recorded&order=desc`
-                )">Date (DESC)</router-link>
-            </div>
-        </div>
-
-        <result-grid :videos="this.videos"></result-grid>
-        <div class="pager">
-            <ul>
-                <li v-for="(item, index) in this.pager" v-if="item !== ''">
-                    <router-link v-if="item" :to="{name: 'search'}" v-on:click.native="getPageData(clearPageQuery + item)">
-                        {{ index }}
-                    </router-link>
-                </li>
-            </ul>
-        </div>
+      </div>
     </div>
+    <div class="search__area">
+      <button class="filters__toggle" @click="showFilters = !showFilters">{{ showFilters ? 'Hide filters' : 'Show filters' }}</button>
+      <div class="filters">
+        <div
+          v-show="showFilters"
+          class="facets"
+        >
+          <h2>Filter by</h2>
+          <ul
+            v-for="(facet, label) in facets"
+            :key="label"
+            class="facet"
+          >
+            <p class="facet__label">{{ label }}</p>
+            <li
+              v-for="option in facet"
+              :key="option.key"
+              class="facet__item"
+            >
+              <router-link
+                v-if="label == 'Year Recorded'"
+                :to="{name: 'search'}"
+                @click.native="filter(`facets=[0]date_recorded:${getYear(option.key_as_string)}`)"
+              >
+                {{ getYear(option.key_as_string) }}
+              </router-link>
+              <router-link
+                v-if="label == 'Program Series'"
+                :to="{name: 'search'}"
+                @click.native="filter(`facets=[1]program_series:${option.key}`)"
+              >
+                {{ option.key }}
+              </router-link>
+              <router-link
+                v-if="label == 'Speakers'"
+                :to="{name: 'search'}"
+                @click.native="filter(`facets=[2]speakers:${option.key}`)"
+              >
+                {{ option.key }}
+              </router-link>
+            </li>
+            <router-link
+              :to="{name: 'search'}"
+              @click.native="search()"
+              class="facet__clear"
+            >
+              Clear filter
+            </router-link>
+          </ul>
+        </div>
+      </div>
+      <div class="results-">
+        <div class="facets__sort">
+          <span class="facet__label">Order by</span>
+          <router-link
+            :to="{name: 'search'}"
+            @click.native="sort(
+              `${clearedSortQuery}&sort=date_recorded&order=asc`
+            )"
+          >
+            Date (ASC)
+          </router-link>
+          <router-link
+            :to="{name: 'search'}"
+            @click.native="sort(
+              `${clearedSortQuery}&sort=date_recorded&order=desc`
+            )"
+          >
+            Date (DESC)
+          </router-link>
+        </div>
+        <result-grid :videos="videos" />
+      </div>
+    </div>
+    <div class="pager">
+      <ul>
+        <li
+          v-for="(item, index) in filteredPager"
+          :key="item"
+        >
+          <router-link
+            v-if="item"
+            :to="{name: 'search'}"
+            @click.native="getPageData(clearPageQuery + item)"
+          >
+            {{ index }}
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
+import axios from 'axios';
 import ResultGrid from './ResultGridComponent.vue';
 import mixin from '../mixin';
 
 export default {
   name: 'Search',
-  props: {},
+  components: {
+    ResultGrid,
+  },
   data() {
     return {
+      showFilters: true,
       title: this.title,
       videos: this.videos,
       pager: this.pager,
@@ -71,7 +143,31 @@ export default {
       currentQuery: this.currentQuery,
     };
   },
+  computed: {
+    filteredPager() {
+      if (this.pager) {
+        // Filter out empty properties in the pager.
+        return Object.entries(this.pager).reduce((a, [k, v]) => (v ? { ...a, [k]: v } : a), {});
+      }
+      return false;
+    },
+  },
+  mounted() {
+    // @todo make this use the actual search term
+    this.getPageData('');
+    this.clearedSortQuery = '?';
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
   methods: {
+    handleResize() {
+      if (window.innerWidth >= 850) {
+        this.showFilters = true;
+      }
+      else {
+        this.showFilters = false;
+      }
+    },
     // Initially, AJAX request the search JSON endpoint and set results on component
     getPageData(params = '') {
       axios
@@ -129,11 +225,6 @@ export default {
       const date = new Date(dateString);
       return date.getFullYear();
     },
-  },
-  mounted() {
-    // @todo make this use the actual search term
-    this.getPageData('');
-    this.clearedSortQuery = '?';
   },
 };
 </script>
