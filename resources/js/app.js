@@ -2,8 +2,6 @@
 import Vue from 'vue/dist/vue.esm';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueRouter from 'vue-router';
-
-import Header from './components/HeaderComponent.vue';
 import VideoComponent from './components/VideoComponent.vue';
 import VideoPlayer from './components/VideoPlayer.vue';
 import Home from './components/HomeComponent.vue';
@@ -39,7 +37,6 @@ Vue.component('video-player', VideoPlayer);
 Vue.component('home-component', Home);
 Vue.component('result-grid', ResultGrid);
 Vue.component('search-component', Search);
-Vue.component('header-component', Header);
 
 const router = new VueRouter({
   mode: 'history',
