@@ -106,10 +106,8 @@
             },
             // Sort the results
             sort(queryString) {
-                var sortParams = '';
-                sortParams += queryString;
                 axios
-                    .get(`/searchJson${sortParams}`)
+                    .get(`/searchJson${queryString}`)
                     .then((response) => {
                         this.setVars(response)
                     });
