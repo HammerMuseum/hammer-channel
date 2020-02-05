@@ -106,23 +106,23 @@
           </router-link>
         </div>
         <result-grid :videos="videos" />
+        <div class="pager">
+          <ul>
+            <li
+              v-for="(item, index) in filteredPager"
+              :key="item"
+            >
+              <router-link
+                v-if="item"
+                :to="{name: 'search'}"
+                @click.native="getPageData(clearPageQuery + item)"
+              >
+                {{ index | capitalize }}
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="pager">
-      <ul>
-        <li
-          v-for="(item, index) in filteredPager"
-          :key="item"
-        >
-          <router-link
-            v-if="item"
-            :to="{name: 'search'}"
-            @click.native="getPageData(clearPageQuery + item)"
-          >
-            {{ index }}
-          </router-link>
-        </li>
-      </ul>
     </div>
   </div>
 </template>
@@ -136,6 +136,12 @@ export default {
   name: 'Search',
   components: {
     ResultGrid,
+  },
+  filters: {
+    capitalize(value) {
+      if (!value) return '';
+      return value.toString().charAt(0).toUpperCase() + value.slice(1);
+    },
   },
   data() {
     return {
