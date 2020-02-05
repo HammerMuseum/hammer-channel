@@ -28,7 +28,12 @@
       </div>
     </div>
     <div class="search__area">
-      <button class="filters__toggle" @click="showFilters = !showFilters">{{ showFilters ? 'Hide filters' : 'Show filters' }}</button>
+      <button
+        class="filters__toggle"
+        @click="showFilters = !showFilters"
+      >
+        {{ showFilters ? 'Hide filters' : 'Show filters' }}
+      </button>
       <div class="filters">
         <div
           v-show="showFilters"
@@ -40,7 +45,9 @@
             :key="label"
             class="facet"
           >
-            <p class="facet__label">{{ label }}</p>
+            <p class="facet__label">
+              {{ label }}
+            </p>
             <li
               v-for="option in facet"
               :key="option.key"
@@ -70,8 +77,8 @@
             </li>
             <router-link
               :to="{name: 'search'}"
-              @click.native="search()"
               class="facet__clear"
+              @click.native="search()"
             >
               Clear filter
             </router-link>
@@ -163,8 +170,7 @@ export default {
     handleResize() {
       if (window.innerWidth >= 850) {
         this.showFilters = true;
-      }
-      else {
+      } else {
         this.showFilters = false;
       }
     },

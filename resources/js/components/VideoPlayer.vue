@@ -4,13 +4,15 @@
       ref="videoPlayer"
       class="video-js hammer-video-player vjs-default-skin"
     >
-      <!--<track v-bind:key="track.id"-->
-      <!--v-for="track in trackList"-->
-      <!--:kind="track.kind"-->
-      <!--:label="track.label"-->
-      <!--:src="track.src"-->
-      <!--:srcLang="track.srcLang"-->
-      <!--:default="track.default">-->
+      <track
+        v-for="track in trackList"
+        :key="track.id"
+        :kind="track.kind"
+        :label="track.label"
+        :src="track.src"
+        :srcLang="track.srcLang"
+        :default="track.default"
+      >
     </video>
   </div>
 </template>
@@ -21,19 +23,24 @@ import videojs from 'video.js';
 export default {
   name: 'VideoPlayer',
   props: {
-    title: String,
+    title: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
     options: {
       type: Object,
       default() {
         return {};
       },
     },
-    // trackList: {
-    //     type: Array,
-    //     default() {
-    //         return [];
-    //     },
-    // },
+    trackList: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {
@@ -92,14 +99,14 @@ export default {
       });
 
       // Setup overlay content. Move up to parent?
-      const overlay_content = `<p>${this.title}</p>`;
+      const overlayContent = `<p>${this.title}</p>`;
       this.player.overlay({
         overlays: [{
           start: 'loadedmetadata',
           class: 'hammer-video-overlay',
-          content: overlay_content,
+          content: overlayContent,
           end() {
-            if (player.controlBar.hasClass('vjs-user-inactive')) {
+            if (self.player.controlBar.hasClass('vjs-user-inactive')) {
               $('.vjs-overlay').addClass('vjs-user-inactive');
             }
           },

@@ -11,7 +11,7 @@
       <ul>
         <li
           v-for="(item, index) in pager"
-          v-if="item !== ''"
+          :key="item"
         >
           <router-link
             :to="{name: 'app'}"
@@ -26,11 +26,15 @@
 </template>
 
 <script>
+import axios from 'axios';
 import ResultGrid from './ResultGridComponent.vue';
 import mixin from '../mixin';
 
 export default {
   name: 'Home',
+  components: {
+    ResultGrid,
+  },
   mixins: [mixin],
   data() {
     return {
