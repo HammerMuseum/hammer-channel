@@ -67,7 +67,6 @@ class Facets
                         $facetQueryString .= $filter . ';';
                     }
                 }
-
             } else {
                 $queryString .= "&$key=$value";
             }
