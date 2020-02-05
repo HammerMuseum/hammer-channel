@@ -85,7 +85,7 @@
           </ul>
         </div>
       </div>
-      <div class="results-">
+      <div class="results">
         <div class="facets__sort">
           <span class="facet__label">Order by</span>
           <router-link
