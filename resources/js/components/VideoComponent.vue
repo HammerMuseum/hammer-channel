@@ -92,6 +92,13 @@ export default {
       });
   },
   methods: {
+    onPlayerError() {
+      axios
+        .get(`/viewJson/${this.$route.params.id}`)
+        .then((response) => {
+          this.videoUrl = response.data.data.video_url;
+        });
+    },
     getTranscriptForCaptions() {
       axios
         .get(`${this.datastore}videos/${this.assetId}/transcript`)
