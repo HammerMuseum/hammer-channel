@@ -1,80 +1,104 @@
 <template>
   <div class="video-wrapper">
-    <video-player dusk="video-player-component" 
-                  :options="videoOptions" 
-                  :title="title" 
-                  :trackList="trackList"
-                  @error="onPlayerError()">
-    </video-player>
+    <div class="breadcrumb">
+      <router-link :to="{name: 'app'}">
+        Back to All Videos
+      </router-link>
+    </div>
+    <video-player
+      dusk="video-player-component"
+      :options="videoOptions"
+      :title="title"
+      @error="onPlayerError()"
+    />
     <div class="video__info">
-        <div class="video-info__card">
-          <div class="title"><h1>{{ title }}</h1></div>
-          <div class="date">{{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}</div>
-          <div class="description">{{ description }}</div>
-          <div class="keywords">
-            <ul>
-              <li v-bind:key="item.id" v-for="item in tags">
-                <a :href="`/topics/${item}`">{{ item }}</a>
-              </li>
-            </ul>
-          </div>
+      <div class="video-info__card">
+        <div class="title">
+          <h1>{{ title }}</h1>
         </div>
-        <button v-show="transcription" @click='toggleTranscription()'>Show/Hide transcription</button>
-        <div v-show="transcriptionIsVisible" class="video-info__transcription">
-          <span style="white-space: pre;">{{ transcription }}</span>
+        <div class="date">
+          {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
+        </div>
+        <div class="description">
+          {{ description }}
+        </div>
+        <div class="keywords">
+          <ul>
+            <li
+              v-for="item in keywords"
+              :key="item.id"
+            >
+              {{ item }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
-  import VideoPlayer from "./VideoPlayer.vue";
-  export default {
-    name: 'VideoComponent',
-    props: {
-      url: String,
-      aid: String,
-      title: String,
-      date: String,
-      description: String,
-      tags: Array,
+import axios from 'axios';
+import VideoPlayer from './VideoPlayer.vue';
+
+export default {
+  name: 'VideoComponent',
+  components: {
+    VideoPlayer,
+  },
+  data() {
+    return {
+      datastore: process.env.MIX_DATASTORE_URL,
+      assetId: null,
+      title: this.title,
+      description: this.description,
+      date: this.date,
+      transcriptionIsVisible: false,
+      transcription: null,
+      videoUrl: this.videoUrl,
+      thumbnailUrl: null,
+      keywords: this.keywords,
+      videoOptions: this.videoOptions,
+    };
+  },
+  watch: {
+    assetId() {
+      this.getTranscriptForCaptions();
     },
-    components: {
-      VideoPlayer
-    },
-    methods:{
-      toggleTranscription() {
-        this.transcriptionIsVisible = !this.transcriptionIsVisible
-      },
-    },
-    data() {
-      return {
-        trackList: [
-          {
-            src: `https://datastore.hammer.cogapp.com/api/videos/205/transcript`,
-            kind: "captions",
-            label: "English",
-            srcLang: 'en',
-            default: true
-          }
-        ],
-        videoTitle: this.title,
-        transcriptionIsVisible: false,
-        transcription: null,
-        videoOptions: {
+  },
+  mounted() {
+    const assetId = this.$route.params.id;
+    axios
+      .get(`/viewJson/${assetId}`)
+      .then((response) => {
+        this.title = response.data.data.title;
+        this.description = response.data.data.description;
+        this.assetId = response.data.data.asset_id;
+        this.date = response.data.data.date_recorded;
+        this.thumbnailUrl = response.data.data.thumbnail_url;
+        this.videoUrl = response.data.data.video_url;
+        this.keywords = response.data.data.tags;
+
+        this.videoOptions = {
           autoplay: false,
           controls: true,
           sources: [
             {
-              src: this.url,
-              type: "video/mp4"
-            }
-          ]
-        }
-      };
+              src: this.videoUrl,
+              type: 'video/mp4',
+            },
+          ],
+        };
+      });
+  },
+  methods: {
+    getTranscriptForCaptions() {
+      axios
+        .get(`${this.datastore}videos/${this.assetId}/transcript`)
+        .then((response) => {
+          this.transcription = response.data.data[0].transcription;
+        });
     },
-    mounted() {
-    }
-  }
+  },
+};
 </script>

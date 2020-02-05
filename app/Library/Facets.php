@@ -10,7 +10,9 @@ class Facets
 {
     /** @var array */
     protected $facetMap = [
-        'date' => 'Year Recorded'
+        'date' => 'Year Recorded',
+        'series' => 'Program Series',
+        'speakers' => 'Speakers'
     ];
 
     /**
@@ -23,9 +25,21 @@ class Facets
     {
         $facetOptions = [];
         foreach ($aggregations as $facet => $aggregation) {
+            if ($facet == 'label') {
+                foreach ($aggregation as $facetLabel => $globalAggregation) {
+                    if (isset($this->facetMap[$facetLabel])) {
+                        foreach ($globalAggregation['buckets'] as $bucket) {
+                            if (count($globalAggregation['buckets']) > 0) {
+                                $facetOptions[$this->facetMap[$facetLabel]][] = $bucket;
+                            }
+                        }
+                    }
+                }
+                return $facetOptions;
+            }
             if (isset($this->facetMap[$facet])) {
                 foreach ($aggregation['buckets'] as $bucket) {
-                    if ($bucket['doc_count'] > 0) {
+                    if (count($aggregation['buckets']) > 0) {
                         $facetOptions[$this->facetMap[$facet]][] = $bucket;
                     }
                 }
@@ -46,9 +60,13 @@ class Facets
         $facetQueryString = 'facets=';
         foreach ($params as $key => $value) {
             if ($key == 'facets') {
-                $query = explode(':', substr($value, 3));
-                $query = $query[0] . ':' . $query[1] . ';';
-                $facetQueryString .= $query;
+                // Pull out the [0] pattern
+                $filters = preg_split("(\D[0-9]])  ", $value);
+                foreach ($filters as $filter) {
+                    if ($filter !== '') {
+                        $facetQueryString .= $filter . ';';
+                    }
+                }
             } else {
                 $queryString .= "&$key=$value";
             }
