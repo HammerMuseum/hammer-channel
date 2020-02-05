@@ -91,7 +91,7 @@ export default {
 
         // watch timeupdate
         this.on('timeupdate', function () {
-          self.$smit('timeupdate', this.currentTime());
+          self.$emit('timeupdate', this.currentTime());
         });
 
         // player readied
