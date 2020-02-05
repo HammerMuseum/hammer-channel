@@ -42,11 +42,6 @@ class ListingController extends Controller
         $params = $request->all();
         $videos = $this->api->request('videos', http_build_query($params));
 
-        if (isset($videos['success']) && $videos['success']) {
-            return view('app', [
-               'state' => $this->getAppState($videos, $params)
-            ]);
-        }
         return view('app', [
             'state' => $this->getAppState($videos, $params)
         ]);
@@ -62,11 +57,8 @@ class ListingController extends Controller
     {
         $params = $request->all();
         $videos = $this->api->request('videos', http_build_query($params));
-
-        if (isset($videos['success']) && $videos['success']) {
-            $state = $this->getAppState($videos, $params);
-            return response()->json($state);
-        }
+        $state = $this->getAppState($videos, $params);
+        return response()->json($state);
     }
 
     public function getAppState($data, $params)
