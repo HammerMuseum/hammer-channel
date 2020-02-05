@@ -8,18 +8,18 @@
 
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <title>Hammer Museum | Video Archive</title>
+    <script type="text/javascript">
+        window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
+    </script>
   </head>
 
   <body>
-    
-    @include('header')
-    
     <div class="main" id="main-content">
-        @yield('content')
+      <router-view></router-view>
     </div>
 
     <script type="text/javascript" src="/js/main.js"></script>
-    {{-- <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : '/js/main.js' }}"></script> --}}
+{{--     <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : 'http://localhost:8080/js/app.js' }}"></script>--}}
 
   </body>
 </html>

@@ -42,28 +42,41 @@ class ListingController extends Controller
         $params = $request->all();
         $videos = $this->api->request('videos', http_build_query($params));
 
-        if (isset($videos['success']) && $videos['success']) {
-            $requestUrl = $request->url();
-            $pagerLinks = [];
-            if (!empty($videos['pages'])) {
-                $pagerLinks = $this->pagination->pagerLinks($videos['pages']['pager']);
-            }
-
-            return view('listing', [
-               'videos' => $videos['data'],
-               'pagerLinks' => $pagerLinks,
-               'message' => false,
-               'title' => '',
-               'show_clear' => true
-            ]);
-        }
-        return view('listing', [
-            'videos' => false,
-            'pagerLinks' => [],
-            'message' => 'No videos available.',
-            'title' => '',
-            'show_clear' => false
+        return view('app', [
+            'state' => $this->getAppState($videos, $params)
         ]);
+    }
+
+    /**
+     * Return a JSON version of the index action
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function indexJson(Request $request)
+    {
+        $params = $request->all();
+        $videos = $this->api->request('videos', http_build_query($params));
+        $state = $this->getAppState($videos, $params);
+        return response()->json($state);
+    }
+
+    public function getAppState($data, $params)
+    {
+        $pagerLinks = [];
+        if (!empty($data['pages'])) {
+            $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager']);
+        }
+        return [
+            'path' => '/json',
+            'videos' => isset($data['data']) ? $data['data'] : [],
+            'pager' => $pagerLinks,
+            'message' => isset($data['message']) ? $data['message'] : false,
+            'title' => '',
+            'show_clear' => false,
+            'clearedPageQuery' => '?' . $this->pagination->clearParams($params, ['start']),
+            'clearedSortQuery' => '?' . $this->pagination->clearParams($params, ['sort', 'order']),
+        ];
     }
 
     /**

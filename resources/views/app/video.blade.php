@@ -14,14 +14,14 @@
             </a>
         </div>
         @if ($data !== false)
-            <video-component 
-                dusk="video-component"
-                url="{{ $data['video_url'] }}"
-                aid="{{ $data['asset_id'] }}"
-                title="{{ $data['title'] }}"
-                date="{{ $data['date_recorded'] }}"
-                description="{{ $data['description'] }}"
-                :tags='@json($data['tags'])'>
+            <video-component
+                    dusk="video-component"
+                    url="{{ $data['video_url'] }}"
+                    aid="{{ $data['asset_id'] }}"
+                    title="{{ $data['title'] }}"
+                    date="{{ $data['date_recorded'] }}"
+                    description="{{ $data['description'] }}"
+                    :tags='@json($data['tags'])'>
             </video-component>
 
             <noscript>

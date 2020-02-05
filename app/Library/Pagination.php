@@ -22,9 +22,25 @@ class Pagination
                 // If there are already query parameters, use the correct concatenation
                 $pager[$key] = empty($params) ? '?' . $pagerLink : '&' . $pagerLink;
             } else {
-                $pager[$key] = false;
+                $pager[$key] = '';
             }
         }
         return $pager;
+    }
+
+    /**
+     * Clear unwanted sorting parameters
+     *
+     * @param $params
+     * @return mixed
+     */
+    public function clearParams($params, $keys = [])
+    {
+        foreach ($keys as $key) {
+            if (isset($params[$key])) {
+                unset($params[$key]);
+            }
+        }
+        return http_build_query($params);
     }
 }
