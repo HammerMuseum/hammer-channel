@@ -53,86 +53,87 @@
 </template>
 
 <script>
-    import ResultGrid from "./ResultGridComponent.vue";
-    import mixin  from '../mixin';
-    export default {
-        name: 'Search',
-        props: {},
-        data() {
-            return {
-                title: this.title,
-                videos: this.videos,
-                pager: this.pager,
-                term: this.term,
-                facets: this.facets,
-                clearPageQuery: this.clearPageQuery,
-                clearedSortQuery: this.clearedSortQuery,
-                currentQuery: this.currentQuery
-            }
-        },
-        methods: {
-            // Initially, AJAX request the search JSON endpoint and set results on component
-            getPageData(params = '') {
-                axios
-                    .get(`/searchJson${params}`)
-                    .then((response) => {
-                        this.setVars(response)
-                    });
-            },
-            // Perform a search
-            search() {
-                var searchParams = '';
-                var searchTerm = document.querySelector("[name=term]");
-                searchParams += '?term=' + searchTerm.value;
-                axios
-                    .get(`/searchJson${searchParams}`)
-                    .then((response) => {
-                        this.setVars(response)
-                    });
-            },
-            // Expected querystring format: field_name:value
-            filter(queryString) {
-                var filterParams = '';
-                if (this.term != null) {
-                  filterParams += 'term=' + this.term + '&';
-                }
-                filterParams += queryString;
-                filterParams += this.currentQuery;
-                axios
-                    .get(`/searchJson?${filterParams}`)
-                    .then((response) => {
-                        this.setVars(response)
-                    });
-            },
-            // Sort the results
-            sort(queryString) {
-                axios
-                    .get(`/searchJson${queryString}`)
-                    .then((response) => {
-                        this.setVars(response)
-                    });
-            },
-            // Use whatever response current in the application to populate the page
-            setVars(response) {
-              this.title = response.data.title;
-              this.pager = response.data.pager;
-              this.videos = response.data.videos;
-              this.facets = response.data.facets;
-              this.term = response.data.term;
-              this.clearPageQuery = response.data.clearedPageQuery;
-              this.clearedSortQuery = response.data.clearedSortQuery;
-              this.currentQuery = response.data.currentQuery;
-            },
-            // Extract year from date string
-            getYear(dateString) {
-                var date = new Date(dateString);
-                return date.getFullYear();
-            }
-        },
-        mounted() {
-            //@todo make this use the actual search term
-            this.getPageData('');
-            this.clearedSortQuery = '?';
-        }
-    }
+import ResultGrid from './ResultGridComponent.vue';
+import mixin from '../mixin';
+
+export default {
+  name: 'Search',
+  props: {},
+  data() {
+    return {
+      title: this.title,
+      videos: this.videos,
+      pager: this.pager,
+      term: this.term,
+      facets: this.facets,
+      clearPageQuery: this.clearPageQuery,
+      clearedSortQuery: this.clearedSortQuery,
+      currentQuery: this.currentQuery,
+    };
+  },
+  methods: {
+    // Initially, AJAX request the search JSON endpoint and set results on component
+    getPageData(params = '') {
+      axios
+        .get(`/searchJson${params}`)
+        .then((response) => {
+          this.setVars(response);
+        });
+    },
+    // Perform a search
+    search() {
+      let searchParams = '';
+      const searchTerm = document.querySelector('[name=term]');
+      searchParams += `?term=${searchTerm.value}`;
+      axios
+        .get(`/searchJson${searchParams}`)
+        .then((response) => {
+          this.setVars(response);
+        });
+    },
+    // Expected querystring format: field_name:value
+    filter(queryString) {
+      let filterParams = '';
+      if (this.term != null) {
+        filterParams += `term=${this.term}&`;
+      }
+      filterParams += queryString;
+      filterParams += this.currentQuery;
+      axios
+        .get(`/searchJson?${filterParams}`)
+        .then((response) => {
+          this.setVars(response);
+        });
+    },
+    // Sort the results
+    sort(queryString) {
+      axios
+        .get(`/searchJson${queryString}`)
+        .then((response) => {
+          this.setVars(response);
+        });
+    },
+    // Use whatever response current in the application to populate the page
+    setVars(response) {
+      this.title = response.data.title;
+      this.pager = response.data.pager;
+      this.videos = response.data.videos;
+      this.facets = response.data.facets;
+      this.term = response.data.term;
+      this.clearPageQuery = response.data.clearedPageQuery;
+      this.clearedSortQuery = response.data.clearedSortQuery;
+      this.currentQuery = response.data.currentQuery;
+    },
+    // Extract year from date string
+    getYear(dateString) {
+      const date = new Date(dateString);
+      return date.getFullYear();
+    },
+  },
+  mounted() {
+    // @todo make this use the actual search term
+    this.getPageData('');
+    this.clearedSortQuery = '?';
+  },
+};
 </script>
