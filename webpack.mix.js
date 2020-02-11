@@ -13,12 +13,13 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
  |
  */
 
-// mix.options({
-//   hmrOptions: {
-//     host: 'localhost',
-//     port: 8222,
-//   },
-// });
+
+mix.options({
+  hmrOptions: {
+    host: 'localhost',
+    port: 8082,
+  },
+});
 
 mix
   .js('resources/js/app.js', 'public/js')
@@ -27,7 +28,7 @@ mix
   .webpackConfig({
     // add any webpack dev server config here
     devServer: {
-      disableHostCheck: true
+      disableHostCheck: true,
     },
     plugins: [
       new StyleLintPlugin({
