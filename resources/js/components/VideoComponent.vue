@@ -69,9 +69,9 @@ export default {
     };
   },
   watch: {
-    // assetId() {
-    //   this.getTranscriptForCaptions();
-    // },
+    assetId() {
+      this.getTranscriptForCaptions();
+    },
   },
   mounted() {
     const assetId = this.$route.params.id;
@@ -107,13 +107,13 @@ export default {
           this.videoUrl = response.data.data.video_url;
         });
     },
-    // getTranscriptForCaptions() {
-    //   axios
-    //     .get(`${this.datastore}videos/${this.assetId}/transcript`)
-    //     .then((response) => {
-    //       this.transcription = response.data.data[0].transcription;
-    //     });
-    // },
+    getTranscriptForCaptions() {
+      axios
+        .get(`${this.datastore}videos/${this.assetId}/transcript`)
+        .then((response) => {
+          this.transcription = response.data.data[0].transcription;
+        });
+    },
   },
 };
 </script>
