@@ -20,6 +20,12 @@
           {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
         </div>
         <div class="description">
+          <div class="program_series" v-if="programSeries">
+            Part of the series:
+            <router-link :to="{name: 'search', params: {params:`?facets=[1]program_series:${programSeries}`}}">
+              {{ programSeries }}
+            </router-link>
+          </div>
           {{ description }}
         </div>
         <div class="keywords">
@@ -59,12 +65,13 @@ export default {
       thumbnailUrl: null,
       keywords: this.keywords,
       videoOptions: this.videoOptions,
+      programSeries: this.programSeries
     };
   },
   watch: {
-    assetId() {
-      this.getTranscriptForCaptions();
-    },
+    // assetId() {
+    //   this.getTranscriptForCaptions();
+    // },
   },
   mounted() {
     const assetId = this.$route.params.id;
@@ -78,6 +85,7 @@ export default {
         this.thumbnailUrl = response.data.data.thumbnail_url;
         this.videoUrl = response.data.data.video_url;
         this.keywords = response.data.data.tags;
+        this.programSeries = response.data.data.program_series;
 
         this.videoOptions = {
           autoplay: false,
@@ -99,13 +107,13 @@ export default {
           this.videoUrl = response.data.data.video_url;
         });
     },
-    getTranscriptForCaptions() {
-      axios
-        .get(`${this.datastore}videos/${this.assetId}/transcript`)
-        .then((response) => {
-          this.transcription = response.data.data[0].transcription;
-        });
-    },
+    // getTranscriptForCaptions() {
+    //   axios
+    //     .get(`${this.datastore}videos/${this.assetId}/transcript`)
+    //     .then((response) => {
+    //       this.transcription = response.data.data[0].transcription;
+    //     });
+    // },
   },
 };
 </script>
