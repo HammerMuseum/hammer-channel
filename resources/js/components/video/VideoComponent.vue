@@ -1,54 +1,41 @@
 <template>
-  <div class="video-wrapper">
-    <div class="breadcrumb">
-      <router-link :to="{name: 'app'}">
-        Back to All Videos
-      </router-link>
+  <div class="video-wrapper horizontal-layout">
+    <div class="item-list sidebar">
+      <ul>
+        <li @click="setCurrentPanel('about')">About</li>
+      </ul>
     </div>
+    <about
+      v-show="currentPanel == 'about'"
+      :description="description"
+      :date="date"
+      :keywords="keywords"
+      :currentPanel="currentPanel"
+    ></about>
+
     <video-player
       dusk="video-player-component"
       :options="videoOptions"
       :title="title"
       @error="onPlayerError()"
     />
-    <div class="video__info">
-      <div class="video-info__card">
-        <div class="title">
-          <h1>{{ title }}</h1>
-        </div>
-        <div class="date">
-          {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
-        </div>
-        <div class="description">
-          {{ description }}
-        </div>
-        <div class="keywords">
-          <ul>
-            <li
-              v-for="item in keywords"
-              :key="item.id"
-            >
-              {{ item }}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
+import About from './AboutComponent.vue';
 
 export default {
   name: 'VideoComponent',
   components: {
     VideoPlayer,
+    About
   },
   data() {
     return {
-      datastore: process.env.MIX_DATASTORE_URL,
+      datastore: /*process.env.MIX_DATASTORE_URL,*/ 'http://datastore.rufio.office.cogapp.com/api/',
       assetId: null,
       title: this.title,
       description: this.description,
@@ -59,12 +46,13 @@ export default {
       thumbnailUrl: null,
       keywords: this.keywords,
       videoOptions: this.videoOptions,
+      currentPanel: null
     };
   },
   watch: {
-    assetId() {
-      this.getTranscriptForCaptions();
-    },
+    // assetId() {
+    //   this.getTranscriptForCaptions();
+    // },
   },
   mounted() {
     const assetId = this.$route.params.id;
@@ -99,13 +87,20 @@ export default {
           this.videoUrl = response.data.data.video_url;
         });
     },
-    getTranscriptForCaptions() {
+    setCurrentPanel(name) {
+      if (this.currentPanel == name) {
+        this.currentPanel = null;
+      } else {
+        this.currentPanel = name;
+      }
+    }
+/*    getTranscriptForCaptions() {
       axios
         .get(`${this.datastore}videos/${this.assetId}/transcript`)
         .then((response) => {
           this.transcription = response.data.data[0].transcription;
         });
-    },
+    },*/
   },
 };
 </script>

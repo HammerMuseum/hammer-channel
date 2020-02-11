@@ -1,5 +1,5 @@
 <template>
-  <div class="video-js-responsive-container vjs-hd">
+  <div class="vjs-hd">
     <video
       ref="videoPlayer"
       class="video-js hammer-video-player vjs-default-skin"
@@ -14,6 +14,9 @@
         :default="track.default"
       >
     </video>
+    <div class="title">
+      <h1>{{ title }}</h1>
+    </div>
   </div>
 </template>
 

@@ -56,3 +56,21 @@
 .breadcrumb__icon svg {
   transform: rotate(180deg);
 }
+
+.horizontal-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.horizontal-layout > div {
+  flex-basis: 50%;
+}
+
+.horizontal-layout > .sidebar {
+  flex-basis: 25%;
+}
+
+.horizontal-layout > .vjs-hd {
+  flex-basis: 100%;
+}
