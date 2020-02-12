@@ -51,8 +51,8 @@
 
 .horizontal-layout {
   display: flex;
-  flex-direction: row;
   height: 100vh;
+  flex-direction: column-reverse;
 }
 
 .horizontal-layout > div {
@@ -69,6 +69,11 @@
   z-index: 1;
   display: flex;
   align-items: center;
+}
+
+.item-list ul {
+  display: flex;
+  flex-direction: row;
 }
 
 .item-list__item {
@@ -91,13 +96,11 @@
 }
 
 .active-panel {
-  width: 100%;
+  width: auto;
 }
 
 .close-button {
-  display: inline-block;
-  float: right;
-  cursor: pointer;
+  display: none;
 }
 
 .video-wrapper__item {
@@ -105,4 +108,24 @@
   scroll-behavior: smooth;
   background: white;
   padding: 10px;
+}
+
+@media screen and (min-width: 760px) {
+  .horizontal-layout {
+    flex-direction: row;
+  }
+
+  .item-list ul {
+    flex-direction: column;
+  }
+
+  .active-panel {
+    width: 100%;
+  }
+
+  .close-button {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+  }
 }
