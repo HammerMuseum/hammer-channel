@@ -2,10 +2,10 @@
   <div class="video-wrapper horizontal-layout">
     <div class="item-list sidebar">
       <ul>
-        <li @click="setCurrentPanel('about')">About</li>
+        <li class="item-list__item" @click="setCurrentPanel('about')">About</li>
       </ul>
     </div>
-    <!--<transition name="slide">-->
+    <transition name="slide" v-on:leave="leave" v-on:after-leave="afterLeave">
       <about
         v-show="currentPanel == 'about'"
         :description="description"
@@ -13,7 +13,7 @@
         :keywords="keywords"
         :currentPanel="currentPanel"
       ></about>
-    <!--</transition>-->
+    </transition>
     <video-player
       dusk="video-player-component"
       :options="videoOptions"
@@ -94,7 +94,18 @@ export default {
       } else {
         this.currentPanel = name;
       }
+    },
+    leave() {
+      let videoContainer = document.querySelector('.hammer-video-player');
+      if (!videoContainer.classList.contains('resize-video')) {
+        videoContainer.classList.add('resize-video');
+      }
+    },
+    afterLeave() {
+      let videoContainer = document.querySelector('.hammer-video-player');
+      videoContainer.classList.remove('resize-video');
     }
+
 /*    getTranscriptForCaptions() {
       axios
         .get(`${this.datastore}videos/${this.assetId}/transcript`)

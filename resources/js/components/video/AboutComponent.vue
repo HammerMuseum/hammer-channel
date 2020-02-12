@@ -1,7 +1,7 @@
 <template>
     <transition name="slide-fade">
         <div class="video__info">
-            <div class="video-info__card">
+            <div class="video-info__card" scroll>
                 <div class="date">
                     {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
                 </div>
