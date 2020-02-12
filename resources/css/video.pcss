@@ -66,10 +66,11 @@
 .horizontal-layout > div {
   flex-basis: 50%;
   flex-grow: 1;
+  padding: 0 10px;
 }
 
 .horizontal-layout > .sidebar {
-  flex-basis: 25%;
+  flex-basis: 10%;
 }
 
 .horizontal-layout > .video-wrapper {
@@ -88,8 +89,25 @@
 }
 
 .item-list__item {
-  border: 1px solid gray;
   background: white;
   width: 150px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.active-panel {
+  width: 100%;
+}
+
+.close-button {
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+}
+
+.video-wrapper__item {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: white;
   padding: 10px;
 }

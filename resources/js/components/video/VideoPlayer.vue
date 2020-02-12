@@ -14,18 +14,20 @@
         :default="track.default"
       >
     </video>
-    <div class="title">
-      <h1>{{ title }}</h1>
-    </div>
-    <div class="keywords">
-      <ul>
-        <li
-                v-for="item in keywords"
-                :key="item.id"
-        >
-          {{ item }}
-        </li>
-      </ul>
+    <div class="video-info video-info--title">
+      <div class="title">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="keywords">
+        <ul>
+          <li
+            v-for="item in keywords"
+            :key="item.id"
+          >
+            {{ item }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

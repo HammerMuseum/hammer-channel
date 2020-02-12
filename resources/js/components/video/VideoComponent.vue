@@ -2,7 +2,10 @@
   <div class="video-page-wrapper horizontal-layout">
     <div class="item-list sidebar">
       <ul>
-        <li class="item-list__item" @click="setCurrentPanel('about')">About</li>
+        <li class="item-list__item" @click="toggleActivePanel($event, 'about')">About</li>
+        <li class="item-list__item" @click="toggleActivePanel($event, 'share')">Share</li>
+        <li class="item-list__item" @click="toggleActivePanel($event, 'use')">Use this video</li>
+        <li class="item-list__item" @click="toggleActivePanel($event, 'transcript')">Transcript</li>
       </ul>
     </div>
     <div class="video-wrapper horizontal-layout">
@@ -14,6 +17,18 @@
         :keywords="keywords"
         :currentPanel="currentPanel"
       ></about>
+      <div class="share video-wrapper__item" v-show="currentPanel == 'share'">
+        <span class="close-button" @click="toggleActivePanel($event, 'share')">X</span>
+        Share buttons go here.
+      </div>
+      <div class="use video-wrapper__item" v-show="currentPanel == 'use'">
+        <span class="close-button" @click="toggleActivePanel($event, 'use')">X</span>
+        Usage information goes here.
+      </div>
+      <div class="transcript video-wrapper__item" v-show="currentPanel == 'transcript'">
+        <span class="close-button" @click="toggleActivePanel($event, 'transcript')">X</span>
+        Transcript goes here.
+      </div>
       <!--</transition>-->
       <video-player
         dusk="video-player-component"
@@ -91,11 +106,16 @@ export default {
           this.videoUrl = response.data.data.video_url;
         });
     },
-    setCurrentPanel(name) {
+    toggleActivePanel(event, name) {
+      let clickedElem = event.target;
       if (this.currentPanel == name) {
         this.currentPanel = null;
+        clickedElem.classList.remove('active-panel');
+        document.querySelector('.video-info--title').classList.remove('hidden');
       } else {
         this.currentPanel = name;
+        clickedElem.classList.add('active-panel');
+        document.querySelector('.video-info--title').classList.add('hidden');
       }
     },
     leave() {

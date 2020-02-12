@@ -1,6 +1,7 @@
 <template>
-    <div class="video__info">
-        <div class="video-info__card" scroll>
+    <div class="video__info video-wrapper__item">
+        <div class="video-info__card">
+            <span class="close-button" @click="toggleActivePanel($event, 'about')">X</span>
             <div class="date">
                 {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
             </div>
@@ -19,9 +20,12 @@
       description: String,
       keywords: Array
     },
+    methods: {
+      toggleActivePanel(event, panel) {
+        this.$parent.toggleActivePanel(event, panel);
+      }
+    },
     mounted() {
-      console.log('Component mounted.');
-      console.log(this.date);
     },
   };
 </script>
