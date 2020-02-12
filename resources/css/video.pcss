@@ -78,7 +78,7 @@
 
 .item-list__item {
   background: white;
-  width: 150px;
+  width: auto;
   padding: 10px;
   cursor: pointer;
   margin: 20px 0;
@@ -103,6 +103,10 @@
   display: none;
 }
 
+.video-info__title {
+  text-align: center;
+}
+
 .video-wrapper__item {
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -117,6 +121,10 @@
 
   .item-list ul {
     flex-direction: column;
+  }
+
+  .item-list__item {
+    width: 150px;
   }
 
   .active-panel {
