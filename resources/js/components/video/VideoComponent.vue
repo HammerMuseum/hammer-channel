@@ -1,11 +1,12 @@
 <template>
-  <div class="video-wrapper horizontal-layout">
+  <div class="video-page-wrapper horizontal-layout">
     <div class="item-list sidebar">
       <ul>
         <li class="item-list__item" @click="setCurrentPanel('about')">About</li>
       </ul>
     </div>
-    <transition name="slide" v-on:leave="leave" v-on:after-leave="afterLeave">
+    <div class="video-wrapper horizontal-layout">
+      <!--<transition name="slide">-->
       <about
         v-show="currentPanel == 'about'"
         :description="description"
@@ -13,13 +14,15 @@
         :keywords="keywords"
         :currentPanel="currentPanel"
       ></about>
-    </transition>
-    <video-player
-      dusk="video-player-component"
-      :options="videoOptions"
-      :title="title"
-      @error="onPlayerError()"
-    />
+      <!--</transition>-->
+      <video-player
+        dusk="video-player-component"
+        :options="videoOptions"
+        :title="title"
+        :keywords="keywords"
+        @error="onPlayerError()"
+      />
+    </div>
   </div>
 </template>
 

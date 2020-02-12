@@ -1,26 +1,14 @@
 <template>
-    <transition name="slide-fade">
-        <div class="video__info">
-            <div class="video-info__card" scroll>
-                <div class="date">
-                    {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
-                </div>
-                <div class="description">
-                    {{ description }}
-                </div>
-                <div class="keywords">
-                    <ul>
-                        <li
-                                v-for="item in keywords"
-                                :key="item.id"
-                        >
-                            {{ item }}
-                        </li>
-                    </ul>
-                </div>
+    <div class="video__info">
+        <div class="video-info__card" scroll>
+            <div class="date">
+                {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
+            </div>
+            <div class="description">
+                {{ description }}
             </div>
         </div>
-    </transition>
+    </div>
 </template>
 
 <script>

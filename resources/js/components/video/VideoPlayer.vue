@@ -2,7 +2,7 @@
   <div class="vjs-hd">
     <video
       ref="videoPlayer"
-      class="video-js hammer-video-player vjs-default-skin"
+      class="video-js video-js-responsive-container hammer-video-player vjs-default-skin"
     >
       <track
         v-for="track in trackList"
@@ -16,6 +16,16 @@
     </video>
     <div class="title">
       <h1>{{ title }}</h1>
+    </div>
+    <div class="keywords">
+      <ul>
+        <li
+                v-for="item in keywords"
+                :key="item.id"
+        >
+          {{ item }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -32,6 +42,7 @@ export default {
         return '';
       },
     },
+    keywords: Array,
     options: {
       type: Object,
       default() {
