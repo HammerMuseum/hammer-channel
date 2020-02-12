@@ -21,7 +21,7 @@
         </div>
         <div class="description">
           <div class="program_series" v-if="programSeries">
-            Part of the series:
+            Part of:
             <router-link :to="{name: 'search', params: {params:`?facets=[1]program_series:${programSeries}`}}">
               {{ programSeries }}
             </router-link>
