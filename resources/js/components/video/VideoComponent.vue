@@ -108,7 +108,7 @@ export default {
     },
     toggleActivePanel(event, name) {
       let clickedElem = event.target;
-      if (this.currentPanel == name) {
+      if (this.currentPanel === name) {
         this.currentPanel = null;
         clickedElem.classList.remove('active-panel');
         document.querySelector('.video-info--title').classList.remove('hidden');

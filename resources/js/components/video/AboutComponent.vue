@@ -1,6 +1,6 @@
 <template>
     <div class="video__info video-wrapper__item">
-        <div class="video-info__card">
+        <div class="video-info__card" scroll>
             <span class="close-button" @click="toggleActivePanel($event, 'about')">X</span>
             <div class="date">
                 {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
