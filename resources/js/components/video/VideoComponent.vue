@@ -5,14 +5,15 @@
         <li @click="setCurrentPanel('about')">About</li>
       </ul>
     </div>
-    <about
-      v-show="currentPanel == 'about'"
-      :description="description"
-      :date="date"
-      :keywords="keywords"
-      :currentPanel="currentPanel"
-    ></about>
-
+    <!--<transition name="slide">-->
+      <about
+        v-show="currentPanel == 'about'"
+        :description="description"
+        :date="date"
+        :keywords="keywords"
+        :currentPanel="currentPanel"
+      ></about>
+    <!--</transition>-->
     <video-player
       dusk="video-player-component"
       :options="videoOptions"
