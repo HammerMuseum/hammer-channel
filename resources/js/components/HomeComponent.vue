@@ -6,22 +6,47 @@
     <h1 class="title">
       {{ title }}
     </h1>
-    <result-grid :videos="videos" />
-    <div class="pager">
+    <div class="topics">
       <ul>
-        <li
-          v-for="(item, index) in pager"
-          :key="item"
-        >
-          <router-link
-            :to="{name: 'app'}"
-            @click.native="getPageData(item)"
-          >
-            {{ index }}
-          </router-link>
+        <li v-for="(videos, topic) in topics" :key="topic">
+          {{topic}}
         </li>
       </ul>
     </div>
+    <div class="videos">
+      <div v-for="(topic, topic_name) in topics" :key="topic_name">
+        <h2>{{topic_name}}</h2>
+        <div v-for="video in topic" class="video">
+            <div>
+              <img :src="video._source['thumbnail_url']">
+            </div>
+        </div>
+        <div class="video">
+          See all
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!--<result-grid :videos="videos" />-->
+    <!--<div class="pager">-->
+      <!--<ul>-->
+        <!--<li-->
+          <!--v-for="(item, index) in pager"-->
+          <!--:key="item"-->
+        <!--&gt;-->
+          <!--<router-link-->
+            <!--:to="{name: 'app'}"-->
+            <!--@click.native="getPageData(item)"-->
+          <!--&gt;-->
+            <!--{{ index }}-->
+          <!--</router-link>-->
+        <!--</li>-->
+      <!--</ul>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -29,11 +54,15 @@
 import axios from 'axios';
 import ResultGrid from './ResultGridComponent.vue';
 import mixin from '../mixin';
+import VueSlickCarousel from 'vue-slick-carousel'
+// optional style for arrows & dots
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
   name: 'Home',
   components: {
     ResultGrid,
+    VueSlickCarousel
   },
   mixins: [mixin],
   data() {
@@ -41,10 +70,19 @@ export default {
       title: this.title,
       videos: this.videos,
       pager: this.pager,
+      topics: this.topics,
+      settings: {
+        "dots": true,
+        "infinite": true,
+        "speed": 500,
+        "slidesToShow": 3,
+        "slidesToScroll": 3,
+        "touchThreshold": 5,
+      }
     };
   },
   mounted() {
-    this.getPageData();
+    this.getPageData('?term=all');
   },
   methods: {
     getPageData(params = '') {
@@ -54,6 +92,7 @@ export default {
           this.title = response.data.title;
           this.pager = response.data.pager;
           this.videos = response.data.videos;
+          this.topics = response.data.topics;
         });
     },
   },

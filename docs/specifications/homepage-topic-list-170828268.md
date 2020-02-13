@@ -18,11 +18,39 @@ This is a template for a specification.
 ## Implementation
 
 - The `topics` field in Elasticsearch index should be converted to a split field via the harvester as sometimes there are multiple topics.
+- The field should also be made into a 'keyword' field.
 - To get a list of all topics in the backend, perform a search with the parameter `_source=topics`.
   - This could take the form of a re-usable method that gets all values from a specified field.
 - Use the list of topics on the frontend by using the `term` endpoint to retrieve all videos for each topic.
 - Initially fetch all videos, un-limited.
 
+
+    {
+        "size": "0",
+        "aggs": {
+            "topics": {
+                "terms": {
+                    "field": "topics.keyword",
+                    "size": 12
+                },
+                "aggs": {
+                    "by_top_hit": {
+                        "top_hits": {
+                            "sort": [
+                                {
+                                    "date_recorded": {
+                                        "order": "desc"
+                                    }
+                                }
+                            ],
+                            "size": 1,
+                            "_source": ["title", "thumbnail_url", "title_slug"]
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
 - Implement Vue slick carousel on the video thumbnails to build a row.
