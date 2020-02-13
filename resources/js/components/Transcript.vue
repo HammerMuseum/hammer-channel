@@ -71,7 +71,8 @@ export default {
     },
     downloadTranscript() {
       // const blob = new Blob(this.items)
-    }
+      // Add download logic here
+    },
   },
 };
 </script>
