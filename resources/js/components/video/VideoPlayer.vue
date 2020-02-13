@@ -1,5 +1,5 @@
 <template>
-  <div class="vjs-hd video-js-responsive-container ">
+  <div class="vjs-hd">
     <video
       ref="videoPlayer"
       class="video-js hammer-video-player vjs-default-skin"
