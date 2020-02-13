@@ -7,48 +7,31 @@
       {{ title }}
     </h1>
     <div class="topics">
-      <ul>
-        <li v-for="(videos, topic) in topics" :key="topic">
-          {{topic}}
+      <ul class="topics__list">
+        <li class="topics__list-item" v-for="(videos, topic) in topics" :key="topic">
+          <a :href="`#${topic}`">{{topic}}</a>
         </li>
       </ul>
     </div>
 
-
-    <div class="">
-      <VueSlickCarousel v-bind="settings" v-for="(topic, topic_name) in topics" :key="topic_name" :dots="true" :arrows="true">
-        {{ topic_name }}
-        <div v-for="video in topic">
+    <div class="videos">
+      <div v-for="(topic, topic_name) in topics" :key="topic_name" :id="topic_name">
+        <h2>{{ topic_name }}</h2>
+        <VueSlickCarousel v-bind="settings" :arrows="true">
+          <div class="video" v-for="video in topic">
             <div>
               <img :src="video._source['thumbnail_url']">
+              <span>{{video._source['title']}}</span>
             </div>
-        </div>
-        <div class="video">
-          See all
-        </div>
-      </VueSlickCarousel>
+          </div>
+          <div class="video">
+            <router-link>
+              See all
+            </router-link>
+          </div>
+        </VueSlickCarousel>
+      </div>
     </div>
-
-
-
-
-
-    <!--<result-grid :videos="videos" />-->
-    <!--<div class="pager">-->
-      <!--<ul>-->
-        <!--<li-->
-          <!--v-for="(item, index) in pager"-->
-          <!--:key="item"-->
-        <!--&gt;-->
-          <!--<router-link-->
-            <!--:to="{name: 'app'}"-->
-            <!--@click.native="getPageData(item)"-->
-          <!--&gt;-->
-            <!--{{ index }}-->
-          <!--</router-link>-->
-        <!--</li>-->
-      <!--</ul>-->
-    <!--</div>-->
   </div>
 </template>
 
@@ -74,11 +57,9 @@ export default {
       pager: this.pager,
       topics: this.topics,
       settings: {
-        "dots": true,
         "slidesToShow": 3,
         "infinite": false,
-        "touchThreshold": 5,
-        "centerMode": true
+        "touchThreshold": 5
       }
     };
   },
