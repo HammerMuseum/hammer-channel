@@ -20,6 +20,12 @@
           {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
         </div>
         <div class="description">
+          <div v-if="programSeries">
+            Part of:
+            <router-link :to="{name: 'search', params: {params:`?facets=[1]program_series:${programSeries}`}}">
+              {{ programSeries }}
+            </router-link>
+          </div>
           {{ description }}
         </div>
         <div class="keywords">
@@ -59,6 +65,7 @@ export default {
       thumbnailUrl: null,
       keywords: this.keywords,
       videoOptions: this.videoOptions,
+      programSeries: this.programSeries
     };
   },
   watch: {
@@ -71,13 +78,15 @@ export default {
     axios
       .get(`/viewJson/${assetId}`)
       .then((response) => {
-        this.title = response.data.data.title;
-        this.description = response.data.data.description;
-        this.assetId = response.data.data.asset_id;
-        this.date = response.data.data.date_recorded;
-        this.thumbnailUrl = response.data.data.thumbnail_url;
-        this.videoUrl = response.data.data.video_url;
-        this.keywords = response.data.data.tags;
+        let videoData = response.data.data;
+        this.title = videoData.title;
+        this.description = videoData.description;
+        this.assetId = videoData.asset_id;
+        this.date = videoData.date_recorded;
+        this.thumbnailUrl = videoData.thumbnail_url;
+        this.videoUrl = videoData.video_url;
+        this.keywords = videoData.tags;
+        this.programSeries = videoData.program_series;
 
         this.videoOptions = {
           autoplay: false,

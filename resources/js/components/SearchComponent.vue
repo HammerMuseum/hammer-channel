@@ -166,8 +166,8 @@ export default {
     },
   },
   mounted() {
-    // @todo make this use the actual search term
-    this.getPageData('');
+    let optionalParams = this.$route.params.params;
+    this.getPageData(optionalParams);
     this.clearedSortQuery = '?';
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
