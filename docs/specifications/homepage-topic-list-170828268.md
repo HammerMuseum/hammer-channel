@@ -19,9 +19,10 @@ This is a template for a specification.
 
 - The `topics` field in Elasticsearch index should be converted to a split field via the harvester as sometimes there are multiple topics.
 - To get a list of all topics in the backend, perform a search with the parameter `_source=topics`.
+  - This could take the form of a re-usable method that gets all values from a specified field.
 - Use the list of topics on the frontend by using the `term` endpoint to retrieve all videos for each topic.
 - Initially fetch all videos, un-limited.
-- Question: how do we expect to handle when there is a video in two topics, does it just show twice? might look odd.
+
 
 
 - Implement Vue slick carousel on the video thumbnails to build a row.
@@ -34,4 +35,3 @@ This is a template for a specification.
 
 ## Documentation required
 - Slick carousel usage
-- 'Fetch all topics' method/endpoint

@@ -16,5 +16,17 @@
 ## Description
 
 ## Requirements to test
+- Access to the testing environment
 
 ## Test Plan
+- Navigate to the homepage
+  - Is there a list of topics on the page?
+  - Is there a row of video thumbnails for each topic?
+  - Is the row of thumbnails a slider/carousel?
+- Click on a topic
+  - Are you taken to the corresponding row of video thumbnails for the topic you clicked on?
+- Click on the arrows on the carousel. 
+  - Do these let you cycle through the thumbnails?
+  - At the end of the cycle, is there a 'See all' card?
+- Click on the 'See all' card.
+  - Are you taken to a search results page, filtered by the topic for the row that you navigated from?
