@@ -47,7 +47,7 @@ const router = new VueRouter({
       path: '/', name: 'app', component: Home,
     },
     {
-      path: '/search', name: 'search', component: Search,
+      path: '/search/:params?', name: 'search', component: Search,
     },
     {
       path: '/video/:id', name: 'video', component: VideoComponent, props: true,
