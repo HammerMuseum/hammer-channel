@@ -58,7 +58,7 @@ export default {
       this.player.play();
     },
     videoUrl(val) {
-      this.updatePlayerSrc(val);
+      // this.updatePlayerSrc(val);
     },
   },
   beforeDestroy() {
@@ -128,6 +128,31 @@ export default {
       });
       $('.vjs-overlay').addClass('vjs-control-bar');
     },
-  },
+    updatePlayerSrc(val) {
+      const time = this.player.currentTime();
+      const self = this;
+      let initdone = false;
+
+      this.player.off('ready');
+      this.player.src({
+        type: 'video/mp4',
+        src: val,
+      });
+
+      // wait for video metadata to load, then set time.
+      this.player.on('loadedmetadata', () => {
+        self.player.currentTime(time);
+      });
+
+      // iPhone/iPad need to play first, then set the time
+      // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
+      this.player.on('canplaythrough', () => {
+        if (!initdone) {
+          self.player.currentTime(time);
+          initdone = true;
+        }
+      });
+    },
+  }
 };
 </script>
