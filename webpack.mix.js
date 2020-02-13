@@ -21,6 +21,7 @@ mix.options({
   },
 });
 
+const dev = !mix.inProduction();
 mix
   .js('resources/js/app.js', 'public/js')
   .postCss('resources/css/app.pcss', 'public/css')
@@ -37,4 +38,6 @@ mix
         quiet: true,
       }),
     ],
-  });
+    devtool: dev ? 'source-map' : false,
+  })
+  .sourceMaps(dev);
