@@ -13,10 +13,12 @@
         </li>
       </ul>
     </div>
-    <div class="videos">
-      <div v-for="(topic, topic_name) in topics" :key="topic_name">
-        <h2>{{topic_name}}</h2>
-        <div v-for="video in topic" class="video">
+
+
+    <div class="">
+      <VueSlickCarousel v-bind="settings" v-for="(topic, topic_name) in topics" :key="topic_name" :dots="true" :arrows="true">
+        {{ topic_name }}
+        <div v-for="video in topic">
             <div>
               <img :src="video._source['thumbnail_url']">
             </div>
@@ -24,7 +26,7 @@
         <div class="video">
           See all
         </div>
-      </div>
+      </VueSlickCarousel>
     </div>
 
 
@@ -56,7 +58,7 @@ import ResultGrid from './ResultGridComponent.vue';
 import mixin from '../mixin';
 import VueSlickCarousel from 'vue-slick-carousel'
 // optional style for arrows & dots
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+
 
 export default {
   name: 'Home',
@@ -73,11 +75,10 @@ export default {
       topics: this.topics,
       settings: {
         "dots": true,
-        "infinite": true,
-        "speed": 500,
         "slidesToShow": 3,
-        "slidesToScroll": 3,
+        "infinite": false,
         "touchThreshold": 5,
+        "centerMode": true
       }
     };
   },

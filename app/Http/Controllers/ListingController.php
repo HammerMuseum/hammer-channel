@@ -74,10 +74,6 @@ class ListingController extends Controller
                 $topics[$topic['key']] = $topic['by_topic']['hits']['hits'];
             }
         }
-
-
-
-
         return [
             'path' => '/json',
             'videos' => isset($data['data']) ? $data['data'] : [],
