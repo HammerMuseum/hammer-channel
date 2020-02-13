@@ -2,11 +2,11 @@
 import Vue from 'vue/dist/vue.esm';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueRouter from 'vue-router';
+
 import VideoComponent from './components/VideoComponent.vue';
-import VideoPlayer from './components/VideoPlayer.vue';
 import Home from './components/HomeComponent.vue';
-import ResultGrid from './components/ResultGridComponent.vue';
 import Search from './components/SearchComponent.vue';
+import NotFoundComponent from './components/NotFoundComponent.vue';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -26,39 +26,32 @@ window.VIDEOJS_NO_BASE_THEME = true;
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
+// const files = require.context('./', true, /\.vue$/i)
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+
+const routes = [
+  {
+    path: '/', name: 'app', component: Home,
+  },
+  {
+    path: '/search', name: 'search', component: Search,
+  },
+  {
+    path: '/video/:id', name: 'video', component: VideoComponent, props: true,
+  },
+  {
+    path: '*', component: NotFoundComponent,
+  },
+];
+
+const router = new VueRouter({
+  mode: 'history',
+  routes,
+});
 
 Vue.use(VueFilterDateFormat);
 Vue.use(VueRouter);
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-Vue.component('video-component', VideoComponent);
-Vue.component('video-player', VideoPlayer);
-Vue.component('home-component', Home);
-Vue.component('result-grid', ResultGrid);
-Vue.component('search-component', Search);
-
-const router = new VueRouter({
-  mode: 'history',
-  routes: [
-    {
-      path: '/', name: 'app', component: Home,
-    },
-    {
-      path: '/search', name: 'search', component: Search,
-    },
-    {
-      path: '/video/:id', name: 'video', component: VideoComponent, props: true,
-    },
-  ],
-});
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-//
 const app = new Vue({ // eslint-disable-line
   el: '#main-content',
   router,
