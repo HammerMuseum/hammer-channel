@@ -3,10 +3,10 @@ import Vue from 'vue/dist/vue.esm';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueRouter from 'vue-router';
 
-import VideoComponent from './components/VideoComponent.vue';
 import Home from './components/HomeComponent.vue';
 import Search from './components/SearchComponent.vue';
 import NotFoundComponent from './components/NotFoundComponent.vue';
+import VideoComponent from './components/video/VideoComponent.vue';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -26,15 +26,15 @@ window.VIDEOJS_NO_BASE_THEME = true;
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+const files = require.context('./', true, /\.vue$/i);
+files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 const routes = [
   {
     path: '/', name: 'app', component: Home,
   },
   {
-    path: '/search', name: 'search', component: Search,
+    path: '/search/:params?', name: 'search', component: Search,
   },
   {
     path: '/video/:id', name: 'video', component: VideoComponent, props: true,

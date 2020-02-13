@@ -1,9 +1,24 @@
 <template>
-  <div class="video-js-responsive-container vjs-hd">
+  <div class="vjs-hd video-js-responsive-container ">
     <video
       ref="videoPlayer"
       class="video-js hammer-video-player vjs-default-skin"
     />
+    <div class="video-info video-info--title">
+      <div class="title">
+        <h1>{{ title }}</h1>
+      </div>
+      <div class="keywords">
+        <ul>
+          <li
+            v-for="item in keywords"
+            :key="item.id"
+          >
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,6 +38,12 @@ export default {
       type: String,
       default() {
         return '';
+      },
+    },
+    keywords: {
+      type: Array,
+      default() {
+        return [];
       },
     },
     options: {
@@ -153,6 +174,6 @@ export default {
         }
       });
     },
-  }
+  },
 };
 </script>
