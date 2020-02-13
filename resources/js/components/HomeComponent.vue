@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="video">
-            <router-link>
+            <router-link :to="{name: 'search', params: {params:`?facets=[3]topics.keyword:${topic_name}`}}">
               See all
             </router-link>
           </div>
