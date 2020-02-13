@@ -15,6 +15,7 @@
         :description="description"
         :date="date"
         :keywords="keywords"
+        :programSeries="programSeries"
         :currentPanel="currentPanel"
       ></about>
       <div class="share video-wrapper__item" v-show="currentPanel == 'share'">
@@ -65,7 +66,8 @@ export default {
       thumbnailUrl: null,
       keywords: this.keywords,
       videoOptions: this.videoOptions,
-      currentPanel: null
+      currentPanel: null,
+      programSeries: this.programSeries
     };
   },
   watch: {
@@ -78,13 +80,15 @@ export default {
     axios
       .get(`/viewJson/${assetId}`)
       .then((response) => {
-        this.title = response.data.data.title;
-        this.description = response.data.data.description;
-        this.assetId = response.data.data.asset_id;
-        this.date = response.data.data.date_recorded;
-        this.thumbnailUrl = response.data.data.thumbnail_url;
-        this.videoUrl = response.data.data.video_url;
-        this.keywords = response.data.data.tags;
+        var videoData = response.data.data;
+        this.title = videoData.title;
+        this.description = videoData.description;
+        this.assetId = videoData.asset_id;
+        this.date = videoData.date_recorded;
+        this.thumbnailUrl = videoData.thumbnail_url;
+        this.videoUrl = videoData.video_url;
+        this.keywords = videoData.tags;
+        this.programSeries = videoData.program_series;
 
         this.videoOptions = {
           autoplay: false,
