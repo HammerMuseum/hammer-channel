@@ -7,7 +7,7 @@
     "build-dev": "NODE_ENV=development npx webpack --mode development --env dev --display errors-only",
     "watch": "NODE_ENV=production npx webpack --mode production --env prod --watch",
     "watch-dev": "NODE_ENV=development npx webpack --mode development --env dev --watch",
-    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --mode development --env dev --config=node_modules/laravel-mix/setup/webpack.config.js",
     "away": "npm run watch-dev"
   },
   "devDependencies": {
