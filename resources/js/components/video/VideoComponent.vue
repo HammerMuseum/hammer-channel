@@ -118,16 +118,6 @@ export default {
         document.querySelector('.video-info--title').classList.add('hidden');
       }
     },
-    leave() {
-      let videoContainer = document.querySelector('.hammer-video-player');
-      if (!videoContainer.classList.contains('resize-video')) {
-        videoContainer.classList.add('resize-video');
-      }
-    },
-    afterLeave() {
-      let videoContainer = document.querySelector('.hammer-video-player');
-      videoContainer.classList.remove('resize-video');
-    }
 
 /*    getTranscriptForCaptions() {
       axios
