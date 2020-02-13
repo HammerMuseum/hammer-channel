@@ -1,8 +1,8 @@
 <template>
-  <div class="vjs-hd">
+  <div class="vjs-hd video-js-responsive-container ">
     <video
       ref="videoPlayer"
-      class="video-js video-js-responsive-container hammer-video-player vjs-default-skin"
+      class="video-js hammer-video-player vjs-default-skin"
     >
       <track
         v-for="track in trackList"
