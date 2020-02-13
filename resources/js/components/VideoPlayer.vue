@@ -3,17 +3,7 @@
     <video
       ref="videoPlayer"
       class="video-js hammer-video-player vjs-default-skin"
-    >
-      <track
-        v-for="track in trackList"
-        :key="track.id"
-        :kind="track.kind"
-        :label="track.label"
-        :src="track.src"
-        :srcLang="track.srcLang"
-        :default="track.default"
-      >
-    </video>
+    />
   </div>
 </template>
 
@@ -29,16 +19,28 @@ export default {
         return '';
       },
     },
+    videoUrl: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
     options: {
       type: Object,
       default() {
         return {};
       },
     },
-    trackList: {
-      type: Array,
+    timecode: {
+      type: Number,
       default() {
-        return [];
+        return 0;
+      },
+    },
+    track: {
+      type: Object,
+      default() {
+        return {};
       },
     },
   },
@@ -50,6 +52,13 @@ export default {
   watch: {
     options() {
       this.initVideoPlayer();
+    },
+    timecode(val) {
+      this.player.currentTime(val);
+      this.player.play();
+    },
+    videoUrl(val) {
+      this.updatePlayerSrc(val);
     },
   },
   beforeDestroy() {
@@ -78,7 +87,7 @@ export default {
         const events = DEFAULT_EVENTS;
         // watch events
         const onEdEvents = {};
-        for (let i = 0; i < events.length; i++) {
+        for (let i = 0; i < events.length; i += 1) {
           if (typeof events[i] === 'string' && onEdEvents[events[i]] === undefined) {
             ((event) => {
               onEdEvents[event] = null;
@@ -96,6 +105,10 @@ export default {
 
         // player readied
         self.$emit('ready', this);
+      });
+
+      this.player.ready(function () {
+        self.player.addRemoteTextTrack(self.track);
       });
 
       // Setup overlay content. Move up to parent?

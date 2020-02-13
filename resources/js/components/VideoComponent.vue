@@ -1,69 +1,87 @@
 <template>
   <div class="video-wrapper">
-    <div class="breadcrumb">
-      <router-link :to="{name: 'app'}">
-        Back to All Videos
-      </router-link>
+    <div>
+      <video-player
+        dusk="video-player-component"
+        :options="videoOptions"
+        :title="title"
+        :track="track"
+        :timecode="timecode"
+        :video-url="videoUrl"
+        @error="onPlayerError"
+        @timeupdate="onTimeUpdate"
+      />
     </div>
-    <video-player
-      dusk="video-player-component"
-      :options="videoOptions"
-      :title="title"
-      @error="onPlayerError()"
+    <div>{{ currentTimecode }}</div>
+    <button @click="getTranscript">Load transcript</button>
+    <button @click="onPlayerError">refresh source</button>
+    <button @click="updateTimecode(currentTimecode - 10)"><< 10s</button>
+    <button @click="updateTimecode(currentTimecode + 10)">10s >></button>
+    <transcript
+      :items="paraText"
+      :current-timecode="currentTimecode"
+      @updateTimecode="updateTimecode"
     />
-    <div class="video__info">
-      <div class="video-info__card">
-        <div class="title">
-          <h1>{{ title }}</h1>
-        </div>
-        <div class="date">
-          {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
-        </div>
-        <div class="description">
-          {{ description }}
-        </div>
-        <div class="keywords">
-          <ul>
-            <li
-              v-for="item in keywords"
-              :key="item.id"
-            >
-              {{ item }}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
+import Transcript from './Transcript.vue';
 
 export default {
   name: 'VideoComponent',
   components: {
+    Transcript,
     VideoPlayer,
   },
   data() {
     return {
-      datastore: process.env.MIX_DATASTORE_URL,
       assetId: null,
-      title: this.title,
-      description: this.description,
+      datastore: process.env.MIX_DATASTORE_URL,
       date: this.date,
-      transcriptionIsVisible: false,
-      transcription: null,
-      videoUrl: this.videoUrl,
-      thumbnailUrl: null,
+      description: this.description,
       keywords: this.keywords,
+      thumbnailUrl: null,
+      currentTimecode: 0,
+      timecode: 0,
+      title: this.title,
+      track: null,
+      transcriptItems: [],
+      transcriptLoaded: false,
       videoOptions: this.videoOptions,
+      videoUrl: null,
     };
+  },
+  computed: {
+    paraText() {
+      if (!this.transcriptLoaded) {
+        return [];
+      }
+
+      const keys = Object.keys(this.transcriptItems);
+      return keys.map((key) => {
+        const para = this.transcriptItems[key];
+        const str = para.map((item) => item.value);
+        return {
+          id: key,
+          message: str.join(' '),
+          start: para[0].time / 1000,
+          end: para[para.length - 1].time / 1000,
+        };
+      });
+    },
   },
   watch: {
     assetId() {
-      this.getTranscriptForCaptions();
+      this.track = {
+        src: `${this.datastore}videos/${this.assetId}/transcript?format=vtt`,
+        kind: 'captions',
+        language: 'en',
+        label: 'English',
+        default: true,
+      };
     },
   },
   mounted() {
@@ -71,20 +89,19 @@ export default {
     axios
       .get(`/viewJson/${assetId}`)
       .then((response) => {
-        this.title = response.data.data.title;
-        this.description = response.data.data.description;
-        this.assetId = response.data.data.asset_id;
-        this.date = response.data.data.date_recorded;
-        this.thumbnailUrl = response.data.data.thumbnail_url;
-        this.videoUrl = response.data.data.video_url;
-        this.keywords = response.data.data.tags;
-
+        const data = response.data.data;
+        this.title = data.title;
+        this.description = data.description;
+        this.assetId = data.asset_id;
+        this.date = data.date_recorded;
+        this.thumbnailUrl = data.thumbnail_url;
+        this.keywords = data.tags;
         this.videoOptions = {
           autoplay: false,
           controls: true,
           sources: [
             {
-              src: this.videoUrl,
+              src: data.video_url,
               type: 'video/mp4',
             },
           ],
@@ -99,12 +116,26 @@ export default {
           this.videoUrl = response.data.data.video_url;
         });
     },
-    getTranscriptForCaptions() {
+    getTranscript() {
       axios
-        .get(`${this.datastore}videos/${this.assetId}/transcript`)
+        .get(`${this.datastore}videos/${this.assetId}/transcript?format=json`)
         .then((response) => {
-          this.transcription = response.data.data[0].transcription;
+          const paras = {};
+          response.data.data.words.forEach((item) => {
+            if (paras[item.paragraphId] === undefined) {
+              paras[item.paragraphId] = [];
+            }
+            paras[item.paragraphId].push(item);
+          });
+          this.transcriptItems = paras;
+          this.transcriptLoaded = true;
         });
+    },
+    onTimeUpdate(value) {
+      this.currentTimecode = value;
+    },
+    updateTimecode(value) {
+      this.timecode = value;
     },
   },
 };
