@@ -1,8 +1,14 @@
 <template>
   <div
     v-if="items"
-    class="transcript"
+    class="video-meta__transcript transcript"
   >
+    <h3 class="video-meta__title">
+      Transcript
+    </h3>
+    <button @click="downloadTranscript">
+      Download
+    </button>
     <p
       v-for="item in items"
       :key="item.id"
@@ -44,7 +50,7 @@ export default {
     currentPara() {
       const self = this;
       const options = {
-        container: '.transcript',
+        container: '.video-wrapper__item.active',
         easing: 'ease-in-out',
         offset: -200,
         force: true,
@@ -70,26 +76,24 @@ export default {
       return false;
     },
     downloadTranscript() {
-      // const blob = new Blob(this.items)
-      // Add download logic here
+      const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);
+      const blob = new Blob(output, { type: 'text/plain;charset=utf-8' });
+      saveAs(blob, 'transcript.txt');
     },
   },
 };
 </script>
 
 <style scoped>
-p {
-  font-size: 16px;
+.video-meta__transcript {
+  text-align: left;
+  color: var(--text-secondary);
 }
 
 .transcript__paragraph {
+  font-size: 18px;
+  line-height: 1.4;
   text-align: left;
-}
-
-.transcript {
-  font-size: 12px;
-  text-align: left;
-  color: #999;
 }
 
 .transcript__paragraph {
@@ -97,11 +101,6 @@ p {
 }
 
 .transcript__paragraph--active {
-  color: #000;
-}
-
-@media screen and (min-width: 850px) {
-  .transcript {
-  }
+  background: var(--highlight-color-primary);
 }
 </style>

@@ -1,32 +1,20 @@
 <template>
-  <div class="vjs-hd">
+  <div class="video-player-container vjs-hd">
     <video
       ref="videoPlayer"
-      class="video-js hammer-video-player vjs-default-skin"
+      class="video-js video-player vjs-default-skin"
     >
       <p class="vjs-no-js">
         To view this video please enable JavaScript, and consider upgrading to a
         web browser that
-        <a href="https://videojs.com/html5-video-support/" target="_blank">
+        <a
+          href="https://videojs.com/html5-video-support/"
+          target="_blank"
+        >
           supports HTML5 video
         </a>
       </p>
     </video>
-    <div class="video-info video-info--title">
-      <div class="title">
-        <h1>{{ title }}</h1>
-      </div>
-      <div class="keywords">
-        <ul>
-          <li
-            v-for="item in keywords"
-            :key="item.id"
-          >
-            {{ item }}
-          </li>
-        </ul>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -46,12 +34,6 @@ export default {
       type: String,
       default() {
         return '';
-      },
-    },
-    keywords: {
-      type: Array,
-      default() {
-        return [];
       },
     },
     options: {
@@ -87,7 +69,7 @@ export default {
       this.player.play();
     },
     videoUrl(val) {
-      // this.updatePlayerSrc(val);
+      this.updatePlayerSrc(val);
     },
   },
   beforeDestroy() {
@@ -127,12 +109,16 @@ export default {
           }
         }
 
-        // watch timeupdate
+        this.on('error', function () {
+          if (this.error().code === 2) {
+            self.$emit('playbackerror');
+          }
+        });
+
         this.on('timeupdate', function () {
           self.$emit('timeupdate', this.currentTime());
         });
 
-        // player readied
         self.$emit('ready', this);
       });
 
@@ -149,7 +135,7 @@ export default {
           content: overlayContent,
           end() {
             if (self.player.controlBar.hasClass('vjs-user-inactive')) {
-              $('.vjs-overlay').addClass('vjs-user-inactive');
+              $('.vjs-overlay').removeClass('vjs-user-inactive');
             }
           },
           align: 'top',
@@ -186,17 +172,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.keywords {
-  display: none;
-}
-
-@media screen and (max-width: 759px) {
-  .title h1 {
-    font-size: 18px;
-    font-family: 'lft_eticabold', sans-serif;
-    margin: 0;
-  }
-}
-
-</style>

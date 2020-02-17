@@ -1,8 +1,18 @@
 <template>
   <div
-    class="video-info__card"
     scroll
   >
+    <div class="video-meta__date-recorded">
+      Recorded: {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
+    </div>
+
+    <h3 class="video-meta__section-title">
+      Description
+    </h3>
+    <div class="video-meta__description">
+      <p>{{ description }}</p>
+    </div>
+
     <div v-if="programSeries">
       Part of:
       <router-link
@@ -10,12 +20,6 @@
       >
         {{ programSeries }}
       </router-link>
-    </div>
-    <div class="date">
-      {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
-    </div>
-    <div class="description">
-      {{ description }}
     </div>
   </div>
 </template>
