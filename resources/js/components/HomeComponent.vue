@@ -9,26 +9,43 @@
     <div class="topics">
       <ul class="topics__list">
         <li class="topics__list-item" v-for="(videos, topic) in topics" :key="topic">
-          <a :href="`#${topic}`">{{topic}}</a>
+          <a :href="`#${stripChars(topic)}`">{{topic}}</a>
         </li>
       </ul>
     </div>
 
     <div class="videos">
-      <div v-for="(topic, topic_name) in topics" :key="topic_name" :id="topic_name">
-        <h2>{{ topic_name }}</h2>
+      <div v-for="(topic, topic_name) in topics" :key="topic_name" :id="stripChars(topic_name)" :class="`topic`">
+        <h2 class="topic__name">{{ topic_name }}</h2>
         <VueSlickCarousel v-bind="settings" :arrows="true">
-          <div class="video" v-for="video in topic">
-            <div>
-              <img :src="video._source['thumbnail_url']">
-              <span>{{video._source['title']}}</span>
+          <!-- Custom arrow -->
+          <template #prevArrow="arrowOption">
+            <div class="videos__navigation">
+              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
             </div>
+          </template>
+          <div class="video" v-for="video in topic">
+            <router-link
+              :to="{name: 'video', params: {id: video._source['title_slug']}}"
+            >
+              <div class="video__thumbnail">
+                <img :src="video._source['thumbnail_url']">
+                <span class="video__title">{{video._source['title']}}</span>
+              </div>
+            </router-link>
           </div>
           <div class="video">
             <router-link :to="{name: 'search', params: {params:`?facets=[3]topics.keyword:${topic_name}`}}">
-              See all
+              See all videos tagged
+              <span class="topic-name">{{ topic_name }}</span>
             </router-link>
           </div>
+          <!-- Custom arrow -->
+          <template #nextArrow="arrowOption">
+            <div class="videos__navigation">
+              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
+            </div>
+          </template>
         </VueSlickCarousel>
       </div>
     </div>
@@ -57,9 +74,29 @@ export default {
       pager: this.pager,
       topics: this.topics,
       settings: {
-        "slidesToShow": 3,
+        "slidesToShow": 2.5,
         "infinite": false,
-        "touchThreshold": 5
+        "touchThreshold": 5,
+        "responsive": [
+          {
+            "breakpoint": 1024,
+            "settings": {
+              "slidesToShow": 2.5,
+            }
+          },
+          {
+            "breakpoint": 800,
+            "settings": {
+              "slidesToShow": 2,
+            }
+          },
+          {
+            "breakpoint": 650,
+            "settings": {
+              "slidesToShow": 1.5,
+            }
+          }
+        ]
       }
     };
   },
@@ -77,6 +114,10 @@ export default {
           this.topics = response.data.topics;
         });
     },
+    stripChars(topic) {
+      let strippedTopic = topic.replace(' & ', '');
+      return strippedTopic.replace(' ', '');
+    }
   },
 };
 </script>

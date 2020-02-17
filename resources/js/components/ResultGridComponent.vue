@@ -5,14 +5,7 @@
       class="result-item"
     >
       <router-link
-        :to="{name: 'video', props: {
-          url: video.video_url,
-          aid: video.asset_id,
-          title: video.title,
-          date: video.date_recorded,
-          description: video.description,
-          tags: video.tags,
-        }, params: {id: video.title_slug}}"
+        :to="{name: 'video', params: {id: video.title_slug}}"
       >
         <img
           class="result-item__image"
