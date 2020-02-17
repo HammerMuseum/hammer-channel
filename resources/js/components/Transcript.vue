@@ -87,8 +87,6 @@ p {
 }
 
 .transcript {
-  overflow: scroll;
-  height: 50vh;
   font-size: 12px;
   text-align: left;
   color: #999;
@@ -104,8 +102,6 @@ p {
 
 @media screen and (min-width: 850px) {
   .transcript {
-    overflow: scroll;
-    height: 100%;
   }
 }
 </style>

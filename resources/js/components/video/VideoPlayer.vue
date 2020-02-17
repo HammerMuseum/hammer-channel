@@ -1,9 +1,17 @@
 <template>
-  <div class="vjs-hd video-js-responsive-container ">
+  <div class="vjs-hd">
     <video
       ref="videoPlayer"
       class="video-js hammer-video-player vjs-default-skin"
-    />
+    >
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        <a href="https://videojs.com/html5-video-support/" target="_blank">
+          supports HTML5 video
+        </a>
+      </p>
+    </video>
     <div class="video-info video-info--title">
       <div class="title">
         <h1>{{ title }}</h1>
@@ -136,7 +144,7 @@ export default {
       const overlayContent = `<p>${this.title}</p>`;
       this.player.overlay({
         overlays: [{
-          start: 'loadedmetadata',
+          start: 'pause',
           class: 'hammer-video-overlay',
           content: overlayContent,
           end() {
@@ -177,3 +185,18 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.keywords {
+  display: none;
+}
+
+@media screen and (max-width: 759px) {
+  .title h1 {
+    font-size: 18px;
+    font-family: 'lft_eticabold', sans-serif;
+    margin: 0;
+  }
+}
+
+</style>

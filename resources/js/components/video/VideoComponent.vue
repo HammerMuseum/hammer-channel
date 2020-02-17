@@ -1,57 +1,128 @@
 <template>
-  <div class="video-page-wrapper horizontal-layout">
-    <div class="item-list sidebar">
-      <ul>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'about')">About</li>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'share')">Share</li>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'use')">Use this video</li>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'transcript')">Transcript</li>
-      </ul>
+  <div class="video-page-container">
+    <div class="video-wrapper">
+      <div class="video-content">
+        <div class="panel--left">
+          <div
+            v-show="currentPanel == 'about'"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, currentPanel);"
+            >Close</span>
+            <about
+              v-show="currentPanel == 'about'"
+              :description="description"
+              :date="date"
+              :keywords="keywords"
+              :program-series="programSeries"
+              :current-panel="currentPanel"
+            />
+          </div>
+
+          <div
+            v-show="currentPanel == 'share'"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, currentPanel);"
+            >Close</span>
+            Share this item
+          </div>
+
+
+          <div
+            v-show="currentPanel == 'use'"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, currentPanel);"
+            >Close</span>
+            Use this item
+          </div>
+
+
+          <div
+            v-show="currentPanel == 'transcript'"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, currentPanel);"
+            >Close</span>
+            <transcript
+              :items="paraText"
+              :current-timecode="currentTimecode"
+              @updateTimecode="updateTimecode"
+            />
+          </div>
+        </div>
+        <div class="panel--right">
+          <video-player
+            dusk="video-player-component"
+            :options="videoOptions"
+            :title="title"
+            :keywords="keywords"
+            :track="track"
+            :timecode="timecode"
+            :video-url="videoUrl"
+            @error="onPlayerError"
+            @timeupdate="onTimeUpdate"
+          />
+          <div class="video-description--mobile">
+            <about
+              :description="description"
+              :date="date"
+              :keywords="keywords"
+              :program-series="programSeries"
+              :current-panel="currentPanel"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="item-list sidebar">
+        <ul>
+          <li
+            class="item-list__item item-list__item--hide-small"
+            @click="toggleActivePanel($event, 'about')"
+          >
+            About
+          </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'share')"
+          >
+            Share
+          </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'use')"
+          >
+            Use this video
+          </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'transcript');getTranscript()"
+          >
+            Transcript
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="video-wrapper horizontal-layout">
-      <!--<transition name="slide">-->
-      <about
-        v-show="currentPanel == 'about'"
-        :description="description"
-        :date="date"
-        :keywords="keywords"
-        :programSeries="programSeries"
-        :currentPanel="currentPanel"
-      ></about>
-      <div class="share video-wrapper__item" v-show="currentPanel == 'share'">
-        <span class="close-button" @click="toggleActivePanel($event, 'share')">X</span>
-        Share buttons go here.
+    <div class="related-content">
+      <div class="related-content__item">
+        Tags
       </div>
-      <div class="use video-wrapper__item" v-show="currentPanel == 'use'">
-        <span class="close-button" @click="toggleActivePanel($event, 'use')">X</span>
-        Usage information goes here.
+      <div class="related-content__item">
+        Related
       </div>
-      <div class="transcript video-wrapper__item" v-show="currentPanel == 'transcript'">
-        <span class="close-button" @click="toggleActivePanel($event, 'transcript')">X</span>
-        Transcript goes here.
+      <div class="related-content__item">
+        Attend
       </div>
-      <!--</transition>-->
-      <video-player
-        dusk="video-player-component"
-        :options="videoOptions"
-        :title="title"
-        :keywords="keywords"
-        :track="track"
-        :timecode="timecode"
-        :video-url="videoUrl"
-        @error="onPlayerError"
-        @timeupdate="onTimeUpdate"
-      />
-      <div>{{ currentTimecode }}</div>
-      <button @click="getTranscript">Load transcript</button>
-      <button @click="onPlayerError">refresh source</button>
-      <button @click="updateTimecode(currentTimecode - 10)"><< 10s</button>
-      <button @click="updateTimecode(currentTimecode + 10)">10s >></button>
-      <transcript
-        :items="paraText"
-        :current-timecode="currentTimecode"
-        @updateTimecode="updateTimecode"
-      />
     </div>
   </div>
 </template>
@@ -137,9 +208,11 @@ export default {
         this.videoOptions = {
           autoplay: false,
           controls: true,
+          fluid: true,
+          aspectRatio: '16:9',
           sources: [
             {
-              src: data.videoUrl,
+              src: data.video_url,
               type: 'video/mp4',
             },
           ],
@@ -159,11 +232,13 @@ export default {
       if (this.currentPanel === name) {
         this.currentPanel = null;
         clickedElem.classList.remove('active-panel');
-        document.querySelector('.video-info--title').classList.remove('hidden');
+        document.querySelector('.panel--left').classList.remove('panel--left--open');
+        // document.querySelector('.video-info--title').classList.remove('hidden');
       } else {
         this.currentPanel = name;
         clickedElem.classList.add('active-panel');
-        document.querySelector('.video-info--title').classList.add('hidden');
+        document.querySelector('.panel--left').classList.add('panel--left--open');
+        // document.querySelector('.video-info--title').classList.add('hidden');
       }
     },
     getTranscript() {
@@ -190,3 +265,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .related-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .related-content__item {
+    padding: 1.5rem;
+    max-width: 65px;
+    text-align: center;
+  }
+</style>
