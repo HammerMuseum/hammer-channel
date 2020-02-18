@@ -351,13 +351,8 @@ export default {
       background: white;
       margin: 0 10px;
       flex: 1;
-      transform: translateY(132px);
-      height: 200px;
+      height: 50px;
       transition: all 0.2s cubic-bezier(0.47, 0, 0.75, 0);
-    }
-
-    .related-content__item .related-content__item--visible {
-      transform: translateY(0);
     }
   }
 </style>
