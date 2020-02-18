@@ -30,15 +30,19 @@
             >
               <div class="video__thumbnail">
                 <img :src="video._source['thumbnail_url']">
-                <span class="video__title">{{video._source['title']}}</span>
+                <div class="video__title">
+                  <span>{{video._source['title']}}</span>
+                </div>
               </div>
             </router-link>
           </div>
-          <div class="video">
-            <router-link :to="{name: 'search', params: {params:`?facets=[3]topics.keyword:${topic_name}`}}">
-              See all videos tagged
-              <span class="topic-name">{{ topic_name }}</span>
-            </router-link>
+          <div class="video topic__see-all">
+            <div class="video__thumbnail">
+              <router-link class="topic-link" :to="{name: 'search', params: {params:`?facets=[3]topics.keyword:${topic_name}`}}">
+                See all videos tagged
+                <span class="topic-name">{{ topic_name }}</span>
+              </router-link>
+            </div>
           </div>
           <!-- Custom arrow -->
           <template #nextArrow="arrowOption">
@@ -74,14 +78,21 @@ export default {
       pager: this.pager,
       topics: this.topics,
       settings: {
-        "slidesToShow": 2.5,
+        "slidesToShow": 3.5,
         "infinite": false,
         "touchThreshold": 5,
+        // "variableWidth": true,
         "responsive": [
           {
-            "breakpoint": 1024,
+            "breakpoint": 1200,
             "settings": {
-              "slidesToShow": 2.5,
+              "slidesToShow": 3,
+            }
+          },
+          {
+            "breakpoint": 965,
+            "settings": {
+              "slidesToShow": 2.5
             }
           },
           {
@@ -94,6 +105,12 @@ export default {
             "breakpoint": 650,
             "settings": {
               "slidesToShow": 1.5,
+            }
+          },
+          {
+            "breakpoint": 500,
+            "settings": {
+              "slidesToShow": 1,
             }
           }
         ]

@@ -1,13 +1,13 @@
 .topics__list {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   flex-wrap: wrap;
   align-items: flex-start;
 }
 
 .topics__list-item {
   padding: 5px;
-  margin: 1px;
+  margin: 5px;
 }
 
 .topics__list-item > a {
@@ -18,15 +18,12 @@
   color: black;
 }
 
-.topic {
-  padding: 20px 0;
-}
-
 .topics {
   position: fixed;
   bottom: 2vh;
   background: #f36cb5;
   padding: 5px;
+  z-index: 200;
 }
 
 .videos {
@@ -54,6 +51,7 @@
   display: block;
   padding: 10px 0;
   background: white;
+  min-height: 40px;
 }
 
 .videos__navigation.slick-next,
@@ -67,4 +65,20 @@
 
 .videos__navigation.slick-prev {
   left: 0;
+}
+
+.topic__see-all {
+  min-height: 170px;
+  text-align: center;
+  background: #808285;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.topic-link {
+  text-decoration: none;
+  color: white;
+  transition: all 0.5s ease;
+  background: black;
 }
