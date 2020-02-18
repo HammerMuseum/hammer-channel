@@ -34,6 +34,7 @@
 
 <script>
 import videojs from 'video.js';
+import videojsoffset from 'videojs-offset';
 
 export default {
   name: 'VideoPlayer',
@@ -128,6 +129,10 @@ export default {
           },
           align: 'top',
         }],
+      }),
+      this.player.offset({
+        start: 10,
+        end: 20,
       });
       $('.vjs-overlay').addClass('vjs-control-bar');
     },

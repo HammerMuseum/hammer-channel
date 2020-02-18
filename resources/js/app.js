@@ -17,6 +17,7 @@ import Search from './components/SearchComponent.vue';
 require('./bootstrap');
 require('videojs-overlay');
 require('video.js');
+require('videojs-offset');
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
