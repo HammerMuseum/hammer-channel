@@ -193,7 +193,7 @@ export default {
       assetId: null,
       activePanel: null,
       currentTimecode: 0,
-      datastore: process.env.MIX_DATASTORE_URL,
+      datastore: 'https://datastore.hammer.cogapp.com/api/',
       date: this.date,
       description: this.description,
       keywords: this.keywords,
@@ -334,6 +334,10 @@ export default {
     margin: 0 1rem;
   }
 
+  .related-content__item a {
+    color: #fff;
+  }
+
   @media screen and (min-width: 760px) {
     .related-content {
       display: flex;
@@ -348,7 +352,7 @@ export default {
 
     .related-content__item {
       text-align: center;
-      background: white;
+      background: #4b4b4b;
       margin: 0 10px;
       flex: 1;
       height: 50px;
