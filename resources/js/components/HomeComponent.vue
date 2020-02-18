@@ -1,8 +1,17 @@
 <template>
   <div class="listing">
-    <router-link :to="{name: 'search'}">
-      Search
-    </router-link>
+    <ul class="nav-list">
+      <li class="nav-item">
+        <router-link :to="{name: 'app'}">
+          Home
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link :to="{name: 'search'}">
+          Search
+        </router-link>
+      </li>
+    </ul>
     <h1 class="title">
       {{ title }}
     </h1>

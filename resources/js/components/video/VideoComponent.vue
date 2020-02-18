@@ -27,6 +27,16 @@
           >
             <a href="#transcript">Transcript</a>
           </li>
+          <li class="">
+            <router-link :to="{name: 'app'}">
+              Home
+            </router-link>
+          </li>
+          <li class="">
+            <router-link :to="{name: 'search'}">
+              Search
+            </router-link>
+          </li>
         </ul>
       </div>
       <div class="video-content">
@@ -326,7 +336,7 @@ export default {
 
 <style scoped>
   .related-content {
-    display: flex;
+    display: none;
     justify-content: center;
   }
 
@@ -340,7 +350,7 @@ export default {
 
   @media screen and (min-width: 760px) {
     .related-content {
-      display: flex;
+      display: none;
       justify-content: center;
       position: absolute;
       bottom: 0;
