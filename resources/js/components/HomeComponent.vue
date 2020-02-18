@@ -38,7 +38,7 @@
           </div>
           <div class="video topic__see-all">
             <div class="video__thumbnail">
-              <router-link class="topic-link" :to="{name: 'search', params: {params:`?facets=[3]topics.keyword:${topic_name}`}}">
+              <router-link class="topic-link" :to="{name: 'search', params: {params:`?facets=[3]topics:${topic_name}`}}">
                 See all videos tagged
                 <span class="topic-name">{{ topic_name }}</span>
               </router-link>
