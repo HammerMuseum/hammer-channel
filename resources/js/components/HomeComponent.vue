@@ -81,7 +81,6 @@ export default {
         "slidesToShow": 3.5,
         "infinite": false,
         "touchThreshold": 5,
-        // "variableWidth": true,
         "responsive": [
           {
             "breakpoint": 1200,
