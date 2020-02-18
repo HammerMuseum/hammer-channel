@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      datastore: /*process.env.MIX_DATASTORE_URL,*/ 'http://datastore.rufio.office.cogapp.com/api/',
+      datastore: process.env.MIX_DATASTORE_URL,
       assetId: null,
       title: this.title,
       description: this.description,
