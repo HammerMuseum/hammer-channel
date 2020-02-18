@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
@@ -5,6 +7,9 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(dotenv.config().parsed)
+    }),
     new MiniCssExtractPlugin({
       filename: '../css/main.css',
       chunkFilename: '[id].css',
@@ -27,7 +32,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.pcss$/,
+        test: /\.p?css$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,

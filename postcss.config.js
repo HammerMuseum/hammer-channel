@@ -7,7 +7,7 @@ module.exports = ctx => ({
       require('postcss-color-function'),
       require('postcss-hexrgba'),
       require('postcss-custom-properties')({
-        preserve: false, // TBD, which is better?
+        preserve: true,
       }),
       require('postcss-pxtorem')({
         rootValue: 16,

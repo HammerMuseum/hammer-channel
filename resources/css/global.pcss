@@ -25,41 +25,37 @@ section {
 
 html,
 body {
-  background-color: #f4f4f4;
-  color: #4d4b4b;
-  font-family: 'lft_etica', sans-serif;
-  font-style: normal;
-  font-weight: 200;
   height: 100vh;
   margin: 0;
+  font-family: 'lft-etica', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  color: #4d4b4b;
+  background-color: #f4f4f4;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-weight: 400;
+  -webkit-font-smoothing: auto;
 }
 
 a {
   transition: 0.2s all;
 }
 
-a:hover {
-  color: var(--highlight-color-primary);
-  background: #fff;
-}
-
 .main {
+  height: 100%;
   max-width: 1300px;
-  margin: 1rem auto;
-  padding: 0 1rem;
+  margin: 0 auto;
 }
 
 .header {
-  margin: 0 auto 1rem auto;
-  max-width: 1076px;
-  padding: 0 1rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 1rem 0;
 }
 
 ul,
@@ -71,4 +67,17 @@ li {
 
 .hidden {
   display: none;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.nav-list {
+  display: inline-flex;
+}
+
+.nav-item {
+  padding: 1rem 1rem 1rem 0;
 }
