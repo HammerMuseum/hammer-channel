@@ -37,5 +37,9 @@ Populate a text field with the link.
 * In the VideoPlayer component, when the video has been loaded, if there is a start and end time specified, set it using `this.player.currentTime()`
 * To achieve this, an end time property will need to be added to the player.
 * Once the video is playing, during the `timeupdate` event, check if the end time has been reached, and pause the video if so.
+* Add click method to set time buttons to update the value of the start time input to the current time.
+* Format the time in hours, minutes and seconds when displaying in the input, but keep the seconds value to put in the URL params.
+* Some preliminary styles.
 
 ## Documentation required
+- Process used to create clip
