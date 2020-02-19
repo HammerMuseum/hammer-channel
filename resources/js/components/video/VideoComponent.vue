@@ -81,7 +81,10 @@
               class="close-button"
               @click="toggleActivePanel($event, activePanel);"
             >Close</span>
-            Use this item
+            <use-this
+              v-show="activePanel === 'use'"
+              :current-panel="activePanel"
+            />
           </div>
 
           <div
@@ -190,6 +193,7 @@ import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
 import About from './AboutComponent.vue';
 import Transcript from '../Transcript.vue';
+import Use from './UseThis.vue';
 
 export default {
   name: 'VideoComponent',
@@ -197,6 +201,7 @@ export default {
     About,
     Transcript,
     VideoPlayer,
+    Use
   },
   data() {
     return {
