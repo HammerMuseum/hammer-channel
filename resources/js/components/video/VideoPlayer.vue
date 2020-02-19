@@ -156,14 +156,16 @@ export default {
 
       // wait for video metadata to load, then set time.
       this.player.on('loadedmetadata', () => {
-        self.player.currentTime(time);
+        // self.player.currentTime(time);
+        this.player.currentTime(10000);
       });
 
       // iPhone/iPad need to play first, then set the time
       // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
       this.player.on('canplaythrough', () => {
         if (!initdone) {
-          self.player.currentTime(time);
+          // self.player.currentTime(time);
+          this.player.currentTime(10000);
           initdone = true;
         }
       });
