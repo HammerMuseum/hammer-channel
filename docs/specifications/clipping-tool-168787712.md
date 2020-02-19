@@ -40,6 +40,7 @@ Populate a text field with the link.
 * Add click method to set time buttons to update the value of the start time input to the current time.
 * Format the time in hours, minutes and seconds when displaying in the input, but keep the seconds value to put in the URL params.
 * Some preliminary styles.
+* Some styles on the seek bar to indicate the length of the clip.
 
 ## Documentation required
 - Process used to create clip

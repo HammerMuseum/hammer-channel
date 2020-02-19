@@ -27,6 +27,12 @@
           >
             <a href="#transcript">Transcript</a>
           </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'clip')"
+          >
+            <a href="#transcript">Clip</a>
+          </li>
           <li class="">
             <router-link :to="{name: 'app'}">
               Home
@@ -105,6 +111,21 @@
               @updateTimecode="updateTimecode"
             />
           </div>
+          <div
+            v-show="activePanel === 'clip'"
+            :class="{active: activePanel === 'clip'}"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, activePanel);"
+            >Close</span>
+            <clipping-tool
+              v-show="activePanel === 'clip'"
+              :current-panel="activePanel"
+              :currentTimecode="this.currentTimecode"
+            />
+          </div>
         </div>
         <div class="panel--right">
           <video-player
@@ -169,6 +190,12 @@
               >
                 <a href="#transcript">Transcript</a>
               </li>
+              <li
+                class="item-list__item"
+                @click="toggleActivePanel($event, 'clip')"
+              >
+                <a href="#use">Clip</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -193,7 +220,8 @@ import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
 import About from './AboutComponent.vue';
 import Transcript from '../Transcript.vue';
-import Use from './UseThis.vue';
+import UseThis from './UseThis.vue';
+import ClippingTool from './ClippingTool.vue';
 
 export default {
   name: 'VideoComponent',
@@ -201,7 +229,8 @@ export default {
     About,
     Transcript,
     VideoPlayer,
-    Use
+    UseThis,
+    ClippingTool
   },
   data() {
     return {

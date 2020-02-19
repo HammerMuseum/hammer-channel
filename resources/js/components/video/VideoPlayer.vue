@@ -58,6 +58,8 @@ export default {
   data() {
     return {
       player: null,
+      endtime: 0,
+      starttime: 0
     };
   },
   watch: {
@@ -117,6 +119,9 @@ export default {
 
         this.on('timeupdate', function () {
           self.$emit('timeupdate', this.currentTime());
+          if (self.endtime > 0 && this.currentTime() >= self.endtime) {
+            self.player.pause();
+          }
         });
 
         self.$emit('ready', this);
@@ -143,6 +148,33 @@ export default {
       });
       $('.vjs-overlay').addClass('vjs-control-bar');
     },
+    setSliderAppearance() {
+      let sliderBar = document.querySelector('.vjs-play-progress');
+      let sliderInfo = sliderBar.getBoundingClientRect();
+      let sliderWidth = sliderInfo.width;
+
+      let progressHolder = document.querySelector('.vjs-progress-holder');
+      let progressInfo = progressHolder.getBoundingClientRect();
+      let progressWidth = progressInfo.width;
+
+      let percentageWidth = sliderWidth / progressWidth * 100;
+      //
+      let clipDuration = this.endtime - this.starttime;
+      let clipPercentage = clipDuration / this.player.duration() * 100;
+      //
+      this.player.controlBar.progressControl.seekBar.playProgressBar.updateDataAttr = function() {
+        document.querySelector(".vjs-play-progress").style.width = clipPercentage + '%';
+        // template.find(".vjs-play-progress").setAttribute('data-current-time', formatTime(template.currentTime, globalDuration));
+      }
+      let wrapperHtml = `<div class="hammer-progress-bar"></div>`;
+      // progressHolder.innerHTML = progressHolder.innerHTML + wrapperHtml;
+      // progressHolder.classList.add('hammer-progress-holder');
+      // let hammerBar = document.querySelector('.hammer-progress-bar');
+      // hammerBar.style.width = clipPercentage + '%';
+      // hammerBar.style.left = sliderWidth + 'px';
+
+
+    },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
       const self = this;
@@ -154,23 +186,35 @@ export default {
         src: val,
       });
 
+      this.queryParams = this.$route.query;
       // wait for video metadata to load, then set time.
       this.player.on('loadedmetadata', () => {
-        // self.player.currentTime(time);
-        this.player.currentTime(10000);
+        self.setClip(self.queryParams);
+      });
+
+      this.player.on('seeked', () => {
+        if (self.queryParams.start || self.queryParams.end) {
+          self.setSliderAppearance();
+        }
       });
 
       // iPhone/iPad need to play first, then set the time
       // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
       this.player.on('canplaythrough', () => {
         if (!initdone) {
-          // self.player.currentTime(time);
-          this.player.currentTime(10000);
           initdone = true;
         }
       });
     },
+    setClip(queryParams) {
+      if (queryParams.start) {
+        this.player.currentTime(queryParams.start);
+        console.log('set the clip time');
+      }
+      if (queryParams.end) {
+        this.endtime = queryParams.end;
+      }
+    }
   },
 };
 </script>
-
