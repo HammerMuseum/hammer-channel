@@ -1,34 +1,20 @@
 <template>
-  <div class="vjs-hd">
+  <div class="video-player-container vjs-hd">
     <video
       ref="videoPlayer"
-      class="video-js hammer-video-player vjs-default-skin"
+      class="video-js video-player vjs-default-skin"
     >
-      <track
-        v-for="track in trackList"
-        :key="track.id"
-        :kind="track.kind"
-        :label="track.label"
-        :src="track.src"
-        :srcLang="track.srcLang"
-        :default="track.default"
-      >
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        <a
+          href="https://videojs.com/html5-video-support/"
+          target="_blank"
+        >
+          supports HTML5 video
+        </a>
+      </p>
     </video>
-    <div class="video-info video-info--title">
-      <div class="title">
-        <h1>{{ title }}</h1>
-      </div>
-      <div class="keywords">
-        <ul>
-          <li
-            v-for="item in keywords"
-            :key="item.id"
-          >
-            {{ item }}
-          </li>
-        </ul>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -44,17 +30,28 @@ export default {
         return '';
       },
     },
-    keywords: Array,
+    videoUrl: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
     options: {
       type: Object,
       default() {
         return {};
       },
     },
-    trackList: {
-      type: Array,
+    timecode: {
+      type: Number,
       default() {
-        return [];
+        return 0;
+      },
+    },
+    track: {
+      type: Object,
+      default() {
+        return {};
       },
     },
   },
@@ -66,6 +63,13 @@ export default {
   watch: {
     options() {
       this.initVideoPlayer();
+    },
+    timecode(val) {
+      this.player.currentTime(val);
+      this.player.play();
+    },
+    videoUrl(val) {
+      this.updatePlayerSrc(val);
     },
   },
   beforeDestroy() {
@@ -94,7 +98,7 @@ export default {
         const events = DEFAULT_EVENTS;
         // watch events
         const onEdEvents = {};
-        for (let i = 0; i < events.length; i++) {
+        for (let i = 0; i < events.length; i += 1) {
           if (typeof events[i] === 'string' && onEdEvents[events[i]] === undefined) {
             ((event) => {
               onEdEvents[event] = null;
@@ -105,25 +109,33 @@ export default {
           }
         }
 
-        // watch timeupdate
+        this.on('error', function () {
+          if (this.error().code === 2) {
+            self.$emit('playbackerror');
+          }
+        });
+
         this.on('timeupdate', function () {
           self.$emit('timeupdate', this.currentTime());
         });
 
-        // player readied
         self.$emit('ready', this);
+      });
+
+      this.player.ready(function () {
+        self.player.addRemoteTextTrack(self.track);
       });
 
       // Setup overlay content. Move up to parent?
       const overlayContent = `<p>${this.title}</p>`;
       this.player.overlay({
         overlays: [{
-          start: 'loadedmetadata',
+          start: 'pause',
           class: 'hammer-video-overlay',
           content: overlayContent,
           end() {
             if (self.player.controlBar.hasClass('vjs-user-inactive')) {
-              $('.vjs-overlay').addClass('vjs-user-inactive');
+              $('.vjs-overlay').removeClass('vjs-user-inactive');
             }
           },
           align: 'top',
@@ -131,6 +143,32 @@ export default {
       });
       $('.vjs-overlay').addClass('vjs-control-bar');
     },
+    updatePlayerSrc(val) {
+      const time = this.player.currentTime();
+      const self = this;
+      let initdone = false;
+
+      this.player.off('ready');
+      this.player.src({
+        type: 'video/mp4',
+        src: val,
+      });
+
+      // wait for video metadata to load, then set time.
+      this.player.on('loadedmetadata', () => {
+        self.player.currentTime(time);
+      });
+
+      // iPhone/iPad need to play first, then set the time
+      // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
+      this.player.on('canplaythrough', () => {
+        if (!initdone) {
+          self.player.currentTime(time);
+          initdone = true;
+        }
+      });
+    },
   },
 };
 </script>
+

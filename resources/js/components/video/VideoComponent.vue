@@ -1,43 +1,186 @@
 <template>
-  <div class="video-page-wrapper horizontal-layout">
-    <div class="item-list sidebar">
-      <ul>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'about')">About</li>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'share')">Share</li>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'use')">Use this video</li>
-        <li class="item-list__item" @click="toggleActivePanel($event, 'transcript')">Transcript</li>
-      </ul>
-    </div>
-    <div class="video-wrapper horizontal-layout">
-      <!--<transition name="slide">-->
-      <about
-        v-show="currentPanel == 'about'"
-        :description="description"
-        :date="date"
-        :keywords="keywords"
-        :programSeries="programSeries"
-        :currentPanel="currentPanel"
-      ></about>
-      <div class="share video-wrapper__item" v-show="currentPanel == 'share'">
-        <span class="close-button" @click="toggleActivePanel($event, 'share')">X</span>
-        Share buttons go here.
+  <div class="video-page-container">
+    <div class="video-wrapper">
+      <div class="item-list video-options">
+        <ul>
+          <li
+            class="item-list__item item-list__item--hide-small"
+            @click="toggleActivePanel($event, 'about')"
+          >
+            <a href="#about">About</a>
+          </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'share')"
+          >
+            <a href="#Share">Share</a>
+          </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'use')"
+          >
+            <a href="#use">Use this video</a>
+          </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'transcript');getTranscript()"
+          >
+            <a href="#transcript">Transcript</a>
+          </li>
+          <li class="">
+            <router-link :to="{name: 'app'}">
+              Home
+            </router-link>
+          </li>
+          <li class="">
+            <router-link :to="{name: 'search'}">
+              Search
+            </router-link>
+          </li>
+        </ul>
       </div>
-      <div class="use video-wrapper__item" v-show="currentPanel == 'use'">
-        <span class="close-button" @click="toggleActivePanel($event, 'use')">X</span>
-        Usage information goes here.
+      <div class="video-content">
+        <div class="panel--left">
+          <div
+            v-show="activePanel === 'about'"
+            :class="{active: activePanel === 'about'}"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, activePanel);"
+            >Close</span>
+            <about
+              v-show="activePanel === 'about'"
+              :description="description"
+              :date="date"
+              :keywords="keywords"
+              :program-series="programSeries"
+              :current-panel="activePanel"
+            />
+          </div>
+
+          <div
+            v-show="activePanel === 'share'"
+            :class="{active: activePanel === 'share'}"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, activePanel);"
+            >Close</span>
+            Share this item
+          </div>
+
+          <div
+            v-show="activePanel === 'use'"
+            :class="{active: activePanel === 'use'}"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, activePanel);"
+            >Close</span>
+            Use this item
+          </div>
+
+          <div
+            v-show="activePanel === 'transcript'"
+            :class="{active: activePanel === 'transcript'}"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, activePanel);"
+            >Close</span>
+            <p v-show="!transcriptLoaded">
+              Loading...
+            </p>
+            <transcript
+              :items="paraText"
+              :current-timecode="currentTimecode"
+              @updateTimecode="updateTimecode"
+            />
+          </div>
+        </div>
+        <div class="panel--right">
+          <video-player
+            dusk="video-player-component"
+            :options="videoOptions"
+            :title="title"
+            :keywords="keywords"
+            :track="track"
+            :timecode="timecode"
+            :video-url="videoUrl"
+            @playbackerror="onPlayerError"
+            @timeupdate="onTimeUpdate"
+          />
+          <div class="video-meta">
+            <h1 class="video-meta__title title">
+              {{ title }}
+            </h1>
+            <!-- <div class="keywords">
+              <ul>
+                <li
+                  v-for="item in keywords"
+                  :key="item.id"
+                >
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div> -->
+            <div class="video-description--mobile">
+              <about
+                :description="description"
+                :date="date"
+                :keywords="keywords"
+                :program-series="programSeries"
+              />
+            </div>
+          </div>
+
+          <div class="item-list video-options video-options--mobile">
+            <ul>
+              <li
+                class="item-list__item item-list__item--hide-small"
+                @click="toggleActivePanel($event, 'about')"
+              >
+                <a href="#about">About</a>
+              </li>
+              <li
+                class="item-list__item"
+                @click="toggleActivePanel($event, 'share')"
+              >
+                <a href="#Share">Share</a>
+              </li>
+              <li
+                class="item-list__item"
+                @click="toggleActivePanel($event, 'use')"
+              >
+                <a href="#use">Use this video</a>
+              </li>
+              <li
+                class="item-list__item"
+                @click="toggleActivePanel($event, 'transcript');getTranscript()"
+              >
+                <a href="#transcript">Transcript</a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="transcript video-wrapper__item" v-show="currentPanel == 'transcript'">
-        <span class="close-button" @click="toggleActivePanel($event, 'transcript')">X</span>
-        Transcript goes here.
+      <div class="related-content">
+        <div class="related-content__item">
+          <a href="#tags">Tags</a>
+        </div>
+        <div class="related-content__item">
+          <a href="#related">Related</a>
+        </div>
+        <div class="related-content__item">
+          <a href="#attend">Attend</a>
+        </div>
       </div>
-      <!--</transition>-->
-      <video-player
-        dusk="video-player-component"
-        :options="videoOptions"
-        :title="title"
-        :keywords="keywords"
-        @error="onPlayerError()"
-      />
     </div>
   </div>
 </template>
@@ -46,56 +189,97 @@
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
 import About from './AboutComponent.vue';
+import Transcript from '../Transcript.vue';
 
 export default {
   name: 'VideoComponent',
   components: {
+    About,
+    Transcript,
     VideoPlayer,
-    About
   },
   data() {
     return {
-      datastore: process.env.MIX_DATASTORE_URL,
       assetId: null,
-      title: this.title,
-      description: this.description,
+      activePanel: null,
+      currentTimecode: 0,
+      datastore: 'https://datastore.hammer.cogapp.com/api/',
       date: this.date,
-      transcriptionIsVisible: false,
-      transcription: null,
-      videoUrl: this.videoUrl,
-      thumbnailUrl: null,
+      description: this.description,
       keywords: this.keywords,
+      programSeries: this.programSeries,
+      thumbnailUrl: null,
+      timecode: 0,
+      title: this.title,
+      track: null,
+      transcription: null,
+      transcriptItems: [],
+      transcriptLoaded: false,
       videoOptions: this.videoOptions,
-      currentPanel: null,
-      programSeries: this.programSeries
+      videoUrl: null,
     };
   },
+  computed: {
+    paraText() {
+      if (!this.transcriptLoaded) {
+        return [];
+      }
+
+      const keys = Object.keys(this.transcriptItems);
+      return keys.map((key) => {
+        const para = this.transcriptItems[key];
+        const str = para.map((item) => item.value);
+        return {
+          id: key,
+          message: str.join(' '),
+          start: para[0].time / 1000,
+          end: para[para.length - 1].time / 1000,
+        };
+      });
+    },
+  },
   watch: {
-    // assetId() {
-    //   this.getTranscriptForCaptions();
-    // },
+    activePanel() {
+      if (window.innerWidth < 760) {
+        this.$nextTick(() => {
+          if (document.querySelector('.video-wrapper__item.active')) {
+            const height = document.documentElement.offsetHeight - document.querySelector('video').offsetHeight;
+            document.querySelector('.video-wrapper__item.active').setAttribute('style', `height:${height}px`);
+          }
+        });
+      }
+    },
+    assetId() {
+      this.track = {
+        src: `${this.datastore}videos/${this.assetId}/transcript?format=vtt`,
+        kind: 'captions',
+        language: 'en',
+        label: 'English',
+        default: true,
+      };
+    },
   },
   mounted() {
     const assetId = this.$route.params.id;
     axios
       .get(`/viewJson/${assetId}`)
       .then((response) => {
-        var videoData = response.data.data;
-        this.title = videoData.title;
-        this.description = videoData.description;
-        this.assetId = videoData.asset_id;
-        this.date = videoData.date_recorded;
-        this.thumbnailUrl = videoData.thumbnail_url;
-        this.videoUrl = videoData.video_url;
-        this.keywords = videoData.tags;
-        this.programSeries = videoData.program_series;
-
+        const data = response.data.data;
+        this.title = data.title;
+        this.description = data.description;
+        this.assetId = data.asset_id;
+        this.date = data.date_recorded;
+        this.thumbnailUrl = data.thumbnail_url;
+        this.videoUrl = data.video_url;
+        this.keywords = data.tags;
+        this.programSeries = data.program_series;
         this.videoOptions = {
           autoplay: false,
           controls: true,
+          fill: true,
           sources: [
             {
-              src: this.videoUrl,
+              src: data.video_url,
               type: 'video/mp4',
             },
           ],
@@ -111,25 +295,78 @@ export default {
         });
     },
     toggleActivePanel(event, name) {
-      let clickedElem = event.target;
-      if (this.currentPanel === name) {
-        this.currentPanel = null;
-        clickedElem.classList.remove('active-panel');
-        document.querySelector('.video-info--title').classList.remove('hidden');
+      const clickedElem = event.target;
+      if (document.querySelector('.active-panel')) {
+        document.querySelector('.active-panel').classList.remove('active-panel');
+      }
+
+      if (this.activePanel === name) {
+        this.activePanel = null;
+        document.querySelector('.panel--left').classList.remove('panel--left--open');
       } else {
-        this.currentPanel = name;
+        this.activePanel = name;
         clickedElem.classList.add('active-panel');
-        document.querySelector('.video-info--title').classList.add('hidden');
+        document.querySelector('.panel--left').classList.add('panel--left--open');
       }
     },
-
-/*    getTranscriptForCaptions() {
+    getTranscript() {
       axios
-        .get(`${this.datastore}videos/${this.assetId}/transcript`)
+        .get(`${this.datastore}videos/${this.assetId}/transcript?format=json`)
         .then((response) => {
-          this.transcription = response.data.data[0].transcription;
+          const paras = {};
+          response.data.data.words.forEach((item) => {
+            if (paras[item.paragraphId] === undefined) {
+              paras[item.paragraphId] = [];
+            }
+            paras[item.paragraphId].push(item);
+          });
+          this.transcriptItems = paras;
+          this.transcriptLoaded = true;
         });
-    },*/
+    },
+    onTimeUpdate(value) {
+      this.currentTimecode = value;
+    },
+    updateTimecode(value) {
+      this.timecode = value;
+    },
   },
 };
 </script>
+
+<style scoped>
+  .related-content {
+    display: none;
+    justify-content: center;
+  }
+
+  .related-content__item {
+    margin: 0 1rem;
+  }
+
+  .related-content__item a {
+    color: #fff;
+  }
+
+  @media screen and (min-width: 760px) {
+    .related-content {
+      display: none;
+      justify-content: center;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      overflow: hidden;
+    }
+
+    .related-content__item {
+      text-align: center;
+      background: #4b4b4b;
+      margin: 0 10px;
+      flex: 1;
+      height: 50px;
+      transition: all 0.2s cubic-bezier(0.47, 0, 0.75, 0);
+    }
+  }
+</style>
