@@ -207,7 +207,6 @@ export default {
     setClip(queryParams) {
       if (queryParams.start) {
         this.player.currentTime(queryParams.start);
-        console.log('set the clip time');
       }
       if (queryParams.end) {
         this.endtime = queryParams.end;

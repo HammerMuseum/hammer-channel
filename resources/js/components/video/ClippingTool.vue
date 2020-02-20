@@ -52,7 +52,7 @@
         let startTime = document.querySelector('input[name=start_time]');
         let endTime = document.querySelector('input[name=end_time]');
 
-        if (endTime.value <= startTime.value) {
+        if (endTime.value > 0 && endTime.value <= startTime.value) {
           this.canGenerateClip = false;
           return false;
         }
