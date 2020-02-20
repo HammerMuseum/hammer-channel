@@ -17,6 +17,7 @@
     <div class="main" id="main-content">
       <router-view></router-view>
     </div>
+    <footer-component></footer-component>
     <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : '/js/main.js' }}"></script>
   </body>
 </html>

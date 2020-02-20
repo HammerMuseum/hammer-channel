@@ -193,7 +193,7 @@ import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
 import About from './AboutComponent.vue';
 import Transcript from '../Transcript.vue';
-import Use from './UseThis.vue';
+import UseThis from './UseThis.vue';
 
 export default {
   name: 'VideoComponent',
@@ -201,7 +201,7 @@ export default {
     About,
     Transcript,
     VideoPlayer,
-    Use
+    UseThis
   },
   data() {
     return {
