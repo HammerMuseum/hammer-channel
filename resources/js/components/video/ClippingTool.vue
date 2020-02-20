@@ -11,9 +11,9 @@
       </div>
     </div>
     <div class="share-clip">
-      <button class="share-clip__generate" @click="generateLink()" name="make_link">Generate shareable link</button>
-      <input class="share-clip__link" name="link" />
-      <button class="share-clip__copy" name="copy_link" @click="copyLink()">Copy to clipboard</button>
+      <button class="share-clip__item" @click="generateLink()" name="make_link">Generate shareable link</button>
+      <input class="share-clip__item" name="link" />
+      <button class="share-clip__item" name="copy_link" @click="copyLink()">Copy to clipboard</button>
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@
       generateLink() {
         let domain = window.location.origin;
         let path = this.$route.path;
-        let linkInput = document.querySelector('.share-clip__link');
+        let linkInput = document.querySelector('input[name=link]');
         let startTime = document.querySelector('input[name=start_time]');
         let endTime = document.querySelector('input[name=end_time]');
 
@@ -55,7 +55,7 @@
         linkInput.value = domain + path + '?start=' + startSeconds + '&end=' + endSeconds;
       },
       copyLink() {
-        let link = document.querySelector('.share-clip__link');
+        let link = document.querySelector('input[name=link]');
         link.select();
         document.execCommand('copy');
       },

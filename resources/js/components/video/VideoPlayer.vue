@@ -124,6 +124,11 @@ export default {
           }
         });
 
+        // Update the slider appearance when the screen is resized
+        this.on('playerresize', function() {
+          self.setSliderAppearance();
+        });
+
         self.$emit('ready', this);
       });
 
@@ -150,30 +155,23 @@ export default {
     },
     setSliderAppearance() {
       let sliderBar = document.querySelector('.vjs-play-progress');
-      let sliderInfo = sliderBar.getBoundingClientRect();
-      let sliderWidth = sliderInfo.width;
-
+      let sliderWidth = sliderBar.getBoundingClientRect().width;
       let progressHolder = document.querySelector('.vjs-progress-holder');
-      let progressInfo = progressHolder.getBoundingClientRect();
-      let progressWidth = progressInfo.width;
-
-      let percentageWidth = sliderWidth / progressWidth * 100;
-      //
       let clipDuration = this.endtime - this.starttime;
-      let clipPercentage = clipDuration / this.player.duration() * 100;
-      //
-      this.player.controlBar.progressControl.seekBar.playProgressBar.updateDataAttr = function() {
-        document.querySelector(".vjs-play-progress").style.width = clipPercentage + '%';
-        // template.find(".vjs-play-progress").setAttribute('data-current-time', formatTime(template.currentTime, globalDuration));
+      let clipPercentage = (clipDuration / this.player.duration()) * 10;
+
+      // If the custom progress bar already exists, remove it
+      let hammerProgressBar = document.querySelector('.hammer-progress-bar');
+      if (hammerProgressBar != null) {
+        hammerProgressBar.parentNode.removeChild(hammerProgressBar);
       }
-      let wrapperHtml = `<div class="hammer-progress-bar"></div>`;
-      // progressHolder.innerHTML = progressHolder.innerHTML + wrapperHtml;
-      // progressHolder.classList.add('hammer-progress-holder');
-      // let hammerBar = document.querySelector('.hammer-progress-bar');
-      // hammerBar.style.width = clipPercentage + '%';
-      // hammerBar.style.left = sliderWidth + 'px';
 
-
+      // Insert the custom progress bar
+      let newProgressBar = document.createElement('div');
+      newProgressBar.classList.add('hammer-progress-bar');
+      newProgressBar.style.width = clipPercentage + '%';
+      newProgressBar.style.left = sliderWidth + 'px';
+      progressHolder.appendChild(newProgressBar);
     },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
