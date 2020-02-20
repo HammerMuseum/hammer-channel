@@ -119,8 +119,6 @@ export default {
 
         this.on('timeupdate', function () {
           self.$emit('timeupdate', this.currentTime());
-          console.log(self.endtime);
-          console.log(this.currentTime());
           if (self.endtime > 0 && this.currentTime() >= self.endtime) {
             self.player.pause();
           }
