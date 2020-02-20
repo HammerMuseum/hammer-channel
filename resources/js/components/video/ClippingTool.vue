@@ -12,6 +12,7 @@
     </div>
     <div class="share-clip">
       <button class="share-clip__item" @click="generateLink()" name="make_link">Generate shareable link</button>
+      <span class="clip-error" v-show="canGenerateClip == false">End time is before start time.</span>
       <input class="share-clip__item" name="link" />
       <button class="share-clip__item" name="copy_link" @click="copyLink()">Copy to clipboard</button>
     </div>
@@ -26,6 +27,11 @@
         default() {
           return 0;
         },
+      }
+    },
+    data() {
+      return {
+        canGenerateClip: true
       }
     },
     mounted() {
@@ -43,11 +49,20 @@
         return new Date('1970-01-01T' + timeStr + 'Z').getTime() / 1000;
       },
       generateLink() {
+        let startTime = document.querySelector('input[name=start_time]');
+        let endTime = document.querySelector('input[name=end_time]');
+
+        if (endTime.value <= startTime.value) {
+          this.canGenerateClip = false;
+          return false;
+        }
+
+        this.canGenerateClip = true;
+
         let domain = window.location.origin;
         let path = this.$route.path;
         let linkInput = document.querySelector('input[name=link]');
-        let startTime = document.querySelector('input[name=start_time]');
-        let endTime = document.querySelector('input[name=end_time]');
+
 
         let startSeconds = this.convertToSeconds(startTime.value);
         let endSeconds = this.convertToSeconds(endTime.value);
