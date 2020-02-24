@@ -41,7 +41,8 @@
         </template>
       </VTabs>
       <div class="footer-logo">
-        <img src="/assets/images/logo-header.svg" />
+        <img class="footer-logo__hammer" src="/assets/images/logo-hammer.png" />
+        <img class="footer-logo__mellon" src="/assets/images/logo-header.svg" />
       </div>
     </div>
   </div>
