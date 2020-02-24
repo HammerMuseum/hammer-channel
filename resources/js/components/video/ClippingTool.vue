@@ -1,13 +1,13 @@
 <template>
   <div class="clip">
     <div class="clip__controls">
-      <div class="clip__controls clip-control">
-        <button class="clip-control__button" @click="setTime('start')">Set start time</button>
-        <input class="clip-control__input" name="start_time" value="00:00:00" />
+      <div class="clip__control">
+        <button class="clip__control__button" @click="setTime('start')">Set start time</button>
+        <input class="clip__control__input" name="start_time" value="00:00:00" />
       </div>
-      <div class="clip__controls clip-control">
-        <button class="clip-control__button" @click="setTime('end')">Set end time</button>
-        <input class="clip-control__input" name="end_time" value="00:00:00" />
+      <div class="clip__control">
+        <button class="clip__control__button" @click="setTime('end')">Set end time</button>
+        <input class="clip__control__input" name="end_time" value="00:00:00" />
       </div>
     </div>
     <div class="share-clip">
@@ -58,15 +58,12 @@
         }
 
         this.canGenerateClip = true;
-
         let domain = window.location.origin;
         let path = this.$route.path;
         let linkInput = document.querySelector('input[name=link]');
 
-
         let startSeconds = this.convertToSeconds(startTime.value);
         let endSeconds = this.convertToSeconds(endTime.value);
-
         linkInput.value = domain + path + '?start=' + startSeconds + '&end=' + endSeconds;
       },
       copyLink() {

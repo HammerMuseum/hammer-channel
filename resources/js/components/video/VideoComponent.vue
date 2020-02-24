@@ -31,7 +31,7 @@
             class="item-list__item"
             @click="toggleActivePanel($event, 'clip')"
           >
-            <a href="#transcript">Clip</a>
+            <a href="#clip">Clip</a>
           </li>
           <li class="">
             <router-link :to="{name: 'app'}">
@@ -194,7 +194,7 @@
                 class="item-list__item"
                 @click="toggleActivePanel($event, 'clip')"
               >
-                <a href="#use">Clip</a>
+                <a href="#clip">Clip</a>
               </li>
             </ul>
           </div>
