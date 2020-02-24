@@ -37,6 +37,7 @@ This is a specification for email signups.
 - Return success/failure as JSON with a message.
 - Represent the JSON message on the page.
 - Styling.
+- Add the Mailchimp config variables to provisioning .env file
 
 ## Documentation required
 - Configuration

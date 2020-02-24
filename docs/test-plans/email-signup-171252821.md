@@ -35,3 +35,6 @@ Access to the testing environment.
   - Are you prevented from doing so?
 - Try to submit the form with an invalid email address e.g 'some word' or 'email@nothing'
   - Are you prevented from doing so?
+- Log into the test [Mailchimp backend](http://tpm.office.cogapp.com/index.php/pwd/view/684)
+- Navigate to the 'Audience' tab and click 'View contacts'
+  - Is the first valid email address you entered visible in the list?

@@ -7,7 +7,11 @@
       <VTabs class="styled">
         <template slot="About">
           <h2>About</h2>
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          <div class="about">
+            <p>In the Hammer’s video archive, people will discover ideas that will illuminate their lives in new ways.</p>
+            <p>From the Hammer’s robust archive of conversations and programs featuring some of the greatest artists and activists of our time, visitors will be empowered to share those ideas, build knowledge, and open new lines of dialogue in the pursuit of a more just world.</p>
+          </div>
+
         </template>
 
         <template slot="Terms and conditions">
@@ -21,7 +25,12 @@
         </template>
 
         <template slot="Email sign up">
-          <h2>Email sign up</h2>
+          <div class="email-signup">
+            <label for="email">Enter your email address</label>
+            <input class="email-signup__email" id="email" name="email" type="email" required>
+            <button class="email-signup__button" @click="submitNewsletterForm()">Submit</button>
+            <span class="email-signup__result"></span>
+          </div>
         </template>
 
         <template slot="Visit the main Hammer site">
@@ -36,10 +45,7 @@
   import { VTabs } from "vuetensils";
   export default {
     components: {
-      VTabs,
-    },
-    mounted() {
-      console.log('Component mounted.');
+      VTabs
     },
     data() {
       return {
@@ -50,9 +56,24 @@
       toggleFooter() {
         if (!this.showFooter) {
           this.showFooter = true;
-        } else {
-          this.showFooter = false;
+          return true;
         }
+        this.showFooter = false;
+        return false;
+      },
+      submitNewsletterForm() {
+        let emailAddress = document.querySelector('[name=email]').value;
+        if (emailAddress === '') {
+          console.log('Please enter a valid email');
+          return false;
+        }
+        let result = document.querySelector('.email-signup__result');
+        axios
+          .get(`/submit?email=${emailAddress}`)
+          .then((response) => {
+            console.log(response);
+            result.innerHTML = response.data.message;
+          });
       }
     }
   };
