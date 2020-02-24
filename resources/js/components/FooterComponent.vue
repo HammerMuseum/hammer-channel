@@ -40,6 +40,9 @@
           <a href="https://hammer.ucla.edu">https://hammer.ucla.edu</a>
         </template>
       </VTabs>
+      <div class="footer-logo">
+        <img src="/assets/images/logo-header.svg" />
+      </div>
     </div>
   </div>
 </template>
