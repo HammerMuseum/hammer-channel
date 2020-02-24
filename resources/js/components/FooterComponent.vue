@@ -26,10 +26,13 @@
 
         <template slot="Email sign up">
           <div class="email-signup">
-            <label for="email">Enter your email address</label>
-            <input class="email-signup__email" id="email" name="email" type="email" required>
-            <button class="email-signup__button" @click="submitNewsletterForm()">Submit</button>
-            <span class="email-signup__result"></span>
+            <label for="email" class="email-signup__item">Enter your email address</label>
+            <input class="email-signup__email email-signup__item" id="email" name="email" type="email" required>
+            <button class="email-signup__button email-signup__item" @click="submitNewsletterForm()">Submit</button>
+            <span class="email-signup__result email-signup__item"></span>
+            <div class="email-signup__info">
+              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
           </div>
         </template>
 
@@ -64,14 +67,12 @@
       submitNewsletterForm() {
         let emailAddress = document.querySelector('[name=email]').value;
         if (emailAddress === '') {
-          console.log('Please enter a valid email');
           return false;
         }
         let result = document.querySelector('.email-signup__result');
         axios
           .get(`/submit?email=${emailAddress}`)
           .then((response) => {
-            console.log(response);
             result.innerHTML = response.data.message;
           });
       }
