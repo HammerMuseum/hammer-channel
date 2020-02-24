@@ -7,7 +7,6 @@ import Home from './components/HomeComponent.vue';
 import Search from './components/SearchComponent.vue';
 import NotFoundComponent from './components/NotFoundComponent.vue';
 import VideoComponent from './components/video/VideoComponent.vue';
-import FooterComponent from './components/FooterComponent.vue';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
