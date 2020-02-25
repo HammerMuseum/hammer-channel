@@ -1,0 +1,41 @@
+.drawer {
+  width: 300px;
+  height: 20px;
+}
+
+.active-drawer {
+  height: calc(100px + 1rem);
+}
+
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.slide-right-enter,
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.vts-drawer {
+  background: rgba(0, 0, 255, 0.5);
+  bottom: 0;
+}
+
+.vts-drawer__content {
+  padding: 20px;
+  color: #fff;
+  background: #222;
+  transition: transform 0.3s;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}

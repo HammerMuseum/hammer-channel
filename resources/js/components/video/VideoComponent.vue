@@ -209,6 +209,9 @@ export default {
   data() {
     return {
       assetId: null,
+      showTopicDrawer: false,
+      showRelatedDrawer: false,
+      showEventDrawer: false,
       activePanel: null,
       currentTimecode: 0,
       datastore: 'https://datastore.hammer.cogapp.com/api/',
