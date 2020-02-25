@@ -18,6 +18,12 @@
   background: var(--highlight-color-secondary);
   width: 100%;
   padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.footer__text {
+  font-size: 14px;
 }
 
 .styled.vts-tabs {
@@ -32,9 +38,6 @@
 }
 
 .footer-logo {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
   display: flex;
   flex-direction: column;
 }
@@ -66,4 +69,10 @@
 
 .footer-logo__mellon {
   width: 150px;
+}
+
+@media screen and (min-width: 800px) {
+  .footer__text {
+    font-size: 18px;
+  }
 }
