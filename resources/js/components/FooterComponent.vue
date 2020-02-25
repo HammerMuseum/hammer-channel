@@ -69,15 +69,19 @@
         return false;
       },
       submitNewsletterForm() {
-        let emailAddress = document.querySelector('[name=email]').value;
-        if (emailAddress === '') {
+        let emailAddress = document.querySelector('[name=email]');
+        let result = document.querySelector('.email-signup__result');
+        if (emailAddress.value === '') {
+          result.innerHTML = 'Please enter a valid email address.';
           return false;
         }
-        let result = document.querySelector('.email-signup__result');
         axios
-          .get(`/submit?email=${emailAddress}`)
+          .get(`/submit?email=${emailAddress.value}`)
           .then((response) => {
             result.innerHTML = response.data.message;
+            if (response.success) {
+              emailAddress.value = '';
+            }
           });
       }
     }
