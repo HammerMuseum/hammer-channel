@@ -79,7 +79,7 @@
           .get(`/submit?email=${emailAddress.value}`)
           .then((response) => {
             result.innerHTML = response.data.message;
-            if (response.success) {
+            if (response.data.success) {
               emailAddress.value = '';
             }
           });
