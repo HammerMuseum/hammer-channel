@@ -185,6 +185,7 @@
         </div>
       </div>
     </div>
+    <drawer-component></drawer-component>
   </div>
 </template>
 
@@ -194,6 +195,7 @@ import VideoPlayer from './VideoPlayer.vue';
 import About from './AboutComponent.vue';
 import Transcript from '../Transcript.vue';
 import UseThis from './UseThis.vue';
+import Drawer from './DrawerComponent.vue';
 
 export default {
   name: 'VideoComponent',
@@ -201,7 +203,8 @@ export default {
     About,
     Transcript,
     VideoPlayer,
-    UseThis
+    UseThis,
+    Drawer
   },
   data() {
     return {
