@@ -15,6 +15,25 @@ This is a template for a specification.
 
 ## Story description
 
+**As a user, I want to see what's on at the Hammer, so that I can attend a public program in person**
+
+Add a link to the Programs & Events page in the third drawer on the video page.
+
+---
+- Is there an upcoming programs drawer?
+- Does it show a link to the Programs & Events page on the main Hammer website?
+
 ## Implementation
+**The drawer functionality**
+* A drawer component with a drawer container
+  * Should be positioned absolutely with `bottom: 0`
+* Three drawers inside the container
+* Show/hide the drawers by toggling a class
+* Style the drawers as though they are open
+* Transform the drawers with `translateY(100% - [height of title])` 
+* The active/open class should remove the transform
+* The drawer relevant to this story should contain a link to the Hammer "Programs & Events" page.
+* Some basic / responsive styling
+
 
 ## Documentation required
