@@ -52,6 +52,7 @@
         let startTime = document.querySelector('input[name=start_time]');
         let endTime = document.querySelector('input[name=end_time]');
 
+        // If the start time is after the end time.
         if (endTime.value !== '00:00:00' && endTime.value <= startTime.value) {
           this.canGenerateClip = false;
           return false;

@@ -157,8 +157,11 @@ export default {
       let sliderBar = document.querySelector('.vjs-play-progress');
       let sliderWidth = sliderBar.getBoundingClientRect().width;
       let progressHolder = document.querySelector('.vjs-progress-holder');
-      let clipDuration = this.endtime - this.starttime;
-      let clipPercentage = (clipDuration / this.player.duration()) * 10;
+      let clipDuration = this.getClipDuration();
+      let clipPercentage = 100;
+      if (clipDuration !== this.player.duration()) {
+        clipPercentage = (clipDuration / this.player.duration()) * 100;
+      }
 
       // If the custom progress bar already exists, remove it
       let hammerProgressBar = document.querySelector('.hammer-progress-bar');
@@ -172,6 +175,12 @@ export default {
       newProgressBar.style.width = clipPercentage + '%';
       newProgressBar.style.left = sliderWidth + 'px';
       progressHolder.appendChild(newProgressBar);
+    },
+    getClipDuration() {
+      if (this.endtime === 0) {
+        return this.player.duration();
+      }
+      return this.endtime - this.starttime;
     },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
@@ -206,6 +215,7 @@ export default {
     },
     setClip(queryParams) {
       if (queryParams.start) {
+        this.starttime = queryParams.start;
         this.player.currentTime(queryParams.start);
       }
       if (queryParams.end) {
