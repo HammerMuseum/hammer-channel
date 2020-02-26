@@ -67,7 +67,7 @@
           >
             <span
               class="close-button"
-              @click="toggleActivePanel($event, activePanel);"
+              @click="toggleActivePanel($event, activePanel)"
             >Close</span>
             Share this item
           </div>

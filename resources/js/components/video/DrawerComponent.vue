@@ -9,16 +9,6 @@
         <p>Here is the drawer content.</p>
         <p>Here is the drawer content.</p>
         <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
       </div>
     </div>
     <div class="drawer">
@@ -30,7 +20,7 @@
     <div class="drawer">
       <span class="drawer__button" @click="openDrawer($event, 'event')">Attend our next event</span>
       <div class="drawer__content event-drawer">
-        Here is the drawer content.
+        See what's on <a href="https://hammer.ucla.edu/programs-events" target="_blank">at the Hammer Museum.</a>
       </div>
     </div>
   </div>
@@ -49,8 +39,16 @@
     methods: {
       openDrawer(event, name) {
         const clickedElem = event.target;
-        if (document.querySelector('.active-drawer')) {
-          document.querySelector('.active-drawer').classList.remove('active-drawer');
+
+        // If this was clicked on to close it
+        if (clickedElem.parentNode.classList.contains('active-drawer')) {
+          clickedElem.parentNode.classList.remove('active-drawer');
+          return;
+        }
+        let activeDrawer = document.querySelector('.active-drawer');
+        if (activeDrawer !== null) {
+         activeDrawer.classList.remove('active-drawer');
+         clickedElem.parentNode.classList.add('active-drawer');
         } else {
           clickedElem.parentNode.classList.add('active-drawer');
         }
