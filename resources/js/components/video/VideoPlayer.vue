@@ -59,7 +59,8 @@ export default {
     return {
       player: null,
       endtime: 0,
-      starttime: 0
+      starttime: 0,
+      clipSliderSet: false
     };
   },
   watch: {
@@ -124,11 +125,6 @@ export default {
           }
         });
 
-        // Update the slider appearance when the screen is resized
-        this.on('playerresize', function() {
-          self.setSliderAppearance();
-        });
-
         self.$emit('ready', this);
       });
 
@@ -155,7 +151,8 @@ export default {
     },
     setSliderAppearance() {
       let sliderBar = document.querySelector('.vjs-play-progress');
-      let sliderWidth = sliderBar.getBoundingClientRect().width;
+      let sliderWidth = sliderBar.style.width;
+
       let progressHolder = document.querySelector('.vjs-progress-holder');
       let clipDuration = this.getClipDuration();
       let clipPercentage = 100;
@@ -173,12 +170,13 @@ export default {
       let newProgressBar = document.createElement('div');
       newProgressBar.classList.add('hammer-progress-bar');
       newProgressBar.style.width = clipPercentage + '%';
-      newProgressBar.style.left = sliderWidth + 'px';
+      newProgressBar.style.left = sliderWidth;
       progressHolder.appendChild(newProgressBar);
+      this.clipSliderSet = true;
     },
     getClipDuration() {
-      if (this.endtime === 0) {
-        return this.player.duration();
+      if (this.endtime == 0) {
+        return this.player.duration() - this.starttime;
       }
       return this.endtime - this.starttime;
     },
@@ -200,7 +198,8 @@ export default {
       });
 
       this.player.on('seeked', () => {
-        if (self.queryParams.start || self.queryParams.end) {
+        console.log('seeking');
+        if ((self.queryParams.start || self.queryParams.end) && !self.clipSliderSet) {
           self.setSliderAppearance();
         }
       });
