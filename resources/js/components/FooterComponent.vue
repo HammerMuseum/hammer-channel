@@ -26,8 +26,9 @@
 
         <template slot="Email sign up">
           <div class="email-signup">
-            <label for="email" class="email-signup__item">Enter your email address</label>
-            <input class="email-signup__email email-signup__item" id="email" name="email" type="email" required>
+            <!--<label for="email" class="email-signup__item">Enter your email address</label>-->
+            <VInput v-model="email" type="email" name="email" label="Enter your email address:" v-bind:class="`email-signup__item`"/>
+            <!--<input class="email-signup__email email-signup__item" id="email" name="email" type="email" required>-->
             <button class="email-signup__button email-signup__item" @click="submitNewsletterForm()">Submit</button>
             <span class="email-signup__result email-signup__item"></span>
             <div class="email-signup__info">
@@ -50,13 +51,15 @@
 
 <script>
   import { VTabs } from "vuetensils";
+  import { VInput } from "vuetensils";
   import { directive as onClickaway } from 'vue-clickaway';
   export default {
     directives: {
       onClickaway: onClickaway,
     },
     components: {
-      VTabs
+      VTabs,
+      VInput
     },
     data() {
       return {
