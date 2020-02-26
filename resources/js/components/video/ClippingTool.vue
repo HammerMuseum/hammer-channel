@@ -12,7 +12,7 @@
     </div>
     <div class="share-clip">
       <button class="share-clip__item" @click="generateLink()" name="make_link">Generate shareable link</button>
-      <span class="clip-error" v-show="canGenerateClip == false">End time is before start time.</span>
+      <span class="clip-error" v-show="canGenerateClip == false">Please set a valid start and/or end time.</span>
       <input class="share-clip__item" name="link" />
       <button class="share-clip__item" name="copy_link" @click="copyLink()">Copy to clipboard</button>
     </div>
@@ -54,6 +54,11 @@
 
         // If the start time is after the end time.
         if (endTime.value !== '00:00:00' && endTime.value <= startTime.value) {
+          this.canGenerateClip = false;
+          return false;
+        }
+
+        if (startTime.value === '' || endTime.value === '') {
           this.canGenerateClip = false;
           return false;
         }
