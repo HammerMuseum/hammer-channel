@@ -177,9 +177,21 @@ export default {
       return false;
     },
   },
+  watch: {
+    $route(to, from) {
+      let oldQuery = from.query.term;
+      let newQuery = to.query.term;
+      if (oldQuery !== newQuery) {
+        this.term = newQuery;
+        this.getPageData('', this.term)
+      }
+    }
+  },
   mounted() {
     let optionalParams = this.$route.params.params;
-    this.getPageData(optionalParams);
+    let searchTerm = this.$route.query.term;
+    console.log(searchTerm);
+    this.getPageData(optionalParams, searchTerm);
     this.clearedSortQuery = '?';
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
@@ -193,9 +205,9 @@ export default {
       }
     },
     // Initially, AJAX request the search JSON endpoint and set results on component
-    getPageData(params = '') {
+    getPageData(params = '', term = '') {
       axios
-        .get(`/searchJson${params}`)
+        .get(`/searchJson${params}?term=${term}`)
         .then((response) => {
           this.setVars(response);
         });

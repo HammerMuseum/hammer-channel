@@ -15,6 +15,7 @@
 
   <body>
     <div class="main" id="main-content">
+      <search-bar></search-bar>
       <router-view></router-view>
     </div>
     <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : '/js/main.js' }}"></script>
