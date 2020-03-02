@@ -11,10 +11,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-  p {
-    font-size: 24px;
-    text-align: center;
-  }
-</style>
