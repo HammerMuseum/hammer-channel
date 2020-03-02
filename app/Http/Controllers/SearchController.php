@@ -53,13 +53,17 @@ class SearchController extends Controller
         } else {
             $queryString = http_build_query($params);
         }
-            $results = $this->api->request('search', $queryString);
-            $state = $this->getAppState($results, $request, $params, $queryString);
-            return view('app', [
-                'state' => $state
-            ]);
+        $results = $this->api->request('search', $queryString);
+        $state = $this->getAppState($results, $request, $params, $queryString);
+        return view('app', [
+            'state' => $state
+        ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchJson(Request $request)
     {
         $params = $request->all();
@@ -80,7 +84,7 @@ class SearchController extends Controller
      * @param array $data
      * @param Request $request
      * @param array $params
-     * @param string $term
+     * @param string $originalQuery
      * @return array
      */
     public function getAppState($data, $request, $params, $originalQuery)

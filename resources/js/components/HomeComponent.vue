@@ -70,8 +70,6 @@ import axios from 'axios';
 import ResultGrid from './ResultGridComponent.vue';
 import mixin from '../mixin';
 import VueSlickCarousel from 'vue-slick-carousel'
-// optional style for arrows & dots
-
 
 export default {
   name: 'Home',
