@@ -3,7 +3,8 @@
     <div class="search-bar search-bar__hidden">
       <div class="search-bar__actions">
         <input class="search-bar__input" placeholder="Search" type="search" v-model="searchTerm">
-        <router-link class="search__submit" tag="button" :to="{name: 'search', query: {term: this.searchTerm}}">Search</router-link>
+        <button class="search__submit" @click="doSearch()" @keyup.enter="doSearch()"></button>
+        <!--<router-link class="search__submit" tag="button" :to="{name: 'search', query: {term: this.searchTerm}}">Search</router-link>-->
       </div>
       <div class="search-bar__options">
         <div class="search-bar__option">
@@ -15,7 +16,7 @@
         </div>
       </div>
     </div>
-    <span class="search__submit" @click="showSearch"></span>
+    <span class="search__submit" @click="toggleSearch"></span>
   </div>
 </template>
 
@@ -26,20 +27,23 @@
         searchTerm: ''
       }
     },
+    mounted() {
+      console.log('Mounted!');
+    },
     methods: {
-      showSearch() {
+      toggleSearch() {
         console.log('clicked');
         let searchBar = document.querySelector('.search-bar');
         if (searchBar.classList.contains('search-bar__hidden')) {
-          console.log('has class');
           searchBar.classList.remove('search-bar__hidden');
         } else {
           searchBar.classList.add('search-bar__hidden');
         }
+      },
+      doSearch() {
+        this.$router.push({name: 'search', query: {term: this.searchTerm}}).catch();
+        this.toggleSearch();
       }
-    },
-    mounted() {
-      console.log('Component mounted.');
     }
   };
 </script>

@@ -190,7 +190,6 @@ export default {
   mounted() {
     let optionalParams = this.$route.params.params;
     let searchTerm = this.$route.query.term;
-    console.log(searchTerm);
     this.getPageData(optionalParams, searchTerm);
     this.clearedSortQuery = '?';
     window.addEventListener('resize', this.handleResize);
