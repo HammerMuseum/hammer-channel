@@ -214,7 +214,7 @@ export default {
   data() {
     return {
       activePanel: null,
-      assetId: null,
+      asset_id: null,
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
       date: null,
@@ -274,19 +274,15 @@ export default {
         ],
       };
     },
-    assetId() {
+    asset_id() {
       this.track = {
-        src: `${this.datastore}videos/${this.assetId}/transcript?format=vtt`,
+        src: `${this.datastore}videos/${this.asset_id}/transcript?format=vtt`,
         kind: 'captions',
         language: 'en',
         label: 'English',
         default: true,
       };
     },
-  },
-  mounted() {
-    const assetId = this.$route.params.id;
-
   },
   methods: {
     onPlayerError() {
@@ -313,7 +309,7 @@ export default {
     },
     getTranscript() {
       axios
-        .get(`${this.datastore}videos/${this.assetId}/transcript?format=json`)
+        .get(`${this.datastore}videos/${this.asset_id}/transcript?format=json`)
         .then((response) => {
           const paras = {};
           response.data.data.words.forEach((item) => {
