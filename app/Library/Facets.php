@@ -10,9 +10,18 @@ class Facets
 {
     /** @var array */
     protected $facetMap = [
-        'date' => 'Year Recorded',
-        'series' => 'Program Series',
-        'speakers' => 'Speakers'
+        'date_recorded' => [
+            'label' => 'Year Recorded', 
+            'type' => 'date'
+        ],
+        'in_playlists' => [
+            'label' => 'Playlists', 
+            'type' => 'term'
+        ],
+        'speakers' => [
+            'label' => 'People', 
+            'type' => 'term'
+        ],
     ];
 
     /**
@@ -23,29 +32,40 @@ class Facets
      */
     public function getFacetOptions($aggregations)
     {
+        if (isset($aggregations['global'])) {
+            $aggregations = $aggregations['global'];
+            unset($aggregations['doc_count']);
+        }
+
         $facetOptions = [];
-        foreach ($aggregations as $facet => $aggregation) {
-            if ($facet == 'label') {
-                foreach ($aggregation as $facetLabel => $globalAggregation) {
-                    if (isset($this->facetMap[$facetLabel])) {
-                        foreach ($globalAggregation['buckets'] as $bucket) {
-                            if (count($globalAggregation['buckets']) > 0) {
-                                $facetOptions[$this->facetMap[$facetLabel]][] = $bucket;
-                            }
-                        }
-                    }
-                }
-                return $facetOptions;
-            }
-            if (isset($this->facetMap[$facet])) {
-                foreach ($aggregation['buckets'] as $bucket) {
-                    if (count($aggregation['buckets']) > 0) {
-                        $facetOptions[$this->facetMap[$facet]][] = $bucket;
-                    }
-                }
+        foreach ($aggregations as $facet => $facetData) {
+            if (array_key_exists($facet, $this->facetMap)) {
+                $facetOptions[$facet]['items'] = $this->processFacetData($facetData['buckets']);
+                $facetOptions[$facet]['label'] = $this->facetMap[$facet]['label'];
+                $facetOptions[$facet]['type'] = $this->facetMap[$facet]['type'];
+                $facetOptions[$facet]['id'] = $facet;
             }
         }
         return $facetOptions;
+    }
+
+    /**
+     * Helper to extract necessary facet data.
+     */
+    private function processFacetData($buckets) {
+        $processedBuckets = [];
+        foreach ($buckets as $index => $value) {
+            $bucket = [];
+            if ($value['key']) {
+                $bucket['count'] = $value['doc_count'];
+                $bucket['key'] = $value['key'];
+                if (isset($value['key_as_string'])) {
+                    $bucket['key_as_string'] = $value['key_as_string'];
+                }
+                $processedBuckets[] = $bucket;
+            } 
+        }
+        return $processedBuckets;
     }
 
     /**
@@ -54,24 +74,13 @@ class Facets
      * @param $params
      * @return string
      */
-    public function getFacetQueryString($params)
-    {
-        $queryString = '';
-        $facetQueryString = 'facets=';
-        foreach ($params as $key => $value) {
-            if ($key == 'facets') {
-                // Pull out the [0] pattern
-                $filters = preg_split("(\D[0-9]])  ", $value);
-                foreach ($filters as $filter) {
-                    if ($filter !== '') {
-                        $facetQueryString .= $filter . ';';
-                    }
-                }
-            } else {
-                $queryString .= "&$key=$value";
-            }
-        }
-        $facetQueryString .= $queryString;
-        return $facetQueryString;
+    public function getFacetQueryString()
+    {   
+        $queryParams = $_SERVER["QUERY_STRING"];
+        $facets = implode('|',array_keys($this->facetMap));
+        $re = "/(?<=^|&)(" . $facets . ")(?==)/";
+        parse_str(preg_replace($re, "$1[]", $queryParams), $params);
+        return http_build_query($params);
     }
+    
 }

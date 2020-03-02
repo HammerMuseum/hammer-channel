@@ -47,32 +47,23 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
-        $params = $request->all();
-        if (array_key_exists('facets', $params)) {
-            $queryString = $this->facetHandler->getFacetQueryString($params);
-        } else {
-            $queryString = http_build_query($params);
-        }
-            $results = $this->api->request('search', $queryString);
-            $state = $this->getAppState($results, $request, $params, $queryString);
-            return view('app', [
-                'state' => $state
-            ]);
+        $validParams = config('constants.validQueryParams');
+        $params = $request->only($validParams);
+        $queryString = $this->facetHandler->getFacetQueryString();
+        $results = $this->api->request('search', $queryString);
+        $state = $this->getAppState($results, $request, $params, $queryString);
+        return view('app', [
+            'state' => $state
+        ]);
     }
 
     public function searchJson(Request $request)
     {
-        $params = $request->all();
-        $originalQuery = '';
-        if (array_key_exists('facets', $params)) {
-            $originalQuery = $params['facets'];
-            $queryString = $this->facetHandler->getFacetQueryString($params);
-        } else {
-            $queryString = http_build_query($params);
-        }
-
+        $validParams = config('constants.validQueryParams');
+        $params = $request->only($validParams);
+        $queryString = $this->facetHandler->getFacetQueryString();
         $results = $this->api->request('search', $queryString);
-        $state = $this->getAppState($results, $request, $params, $originalQuery);
+        $state = $this->getAppState($results, $request, $params, $_SERVER["QUERY_STRING"]);
         return response()->json($state);
     }
 
@@ -96,7 +87,7 @@ class SearchController extends Controller
         }
         $term = $request->get('term');
         return [
-            'path' => 'searchJson',
+            'path' => '/search',
             'videos' => isset($data['data']) ? $data['data'] : [],
             'pager' => $pagerLinks,
             'term' => $term,
@@ -105,8 +96,8 @@ class SearchController extends Controller
             'facets' => $facets,
             'url' => $requestUrl,
             'currentQuery' => $originalQuery,
-            'clearedPageQuery' => '?' . $this->pagination->clearParams($params, ['start']),
-            'clearedSortQuery' => '?' . $this->pagination->clearParams($params, ['sort', 'order']),
+            'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
+            'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
             'show_clear' => true
         ];
     }
