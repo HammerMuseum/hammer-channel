@@ -11,15 +11,15 @@ class Facets
     /** @var array */
     protected $facetMap = [
         'date_recorded' => [
-            'label' => 'Year Recorded', 
+            'label' => 'Year Recorded',
             'type' => 'date'
         ],
         'in_playlists' => [
-            'label' => 'Playlists', 
+            'label' => 'Playlists',
             'type' => 'term'
         ],
         'speakers' => [
-            'label' => 'People', 
+            'label' => 'People',
             'type' => 'term'
         ],
     ];
@@ -52,7 +52,8 @@ class Facets
     /**
      * Helper to extract necessary facet data.
      */
-    private function processFacetData($buckets) {
+    private function processFacetData($buckets)
+    {
         $processedBuckets = [];
         foreach ($buckets as $index => $value) {
             $bucket = [];
@@ -63,7 +64,7 @@ class Facets
                     $bucket['key_as_string'] = $value['key_as_string'];
                 }
                 $processedBuckets[] = $bucket;
-            } 
+            }
         }
         return $processedBuckets;
     }
@@ -75,12 +76,11 @@ class Facets
      * @return string
      */
     public function getFacetQueryString()
-    {   
+    {
         $queryParams = $_SERVER["QUERY_STRING"];
-        $facets = implode('|',array_keys($this->facetMap));
+        $facets = implode('|', array_keys($this->facetMap));
         $re = "/(?<=^|&)(" . $facets . ")(?==)/";
         parse_str(preg_replace($re, "$1[]", $queryParams), $params);
         return http_build_query($params);
     }
-    
 }
