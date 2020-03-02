@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-wrapper">
+  <div class="footer-wrapper" v-on-clickaway="away">
     <div class="toggle-footer">
       <button class="toggle-footer__button" @click="toggleFooter()">?</button>
     </div>
@@ -8,8 +8,8 @@
         <template slot="About">
           <h2>About</h2>
           <div class="about">
-            <p>In the Hammer’s video archive, people will discover ideas that will illuminate their lives in new ways.</p>
-            <p>From the Hammer’s robust archive of conversations and programs featuring some of the greatest artists and activists of our time, visitors will be empowered to share those ideas, build knowledge, and open new lines of dialogue in the pursuit of a more just world.</p>
+            <p class="footer__text">In the Hammer’s video archive, people will discover ideas that will illuminate their lives in new ways.</p>
+            <p class="footer__text">From the Hammer’s robust archive of conversations and programs featuring some of the greatest artists and activists of our time, visitors will be empowered to share those ideas, build knowledge, and open new lines of dialogue in the pursuit of a more just world.</p>
           </div>
 
         </template>
@@ -26,8 +26,7 @@
 
         <template slot="Email sign up">
           <div class="email-signup">
-            <label for="email" class="email-signup__item">Enter your email address</label>
-            <input class="email-signup__email email-signup__item" id="email" name="email" type="email" required>
+            <VInput v-model="email" type="email" name="email" label="Enter your email address:" v-bind:class="`email-signup__item`"/>
             <button class="email-signup__button email-signup__item" @click="submitNewsletterForm()">Submit</button>
             <span class="email-signup__result email-signup__item"></span>
             <div class="email-signup__info">
@@ -41,7 +40,8 @@
         </template>
       </VTabs>
       <div class="footer-logo">
-        <img src="/assets/images/logo-header.svg" />
+        <img class="footer-logo__hammer" src="/assets/images/logo-hammer.png" />
+        <img class="footer-logo__mellon" src="/assets/images/logo-header.svg" />
       </div>
     </div>
   </div>
@@ -49,9 +49,15 @@
 
 <script>
   import { VTabs } from "vuetensils";
+  import { VInput } from "vuetensils";
+  import { directive as onClickaway } from 'vue-clickaway';
   export default {
+    directives: {
+      onClickaway: onClickaway,
+    },
     components: {
-      VTabs
+      VTabs,
+      VInput
     },
     data() {
       return {
@@ -67,16 +73,25 @@
         this.showFooter = false;
         return false;
       },
+      away: function() {
+        if (this.showFooter) {
+          this.showFooter = false;
+        }
+      },
       submitNewsletterForm() {
-        let emailAddress = document.querySelector('[name=email]').value;
-        if (emailAddress === '') {
+        let emailAddress = document.querySelector('[name=email]');
+        let result = document.querySelector('.email-signup__result');
+        if (emailAddress.value === '') {
+          result.innerHTML = 'Please enter a valid email address.';
           return false;
         }
-        let result = document.querySelector('.email-signup__result');
         axios
-          .get(`/submit?email=${emailAddress}`)
+          .get(`/submit?email=${emailAddress.value}`)
           .then((response) => {
             result.innerHTML = response.data.message;
+            if (response.data.success) {
+              emailAddress.value = '';
+            }
           });
       }
     }

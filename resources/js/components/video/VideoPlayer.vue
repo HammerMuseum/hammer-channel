@@ -58,7 +58,15 @@ export default {
   data() {
     return {
       player: null,
+      endtime: 0,
+      starttime: 0,
+      clipSliderSet: false,
     };
+  },
+  computed: {
+    isClip() {
+      return !!((this.$route.query.start || this.$route.query.end));
+    },
   },
   watch: {
     options() {
@@ -117,6 +125,9 @@ export default {
 
         this.on('timeupdate', function () {
           self.$emit('timeupdate', this.currentTime());
+          if (self.endtime > 0 && this.currentTime() >= self.endtime) {
+            self.player.pause();
+          }
         });
 
         self.$emit('ready', this);
@@ -143,6 +154,37 @@ export default {
       });
       $('.vjs-overlay').addClass('vjs-control-bar');
     },
+    setSliderAppearance() {
+      const sliderBar = document.querySelector('.vjs-play-progress');
+      const sliderWidth = sliderBar.style.width;
+
+      const progressHolder = document.querySelector('.vjs-progress-holder');
+      const clipDuration = this.getClipDuration();
+      let clipPercentage = 100;
+      if (clipDuration !== this.player.duration()) {
+        clipPercentage = (clipDuration / this.player.duration()) * 100;
+      }
+
+      // If the custom progress bar already exists, remove it
+      const hammerProgressBar = document.querySelector('.hammer-progress-bar');
+      if (hammerProgressBar != null) {
+        hammerProgressBar.parentNode.removeChild(hammerProgressBar);
+      }
+
+      // Insert the custom progress bar
+      const newProgressBar = document.createElement('div');
+      newProgressBar.classList.add('hammer-progress-bar');
+      newProgressBar.style.width = `${clipPercentage}%`;
+      newProgressBar.style.left = sliderWidth;
+      progressHolder.appendChild(newProgressBar);
+      this.clipSliderSet = true;
+    },
+    getClipDuration() {
+      if (this.endtime === 0) {
+        return this.player.duration() - this.starttime;
+      }
+      return this.endtime - this.starttime;
+    },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
       const self = this;
@@ -154,21 +196,42 @@ export default {
         src: val,
       });
 
+      this.queryParams = this.$route.query;
       // wait for video metadata to load, then set time.
       this.player.on('loadedmetadata', () => {
-        self.player.currentTime(time);
+        if (this.isClip) {
+          self.setClip(self.queryParams);
+        } else {
+          self.player.currentTime(time);
+        }
+      });
+
+      this.player.on('seeked', () => {
+        if ((self.queryParams.start || self.queryParams.end) && !self.clipSliderSet) {
+          self.setSliderAppearance();
+        }
       });
 
       // iPhone/iPad need to play first, then set the time
       // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
       this.player.on('canplaythrough', () => {
         if (!initdone) {
-          self.player.currentTime(time);
+          if (!this.isClip) {
+            self.player.currentTime(time);
+          }
           initdone = true;
         }
       });
     },
+    setClip(queryParams) {
+      if (queryParams.start) {
+        this.starttime = queryParams.start;
+        this.player.currentTime(queryParams.start);
+      }
+      if (queryParams.end) {
+        this.endtime = queryParams.end;
+      }
+    },
   },
 };
 </script>
-

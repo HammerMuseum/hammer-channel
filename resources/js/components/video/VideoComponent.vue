@@ -27,6 +27,12 @@
           >
             <a href="#transcript">Transcript</a>
           </li>
+          <li
+            class="item-list__item"
+            @click="toggleActivePanel($event, 'clip')"
+          >
+            <a href="#clip">Clip</a>
+          </li>
           <li class="">
             <router-link :to="{name: 'app'}">
               Home
@@ -67,7 +73,7 @@
           >
             <span
               class="close-button"
-              @click="toggleActivePanel($event, activePanel)"
+              @click="toggleActivePanel($event, activePanel);"
             >Close</span>
             Share this item
           </div>
@@ -103,6 +109,21 @@
               :items="paraText"
               :current-timecode="currentTimecode"
               @updateTimecode="updateTimecode"
+            />
+          </div>
+          <div
+            v-show="activePanel === 'clip'"
+            :class="{active: activePanel === 'clip'}"
+            class="video-wrapper__item"
+          >
+            <span
+              class="close-button"
+              @click="toggleActivePanel($event, activePanel);"
+            >Close</span>
+            <clipping-tool
+              v-show="activePanel === 'clip'"
+              :current-panel="activePanel"
+              :current-timecode="this.currentTimecode"
             />
           </div>
         </div>
@@ -169,6 +190,12 @@
               >
                 <a href="#transcript">Transcript</a>
               </li>
+              <li
+                class="item-list__item"
+                @click="toggleActivePanel($event, 'clip')"
+              >
+                <a href="#clip">Clip</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -195,6 +222,7 @@ import VideoPlayer from './VideoPlayer.vue';
 import About from './AboutComponent.vue';
 import Transcript from '../Transcript.vue';
 import UseThis from './UseThis.vue';
+import ClippingTool from './ClippingTool.vue';
 import Drawer from './DrawerComponent.vue';
 
 export default {
@@ -203,6 +231,8 @@ export default {
     About,
     Transcript,
     VideoPlayer,
+    UseThis,
+    ClippingTool,
     UseThis,
     Drawer
   },

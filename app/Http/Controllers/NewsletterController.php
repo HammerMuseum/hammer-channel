@@ -52,7 +52,7 @@ class NewsletterController extends Controller
             }
             return response()->json([
                 'success' => false,
-                'message' => 'An error occurred.'
+                'message' => 'You are already subscribed to this mailing list.'
             ]);
         }
     }
