@@ -3,12 +3,26 @@
     <div class="drawer">
       <span class="drawer__button" @click="openDrawer($event, 'topic')">Topics and tags</span>
       <div class="drawer__content topic-drawer">
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
-        <p>Here is the drawer content.</p>
+        <div class="drawer__content--topics">
+          <ul>
+            <li
+              v-for="topic in topics"
+              :key="topic.id"
+            >
+              {{ topic }}
+            </li>
+          </ul>
+        </div>
+        <div class="tags">
+          <ul>
+            <li
+              v-for="tag in tags"
+              :key="tag.id"
+            >
+              {{ tag }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="drawer">
@@ -28,6 +42,20 @@
 
 <script>
   export default {
+    props: {
+      topics: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+      tags: {
+        type: Array,
+        default() {
+          return [];
+        }
+      }
+    },
     data() {
       return {
         activeDrawer: null,

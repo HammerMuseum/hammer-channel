@@ -212,7 +212,10 @@
         </div>
       </div>
     </div>
-    <drawer-component></drawer-component>
+    <drawer-component
+      :topics="topics"
+      :tags="keywords"
+    ></drawer-component>
   </div>
 </template>
 
@@ -231,7 +234,6 @@ export default {
     About,
     Transcript,
     VideoPlayer,
-    UseThis,
     ClippingTool,
     UseThis,
     Drawer
@@ -258,6 +260,7 @@ export default {
       transcriptLoaded: false,
       videoOptions: this.videoOptions,
       videoUrl: null,
+      topics: this.topics,
     };
   },
   computed: {
@@ -314,6 +317,7 @@ export default {
         this.videoUrl = data.video_url;
         this.keywords = data.tags;
         this.programSeries = data.program_series;
+        this.topics = data.topics;
         this.videoOptions = {
           autoplay: false,
           controls: true,

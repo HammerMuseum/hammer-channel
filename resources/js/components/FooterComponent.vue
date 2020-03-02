@@ -61,7 +61,8 @@
     },
     data() {
       return {
-        showFooter: false
+        showFooter: false,
+        email: null
       }
     },
     methods: {
@@ -79,18 +80,17 @@
         }
       },
       submitNewsletterForm() {
-        let emailAddress = document.querySelector('[name=email]');
         let result = document.querySelector('.email-signup__result');
-        if (emailAddress.value === '') {
+        if (this.email === '') {
           result.innerHTML = 'Please enter a valid email address.';
           return false;
         }
         axios
-          .get(`/submit?email=${emailAddress.value}`)
+          .get(`/submit?email=${this.email}`)
           .then((response) => {
             result.innerHTML = response.data.message;
             if (response.data.success) {
-              emailAddress.value = '';
+              this.email = '';
             }
           });
       }
