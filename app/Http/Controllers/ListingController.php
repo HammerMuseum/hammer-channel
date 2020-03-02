@@ -41,6 +41,7 @@ class ListingController extends Controller
     {
         $params = $request->all();
         $videos = $this->api->request('term', 'term=all');
+        $playlists = $this->api->request('playlist', 'term=all');
         return view('app', [
             'state' => $this->getAppState($videos, $params)
         ]);

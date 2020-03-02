@@ -29,13 +29,12 @@
 
     <div class="videos">
       <div
-        v-for="(topic, topic_name) in topics"
-        :id="stripChars(topic_name)"
-        :key="topic_name"
-        :class="`topic`"
+        v-if="featured"
+        id="featured"
+        class="topic"
       >
         <h2 class="topic__name">
-          {{ topic_name }}
+          Featured
         </h2>
         <VueSlickCarousel
           v-bind="settings"
@@ -48,30 +47,19 @@
             </div>
           </template>
           <div
-            v-for="video in topic"
+            v-for="video in featured"
             class="video"
           >
             <router-link
-              :to="{name: 'video', params: {id: video._source['title_slug']}}"
+              :to="{name: 'video', params: {id: video['title_slug']}}"
             >
               <div class="video__thumbnail">
-                <img :src="video._source['thumbnail_url']">
+                <img :src="video['thumbnail_url']">
                 <div class="video__title">
-                  <span>{{ video._source['title'] }}</span>
+                  <span>{{ video['title'] }}</span>
                 </div>
               </div>
             </router-link>
-          </div>
-          <div class="video topic__see-all">
-            <div class="video__thumbnail">
-              <router-link
-                class="topic-link"
-                :to="{name: 'search', params: {params:`?facets=[3]topics:${topic_name}`}}"
-              >
-                See all videos tagged
-                <span class="topic-name">{{ topic_name }}</span>
-              </router-link>
-            </div>
           </div>
           <!-- Custom arrow -->
           <template #nextArrow="arrowOption">
@@ -82,6 +70,61 @@
         </VueSlickCarousel>
       </div>
     </div>
+
+    <div
+      v-for="(topic, topic_name) in topics"
+      :id="stripChars(topic_name)"
+      :key="topic_name"
+      :class="`topic`"
+    >
+      <h2 class="topic__name">
+        {{ topic_name }}
+      </h2>
+      <VueSlickCarousel
+        v-bind="settings"
+        :arrows="true"
+      >
+        <!-- Custom arrow -->
+        <template #prevArrow="arrowOption">
+          <div class="videos__navigation">
+            {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
+          </div>
+        </template>
+        <div
+          v-for="video in topic"
+          class="video"
+        >
+          <router-link
+            :to="{name: 'video', params: {id: video._source['title_slug']}}"
+          >
+            <div class="video__thumbnail">
+              <img :src="video._source['thumbnail_url']">
+              <div class="video__title">
+                <span>{{ video._source['title'] }}</span>
+              </div>
+            </div>
+          </router-link>
+        </div>
+        <div class="video topic__see-all">
+          <div class="video__thumbnail">
+            <router-link
+              class="topic-link"
+              :to="{name: 'search', query: {topics: topic_name}}"
+            >
+              See all videos tagged
+              <span class="topic-name">{{ topic_name }}</span>
+            </router-link>
+          </div>
+        </div>
+        <!-- Custom arrow -->
+        <template #nextArrow="arrowOption">
+          <div class="videos__navigation">
+            {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
+          </div>
+        </template>
+      </VueSlickCarousel>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -98,10 +141,11 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      title: this.title,
-      videos: this.videos,
-      pager: this.pager,
-      topics: this.topics,
+      title: null,
+      videos: null,
+      pager: null,
+      topics: null,
+      featured: false,
       settings: {
         slidesToShow: 3.5,
         infinite: false,
@@ -141,7 +185,19 @@ export default {
       },
     };
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.getFeatured();
+    });
+  },
   methods: {
+    getFeatured() {
+      axios
+        .get(`${process.env.MIX_DATASTORE_URL}playlists/12`)
+        .then((response) => {
+          this.featured = response.data.data.videos;
+        });
+    },
     getPageData() {
       axios
         .get('?term=all')
