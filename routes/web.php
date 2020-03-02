@@ -14,5 +14,4 @@
 Route::get('/', 'ListingController@index');
 Route::get('/video/{slug}', 'VideoController@view');
 Route::get('/search', 'SearchController@search');
-//Route::get('/topics/{keyword}', 'ListingController@topic');
-//Route::get('/search/sort/{term}/{field}', 'SearchController@sort');
+Route::get('/submit', 'NewsletterController@submit');

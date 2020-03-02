@@ -57,6 +57,10 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function searchJson(Request $request)
     {
         $validParams = config('constants.validQueryParams');
@@ -71,7 +75,7 @@ class SearchController extends Controller
      * @param array $data
      * @param Request $request
      * @param array $params
-     * @param string $term
+     * @param string $originalQuery
      * @return array
      */
     public function getAppState($data, $request, $params, $originalQuery)
