@@ -167,10 +167,6 @@ export default {
     },
   },
   mounted() {
-    // this.currentQuery = this.$route.query;
-    // // const optionalParams = this.$route.params.params;
-    // // this.getPageData();
-    // this.clearedSortQuery = '';
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
@@ -182,7 +178,6 @@ export default {
         this.showFilters = false;
       }
     },
-    // Initially, AJAX request the search JSON endpoint and set results on component
     getPageData(params = '') {
       axios
         .get(`/api/search${params}`)
@@ -198,7 +193,7 @@ export default {
       }
       this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } });
     },
-    // Use whatever response current in the application to populate the page
+    // Set component data when a response is fetched.
     setVars(response) {
       const data = response.data;
       this.title = data.title;
