@@ -12,6 +12,7 @@
           class="clip__control__input"
           name="start_time"
           value="00:00:00"
+          v-model="clipStart"
         >
       </div>
       <div class="clip__control">
@@ -25,6 +26,7 @@
           class="clip__control__input"
           name="end_time"
           value="00:00:00"
+          v-model="clipEnd"
         >
       </div>
     </div>
@@ -43,7 +45,6 @@
       <input
         class="share-clip__item"
         name="link"
-        v-model:
       >
       <button
         class="share-clip__item"
@@ -76,7 +77,13 @@ export default {
   methods: {
     setTime(input) {
       const inputField = document.querySelector(`input[name=${input}_time]`);
-      inputField.value = this.convertFromSeconds(this.currentTimecode);
+      const selectedTime = this.convertFromSeconds(this.currentTimecode);
+      inputField.value = selectedTime;
+      if (input === 'start') {
+        this.clipStart = selectedTime
+      } else if (input === 'end') {
+        this.clipEnd = selectedTime;
+      }
     },
     convertFromSeconds(timeStr) {
       return (new Date(timeStr * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
