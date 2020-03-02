@@ -17,5 +17,6 @@ Route::get('/', 'ListingController@index');
 Route::get('/json', 'ListingController@indexJson');
 Route::get('/search', 'SearchController@search');
 Route::get('/searchJson', 'SearchController@searchJson');
+Route::get('/submit', 'NewsletterController@submit');
 //Route::get('/topics/{keyword}', 'ListingController@topic');
 //Route::get('/search/sort/{term}/{field}', 'SearchController@sort');
