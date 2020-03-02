@@ -230,7 +230,7 @@ export default {
     Transcript,
     VideoPlayer,
     UseThis,
-    ClippingTool
+    ClippingTool,
   },
   data() {
     return {

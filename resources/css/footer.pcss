@@ -1,0 +1,78 @@
+.toggle-footer {
+  position: absolute;
+  bottom: 1rem;
+}
+
+.footer-wrapper {
+  z-index: 100;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.footer {
+  height: 50vh;
+  background: var(--highlight-color-secondary);
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.footer__text {
+  font-size: 14px;
+}
+
+.styled.vts-tabs {
+  display: flex;
+  flex-direction: column-reverse;
+  width: calc(1300px - 1rem);
+}
+
+.vts-tabs__tablist {
+  position: absolute;
+  bottom: 1rem;
+}
+
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+}
+
+.vts-tabs__tab {
+  -webkit-appearance: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0 1rem;
+  background: none;
+}
+
+.vts-tabs__panel {
+  color: black;
+  max-width: 80%;
+}
+
+.email-signup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-logo__hammer {
+  margin-bottom: 1rem;
+  max-width: 200px;
+}
+
+.footer-logo__mellon {
+  width: 150px;
+}
+
+@media screen and (min-width: 800px) {
+  .footer__text {
+    font-size: 18px;
+  }
+}
