@@ -59,6 +59,17 @@ build_and_test: &build_and_test
     - restore_cache: *restore_node_cache
     - run: npm install
     - save_cache: *save_node_cache
+    - run: echo "MIX_DATASTORE_URL=$PUSHER_LIVE_APP_KEY" >> .env
+
+    run: |
+      echo "MIX_DATASTORE_URL=https://dev.datastore.hammer.cogapp.com/api/" > .envt
+      if [ "$CIRCLE_BRANCH" = "master" ]; then
+          echo "MIX_DATASTORE_URL=https://datastore.hammer.cogapp.com/api/" > .env
+      fi
+      if [ "$CIRCLE_BRANCH" = "develop" ]; then
+          echo "MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/" > .env
+      fi
+
     - run: npm run build
 
     # prepare database
@@ -71,10 +82,10 @@ build_and_test: &build_and_test
 
     # Run linting
     - run: ./vendor/bin/phpcs
-    
-    - run: cp .env.dusk.testing .env
+
+    - run: cp -rf .env.dusk.testing .env
     - run: php artisan key:generate
-    
+
     - run:
         name: Run Laravel Server
         command: php artisan serve
