@@ -123,7 +123,7 @@
             <clipping-tool
               v-show="activePanel === 'clip'"
               :current-panel="activePanel"
-              :currentTimecode="this.currentTimecode"
+              :current-timecode="this.currentTimecode"
             />
           </div>
         </div>
