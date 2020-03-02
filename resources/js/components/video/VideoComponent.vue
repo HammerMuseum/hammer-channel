@@ -54,8 +54,8 @@
               v-show="activePanel === 'about'"
               :description="description"
               :date="date"
-              :keywords="keywords"
-              :program-series="programSeries"
+              :people="speakers"
+              :playlists="in_playlists"
               :current-panel="activePanel"
             />
           </div>
@@ -111,10 +111,9 @@
             dusk="video-player-component"
             :options="videoOptions"
             :title="title"
-            :keywords="keywords"
             :track="track"
             :timecode="timecode"
-            :video-url="videoUrl"
+            :video-url="video_url"
             @playbackerror="onPlayerError"
             @timeupdate="onTimeUpdate"
           />
@@ -122,23 +121,12 @@
             <h1 class="video-meta__title title">
               {{ title }}
             </h1>
-            <!-- <div class="keywords">
-              <ul>
-                <li
-                  v-for="item in keywords"
-                  :key="item.id"
-                >
-                  {{ item }}
-                </li>
-              </ul>
-            </div>
-          </div> -->
             <div class="video-description--mobile">
               <about
                 :description="description"
                 :date="date"
-                :keywords="keywords"
-                :program-series="programSeries"
+                :people="speakers"
+                :playlists="in_playlists"
               />
             </div>
           </div>
@@ -173,17 +161,6 @@
           </div>
         </div>
       </div>
-      <div class="related-content">
-        <div class="related-content__item">
-          <a href="#tags">Tags</a>
-        </div>
-        <div class="related-content__item">
-          <a href="#related">Related</a>
-        </div>
-        <div class="related-content__item">
-          <a href="#attend">Attend</a>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -191,9 +168,10 @@
 <script>
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer.vue';
-import About from './AboutComponent.vue';
+import About from './About.vue';
 import Transcript from '../Transcript.vue';
-import Use from './UseThis.vue';
+import UseThis from './UseThis.vue';
+import getRouteData from '../../mixins/getRouteData';
 
 export default {
   name: 'VideoComponent',
@@ -201,27 +179,28 @@ export default {
     About,
     Transcript,
     VideoPlayer,
-    Use
+    UseThis,
   },
+  mixins: [getRouteData],
   data() {
     return {
-      assetId: null,
       activePanel: null,
+      assetId: null,
       currentTimecode: 0,
-      datastore: 'https://datastore.hammer.cogapp.com/api/',
-      date: this.date,
-      description: this.description,
-      keywords: this.keywords,
-      programSeries: this.programSeries,
+      datastore: process.env.MIX_DATASTORE_URL,
+      date: null,
+      description: null,
+      in_playlists: null,
+      speakers: null,
       thumbnailUrl: null,
       timecode: 0,
-      title: this.title,
+      title: null,
       track: null,
       transcription: null,
       transcriptItems: [],
       transcriptLoaded: false,
-      videoOptions: this.videoOptions,
-      videoUrl: null,
+      videoOptions: null,
+      video_url: null,
     };
   },
   computed: {
@@ -229,7 +208,6 @@ export default {
       if (!this.transcriptLoaded) {
         return [];
       }
-
       const keys = Object.keys(this.transcriptItems);
       return keys.map((key) => {
         const para = this.transcriptItems[key];
@@ -254,6 +232,19 @@ export default {
         });
       }
     },
+    video_url() {
+      this.videoOptions = {
+        autoplay: false,
+        controls: true,
+        fill: true,
+        sources: [
+          {
+            src: this.video_url,
+            type: 'video/mp4',
+          },
+        ],
+      };
+    },
     assetId() {
       this.track = {
         src: `${this.datastore}videos/${this.assetId}/transcript?format=vtt`,
@@ -266,35 +257,12 @@ export default {
   },
   mounted() {
     const assetId = this.$route.params.id;
-    axios
-      .get(`/viewJson/${assetId}`)
-      .then((response) => {
-        const data = response.data.data;
-        this.title = data.title;
-        this.description = data.description;
-        this.assetId = data.asset_id;
-        this.date = data.date_recorded;
-        this.thumbnailUrl = data.thumbnail_url;
-        this.videoUrl = data.video_url;
-        this.keywords = data.tags;
-        this.programSeries = data.program_series;
-        this.videoOptions = {
-          autoplay: false,
-          controls: true,
-          fill: true,
-          sources: [
-            {
-              src: data.video_url,
-              type: 'video/mp4',
-            },
-          ],
-        };
-      });
+
   },
   methods: {
     onPlayerError() {
       axios
-        .get(`/viewJson/${this.$route.params.id}`)
+        .get(`/api/video/${this.$route.params.id}`)
         .then((response) => {
           this.videoUrl = response.data.data.video_url;
         });
@@ -338,40 +306,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-  .related-content {
-    display: none;
-    justify-content: center;
-  }
-
-  .related-content__item {
-    margin: 0 1rem;
-  }
-
-  .related-content__item a {
-    color: #fff;
-  }
-
-  @media screen and (min-width: 760px) {
-    .related-content {
-      display: none;
-      justify-content: center;
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80vw;
-      overflow: hidden;
-    }
-
-    .related-content__item {
-      text-align: center;
-      background: #4b4b4b;
-      margin: 0 10px;
-      flex: 1;
-      height: 50px;
-      transition: all 0.2s cubic-bezier(0.47, 0, 0.75, 0);
-    }
-  }
-</style>
