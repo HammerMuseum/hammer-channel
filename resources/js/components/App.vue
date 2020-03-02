@@ -2,7 +2,7 @@
   <router-view />
 </template>
 <script>
-import mixin from '../mixin';
+import mixin from '../mixins/getRouteData';
 
 export default {
   mixins: [mixin],

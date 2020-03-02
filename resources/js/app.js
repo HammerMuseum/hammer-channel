@@ -34,7 +34,7 @@ const routes = [
     path: '/', name: 'app', component: Home,
   },
   {
-    path: '/search/:params?', name: 'search', component: Search,
+    path: '/search/:params?', name: 'search', component: Search, props: (route) => ({ facetQuery: route.query.facets }),
   },
   {
     path: '/video/:id', name: 'video', component: VideoComponent, props: true,
