@@ -15,11 +15,15 @@ class Facets
             'type' => 'date'
         ],
         'in_playlists' => [
-            'label' => 'Playlists',
+            'label' => 'Playlist',
             'type' => 'term'
         ],
         'speakers' => [
             'label' => 'People',
+            'type' => 'term'
+        ],
+        'topics' => [
+            'label' => 'Topic',
             'type' => 'term'
         ],
     ];

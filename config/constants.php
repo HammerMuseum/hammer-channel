@@ -10,5 +10,6 @@ return [
     'in_playlists',
     'start',
     'end',
+    'topics',
   ],
 ];
