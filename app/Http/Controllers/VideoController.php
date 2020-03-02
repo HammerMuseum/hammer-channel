@@ -35,7 +35,7 @@ class VideoController extends Controller
     {
         $data = $this->api->request('videos/' . $slug);
         return view('app', [
-            'state' => $this->getAppState($data)
+            'state' => $this->getAppState('/video/' . $slug, $data)
         ]);
     }
 
@@ -47,7 +47,7 @@ class VideoController extends Controller
     public function viewJson(Request $request, $slug)
     {
         $data = $this->api->request('videos/' . $slug);
-        $state = $this->getAppState($data);
+        $state = $this->getAppState('/video/' . $slug, $data);
         return response()->json($state);
     }
 
@@ -55,12 +55,13 @@ class VideoController extends Controller
      * @param $data
      * @return array
      */
-    public function getAppState($data)
+    public function getAppState($path, $data)
     {
-        return [
-            'path' => '/viewJson',
-            'data' => isset($data['data'][0]) ? $data['data'][0] : [],
-            'message' => isset($data['message']) ? $data['message'] : false,
-        ];
+        $flatData = [];
+        $flatData['path'] = $path;
+        foreach($data['data'][0] as $k => $v) {
+            $flatData[$k] = $v;
+        }
+        return $flatData;
     }
 }

@@ -11,11 +11,8 @@
 |
 */
 
-Route::get('/video/{slug}', 'VideoController@view');
-Route::get('/viewJson/{slug}', 'VideoController@viewJson');
 Route::get('/', 'ListingController@index');
-Route::get('/json', 'ListingController@indexJson');
+Route::get('/video/{slug}', 'VideoController@view');
 Route::get('/search', 'SearchController@search');
-Route::get('/searchJson', 'SearchController@searchJson');
 //Route::get('/topics/{keyword}', 'ListingController@topic');
 //Route::get('/search/sort/{term}/{field}', 'SearchController@sort');

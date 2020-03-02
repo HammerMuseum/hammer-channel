@@ -147,7 +147,7 @@ export default {
   methods: {
     getPageData(params = '') {
       axios
-        .get(`/json${params}`)
+        .get(`/${params}`)
         .then((response) => {
           this.title = response.data.title;
           this.pager = response.data.pager;

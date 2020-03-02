@@ -75,15 +75,15 @@ class ListingController extends Controller
             }
         }
         return [
-            'path' => '/json',
+            'path' => '/',
             'videos' => isset($data['data']) ? $data['data'] : [],
             'pager' => $pagerLinks,
             'message' => isset($data['message']) ? $data['message'] : false,
             'title' => '',
             'show_clear' => false,
             'topics' => $topics,
-            'clearedPageQuery' => '?' . $this->pagination->clearParams($params, ['start']),
-            'clearedSortQuery' => '?' . $this->pagination->clearParams($params, ['sort', 'order']),
+            'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
+            'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
         ];
     }
 
