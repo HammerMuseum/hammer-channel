@@ -141,13 +141,10 @@ export default {
       },
     };
   },
-  mounted() {
-    this.getPageData('?term=all');
-  },
   methods: {
-    getPageData(params = '') {
+    getPageData() {
       axios
-        .get(`/${params}`)
+        .get('?term=all')
         .then((response) => {
           this.title = response.data.title;
           this.pager = response.data.pager;
