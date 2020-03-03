@@ -90,7 +90,7 @@
           return false;
         }
         axios
-          .get(`/submit?email=${this.email}&firstname=${this.firstName}&lastname=${this.lastName}`)
+          .post('/submit', {data: {firstname: this.firstName, lastname: this.lastName, email: this.email}})
           .then((response) => {
             result.innerHTML = response.data.message;
             if (response.data.success) {

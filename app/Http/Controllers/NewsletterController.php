@@ -33,8 +33,8 @@ class NewsletterController extends Controller
      */
     public function submit(Request $request)
     {
-        $emailAddress = $request->get('email');
-        if (!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+        $requestData = $request->get('data');
+        if (!filter_var($requestData['email'], FILTER_VALIDATE_EMAIL)) {
             // Email address is invalid
             return response()->json([
                 'success' => false,
@@ -42,11 +42,9 @@ class NewsletterController extends Controller
             ]);
         } else {
             // Email address is valid
-            $firstName = $request->get('firstname');
-            $lastName = $request->get('lastname');
-            $signupAction = $this->newsletter->subscribe($emailAddress, [
-                'FNAME' => $firstName,
-                'LNAME' => $lastName
+            $signupAction = $this->newsletter->subscribe($requestData['email'], [
+                'FNAME' => $requestData['firstname'],
+                'LNAME' => $requestData['lastname']
             ], 'subscribers');
             if ($signupAction) {
                 return response()->json([
