@@ -26,7 +26,9 @@
 
         <template slot="Email sign up">
           <div class="email-signup">
-            <VInput v-model="email" type="email" name="email" label="Enter your email address:" v-bind:class="`email-signup__item`"/>
+            <VInput v-model="firstName" required type="text" name="firstname" label="First name:" v-bind:class="`email-signup__item`"/>
+            <VInput v-model="lastName" required type="text" name="lastname" label="Last name:" v-bind:class="`email-signup__item`"/>
+            <VInput v-model="email" required type="email" name="email" label="Email address:" v-bind:class="`email-signup__item`"/>
             <button class="email-signup__button email-signup__item" @click="submitNewsletterForm()">Submit</button>
             <span class="email-signup__result email-signup__item"></span>
             <div class="email-signup__info">
@@ -61,7 +63,10 @@
     },
     data() {
       return {
-        showFooter: false
+        showFooter: false,
+        email: null,
+        firstName: null,
+        lastName: null,
       }
     },
     methods: {
@@ -79,18 +84,19 @@
         }
       },
       submitNewsletterForm() {
-        let emailAddress = document.querySelector('[name=email]');
         let result = document.querySelector('.email-signup__result');
-        if (emailAddress.value === '') {
-          result.innerHTML = 'Please enter a valid email address.';
+        if (this.email === '' || this.firstName === '' || this.lastName === '') {
+          result.innerHTML = 'Please fill out all fields.';
           return false;
         }
         axios
-          .get(`/submit?email=${emailAddress.value}`)
+          .post('/submit', {data: {firstname: this.firstName, lastname: this.lastName, email: this.email}})
           .then((response) => {
             result.innerHTML = response.data.message;
             if (response.data.success) {
-              emailAddress.value = '';
+              this.email = '';
+              this.firstName = '';
+              this.lastName = '';
             }
           });
       }
