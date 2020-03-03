@@ -42,8 +42,12 @@ class NewsletterController extends Controller
             ]);
         } else {
             // Email address is valid
-
-            $signupAction = $this->newsletter->subscribe($emailAddress, [], 'subscribers');
+            $firstName = $request->get('firstname');
+            $lastName = $request->get('lastname');
+            $signupAction = $this->newsletter->subscribe($emailAddress, [
+                'FNAME' => $firstName,
+                'LNAME' => $lastName
+            ], 'subscribers');
             if ($signupAction) {
                 return response()->json([
                     'success' => true,
