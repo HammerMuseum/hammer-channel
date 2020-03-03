@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import queryString from 'query-string';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
