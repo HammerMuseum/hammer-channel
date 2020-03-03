@@ -18,9 +18,9 @@ services:
       MYSQL_PASSWORD: $DB_PASSWORD
     networks:
       - db
-#    volumes:
-#      - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
-#      - /path/to/mariadb/data/on/host:/var/lib/mysql # I want to manage volumes manually.
+    # volumes:
+    #   - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
+    #   - /path/to/mariadb/data/on/host:/var/lib/mysql # I want to manage volumes manually.
 
   php:
     image: wodby/php:$PHP_TAG
@@ -33,27 +33,23 @@ services:
       DB_NAME: $DB_NAME
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
+      # Read instructions at https://wodby.com/docs/stacks/php/local/#xdebug
+      # PHP_XDEBUG: 1
+      PHP_XDEBUG_DEFAULT_ENABLE: 1
+      PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
+      # PHP_IDE_CONFIG: serverName=my-ide
+      # PHP_XDEBUG_IDEKEY: "my-ide"
+      # PHP_XDEBUG_REMOTE_HOST: 172.17.0.1 # Linux
+      PHP_XDEBUG_REMOTE_HOST: 10.254.254.254 # macOS
     networks:
       - db
       - default
-## Read instructions at https://wodby.com/docs/stacks/php/local/#xdebug
-#      PHP_XDEBUG: 1
-#      PHP_XDEBUG_DEFAULT_ENABLE: 1
-#      PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
-#      PHP_IDE_CONFIG: serverName=my-ide
-#      PHP_XDEBUG_IDEKEY: "my-ide"
-#      PHP_XDEBUG_REMOTE_HOST: 172.17.0.1 # Linux
-#      PHP_XDEBUG_REMOTE_HOST: 10.254.254.254 # macOS
-#      PHP_XDEBUG_REMOTE_HOST: 10.0.75.1 # Windows
     volumes:
-      - ./:/var/www/html:cached
-    # networks:
-    #   - hammer-datastore_default
-## For macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)
-#      - ./:/var/www/html:cached # User-guided caching
-#      - docker-sync:/var/www/html # Docker-sync
-## For XHProf and Xdebug profiler traces
-#      - files:/mnt/files
+      # For macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)
+      - ./:/var/www/html:cached  # User-guided caching
+      # - docker-sync:/var/www/html # Docker-sync
+      # For XHProf and Xdebug profiler traces
+      # - files:/mnt/files
 
   nginx:
     image: wodby/nginx:$NGINX_TAG
@@ -66,14 +62,13 @@ services:
       NGINX_BACKEND_HOST: php
       NGINX_VHOST_PRESET: php
       NGINX_SERVER_ROOT: /var/www/html/public
-    volumes:
-      - ./:/var/www/html:cached
     networks:
       - default
       - db
-# Options for macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)
-#      - ./:/var/www/html:cached # User-guided caching
-#      - docker-sync:/var/www/html # Docker-sync
+    volumes:
+      # For macOS users (https://wodby.com/docs/stacks/php/local#docker-for-mac)
+      - ./:/var/www/html:cached  # User-guided caching
+      # - docker-sync:/var/www/html # Docker-sync
     labels:
       - "traefik.docker.network=hammer-datastore_default"
       - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
@@ -144,31 +139,6 @@ services:
 #    labels:
 #      - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
 
-#  solr:
-#    image: wodby/solr:$SOLR_TAG
-#    container_name: "${PROJECT_NAME}_solr"
-#    environment:
-#      SOLR_HEAP: 1024m
-#    labels:
-#      - "traefik.http.routers.${PROJECT_NAME}_solr.rule=Host(`solr.${PROJECT_BASE_URL}`)"
-
-#  elasticsearch:
-#    image: wodby/elasticsearch:$ELASTICSEARCH_TAG
-#    environment:
-#      ES_JAVA_OPTS: "-Xms500m -Xmx500m"
-#    ulimits:
-#      memlock:
-#        soft: -1
-#        hard: -1
-
-#  kibana:
-#    image: wodby/kibana:$KIBANA_TAG
-#    depends_on:
-#      - elasticsearch
-#    labels:
-#      - "traefik.http.services.${PROJECT_NAME}_kibana.loadbalancer.server.port=5601"
-#      - "traefik.http.routers.${PROJECT_NAME}_kibana.rule=Host(`kibana.${PROJECT_BASE_URL}`)"
-
 #  memcached:
 #    container_name: "${PROJECT_NAME}_memcached"
 #    image: wodby/memcached:$MEMCACHED_TAG
@@ -227,25 +197,6 @@ services:
 #      - files:/mnt/files
 #    labels:
 #      - "traefik.http.routers.${PROJECT_NAME}_xhprof.rule=Host(`xhprof.${PROJECT_BASE_URL}`)"
-
-  # portainer:
-  #   image: portainer/portainer
-  #   container_name: "${PROJECT_NAME}_portainer"
-  #   command: --no-auth -H unix:///var/run/docker.sock
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   labels:
-  #    - "traefik.http.routers.${PROJECT_NAME}_portainer.rule=Host(`portainer.${PROJECT_BASE_URL}`)"
-
-  # traefik:
-  #   image: traefik:v2.0
-  #   container_name: "${PROJECT_NAME}_traefik"
-  #   command: --api.insecure=true --providers.docker
-  #   ports:
-  #     - '8000:80'
-  #     # - '8080:8080' # Dashboard
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
 
 #volumes:
 ## Docker-sync for macOS users

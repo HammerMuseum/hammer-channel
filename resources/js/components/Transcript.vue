@@ -83,24 +83,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.video-meta__transcript {
-  text-align: left;
-  color: var(--text-secondary);
-}
-
-.transcript__paragraph {
-  font-size: 18px;
-  line-height: 1.4;
-  text-align: left;
-}
-
-.transcript__paragraph {
-  transition: all 0.4s;
-}
-
-.transcript__paragraph--active {
-  background: var(--highlight-color-primary);
-}
-</style>

@@ -20,11 +20,10 @@
       <div class="search__item-wrapper">
         <input
           id="search-main"
+          v-model="term"
           type="search"
-          value=""
           name="term"
           title="Search"
-          aria-controls=""
           placeholder="Search"
           class="search__item search__input"
           @keyup.enter="search()"
@@ -48,71 +47,31 @@
       </button>
       <div class="filters">
         <div
-          v-show="showFilters"
+          v-show="showFilters && hasFacets"
           class="facets"
         >
           <h2>Filter by</h2>
-          <ul
-            v-for="(facet, label) in facets"
-            :key="label"
-            class="facet"
+          <div
+            v-for="facet in facets"
+            :key="facet.id"
           >
-            <p class="facet__label">
-              {{ label }}
-            </p>
-            <li
-              v-for="option in facet"
-              :key="option.key"
-              class="facet__item"
-            >
-              <router-link
-                v-if="label == 'Year Recorded'"
-                :to="{name: 'search'}"
-                @click.native="filter(`facets=[0]date_recorded:${getYear(option.key_as_string)}`)"
-              >
-                {{ getYear(option.key_as_string) }}
-              </router-link>
-              <router-link
-                v-if="label == 'Program Series'"
-                :to="{name: 'search'}"
-                @click.native="filter(`facets=[1]program_series:${option.key}`)"
-              >
-                {{ option.key }}
-              </router-link>
-              <router-link
-                v-if="label == 'Speakers'"
-                :to="{name: 'search'}"
-                @click.native="filter(`facets=[2]speakers:${option.key}`)"
-              >
-                {{ option.key }}
-              </router-link>
-            </li>
-            <router-link
-              :to="{name: 'search'}"
-              class="facet__clear"
-              @click.native="search()"
-            >
-              Clear filter
-            </router-link>
-          </ul>
+            <search-facet
+              :active-facets="activeFacets"
+              :facet="facet"
+            />
+          </div>
         </div>
       </div>
       <div class="results">
         <div class="facets__sort">
           <span class="facet__label">Order by</span>
           <router-link
-            :to="{name: 'search'}"
-            @click.native="sort(
-              `${clearedSortQuery}&sort=date_recorded&order=asc`
-            )"
+            :to="{ name: 'search', query: { ...$route.query, ...{ sort: 'date_recorded', order: 'asc' } } }"
           >
             Date (ASC)
           </router-link>
           <router-link
-            :to="{name: 'search'}"
-            @click.native="sort(
-              `${clearedSortQuery}&sort=date_recorded&order=desc`
-            )"
+            :to="{ name: 'search', query: { ...$route.query, ...{ sort: 'date_recorded', order: 'desc' } } }"
           >
             Date (DESC)
           </router-link>
@@ -121,15 +80,14 @@
         <div class="pager">
           <ul>
             <li
-              v-for="(item, index) in filteredPager"
+              v-for="(item, label) in filteredPager"
               :key="item"
             >
               <router-link
                 v-if="item"
-                :to="{name: 'search'}"
-                @click.native="getPageData(clearPageQuery + item)"
+                :to="{ name: 'search', query: { ...$route.query, ...{ start: item.split('=').pop() } } }"
               >
-                {{ index | capitalize }}
+                {{ label | capitalize }}
               </router-link>
             </li>
           </ul>
@@ -142,12 +100,15 @@
 <script>
 import axios from 'axios';
 import ResultGrid from './ResultGridComponent.vue';
-import mixin from '../mixin';
+import getRouteData from '../mixins/getRouteData';
+import stringifyQuery from '../mixins/stringifyQuery';
+import SearchFacet from './SearchFacet.vue';
 
 export default {
   name: 'Search',
   components: {
     ResultGrid,
+    SearchFacet,
   },
   filters: {
     capitalize(value) {
@@ -155,20 +116,40 @@ export default {
       return value.toString().charAt(0).toUpperCase() + value.slice(1);
     },
   },
+  mixins: [getRouteData],
+  props: {
+    facetQuery: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       showFilters: true,
-      title: this.title,
-      videos: this.videos,
-      pager: this.pager,
-      term: this.term,
-      facets: this.facets,
-      clearPageQuery: this.clearPageQuery,
-      clearedSortQuery: this.clearedSortQuery,
-      currentQuery: this.currentQuery,
+      title: null,
+      videos: null,
+      pager: null,
+      term: null,
+      facets: null,
+      clearPageQuery: null,
+      clearedSortQuery: null,
+      currentQuery: null,
     };
   },
   computed: {
+    hasFacets() {
+      return !!this.facets;
+    },
+    activeFacets() {
+      const active = [];
+      const query = this.$route.query;
+      const keys = Object.keys(query);
+      for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i];
+        active.push(query[key]);
+      }
+      return [].concat(...active);
+    },
     filteredPager() {
       if (this.pager) {
         // Filter out empty properties in the pager.
@@ -178,20 +159,26 @@ export default {
     },
   },
   watch: {
-    $route(to, from) {
-      let oldQuery = from.query.term;
-      let newQuery = to.query.term;
-      if (oldQuery !== newQuery) {
-        this.term = newQuery;
-        this.getPageData('', this.term)
-      }
+    $route: {
+      // immediate: true,
+      handler(to, from) {
+        let oldQuery = from.query.term;
+        let newQuery = to.query.term;
+        if (oldQuery !== newQuery) {
+          this.term = newQuery;
+          // this.getPageData('', this.term)
+        }
+        this.getPageData(stringifyQuery(to.query));
+      },
     }
   },
+  // mounted() {
+  //   // let optionalParams = this.$route.params.params;
+  //   // let searchTerm = this.$route.query.term;
+  //   // this.getPageData(optionalParams, searchTerm);
+  //   // this.clearedSortQuery = '?';
+  // },
   mounted() {
-    let optionalParams = this.$route.params.params;
-    let searchTerm = this.$route.query.term;
-    this.getPageData(optionalParams, searchTerm);
-    this.clearedSortQuery = '?';
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
@@ -203,62 +190,32 @@ export default {
         this.showFilters = false;
       }
     },
-    // Initially, AJAX request the search JSON endpoint and set results on component
-    getPageData(params = '', term = '') {
+    getPageData(params = '') {
       axios
-        .get(`/searchJson${params}?term=${term}`)
+        .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
         });
     },
     // Perform a search
     search() {
-      let searchParams = '';
-      const searchTerm = document.querySelector('[name=term]');
-      searchParams += `?term=${searchTerm.value}`;
-      axios
-        .get(`/searchJson${searchParams}`)
-        .then((response) => {
-          this.setVars(response);
-        });
-    },
-    // Expected querystring format: field_name:value
-    filter(queryString) {
-      let filterParams = '';
-      if (this.term != null) {
-        filterParams += `term=${this.term}&`;
+      let searchParams = {};
+      if (this.term) {
+        searchParams = { term: this.term };
       }
-      filterParams += queryString;
-      filterParams += this.currentQuery;
-      axios
-        .get(`/searchJson?${filterParams}`)
-        .then((response) => {
-          this.setVars(response);
-        });
+      this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } });
     },
-    // Sort the results
-    sort(queryString) {
-      axios
-        .get(`/searchJson${queryString}`)
-        .then((response) => {
-          this.setVars(response);
-        });
-    },
-    // Use whatever response current in the application to populate the page
+    // Set component data when a response is fetched.
     setVars(response) {
-      this.title = response.data.title;
-      this.pager = response.data.pager;
-      this.videos = response.data.videos;
-      this.facets = response.data.facets;
-      this.term = response.data.term;
-      this.clearPageQuery = response.data.clearedPageQuery;
-      this.clearedSortQuery = response.data.clearedSortQuery;
-      this.currentQuery = response.data.currentQuery;
-    },
-    // Extract year from date string
-    getYear(dateString) {
-      const date = new Date(dateString);
-      return date.getFullYear();
+      const data = response.data;
+      this.title = data.title;
+      this.pager = data.pager;
+      this.videos = data.videos;
+      this.facets = data.facets;
+      this.term = data.term;
+      this.clearPageQuery = data.clearedPageQuery;
+      this.clearedSortQuery = data.clearedSortQuery;
+      this.currentQuery = data.currentQuery;
     },
   },
 };

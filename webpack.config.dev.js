@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -7,9 +7,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': JSON.stringify(dotenv.config().parsed)
-    }),
+    new Dotenv(),
     new MiniCssExtractPlugin({
       filename: '../css/main.css',
       chunkFilename: '[id].css',
