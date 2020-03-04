@@ -76,6 +76,9 @@
             Date (DESC)
           </router-link>
         </div>
+        <div class="totals">
+          Showing 1-12 of {{ total }}
+        </div>
         <result-grid :videos="videos" />
         <div class="pager">
           <ul>
@@ -134,6 +137,8 @@ export default {
       clearPageQuery: null,
       clearedSortQuery: null,
       currentQuery: null,
+      total: null,
+      currentResultSet: null,
     };
   },
   computed: {
@@ -165,6 +170,9 @@ export default {
         this.getPageData(stringifyQuery(to.query));
       },
     },
+    pager() {
+      console.log('pager links has changed')
+    }
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);
@@ -204,6 +212,7 @@ export default {
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
+      this.total = data.total;
     },
   },
 };
