@@ -77,7 +77,7 @@
           </router-link>
         </div>
         <div class="totals">
-          {{ getPageTotals() }} of {{ total }}
+          Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ totals.total }}
         </div>
         <result-grid :videos="videos" />
         <div class="pager">
@@ -192,10 +192,15 @@ export default {
         });
     },
     getPageTotals() {
-      if (this.currentPage === 1) {
-        return `Showing 1 to ${this.currentResultEnd}`;
+      if (this.totals.totalPages === this.currentPage || this.totals.totalPages === 0) {
+        this.currentResultEnd = this.totals.total;
       } else {
-        return `Showing ${12 * (this.currentPage - 1) + 1} to ${this.currentResultEnd}`;
+        this.currentResultEnd = this.currentPage * 12;
+      }
+      if (this.currentPage === 1) {
+        this.currentResultStart = 1;
+      } else {
+        this.currentResultStart = 12 * (this.currentPage - 1) + 1;
       }
     },
     // Perform a search
@@ -217,13 +222,9 @@ export default {
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
-      this.total = data.totals.total;
-      this.currentPage = data.totals.currentPage;
-      if (data.totals.totalPages === this.currentPage || data.totals.totalPages === 0) {
-        this.currentResultEnd = data.totals.total;
-      } else {
-        this.currentResultEnd = this.currentPage * 12;
-      }
+      this.totals = data.totals;
+      this.currentPage = this.totals.currentPage;
+      this.getPageTotals();
     },
   },
 };
