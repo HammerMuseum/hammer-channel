@@ -49,8 +49,12 @@ export default {
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;
-      const qs = queryString.stringify(this.$route.query);
+      let qs = queryString.stringify(this.$route.query);
       const r = this.$route.query;
+      // If the query string contains pagination info, remove it
+      if (r['start']) {
+        qs = qs.replace(`start=${r['start']}`, '');
+      }
       // If the querystring contains the current facet, genearate a new one without it.
       if (r[key] && (r[key] === value || r[key].includes(value))) {
         const processed = qs.replace(param, '');
