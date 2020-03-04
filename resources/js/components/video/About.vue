@@ -36,7 +36,7 @@
     </div>
 
     <div class="video-meta__date-recorded">
-      Recorded: {{ new Date(date) | dateFormat('dddd, DD MMMM, YYYY') }}
+      Recorded: {{ new Date(date_recorded) | dateFormat('dddd, DD MMMM, YYYY') }}
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@
 export default {
   name: 'About',
   props: {
-    date: {
+    date_recorded: {
       type: String,
       default: '',
     },

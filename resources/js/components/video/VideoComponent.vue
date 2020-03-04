@@ -59,7 +59,7 @@
             <about
               v-show="activePanel === 'about'"
               :description="description"
-              :date="date"
+              :date_recorded="date_recorded"
               :people="speakers"
               :playlists="in_playlists"
               :current-panel="activePanel"
@@ -145,7 +145,7 @@
             <div class="video-description--mobile">
               <about
                 :description="description"
-                :date="date"
+                :date_recorded="date_recorded"
                 :people="speakers"
                 :playlists="in_playlists"
               />
@@ -217,7 +217,7 @@ export default {
       asset_id: null,
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
-      date: null,
+      date_recorded: null,
       description: null,
       in_playlists: null,
       speakers: null,
