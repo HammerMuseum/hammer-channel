@@ -41,6 +41,16 @@
   max-width: 300px;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.video__duration {
+  display: block;
+  position: absolute;
+  right: 0;
+  background: var(--background-secondary);
+  color: var(--body-bg);
+  z-index: 1;
 }
 
 .video__thumbnail > img {

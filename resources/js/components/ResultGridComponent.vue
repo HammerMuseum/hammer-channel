@@ -4,6 +4,7 @@
       v-for="video in videos"
       class="result-item"
     >
+      <span class="video__duration">{{ video['duration'] }}</span>
       <router-link
         :to="{name: 'video', params: {id: video.title_slug}}"
       >

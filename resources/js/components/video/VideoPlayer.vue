@@ -1,5 +1,6 @@
 <template>
   <div class="video-player-container vjs-hd">
+    <span class="video__duration">{{ duration }}</span>
     <video
       ref="videoPlayer"
       class="video-js video-player vjs-default-skin"
@@ -52,6 +53,12 @@ export default {
       type: Object,
       default() {
         return {};
+      },
+    },
+    duration: {
+      type: String,
+      default() {
+        return '';
       },
     },
   },
