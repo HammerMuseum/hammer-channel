@@ -76,6 +76,9 @@
             Date (DESC)
           </router-link>
         </div>
+        <div class="totals">
+          Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
+        </div>
         <result-grid :videos="videos" />
         <div class="pager">
           <ul>
@@ -134,6 +137,10 @@ export default {
       clearPageQuery: null,
       clearedSortQuery: null,
       currentQuery: null,
+      totalsInfo: null,
+      total: null,
+      currentResultStart: null,
+      currentResultEnd: null,
     };
   },
   computed: {
@@ -164,7 +171,7 @@ export default {
       handler(to, from) {
         this.getPageData(stringifyQuery(to.query));
       },
-    },
+    }
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);
@@ -185,6 +192,18 @@ export default {
           this.setVars(response);
         });
     },
+    getPageTotals() {
+      if (this.totalsInfo.totalPages === this.currentPage || this.totalsInfo.totalPages === 0) {
+        this.currentResultEnd = this.total;
+      } else {
+        this.currentResultEnd = this.currentPage * 12;
+      }
+      if (this.currentPage === 1) {
+        this.currentResultStart = 1;
+      } else {
+        this.currentResultStart = 12 * (this.currentPage - 1) + 1;
+      }
+    },
     // Perform a search
     search() {
       let searchParams = {};
@@ -204,6 +223,10 @@ export default {
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
+      this.totalsInfo = data.totals;
+      this.total = data.totals.total;
+      this.currentPage = this.totalsInfo.currentPage;
+      this.getPageTotals();
     },
   },
 };

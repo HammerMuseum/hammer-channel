@@ -102,7 +102,8 @@ class SearchController extends Controller
             'currentQuery' => $originalQuery,
             'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
-            'show_clear' => true
+            'show_clear' => true,
+            'totals' => isset($data['pages']) ? $data['pages'] : [],
         ];
     }
 }
