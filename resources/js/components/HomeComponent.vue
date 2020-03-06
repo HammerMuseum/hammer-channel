@@ -70,8 +70,6 @@
           </template>
         </VueSlickCarousel>
       </div>
-    </div>
-
     <div
       v-for="(topic, topic_name) in topics"
       :id="stripChars(topic_name)"
