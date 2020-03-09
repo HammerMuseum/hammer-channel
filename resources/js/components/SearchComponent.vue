@@ -160,24 +160,16 @@ export default {
   },
   watch: {
     $route: {
-      // immediate: true,
       handler(to, from) {
-        let oldQuery = from.query.term;
-        let newQuery = to.query.term;
+        const oldQuery = from.query.term;
+        const newQuery = to.query.term;
         if (oldQuery !== newQuery) {
           this.term = newQuery;
-          // this.getPageData('', this.term)
         }
         this.getPageData(stringifyQuery(to.query));
       },
-    }
+    },
   },
-  // mounted() {
-  //   // let optionalParams = this.$route.params.params;
-  //   // let searchTerm = this.$route.query.term;
-  //   // this.getPageData(optionalParams, searchTerm);
-  //   // this.clearedSortQuery = '?';
-  // },
   mounted() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
