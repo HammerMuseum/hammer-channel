@@ -54,8 +54,11 @@
               <div class="featured-video__thumbnail">
                 <img :src="video['thumbnail_url']">
                 <div class="video__info">
-                  <span class="video__info-title">{{ video['title'] }}</span>
+                  <span class="video__info-title">{{ getTitle(video) }}</span>
                   <div class="video__info-teaser">
+                    <div class="video__info-subtitle">
+                      {{ getTitle(video, true) }}
+                    </div>
                     {{ video['description'].substr(0, 200) }}
                   </div>
                 </div>
@@ -218,6 +221,15 @@ export default {
       const strippedTopic = topic.replace(' & ', '');
       return strippedTopic.replace(' ', '');
     },
+    getTitle(metadata, subtitle = false) {
+      if (subtitle && metadata['quote'] === '') {
+        return '';
+      }
+      if (metadata['quote'] !== '' && !subtitle) {
+        return `"${metadata['quote']}"`;
+      }
+      return metadata['title'];
+    }
   },
 };
 </script>
