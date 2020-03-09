@@ -33,7 +33,6 @@ section {
 
 html,
 body {
-  height: 100vh;
   margin: 0;
   font-family: 'lft-etica', sans-serif;
   font-style: normal;
@@ -53,18 +52,6 @@ h4 {
 
 a {
   transition: 0.2s all;
-}
-
-.main {
-  height: 100%;
-  max-width: 1300px;
-  margin: 0 auto;
-}
-
-.header {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 1rem 0;
 }
 
 ul,
@@ -88,4 +75,13 @@ p {
 
 .nav-item {
   padding: 1rem 1rem 1rem 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
 }
