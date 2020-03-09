@@ -88,7 +88,7 @@
             >
               <router-link
                 v-if="item"
-                :to="{ name: 'search', query: { ...$route.query, ...{ start: item.split('=').pop() } } }"
+                :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
               >
                 {{ label | capitalize }}
               </router-link>
@@ -198,7 +198,7 @@ export default {
       } else {
         this.currentResultEnd = this.currentPage * 12;
       }
-      if (this.currentPage === 1) {
+      if (this.currentPage === 0) {
         this.currentResultStart = 1;
       } else {
         this.currentResultStart = 12 * (this.currentPage - 1) + 1;
