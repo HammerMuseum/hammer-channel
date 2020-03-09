@@ -130,6 +130,7 @@
         <div class="panel--right">
           <video-player
             dusk="video-player-component"
+            :duration="duration"
             :options="videoOptions"
             :title="title"
             :track="track"
@@ -219,6 +220,7 @@ export default {
       datastore: process.env.MIX_DATASTORE_URL,
       date_recorded: null,
       description: null,
+      duration: null,
       in_playlists: null,
       speakers: null,
       thumbnailUrl: null,
