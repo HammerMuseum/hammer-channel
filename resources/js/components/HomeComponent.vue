@@ -90,7 +90,7 @@
           </div>
         </template>
         <div
-          v-for="video in topic"
+          v-for="video in topic['videos']"
           class="video"
         >
           <router-link
@@ -111,7 +111,7 @@
               class="topic-link"
               :to="{name: 'search', query: {topics: topic_name}}"
             >
-              See all videos tagged
+              See all {{ topic['count'] }} videos tagged
               <span class="topic-name">{{ topic_name }}</span>
             </router-link>
           </div>
