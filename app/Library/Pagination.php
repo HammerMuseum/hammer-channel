@@ -31,7 +31,8 @@ class Pagination
     /**
      * Clear unwanted sorting parameters
      *
-     * @param $params
+     * @param array $params
+     * @param array $keys
      * @return mixed
      */
     public function clearParams($params, $keys = [])

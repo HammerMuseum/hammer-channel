@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import queryString from 'query-string';
+import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
   name: 'SearchFacet',
@@ -49,14 +49,18 @@ export default {
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;
-      const qs = queryString.stringify(this.$route.query);
+      let qs = stringifyQuery(this.$route.query);
       const r = this.$route.query;
+      // If the query string contains pagination info, remove it
+      if (r['page']) {
+        qs = qs.replace(`page=${r['page']}`, '');
+      }
       // If the querystring contains the current facet, genearate a new one without it.
       if (r[key] && (r[key] === value || r[key].includes(value))) {
         const processed = qs.replace(param, '');
         return processed;
       }
-      return qs === '' ? `${qs}${key}=${value}` : `${qs}&${key}=${value}`;
+      return qs === '' ? `${qs}${param}` : `${qs}&${param}`;
     },
     isActive(value) {
       return this.activeFacets && this.activeFacets.includes(value);
