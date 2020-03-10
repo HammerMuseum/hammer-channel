@@ -18,7 +18,7 @@
     <div class="topics">
       <ul class="topics__list">
         <li
-          v-for="(videos, topic) in topics"
+          v-for="(items, topic) in topics"
           :key="topic"
           class="topics__list-item"
         >
@@ -48,6 +48,7 @@
           </template>
           <div
             v-for="video in featured"
+            :key="video.id"
             class="video"
           >
             <router-link
@@ -70,61 +71,62 @@
           </template>
         </VueSlickCarousel>
       </div>
-    <div
-      v-for="(topic, topic_name) in topics"
-      :id="stripChars(topic_name)"
-      :key="topic_name"
-      :class="`topic`"
-    >
-      <h2 class="topic__name">
-        {{ topic_name }}
-      </h2>
-      <VueSlickCarousel
-        v-bind="settings"
-        :arrows="true"
+      <div
+        v-for="(topic, topic_name) in topics"
+        :id="stripChars(topic_name)"
+        :key="topic_name"
+        :class="`topic`"
       >
-        <!-- Custom arrow -->
-        <template #prevArrow="arrowOption">
-          <div class="videos__navigation">
-            {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-          </div>
-        </template>
-        <div
-          v-for="video in topic"
-          class="video"
+        <h2 class="topic__name">
+          {{ topic_name }}
+        </h2>
+        <VueSlickCarousel
+          v-bind="settings"
+          :arrows="true"
         >
-          <router-link
-            :to="{name: 'video', params: {id: video._source['title_slug']}}"
-          >
-            <div class="video__thumbnail">
-              <span class="video__duration">{{ video._source['duration'] }}</span>
-              <img :src="video._source['thumbnail_url']">
-              <div class="video__title">
-                <span>{{ video._source['title'] }}</span>
-              </div>
+          <!-- Custom arrow -->
+          <template #prevArrow="arrowOption">
+            <div class="videos__navigation">
+              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
             </div>
-          </router-link>
-        </div>
-        <div class="video topic__see-all">
-          <div class="video__thumbnail">
+          </template>
+          <div
+            v-for="video in topic['videos']"
+            :key="video.id"
+            class="video"
+          >
             <router-link
-              class="topic-link"
-              :to="{name: 'search', query: {topics: topic_name}}"
+              :to="{name: 'video', params: {id: video._source['title_slug']}}"
             >
-              See all videos tagged
-              <span class="topic-name">{{ topic_name }}</span>
+              <div class="video__thumbnail">
+                <span class="video__duration">{{ video._source['duration'] }}</span>
+                <img :src="video._source['thumbnail_url']">
+                <div class="video__title">
+                  <span>{{ video._source['title'] }}</span>
+                </div>
+              </div>
             </router-link>
           </div>
-        </div>
-        <!-- Custom arrow -->
-        <template #nextArrow="arrowOption">
-          <div class="videos__navigation">
-            {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
+          <div class="video topic__see-all">
+            <div class="video__thumbnail">
+              <router-link
+                class="topic-link"
+                :to="{name: 'search', query: {topics: topic_name}}"
+              >
+                See all {{ topic['count'] }} videos tagged
+                <span class="topic-name">{{ topic_name }}</span>
+              </router-link>
+            </div>
           </div>
-        </template>
-      </VueSlickCarousel>
+          <!-- Custom arrow -->
+          <template #nextArrow="arrowOption">
+            <div class="videos__navigation">
+              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
+            </div>
+          </template>
+        </VueSlickCarousel>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
