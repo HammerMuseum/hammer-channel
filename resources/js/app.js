@@ -1,17 +1,12 @@
+// TODO: Is there a way we can use the runtime only build?
+import './bootstrap';
 import Vue from 'vue';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import router from './router';
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-require('./bootstrap');
-
 // Move into Video player?
-require('videojs-overlay');
-require('video.js');
+import 'videojs-overlay';
+import 'video.js';
 
 window.VIDEOJS_NO_BASE_THEME = true;
 

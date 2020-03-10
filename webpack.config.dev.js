@@ -19,6 +19,9 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
   ],
+  resolve: {
+    alias: {vue: 'vue/dist/vue.js'}
+  },
   devtool: 'source-map',
   entry: {
     entry: path.resolve(__dirname, 'entry.js'),
