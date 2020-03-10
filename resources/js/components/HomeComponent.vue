@@ -33,12 +33,10 @@
         id="featured"
         class="topic"
       >
-        <h2 class="topic__name">
-          Featured
-        </h2>
         <VueSlickCarousel
-          v-bind="settings"
+          v-bind="featuredSettings"
           :arrows="true"
+          class="featured-carousel"
         >
           <!-- Custom arrow -->
           <template #prevArrow="arrowOption">
@@ -49,16 +47,22 @@
           <div
             v-for="video in featured"
             :key="video.id"
-            class="video"
+            class="video featured-video"
           >
             <router-link
               :to="{name: 'video', params: {id: video['title_slug']}}"
             >
-              <div class="video__thumbnail">
+              <div class="featured-video__thumbnail">
                 <span class="video__duration">{{ video['duration'] }}</span>
                 <img :src="video['thumbnail_url']">
-                <div class="video__title">
-                  <span>{{ video['title'] }}</span>
+                <div class="video__info">
+                  <span class="video__info-title">{{ getTitle(video) }}</span>
+                  <div class="video__info-teaser">
+                    <div class="video__info-subtitle">
+                      {{ getTitle(video, true) }}
+                    </div>
+                    {{ video['description'].substr(0, 200) }}
+                  </div>
                 </div>
               </div>
             </router-link>
@@ -77,7 +81,7 @@
         :key="topic_name"
         :class="`topic`"
       >
-        <h2 class="topic__name">
+        <h2 class="topic__name video-meta__title">
           {{ topic_name }}
         </h2>
         <VueSlickCarousel
@@ -148,21 +152,28 @@ export default {
       pager: null,
       topics: null,
       featured: false,
+      featuredSettings: {
+        edgeFriction: 0.35,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
       settings: {
-        slidesToShow: 3.5,
+        slidesToShow: 2.5,
         infinite: false,
         touchThreshold: 5,
         responsive: [
           {
             breakpoint: 1200,
             settings: {
-              slidesToShow: 3,
+              slidesToShow: 2.5,
             },
           },
           {
             breakpoint: 965,
             settings: {
-              slidesToShow: 2.5,
+              slidesToShow: 2,
             },
           },
           {
@@ -213,6 +224,15 @@ export default {
     stripChars(topic) {
       const strippedTopic = topic.replace(' & ', '');
       return strippedTopic.replace(' ', '');
+    },
+    getTitle(metadata, subtitle = false) {
+      if (subtitle && metadata.quote === '') {
+        return '';
+      }
+      if (metadata.quote !== '' && !subtitle) {
+        return `"${metadata.quote}"`;
+      }
+      return metadata.title;
     },
   },
 };
