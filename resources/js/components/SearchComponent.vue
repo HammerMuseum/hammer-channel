@@ -38,7 +38,13 @@
         </div>
       </div>
     </div>
-    <div class="search__area">
+    <div class="search__area" v-if="noResults">
+    <div class="no-results">
+      <span class="label">
+        There are no results that match your criteria.</span>
+    </div>
+    </div>
+    <div class="search__area"  v-if="!noResults">
       <button
         class="filters__toggle"
         @click="showFilters = !showFilters"
@@ -88,7 +94,7 @@
             >
               <router-link
                 v-if="item"
-                :to="{ name: 'search', query: { ...$route.query, ...{ start: item.split('=').pop() } } }"
+                :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
               >
                 {{ label | capitalize }}
               </router-link>
@@ -141,6 +147,7 @@ export default {
       total: null,
       currentResultStart: null,
       currentResultEnd: null,
+      noResults: false,
     };
   },
   computed: {
@@ -171,6 +178,9 @@ export default {
       handler(to, from) {
         this.getPageData(stringifyQuery(to.query));
       },
+    },
+    videos(value) {
+      this.noResults = (value.length === 0);
     }
   },
   mounted() {
@@ -198,7 +208,7 @@ export default {
       } else {
         this.currentResultEnd = this.currentPage * 12;
       }
-      if (this.currentPage === 1) {
+      if (this.currentPage === 0) {
         this.currentResultStart = 1;
       } else {
         this.currentResultStart = 12 * (this.currentPage - 1) + 1;
