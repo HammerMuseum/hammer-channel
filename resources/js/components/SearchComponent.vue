@@ -38,7 +38,13 @@
         </div>
       </div>
     </div>
-    <div class="search__area">
+    <div class="search__area" v-if="noResults">
+    <div class="no-results">
+      <span class="label">
+        There are no results that match your criteria.</span>
+    </div>
+    </div>
+    <div class="search__area"  v-if="!noResults">
       <button
         class="filters__toggle"
         @click="showFilters = !showFilters"
@@ -141,6 +147,7 @@ export default {
       total: null,
       currentResultStart: null,
       currentResultEnd: null,
+      noResults: false,
     };
   },
   computed: {
@@ -171,6 +178,9 @@ export default {
       handler(to, from) {
         this.getPageData(stringifyQuery(to.query));
       },
+    },
+    videos(value) {
+      this.noResults = (value.length === 0);
     }
   },
   mounted() {
