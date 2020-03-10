@@ -71,7 +71,8 @@ class ListingController extends Controller
         $topics = [];
         if (isset($data['aggregations']) && isset($data['aggregations']['topics'])) {
             foreach ($data['aggregations']['topics']['buckets'] as $topic) {
-                $topics[$topic['key']] = $topic['by_topic']['hits']['hits'];
+                $topics[$topic['key']]['videos'] = $topic['by_topic']['hits']['hits'];
+                $topics[$topic['key']]['count'] = $topic['doc_count'];
             }
         }
         return [
