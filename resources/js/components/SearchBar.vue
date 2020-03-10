@@ -1,11 +1,13 @@
 <template>
   <focus-trap
     :active="searchActive"
+    :escape-deactivates="false"
   >
     <transition name="slide-down">
       <div
         v-if="searchActive"
         :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchActive }"
+        @keyup.escape="toggleSearchActive"
       >
         <div
           class="search-bar"
