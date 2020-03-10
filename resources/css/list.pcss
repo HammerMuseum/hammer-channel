@@ -79,6 +79,16 @@
 .video__thumbnail {
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.video__duration {
+  display: block;
+  position: absolute;
+  right: 0;
+  background: var(--background-secondary);
+  color: var(--body-bg);
+  z-index: 1;
   width: 100%;
 }
 
@@ -123,4 +133,21 @@
   color: white;
   transition: all 0.5s ease;
   background: black;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 500px;
+  width: 100%;
+  padding: 70px 48px;
+  text-align: center;
+  background-color: #efeff1;
+  border-top: 0;
+}
+
+.no-results.label {
+  font-weight: 600;
+  font-size: 18px;
 }

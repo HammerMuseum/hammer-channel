@@ -52,6 +52,7 @@
               :to="{name: 'video', params: {id: video['title_slug']}}"
             >
               <div class="featured-video__thumbnail">
+                <span class="video__duration">{{ video['duration'] }}</span>
                 <img :src="video['thumbnail_url']">
                 <div class="video__info">
                   <span class="video__info-title">{{ getTitle(video) }}</span>
@@ -100,6 +101,7 @@
             :to="{name: 'video', params: {id: video._source['title_slug']}}"
           >
             <div class="video__thumbnail">
+              <span class="video__duration">{{ video._source['duration'] }}</span>
               <img :src="video._source['thumbnail_url']">
               <div class="video__title">
                 <span>{{ video._source['title'] }}</span>
