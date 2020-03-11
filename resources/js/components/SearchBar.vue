@@ -74,10 +74,10 @@ export default {
   data() {
     return {
       searchLinks: [
-        { name: 'Art', query: { tag: 'Art' } },
-        { name: 'Social Justice', query: { topic: 'Social Justice' } },
-        { name: 'Los Angeles', query: { tag: 'Los Angeles' } },
-        { name: 'Poetry', query: { topic: 'Poetry' } },
+        { name: 'Art', query: { tags: 'Art' } },
+        { name: 'Social Justice', query: { topics: 'Social Justice' } },
+        { name: 'Los Angeles', query: { tags: 'Los Angeles' } },
+        { name: 'Poetry', query: { topics: 'Poetry' } },
       ],
     };
   },
