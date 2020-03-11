@@ -28,8 +28,6 @@ Developer notes:
 - Links tend to be shortened by twitter et al so we can try this first without shortening the links ourselves.
 - There should be default meta tags and an image to use when non video pages are shared.
 
-Make sure this is tested on the portable telephones when sharing to the instant messaging services like "what's up".
-
 ---
 - Can I share a video page?
 - Is there a sharable link?
