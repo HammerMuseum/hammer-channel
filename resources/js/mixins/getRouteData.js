@@ -9,9 +9,8 @@ const getData = function (to) {
         axios.get(`/api${to.path}`).then(({ data }) => {
           resolve(data);
         });
-      }
-      else {
-        axios.get(`/api${ to.path }`, {params: to.query}).then(({ data }) => {
+      } else {
+        axios.get(`/api${to.path}`, { params: to.query }).then(({ data }) => {
           resolve(data);
         });
       }
