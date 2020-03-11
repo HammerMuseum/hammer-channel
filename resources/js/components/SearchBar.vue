@@ -35,7 +35,10 @@
               <router-link
                 class="link link--text"
                 :to="{ name: 'search' }"
-              >show me everything</router-link>
+                @click.native="toggleSearchActive"
+              >
+                show me everything
+              </router-link>
             </div>
             <div class="search-bar__option">
               <span class="search-bar__option-label">or try</span>
@@ -45,6 +48,7 @@
                   :key="item.id"
                   class="link link--text"
                   :to="{ name: 'search', query: item.query }"
+                  @click.native="toggleSearchActive"
                 >
                   {{ item.name }}
                 </router-link>
