@@ -38,13 +38,22 @@ Website password
 
 ## Test Plan
 
+**Cross browser**
 * Go to <https://dev.video.hammer.cogapp.com>
 * Is there a search icon in the top right hand corner of the page?
 * When you click the icon, does a "search box overlay" appear?
+* When you click the icon again, does a "search box overlay" hide?
+* Click the icon to open the search overlay again.
 * Enter the term "politics" into the box and press enter.
 * Does the search overlay hide from view?
 * Does it take you to a search results page? (url should be /search?term=politics)
-* Now using keyboard navigation
+
+* Go to <https://dev.video.hammer.cogapp.com>
+* Open the icon to open the search overlay.
+* Click on one of the suggested searches.
+* Does it take you to a search results page with the filter for the term that you clicked on already applied?
+
+**Now using keyboard navigation on desktop**
 * Can you select the search icon in the right hand corner using the tab key?
 * Can you activate the search overlay using the enter key?
 * Can you now tab through all the elements in the search overlay?
