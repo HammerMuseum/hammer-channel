@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api;
 use App\Library\Pagination;
+use App\Library\Metadata;
 use Illuminate\Http\Request;
 
 /**
@@ -18,17 +19,23 @@ class ListingController extends Controller
     /** @var Pagination */
     protected $pagination;
 
+    /** @var Metadata */
+    protected $metadata;
+
     /**
      * ListingController constructor.
      * @param Api $api
      * @param Pagination $pagination
+     * @param Metadata $metadata
      */
     public function __construct(
         Api $api,
-        Pagination $pagination
+        Pagination $pagination,
+        Metadata $metadata
     ) {
         $this->api = $api;
         $this->pagination = $pagination;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -43,7 +50,8 @@ class ListingController extends Controller
         $videos = $this->api->request('term', 'term=all');
         $playlists = $this->api->request('playlist', 'term=all');
         return view('app', [
-            'state' => $this->getAppState($videos, $params)
+            'state' => $this->getAppState($videos, $params),
+            'metadata' => $this->getMetadata($videos)
         ]);
     }
 
@@ -86,6 +94,11 @@ class ListingController extends Controller
             'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
         ];
+    }
+
+    public function getMetadata($data)
+    {
+        return $this->metadata->getMetadata($data);
     }
 
     /**

@@ -114,5 +114,11 @@ Install the Vue Social Sharing plugin: https://github.com/nicolasbeauvais/vue-so
               <i class="fa fa-facebook"></i> Facebook
             </network>
           </div>
+          
+### Clips
+For previewing clips on Twitter etc.
+* A controller for clip preview
+* An HTML template for the video, populated by the controller
+* Some JS that sets the length using the video JS range slider plugin.
 
 ## Documentation required
