@@ -1,4 +1,7 @@
 {
+  "browserslist": [
+    "defaults"
+  ],
   "private": true,
   "scripts": {
     "lint:css": "stylelint \"resorces/css/**/*.css\"",
