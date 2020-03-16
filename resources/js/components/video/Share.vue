@@ -3,30 +3,36 @@
     <social-sharing :url="`${siteUrl}${fullPath}`"
       :title="title"
       :description="description"
-      :quote="description"
+      quote="Watch this on the Hammer Video Archive"
       twitter-user="hammer_museum"
       inline-template>
 
-        <div>
+      <!-- These icons come from font awesome and need attribution -->
+
+        <div class="share-buttons">
           <network network="email">
-            <span class="fa fa-envelope share-button"></span> Send by Email
+            <span class="fa fa-envelope share-button"></span>
+            <img class="share-buttons__icon" src="/assets/images/icons/envelope.svg">
           </network>
           <network network="facebook">
-            <span class="fa fa-facebook share-button"></span> Share on Facebook
+            <span class="fa fa-facebook share-button"></span>
+            <img class="share-buttons__icon" src="/assets/images/icons/facebook.svg">
           </network>
           <network network="twitter">
-            <span class="fa fa-twitter share-button"></span> Share on Twitter
+            <span class="fa fa-twitter share-button"></span>
+            <img class="share-buttons__icon" src="/assets/images/icons/twitter.svg">
           </network>
           <network network="whatsapp">
-            <span class="fa fa-whatsapp share-button"></span> Share via Whatsapp
+            <span class="fa fa-whatsapp share-button"></span>
+            <img class="share-buttons__icon" src="/assets/images/icons/whatsapp-brands.svg">
           </network>
         </div>
     </social-sharing>
     <div class="citation">
-      <label for="citation">Cite this</label>
-      <textarea name="citation" id="citation" class="citation">"{{ title }}", Hammer Museum Video Archive, {{ new Date(date_recorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{siteUrl}}{{fullPath}}
+      <label for="citation" class="citation__label">Cite this</label>
+      <textarea name="citation" id="citation" class="citation__content">"{{ title }}", Hammer Museum Video Archive, recorded {{ new Date(date_recorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{siteUrl}}{{fullPath}}
       </textarea>
-      <button class="copy-citation" @click="copyCitation">Copy to clipboard</button>
+      <button class="citation__copy" @click="copyCitation">Copy to clipboard</button>
     </div>
   </div>
 </template>

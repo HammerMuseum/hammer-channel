@@ -2,12 +2,11 @@
 import Vue from 'vue/dist/vue.esm';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueRouter from 'vue-router';
-
+import SocialSharing from 'vue-social-sharing';
 import Home from './components/HomeComponent.vue';
 import Search from './components/SearchComponent.vue';
 import NotFoundComponent from './components/NotFoundComponent.vue';
 import VideoComponent from './components/video/VideoComponent.vue';
-import SocialSharing from 'vue-social-sharing';
 
 /**
  * First we will load all of this project's JavaScript dependencies which

@@ -72,6 +72,10 @@ class VideoController extends Controller
         return $flatData;
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     public function getMetadata($data)
     {
         return $this->metadata->getMetadata($data['data'][0]);
