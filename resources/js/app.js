@@ -2,8 +2,8 @@
 import './bootstrap';
 import Vue from 'vue';
 import VueFilterDateFormat from 'vue-filter-date-format';
-import router from './router';
 import SocialSharing from 'vue-social-sharing';
+import router from './router';
 
 // Move into Video player?
 import 'videojs-overlay';
@@ -29,4 +29,3 @@ const app = new Vue({ // eslint-disable-line
   el: '#main-content',
   router,
 });
-
