@@ -192,11 +192,14 @@ export default {
   },
   watch: {
     $route: {
+      immediate: true,
       handler(to, from) {
-        const oldQuery = from.query.term;
-        const newQuery = to.query.term;
-        if (oldQuery !== newQuery) {
-          this.term = newQuery;
+        if (from) {
+          const oldQuery = from.query.term;
+          const newQuery = to.query.term;
+          if (oldQuery !== newQuery) {
+            this.term = newQuery;
+          }
         }
         this.getPageData(stringifyQuery(to.query));
       },
