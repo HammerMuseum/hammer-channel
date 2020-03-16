@@ -61,7 +61,7 @@
     data() {
       return {
         fullPath: this.$route.path,
-        siteUrl: 'http://hv.docker.localhost:8001'
+        siteUrl: process.env.MIX_APP_URL
       }
     },
     methods: {
