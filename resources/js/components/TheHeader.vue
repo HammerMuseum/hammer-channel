@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-container">
     <div class="header">
       <div class="header__logo">
         <a
@@ -80,6 +80,7 @@ img {
   display: none;
   position: absolute;
   left: 0;
+  top: 0;
   width: 138px;
   z-index: 0;
 }
