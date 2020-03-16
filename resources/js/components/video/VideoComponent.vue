@@ -75,7 +75,14 @@
               class="close-button"
               @click="toggleActivePanel($event, activePanel);"
             >Close</span>
-            Share this item
+            <share
+              v-show="activePanel === 'share'"
+              :current-panel="activePanel"
+              :description="description"
+              :title="title"
+              :title_slug="title_slug"
+              :date_recorded="date_recorded"
+            />
           </div>
 
           <div
@@ -200,6 +207,7 @@ import About from './About.vue';
 import ClippingTool from './ClippingTool.vue';
 import Transcript from '../Transcript.vue';
 import UseThis from './UseThis.vue';
+import Share from './Share.vue';
 import VideoPlayer from './VideoPlayer.vue';
 
 export default {
@@ -210,6 +218,7 @@ export default {
     VideoPlayer,
     UseThis,
     ClippingTool,
+    Share
   },
   mixins: [getRouteData],
   data() {
@@ -226,6 +235,7 @@ export default {
       thumbnailUrl: null,
       timecode: 0,
       title: null,
+      title_slug: null,
       track: null,
       transcription: null,
       transcriptItems: [],

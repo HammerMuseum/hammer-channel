@@ -119,4 +119,7 @@ For previewing clips on Twitter etc.
 * An HTML template for the video, populated by the controller
 * Some JS that sets the length using the video JS range slider plugin.
 
+### Cite button
+* Follow citation guidelines: https://libguides.csuchico.edu/c.php?g=414275&p=2823092
+* A copyable textarea containing the text for citation
 ## Documentation required

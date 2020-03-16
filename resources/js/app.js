@@ -7,6 +7,7 @@ import Home from './components/HomeComponent.vue';
 import Search from './components/SearchComponent.vue';
 import NotFoundComponent from './components/NotFoundComponent.vue';
 import VideoComponent from './components/video/VideoComponent.vue';
+import SocialSharing from 'vue-social-sharing';
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -16,6 +17,7 @@ import VideoComponent from './components/video/VideoComponent.vue';
 require('./bootstrap');
 require('videojs-overlay');
 require('video.js');
+require('vue-social-sharing');
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
@@ -51,6 +53,7 @@ const router = new VueRouter({
 
 Vue.use(VueFilterDateFormat);
 Vue.use(VueRouter);
+Vue.use(SocialSharing);
 
 const app = new Vue({ // eslint-disable-line
   el: '#main-content',
