@@ -1,31 +1,10 @@
 <template>
   <div class="listing">
-    <ul class="nav-list">
-      <li class="nav-item">
-        <router-link :to="{name: 'app'}">
-          Home
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link :to="{name: 'search'}">
-          Search
-        </router-link>
-      </li>
-    </ul>
     <h1 class="title">
       {{ title }}
     </h1>
-    <div class="topics">
-      <ul class="topics__list">
-        <li
-          v-for="(items, topic) in topics"
-          :key="topic"
-          class="topics__list-item"
-        >
-          <a :href="`#${stripChars(topic)}`">{{ topic }}</a>
-        </li>
-      </ul>
-    </div>
+
+    <NavigationBar :items="topics" />
 
     <div class="videos">
       <div
@@ -77,7 +56,7 @@
       </div>
       <div
         v-for="(topic, topic_name) in topics"
-        :id="stripChars(topic_name)"
+        :id="topic_name | filterId"
         :key="topic_name"
         :class="`topic`"
       >
@@ -143,6 +122,11 @@ export default {
   name: 'Home',
   components: {
     VueSlickCarousel,
+  },
+  filters: {
+    filterId(value) {
+      return value.replace(/[\s&]/gi, '').toLowerCase();
+    },
   },
   mixins: [mixin],
   data() {
