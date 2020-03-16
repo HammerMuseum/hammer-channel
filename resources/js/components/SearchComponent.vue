@@ -38,13 +38,19 @@
         </div>
       </div>
     </div>
-    <div class="search__area" v-if="noResults">
-    <div class="no-results">
-      <span class="label">
-        There are no results that match your criteria.</span>
+    <div
+      v-if="noResults"
+      class="search__area"
+    >
+      <div class="no-results">
+        <span class="label">
+          There are no results that match your criteria.</span>
+      </div>
     </div>
-    </div>
-    <div class="search__area"  v-if="!noResults">
+    <div
+      v-if="!noResults"
+      class="search__area"
+    >
       <button
         class="filters__toggle"
         @click="showFilters = !showFilters"
@@ -72,12 +78,24 @@
         <div class="facets__sort">
           <span class="facet__label">Order by</span>
           <router-link
-            :to="{ name: 'search', query: { ...$route.query, ...{ sort: 'date_recorded', order: 'asc' } } }"
+            :to="{
+              name: 'search',
+              query: {
+                ...$route.query,
+                ...{ sort: 'date_recorded', order: 'asc' }
+              }
+            }"
           >
             Date (ASC)
           </router-link>
           <router-link
-            :to="{ name: 'search', query: { ...$route.query, ...{ sort: 'date_recorded', order: 'desc' } } }"
+            :to="{
+              name: 'search',
+              query: {
+                ...$route.query,
+                ...{ sort: 'date_recorded', order: 'desc' }
+              }
+            }"
           >
             Date (DESC)
           </router-link>
@@ -176,12 +194,19 @@ export default {
     $route: {
       immediate: true,
       handler(to, from) {
+        if (from) {
+          const oldQuery = from.query.term;
+          const newQuery = to.query.term;
+          if (oldQuery !== newQuery) {
+            this.term = newQuery;
+          }
+        }
         this.getPageData(stringifyQuery(to.query));
       },
     },
     videos(value) {
       this.noResults = (value.length === 0);
-    }
+    },
   },
   mounted() {
     window.addEventListener('resize', this.handleResize);

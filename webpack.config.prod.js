@@ -20,6 +20,9 @@ module.exports = {
     new VueLoaderPlugin(),
   ],
   devtool: false,
+  resolve: {
+    alias: {vue: 'vue/dist/vue.js'}
+  },
   entry: {
     entry: path.resolve(__dirname, 'entry.js'),
   },

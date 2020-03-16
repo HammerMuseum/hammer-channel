@@ -1,4 +1,7 @@
 {
+  "browserslist": [
+    "defaults"
+  ],
   "private": true,
   "scripts": {
     "lint:css": "stylelint \"resorces/css/**/*.css\"",
@@ -23,7 +26,7 @@
     "eslint-config-airbnb": "^18.0.1",
     "eslint-loader": "^3.0.3",
     "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-vue": "^6.0.1",
+    "eslint-plugin-vue": "^6.2.2",
     "file-loader": "^5.0.2",
     "laravel-mix-postcss-config": "^1.0.2",
     "mini-css-extract-plugin": "^0.8.0",
@@ -53,6 +56,7 @@
     "cross-env": "^5.1",
     "dotenv": "^8.2.0",
     "file-saver": "^2.0.2",
+    "focus-trap-vue": "0.0.6",
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.13",
