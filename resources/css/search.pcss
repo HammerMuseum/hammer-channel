@@ -23,15 +23,15 @@
 .search-overlay-toggle {
   position: absolute;
   right: 1rem;
-  top: 1rem;
+  top: 10px;
   border: 0;
   cursor: pointer;
   border-radius: 0;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-image: url(/assets/images/icons/search.png);
   background-repeat: no-repeat;
-  background-position: 2px 50%;
+  background-position: 50% 50%;
   text-indent: -5000px;
   overflow: hidden;
   background-color: #fff;
@@ -115,6 +115,14 @@
   appearance: none;
   -webkit-appearance: none;
   background: var(--search-overlay-background);
+}
+
+@media screen and (min-width: 600px) {
+  .search-overlay-toggle {
+    top: 14px;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 @media screen and (min-width: 1024px) {
