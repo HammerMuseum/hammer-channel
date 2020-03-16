@@ -1,9 +1,5 @@
 <template>
   <div class="listing">
-    <h1 class="title">
-      {{ title }}
-    </h1>
-
     <NavigationBar :items="topics" />
 
     <div class="videos">
@@ -12,7 +8,7 @@
         id="featured"
         class="topic"
       >
-        <VueSlickCarousel
+        <vue-slick-carousel
           v-bind="featuredSettings"
           :arrows="true"
           class="featured-carousel"
@@ -26,25 +22,9 @@
           <div
             v-for="video in featured"
             :key="video.id"
-            class="video featured-video"
+            class="video video--featured"
           >
-            <router-link
-              :to="{name: 'video', params: {id: video['title_slug']}}"
-            >
-              <div class="featured-video__thumbnail">
-                <span class="video__duration">{{ video['duration'] }}</span>
-                <img :src="video['thumbnail_url']">
-                <div class="video__info">
-                  <span class="video__info-title">{{ getTitle(video) }}</span>
-                  <div class="video__info-teaser">
-                    <div class="video__info-subtitle">
-                      {{ getTitle(video, true) }}
-                    </div>
-                    {{ video['description'].substr(0, 200) }}
-                  </div>
-                </div>
-              </div>
-            </router-link>
+            <featured-carousel-slide :item="video" />
           </div>
           <!-- Custom arrow -->
           <template #nextArrow="arrowOption">
@@ -52,7 +32,7 @@
               {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
             </div>
           </template>
-        </VueSlickCarousel>
+        </vue-slick-carousel>
       </div>
       <div
         v-for="(topic, topic_name) in topics"
@@ -63,7 +43,7 @@
         <h2 class="topic__name video-meta__title">
           {{ topic_name }}
         </h2>
-        <VueSlickCarousel
+        <vue-slick-carousel
           v-bind="settings"
           :arrows="true"
         >
@@ -78,17 +58,7 @@
             :key="video.id"
             class="video"
           >
-            <router-link
-              :to="{name: 'video', params: {id: video._source['title_slug']}}"
-            >
-              <div class="video__thumbnail">
-                <span class="video__duration">{{ video._source['duration'] }}</span>
-                <img :src="video._source['thumbnail_url']">
-                <div class="video__title">
-                  <span>{{ video._source['title'] }}</span>
-                </div>
-              </div>
-            </router-link>
+            <carousel-slide :item="video._source" />
           </div>
           <div class="video topic__see-all">
             <div class="video__thumbnail">
@@ -107,7 +77,7 @@
               {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
             </div>
           </template>
-        </VueSlickCarousel>
+        </vue-slick-carousel>
       </div>
     </div>
   </div>
@@ -116,11 +86,15 @@
 <script>
 import axios from 'axios';
 import VueSlickCarousel from 'vue-slick-carousel';
+import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
+import CarouselSlide from './CarouselSlide.vue';
 import mixin from '../mixins/getRouteData';
 
 export default {
   name: 'Home',
   components: {
+    CarouselSlide,
+    FeaturedCarouselSlide,
     VueSlickCarousel,
   },
   filters: {
@@ -183,9 +157,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.getFeatured();
-    });
+    this.getFeatured();
   },
   methods: {
     getFeatured() {
@@ -204,19 +176,6 @@ export default {
           this.videos = response.data.videos;
           this.topics = response.data.topics;
         });
-    },
-    stripChars(topic) {
-      const strippedTopic = topic.replace(' & ', '');
-      return strippedTopic.replace(' ', '');
-    },
-    getTitle(metadata, subtitle = false) {
-      if (subtitle && metadata.quote === '') {
-        return '';
-      }
-      if (metadata.quote !== '' && !subtitle) {
-        return `"${metadata.quote}"`;
-      }
-      return metadata.title;
     },
   },
 };
