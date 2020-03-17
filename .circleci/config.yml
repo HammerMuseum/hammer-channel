@@ -69,6 +69,14 @@ build_and_test: &build_and_test
         if [ "$CIRCLE_BRANCH" = "develop" ]; then
             echo "MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/" > .env
         fi
+    - run: |
+        echo "MIX_APP_URL=https://dev.video.hammer.cogapp.com" > .envt
+        if [ "$CIRCLE_BRANCH" = "master" ]; then
+            echo "MIX_APP_URL=https://video.hammer.cogapp.com/api/" > .env
+        fi
+        if [ "$CIRCLE_BRANCH" = "develop" ]; then
+            echo "MIX_APP_URL=https://stage.video.hammer.cogapp.com/api/" > .env
+        fi
 
     - run: npm run build
 
