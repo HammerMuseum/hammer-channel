@@ -37,10 +37,14 @@ Developer notes:
 
 
 ## Implementation
-- Run a query to fetch the featured playlists
-- From the featured playlists, combine a list of all topics and tags
-- Randomise the order of this list
-- Populate the section of the search bar with 12 topics/tags
-
+- Create a new endpoint `/suggestions`
+- In the endpoint, fetch featured playlists via the API
+- With the result, build a new array of topics and tags
+  - The elements in the array should be aware of whether or not they are tags or topics so that the correct filter can be applied in the link to the search results.
+- Run php's native `shuffle()` on the array to randomise the order
+- Limit the array to 12 with `array_slice($array, 0, 12)`
+- Return the array to the `SearchBar` Vue component
+- Set the terms as data on the component
+- Populate the existing search links element with the terms
 
 ## Documentation required
