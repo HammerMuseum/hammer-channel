@@ -19,7 +19,7 @@
         </h1>
         <router-link
           class="link link--with-image"
-          :to="{name: 'home'}"
+          :to="{name: 'app'}"
         >
           <img
             class="link__image"

@@ -25,10 +25,20 @@
 
 .videos__navigation.slick-next,
 .videos__navigation.slick-prev {
-  border: 1px solid black;
-  background: #f36cb5;
+  width: 40px;
+  height: 40px;
+  background: var(--background-secondary);
   z-index: 1;
   right: 0;
+  padding: 10px;
+}
+
+.videos__navigation.slick-prev:focus,
+.videos__navigation.slick-next:focus,
+.videos__navigation.slick-next:hover,
+.videos__navigation.slick-prev:hover {
+  background: var(--background-secondary);
+  border-bottom: 4px solid var(--highlight-color-primary);
 }
 
 .videos__navigation.slick-prev {
