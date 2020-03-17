@@ -63,7 +63,7 @@ build_and_test: &build_and_test
     - run: echo "MIX_APP_URL=$PUSHER_LIVE_APP_KEY" >> .env
 
     - run: |
-        echo "MIX_DATASTORE_URL=https://dev.datastore.hammer.cogapp.com/api/" > .envt
+        echo "MIX_DATASTORE_URL=https://dev.datastore.hammer.cogapp.com/api/" > .env
         if [ "$CIRCLE_BRANCH" = "master" ]; then
             echo "MIX_DATASTORE_URL=https://datastore.hammer.cogapp.com/api/" > .env
         fi
@@ -71,7 +71,7 @@ build_and_test: &build_and_test
             echo "MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/" > .env
         fi
     - run: |
-        echo "MIX_APP_URL=https://dev.video.hammer.cogapp.com" > .envt
+        echo "MIX_APP_URL=https://dev.video.hammer.cogapp.com" > .env
         if [ "$CIRCLE_BRANCH" = "master" ]; then
             echo "MIX_APP_URL=https://video.hammer.cogapp.com/api/" > .env
         fi
