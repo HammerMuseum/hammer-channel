@@ -41,7 +41,6 @@
         <template slot="Email sign up">
           <div class="email-signup">
             <VInput
-              v-model="email"
               type="email"
               name="email"
               label="Enter your email address:"
