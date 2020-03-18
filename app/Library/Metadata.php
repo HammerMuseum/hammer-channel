@@ -63,7 +63,7 @@ class Metadata
         if (isset($data['description'])) {
             return $data['description'];
         }
-        return 'Some app description value';
+        return 'In the Hammer\'s video archive, people will discover ideas that will illuminate their lives in new ways.';
     }
 
     /**
@@ -83,6 +83,6 @@ class Metadata
         if (isset($data['thumbnail_url'])) {
             return $data['thumbnail_url'];
         }
-        return 'some_default_image.jpg';
+        return config('app.url') . '/assets/images/logo-hammer-video.png';
     }
 }
