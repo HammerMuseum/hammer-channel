@@ -39,7 +39,7 @@ Developer notes:
 ## Implementation
 - Create a new endpoint `/suggestions`
 - In the endpoint, fetch featured playlists via the API
-- With the result, build a new array of topics and tags
+- With the result, build a new array of topics, tags and people.
   - The elements in the array should be aware of whether or not they are tags or topics so that the correct filter can be applied in the link to the search results.
 - Run php's native `shuffle()` on the array to randomise the order
 - Limit the array to 12 with `array_slice($array, 0, 12)`

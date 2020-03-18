@@ -61,6 +61,13 @@ class ListingController extends Controller
         return response()->json($state);
     }
 
+    /**
+     * Get JSON of the app state to inject into the head and populate the frontend
+     *
+     * @param $data
+     * @param $params
+     * @return array
+     */
     public function getAppState($data, $params)
     {
         $pagerLinks = [];
@@ -120,5 +127,37 @@ class ListingController extends Controller
             'pagerLinks' => [],
             'show_clear' => false,
         ]);
+    }
+
+    public function getSuggestions()
+    {
+        $cannedTerms = [];
+        $featuredPlaylist = $this->api->request('playlists/Featured');
+        if (isset($featuredPlaylist['success']) && $featuredPlaylist['success']) {
+            $playlistData = $featuredPlaylist['data'];
+            foreach ($playlistData['videos'] as $video) {
+                if (!empty($video['topics'])) {
+                    foreach ($video['topics'] as $topic) {
+                        $cannedTerms[] = [$topic => 'topic'];
+                    }
+                }
+                if (!empty($video['tags'])) {
+                    foreach ($video['tags'] as $tag) {
+                        $cannedTerms[] = [$tag => 'tag'];
+                    }
+                }
+                if (isset($video['people'])) {
+                    foreach ($video['people'] as $person) {
+                        $cannedTerms[] = [$person => 'person'];
+                    }
+                }
+            }
+        }
+        if (!empty($cannedTerms)) {
+            shuffle($cannedTerms);
+
+        }
+        $limitCannedTerms = array_slice($cannedTerms, 0, 12);
+        return response()->json($limitCannedTerms);
     }
 }

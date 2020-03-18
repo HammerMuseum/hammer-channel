@@ -70,6 +70,7 @@
 <script>
 import { FocusTrap } from 'focus-trap-vue';
 import { store, mutations } from '../store';
+import axios from 'axios';
 
 export default {
   components: {
@@ -83,6 +84,7 @@ export default {
         { name: 'Los Angeles', query: { tags: 'Los Angeles' } },
         { name: 'Poetry', query: { topics: 'Poetry' } },
       ],
+      cannedTerms: []
     };
   },
   computed: {
@@ -107,6 +109,9 @@ export default {
       });
     },
   },
+  mounted() {
+    this.getCannedTerms();
+  },
   methods: {
     toggleSearchActive: mutations.toggleSearchActive,
     setSearchTerm: mutations.setSearchTerm,
@@ -114,6 +119,14 @@ export default {
       this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch();
       this.toggleSearchActive();
     },
+    getCannedTerms() {
+      axios
+        .get('/suggestions')
+        .then((response) => {
+          this.cannedTerms = response.data;
+        });
+      console.log(this.cannedTerms);
+    }
   },
 };
 </script>

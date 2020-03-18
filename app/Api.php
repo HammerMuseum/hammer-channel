@@ -46,8 +46,8 @@ class Api
                     return [
                         'success' => true,
                         'data' => $data['data'],
-                        'pages' => $data['pages'],
-                        'aggregations' => $data['aggregations']
+                        'pages' => isset($data['pages']) ? $data['pages'] : [],
+                        'aggregations' => isset($data['aggregations']) ? $data['aggregations'] : []
                     ];
                 }
                 return [
