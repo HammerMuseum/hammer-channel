@@ -63,7 +63,8 @@ class Metadata
         if (isset($data['description'])) {
             return $data['description'];
         }
-        return 'In the Hammer\'s video archive, people will discover ideas that will illuminate their lives in new ways.';
+        return 'In the Hammer\'s video archive, people will discover 
+        ideas that will illuminate their lives in new ways.';
     }
 
     /**
