@@ -129,6 +129,9 @@ class ListingController extends Controller
         ]);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getSuggestions()
     {
         $cannedTerms = [];
@@ -138,26 +141,41 @@ class ListingController extends Controller
             foreach ($playlistData['videos'] as $video) {
                 if (!empty($video['topics'])) {
                     foreach ($video['topics'] as $topic) {
-                        $cannedTerms[] = [$topic => 'topic'];
+                        $cannedTerms[] = [
+                            'term'=> $topic,
+                            'query' => [
+                                'topic' => $topic
+                            ]
+                        ];
                     }
                 }
                 if (!empty($video['tags'])) {
                     foreach ($video['tags'] as $tag) {
-                        $cannedTerms[] = [$tag => 'tag'];
+                        $cannedTerms[] = [
+                            'term' => $tag,
+                            'query' => [
+                                'tags' => $tag
+                            ]
+                        ];
                     }
                 }
                 if (isset($video['people'])) {
                     foreach ($video['people'] as $person) {
-                        $cannedTerms[] = [$person => 'person'];
+                        $cannedTerms[] = [
+                            'term' => $person,
+                            'query' => [
+                                'speakers' => $person
+                            ]
+                        ];
                     }
                 }
             }
         }
+        // Randomise and limit to 12
         if (!empty($cannedTerms)) {
             shuffle($cannedTerms);
-
+            $cannedTerms = array_slice($cannedTerms, 0, 12);
         }
-        $limitCannedTerms = array_slice($cannedTerms, 0, 12);
-        return response()->json($limitCannedTerms);
+        return response()->json($cannedTerms);
     }
 }

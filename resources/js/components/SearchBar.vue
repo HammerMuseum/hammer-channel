@@ -44,13 +44,13 @@
               <span class="search-bar__option-label">or try</span>
               <div class="search-bar__option-content">
                 <router-link
-                  v-for="item in searchLinks"
+                  v-for="item in cannedTerms"
                   :key="item.id"
                   class="link link--text"
                   :to="{ name: 'search', query: item.query }"
                   @click.native="toggleSearchActive"
                 >
-                  {{ item.name }}
+                  {{ item.term }}
                 </router-link>
               </div>
             </div>
@@ -108,9 +108,12 @@ export default {
         }
       });
     },
-  },
-  mounted() {
-    this.getCannedTerms();
+    $route: {
+      immediate: true,
+      handler(to, from) {
+        this.getCannedTerms();
+      }
+    },
   },
   methods: {
     toggleSearchActive: mutations.toggleSearchActive,
@@ -125,7 +128,6 @@ export default {
         .then((response) => {
           this.cannedTerms = response.data;
         });
-      console.log(this.cannedTerms);
     }
   },
 };
