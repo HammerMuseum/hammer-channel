@@ -15,4 +15,3 @@ Route::get('/', 'ListingController@index');
 Route::get('/video/{slug}', 'VideoController@view');
 Route::get('/search', 'SearchController@search');
 Route::post('/submit', 'NewsletterController@submit');
-Route::get('/clip/{slug}', 'ClipController@index');

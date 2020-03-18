@@ -48,7 +48,6 @@ class ListingController extends Controller
     {
         $params = $request->all();
         $videos = $this->api->request('term', 'term=all');
-//        $playlists = $this->api->request('playlist', 'term=all');
         return view('app', [
             'state' => $this->getAppState($videos, $params),
             'metadata' => $this->getMetadata($videos)
@@ -69,6 +68,11 @@ class ListingController extends Controller
         return response()->json($state);
     }
 
+    /**
+     * @param $data
+     * @param $params
+     * @return array
+     */
     public function getAppState($data, $params)
     {
         $pagerLinks = [];
@@ -96,6 +100,10 @@ class ListingController extends Controller
         ];
     }
 
+    /**
+     * @param $data
+     * @return array
+     */
     public function getMetadata($data)
     {
         return $this->metadata->getMetadata($data);
