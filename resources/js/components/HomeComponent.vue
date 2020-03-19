@@ -206,7 +206,7 @@ export default {
   methods: {
     getFeatured() {
       axios
-        .get(`${process.env.MIX_DATASTORE_URL}playlists/12`)
+        .get(`${process.env.MIX_DATASTORE_URL}playlists/Featured`)
         .then((response) => {
           this.featured = response.data.data.videos;
         });

@@ -69,6 +69,8 @@ class ListingController extends Controller
     }
 
     /**
+     * Get JSON of the app state to inject into the head and populate the frontend
+     *
      * @param $data
      * @param $params
      * @return array
@@ -141,5 +143,55 @@ class ListingController extends Controller
             'pagerLinks' => [],
             'show_clear' => false,
         ]);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSuggestions()
+    {
+        $cannedTerms = [];
+        $featuredPlaylist = $this->api->request('playlists/Featured');
+        if (isset($featuredPlaylist['success']) && $featuredPlaylist['success']) {
+            $playlistData = $featuredPlaylist['data'];
+            foreach ($playlistData['videos'] as $video) {
+                if (!empty($video['topics'])) {
+                    foreach ($video['topics'] as $topic) {
+                        $cannedTerms[] = [
+                            'term'=> $topic,
+                            'query' => [
+                                'topic' => $topic
+                            ]
+                        ];
+                    }
+                }
+                if (!empty($video['tags'])) {
+                    foreach ($video['tags'] as $tag) {
+                        $cannedTerms[] = [
+                            'term' => $tag,
+                            'query' => [
+                                'tags' => $tag
+                            ]
+                        ];
+                    }
+                }
+                if (isset($video['people'])) {
+                    foreach ($video['people'] as $person) {
+                        $cannedTerms[] = [
+                            'term' => $person,
+                            'query' => [
+                                'speakers' => $person
+                            ]
+                        ];
+                    }
+                }
+            }
+        }
+        // Randomise and limit to 12
+        if (!empty($cannedTerms)) {
+            shuffle($cannedTerms);
+            $cannedTerms = array_slice($cannedTerms, 0, 12);
+        }
+        return response()->json($cannedTerms);
     }
 }
