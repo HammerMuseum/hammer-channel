@@ -63,13 +63,27 @@
           class="facets"
         >
           <h2>Filter by</h2>
-          <div
-            v-for="facet in facets"
-            :key="facet.id"
-          >
+          <div>
+            <searchable-facet
+              :active-facets="activeFacets"
+            />
+          </div>
+          <div>
             <search-facet
               :active-facets="activeFacets"
-              :facet="facet"
+              :facet="facets.speakers"
+            />
+          </div>
+          <div>
+            <search-facet
+              :active-facets="activeFacets"
+              :facet="facets.in_playlists"
+            />
+          </div>
+          <div>
+            <search-facet
+              :active-facets="activeFacets"
+              :facet="facets.date_recorded"
             />
           </div>
         </div>
