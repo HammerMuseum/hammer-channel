@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-require('laravel-mix-postcss-config');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
@@ -25,8 +24,19 @@ mix.options({
 const dev = !mix.inProduction();
 mix
   .js('resources/js/app.js', 'public/js')
-  .postCss('resources/css/app.pcss', 'public/css')
-  .postCssConfig()
+  .postCss('resources/css/app.pcss', 'public/css', [
+    require('autoprefixer'),
+    require('postcss-import'),
+    require('postcss-nested'),
+    require('postcss-color-function'),
+    require('postcss-hexrgba'),
+    require('postcss-custom-properties')({
+      preserve: false,
+    }),
+    require('postcss-pxtorem')({
+      rootValue: 16,
+    }),
+  ])
   .webpackConfig({
     // add any webpack dev server config here
     devServer: {
