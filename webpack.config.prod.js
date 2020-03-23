@@ -4,6 +4,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 module.exports = {
   plugins: [
@@ -18,6 +19,14 @@ module.exports = {
       quiet: true,
     }),
     new VueLoaderPlugin(),
+    new SVGSpritemapPlugin(
+      'public/assets/images/icons/*.svg',
+      {
+        output: {
+          filename: '../build/assets/svg/sprite.svg',
+        },
+      },
+    ),
   ],
   devtool: false,
   resolve: {

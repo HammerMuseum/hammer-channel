@@ -1,6 +1,7 @@
 const mix = require('laravel-mix');
 require('laravel-mix-postcss-config');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -32,6 +33,14 @@ mix
       disableHostCheck: true,
     },
     plugins: [
+      new SVGSpritemapPlugin(
+        'public/assets/images/icons/*.svg',
+        {
+          output: {
+            filename: '../build/assets/svg/sprite.svg',
+          },
+        },
+      ),
       new StyleLintPlugin({
         files: '**/*.pcss',
         context: 'resources/css',
