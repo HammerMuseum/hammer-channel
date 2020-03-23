@@ -20,10 +20,10 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new SVGSpritemapPlugin(
-      'public/assets/images/icons/*.svg',
+      'resources/images/icons/*.svg',
       {
         output: {
-          filename: '../build/assets/svg/sprite.svg',
+          filename: '../dist/sprite.svg',
         },
       },
     ),
