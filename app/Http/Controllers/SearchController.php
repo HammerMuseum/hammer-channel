@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Api;
 use App\Library\Facets;
 use App\Library\Pagination;
+use App\Library\Metadata;
 use Illuminate\Support\Str;
 
 /**
@@ -23,20 +24,26 @@ class SearchController extends Controller
     /** @var Pagination */
     protected $pagination;
 
+    /** @var Metadata */
+    protected $metadata;
+
     /**
      * SearchController constructor.
      * @param Api $api
      * @param Facets $facetHandler
      * @param Pagination $pagination
+     * @param Metadata $metadata
      */
     public function __construct(
         Api $api,
         Facets $facetHandler,
-        Pagination $pagination
+        Pagination $pagination,
+        Metadata $metadata
     ) {
         $this->api = $api;
         $this->facetHandler = $facetHandler;
         $this->pagination = $pagination;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -53,7 +60,8 @@ class SearchController extends Controller
         $results = $this->api->request('search', $queryString);
         $state = $this->getAppState($results, $request, $params, $queryString);
         return view('app', [
-            'state' => $state
+            'state' => $state,
+            'metadata' => $this->getMetadata()
         ]);
     }
 
@@ -105,5 +113,14 @@ class SearchController extends Controller
             'show_clear' => true,
             'totals' => isset($data['pages']) ? $data['pages'] : [],
         ];
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata->getMetadata([]);
     }
 }
