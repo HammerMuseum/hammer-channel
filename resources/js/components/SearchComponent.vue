@@ -68,6 +68,7 @@
               Topics & tags
             </p>
             <div class="searchable-facet__container"
+               v-if="facets != null && facets.topicsAndTags != null"
                v-show="activeFacet === 'topics'"
                :class="{active: activeFacet === 'topics'}"
             >
@@ -87,6 +88,7 @@
               Speakers
             </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
               :facet="facets.speakers"
             />
@@ -96,6 +98,7 @@
               Playlists
             </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
               :facet="facets.in_playlists"
             />
@@ -105,6 +108,7 @@
               Year Recorded
             </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
               :facet="facets.date_recorded"
             />
