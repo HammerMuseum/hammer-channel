@@ -64,23 +64,46 @@
         >
           <h2>Filter by</h2>
           <div>
-            <searchable-facet
-              :active-facets="activeFacets"
-            />
+            <p class="search-facet__label" @click="toggleFacetPanel('topics')">
+              Topics & tags
+            </p>
+            <div class="searchable-facet__container"
+               v-show="activeFacet === 'topics'"
+               :class="{active: activeFacet === 'topics'}"
+            >
+              <span
+                class="close-button"
+                @click="toggleFacetPanel(this, 'topics')"
+              >Close</span>
+              <searchable-facet
+                :active-facets="activeFacets"
+                :facetList="topicsAndTags"
+                :panelName="'topics'"
+              />
+            </div>
           </div>
           <div>
+            <p class="facet__label">
+              Speakers
+            </p>
             <search-facet
               :active-facets="activeFacets"
               :facet="facets.speakers"
             />
           </div>
           <div>
+            <p class="facet__label">
+              Playlists
+            </p>
             <search-facet
               :active-facets="activeFacets"
               :facet="facets.in_playlists"
             />
           </div>
           <div>
+            <p class="facet__label">
+              Year Recorded
+            </p>
             <search-facet
               :active-facets="activeFacets"
               :facet="facets.date_recorded"
@@ -144,12 +167,18 @@ import ResultGrid from './ResultGridComponent.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import SearchFacet from './SearchFacet.vue';
+import SearchableFacet from './SearchableFacet.vue';
+import { directive as onClickaway } from 'vue-clickaway';
 
 export default {
   name: 'Search',
   components: {
     ResultGrid,
     SearchFacet,
+    SearchableFacet,
+  },
+  directives: {
+    onClickaway,
   },
   filters: {
     capitalize(value) {
@@ -180,6 +209,8 @@ export default {
       currentResultStart: null,
       currentResultEnd: null,
       noResults: false,
+      topicsAndTags: [],
+      activeFacet: null,
     };
   },
   computed: {
@@ -234,6 +265,11 @@ export default {
         this.showFilters = false;
       }
     },
+    away() {
+      if (this.activeFacet) {
+        this.activeFacet = null;
+      }
+    },
     getPageData(params = '') {
       axios
         .get(`/api/search${params}`)
@@ -276,6 +312,18 @@ export default {
       this.total = data.totals.total;
       this.currentPage = this.totalsInfo.currentPage;
       this.getPageTotals();
+      this.combineTopicsTags();
+    },
+    combineTopicsTags() {
+      this.topicsAndTags.push(this.facets.topics);
+      this.topicsAndTags.push(this.facets.tags);
+    },
+    toggleFacetPanel(name) {
+      if (this.activeFacet === name) {
+        this.activeFacet = null;
+      } else {
+        this.activeFacet = name;
+      }
     },
   },
 };

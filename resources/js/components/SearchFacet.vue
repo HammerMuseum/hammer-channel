@@ -1,8 +1,5 @@
 <template>
   <div>
-    <p class="facet__label">
-      {{ facet.label }}
-    </p>
     <div
       v-for="option in facet.items"
       :key="option.key"
