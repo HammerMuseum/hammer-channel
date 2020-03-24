@@ -68,7 +68,6 @@
               Topics & tags
             </p>
             <div class="searchable-facet__container"
-               v-if="facets != null && facets.topicsAndTags != null"
                v-show="activeFacet === 'topics'"
                :class="{active: activeFacet === 'topics'}"
             >
@@ -77,6 +76,7 @@
                 @click="toggleFacetPanel(this, 'topics')"
               >Close</span>
               <searchable-facet
+                v-if="facets != null"
                 :active-facets="activeFacets"
                 :facetList="topicsAndTags"
                 :panelName="'topics'"
@@ -319,8 +319,10 @@ export default {
       this.combineTopicsTags();
     },
     combineTopicsTags() {
-      this.topicsAndTags.push(this.facets.topics);
-      this.topicsAndTags.push(this.facets.tags);
+      if (this.topicsAndTags.length <= 0) {
+        this.topicsAndTags.push(this.facets.topics);
+        this.topicsAndTags.push(this.facets.tags);
+      }
     },
     toggleFacetPanel(name) {
       if (this.activeFacet === name) {
