@@ -78,12 +78,6 @@ export default {
   },
   data() {
     return {
-      searchLinks: [
-        { name: 'Art', query: { tags: 'Art' } },
-        { name: 'Social Justice', query: { topics: 'Social Justice' } },
-        { name: 'Los Angeles', query: { tags: 'Los Angeles' } },
-        { name: 'Poetry', query: { topics: 'Poetry' } },
-      ],
       cannedTerms: []
     };
   },

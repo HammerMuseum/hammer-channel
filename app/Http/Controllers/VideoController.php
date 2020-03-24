@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api;
+use App\Library\Metadata;
 
 /**
  * Class VideoController
@@ -14,14 +15,19 @@ class VideoController extends Controller
     /** @var Api */
     protected $api;
 
+    protected $metadata;
+
     /**
      * VideoController constructor.
      * @param Api $api
+     * @param Metadata $metadata
      */
     public function __construct(
-        Api $api
+        Api $api,
+        Metadata $metadata
     ) {
         $this->api = $api;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -35,7 +41,8 @@ class VideoController extends Controller
     {
         $data = $this->api->request('videos/' . $slug);
         return view('app', [
-            'state' => $this->getAppState('/video/' . $slug, $data)
+            'state' => $this->getAppState('/video/' . $slug, $data),
+            'metadata' => $this->getMetadata($data)
         ]);
     }
 
@@ -63,5 +70,14 @@ class VideoController extends Controller
             $flatData[$k] = $v;
         }
         return $flatData;
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function getMetadata($data)
+    {
+        return $this->metadata->getMetadata($data['data'][0]);
     }
 }
