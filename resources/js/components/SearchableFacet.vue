@@ -1,33 +1,34 @@
 <template>
-
-    <div class="facet">
-      <div class="searchable-facet__filter">
-        <label for="facet-search">Filter by: </label>
-        <input type="search" name="facet-search" id="facet-search" v-model="facetSearch" />
-      </div>
-      <div v-for="facet in filteredFacetList" class="searchable-facet">
-        <span class="searchable-facet__label">{{ facet.label }}</span>
-        <div class="searchable-facet__items">
-          <div class="searchable-facet__item" v-for="item in facet.items">
-            <a
-              :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
-              class="facets__item-link"
-              @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
-            >
-              <span
-                v-if="!isActive(getValue(item, facet.type))"
-                class="facets__item-link-text"
-              >{{ getValue(item, facet.type) }}</span>
-              <span
-                v-else
-                class="facets__item-link-text"
-              >{{ getValue(item, facet.type) }} (Remove selection)</span>
-            </a>
-          </div>
+  <div class="facet">
+    <div class="searchable-facet__filter">
+      <label for="facet-search">Filter by: </label>
+      <input type="search" name="facet-search" id="facet-search" v-model="facetSearch" />
+    </div>
+    <div v-for="facet in filteredFacetList" class="searchable-facet">
+      <span class="searchable-facet__label">{{ facet.label }}</span>
+      <div class="searchable-facet__items">
+        <div class="searchable-facet__item"
+          v-for="item in facet.items"
+         :class="{facets__item: true, 'facets__item--active': isActive(getValue(item, facet.type))}"
+        >
+          <a
+            :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
+            class="facets__item-link"
+            @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
+          >
+            <span
+              v-if="!isActive(getValue(item, facet.type))"
+              class="facets__item-link-text"
+            >{{ getValue(item, facet.type) }}</span>
+            <span
+              v-else
+              class="facets__item-link-text"
+            >{{ getValue(item, facet.type) }} (Remove selection)</span>
+          </a>
         </div>
       </div>
     </div>
-
+  </div>
 </template>
 
 <script>
@@ -36,6 +37,10 @@
     props: {
       facetList: Array,
       panelName: String,
+      activeFacets: {
+        type: Array,
+        required: true,
+      },
     },
     data() {
       return {
