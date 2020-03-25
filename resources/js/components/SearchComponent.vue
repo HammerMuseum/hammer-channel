@@ -83,14 +83,22 @@
               />
             </div>
           </div>
-          <div>
-            <p class="facet__label">
-              Speakers
-            </p>
-            <search-facet
+          <p class="search-facet__label" @click="toggleFacetPanel('speakers')">
+            Speakers
+          </p>
+          <div class="searchable-facet__container"
+           v-show="activeFacet === 'speakers'"
+           :class="{active: activeFacet === 'speakers'}"
+          >
+            <span
+              class="close-button"
+              @click="toggleFacetPanel(this, 'speakers')"
+            >Close</span>
+            <searchable-facet
               v-if="facets != null"
               :active-facets="activeFacets"
-              :facet="facets.speakers"
+              :facetList="[facets.speakers]"
+              :panelName="'speakers'"
             />
           </div>
           <div>
