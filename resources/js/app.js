@@ -1,5 +1,6 @@
 // TODO: Is there a way we can use the runtime only build?
 import './bootstrap';
+import 'svgxuse';
 import Vue from 'vue';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import router from './router';

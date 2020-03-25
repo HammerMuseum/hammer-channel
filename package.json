@@ -67,6 +67,7 @@
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.20.1",
     "sass-loader": "7.*",
+    "svgxuse": "^1.2.6",
     "video.js": "^7.6.6",
     "videojs-overlay": "^2.1.4",
     "vtt.js": "^0.13.0",
