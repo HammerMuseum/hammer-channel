@@ -30,10 +30,16 @@
       </div>
     </div>
     <button
-      class="search-overlay-toggle"
+      class="button search-overlay-toggle"
       @click="toggleSearchActive"
     >
-      Open search
+      <svg
+        title="Open search"
+        class="icon"
+      >
+        <use xlink:href="/dist/sprite.svg#sprite-search" />
+      </svg>
+      <span class="icon-text visually-hidden">Open search</span>
     </button>
     <SearchBar />
   </div>
