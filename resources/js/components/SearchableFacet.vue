@@ -4,7 +4,8 @@
       <label for="facet-search">Filter by: </label>
       <input type="search" name="facet-search" id="facet-search" v-model="facetSearch" />
     </div>
-    <div v-for="facet in filteredFacetList" class="searchable-facet">
+    <div v-if="noResults">No results found</div>
+    <div v-if="!noResults" v-for="facet in filteredFacetList" class="searchable-facet">
       <span class="searchable-facet__label">{{ facet.label }}</span>
       <div class="searchable-facet__items">
         <div class="searchable-facet__item"
@@ -45,6 +46,18 @@
     data() {
       return {
         facetSearch: '',
+        noResults: false,
+      }
+    },
+    watch: {
+      filteredFacetList(value) {
+        for (let i = 0; i < value.length; i++) {
+          if (value[i].items.length < 1) {
+            this.noResults = true;
+          } else {
+            this.noResults = false;
+          }
+        }
       }
     },
     methods: {
