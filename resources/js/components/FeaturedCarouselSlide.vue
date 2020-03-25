@@ -1,35 +1,39 @@
 <template>
-  <router-link
-    :to="{name: 'video', params: {id: slug}}"
-    class="carousel-slide carousel-slide--featured"
-  >
-    <div class="video__thumbnail">
-      <span class="video__duration">{{ duration }}</span>
-      <img
-        class="video__thumbnail-image"
-        :src="thumbnailUrl"
-      >
-    </div>
-    <div class="video__info">
-      <template v-if="quote">
-        <q class="video__info-title">{{ quote }}</q>
-        <div class="video__info-teaser">
-          <div class="video__info-subtitle">
-            {{ title }}
+  <div class="carousel__slide carousel__slide--featured">
+    <router-link
+      :to="{name: 'video', params: {id: slug}}"
+      class="video-card video-card--featured"
+    >
+      <div class="video-card__thumbnail">
+        <span class="video-card__duration">{{ duration }}</span>
+        <img
+          class="video-card__thumbnail-image"
+          :src="thumbnailUrl"
+        >
+      </div>
+      <article class="video-card__info">
+        <template v-if="quote">
+          <q class="video-card__quote">{{ quote }}</q>
+          <div class="video-card__teaser">
+            <h2 class="video-card__title">
+              {{ title }}
+            </h2>
           </div>
-        </div>
-      </template>
-      <template v-else>
-        <span class="video__info-title">{{ title }}</span>
-        <div class="video__info-teaser">
-          <div class="video__info-subtitle">
-            {{ subtitle }}
+        </template>
+        <template v-else>
+          <span class="video-card__title">{{ title }}</span>
+          <div class="video-card__teaser">
+            <h2 class="video-card__subtitle">
+              {{ subtitle }}
+            </h2>
+            <p class="video-card__description">
+              {{ description }}
+            </p>
           </div>
-          {{ description }}
-        </div>
-      </template>
-    </div>
-  </router-link>
+        </template>
+      </article>
+    </router-link>
+  </div>
 </template>
 
 <script>
@@ -67,8 +71,3 @@ export default {
   },
 };
 </script>
-<style>
-.carousel-slide {
-  text-decoration: none;
-}
-</style>

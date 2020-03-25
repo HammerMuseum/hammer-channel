@@ -2,100 +2,78 @@
   <div class="listing">
     <NavigationBar :items="topics" />
 
-    <div class="videos">
-      <div
-        v-if="featured"
-        id="featured"
-        class="topic"
-      >
-        <vue-slick-carousel
-          v-bind="featuredSettings"
-          :arrows="true"
-          class="featured-carousel"
+    <content-loader
+      v-if="!featured"
+      :width="800"
+      :height="250"
+      :animate="false"
+      primaryColor="#c6c6c6"
+      secondaryColor="#c6c6c6"
+    >
+      <rect x="425" y="3" rx="2" ry="2" width="361" height="26" />
+      <rect x="425" y="44" rx="2" ry="2" width="361" height="26" />
+      <rect x="6" y="2" rx="2" ry="2" width="400" height="192" />
+      <rect x="425" y="83" rx="2" ry="2" width="361" height="26" />
+      <rect x="425" y="124" rx="2" ry="2" width="361" height="26" />
+    </content-loader>
+
+    <Carousel
+      v-else
+      id="featured"
+      title="Featured programs"
+      :controls="true"
+      :classes="['carousel--featured']"
+      :options="featuredSettings"
+      :show-heading="false"
+    >
+      <featured-carousel-slide
+        v-for="video in featured"
+        :key="video.id"
+        :item="video"
+      />
+    </Carousel>
+
+    <carousel
+      v-for="(topic, topic_name) in topics"
+      :id="topic_name"
+      :key="topic_name"
+      :controls="true"
+      :title="topic_name"
+      :options="carouselSettings"
+    >
+      <carousel-slide
+        v-for="video in topic.videos"
+        :key="video.id"
+        :item="video._source"
+      />
+      <div class="video topic__see-all">
+        <router-link
+          class="topic-link"
+          :to="{name: 'search', query: {topics: topic_name}}"
         >
-          <!-- Custom arrow -->
-          <template #prevArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-          <div
-            v-for="video in featured"
-            :key="video.id"
-            class="video video--featured"
-          >
-            <featured-carousel-slide :item="video" />
-          </div>
-          <!-- Custom arrow -->
-          <template #nextArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-        </vue-slick-carousel>
+          {{ seeAllLinkText(topic) }}
+          <span class="topic-name">{{ topic_name }}</span>
+        </router-link>
       </div>
-      <div
-        v-for="(topic, topic_name) in topics"
-        :id="topic_name | filterId"
-        :key="topic_name"
-        :class="`topic`"
-      >
-        <h2 class="topic__name video-meta__title">
-          {{ topic_name }}
-        </h2>
-        <vue-slick-carousel
-          v-bind="settings"
-          :arrows="true"
-        >
-          <!-- Custom arrow -->
-          <template #prevArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-          <div
-            v-for="video in topic['videos']"
-            :key="video.id"
-            class="video"
-          >
-            <carousel-slide :item="video._source" />
-          </div>
-          <div class="video topic__see-all">
-            <div class="video__thumbnail">
-              <router-link
-                class="topic-link"
-                :to="{name: 'search', query: {topics: topic_name}}"
-              >
-                See all {{ topic['count'] }} videos tagged
-                <span class="topic-name">{{ topic_name }}</span>
-              </router-link>
-            </div>
-          </div>
-          <!-- Custom arrow -->
-          <template #nextArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-        </vue-slick-carousel>
-      </div>
-    </div>
+    </carousel>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import VueSlickCarousel from 'vue-slick-carousel';
-import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
+import { ContentLoader } from 'vue-content-loader';
+import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
+import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
 import mixin from '../mixins/getRouteData';
 
 export default {
   name: 'Home',
   components: {
+    Carousel,
     CarouselSlide,
+    ContentLoader,
     FeaturedCarouselSlide,
-    VueSlickCarousel,
   },
   filters: {
     filterId(value) {
@@ -117,39 +95,22 @@ export default {
         slidesToShow: 1,
         slidesToScroll: 1,
       },
-      settings: {
+      carouselSettings: {
         slidesToShow: 2.5,
-        infinite: false,
-        touchThreshold: 5,
+        slidesToScroll: 1,
         responsive: [
           {
             breakpoint: 1200,
             settings: {
-              slidesToShow: 2.5,
-            },
-          },
-          {
-            breakpoint: 965,
-            settings: {
-              slidesToShow: 2,
-            },
-          },
-          {
-            breakpoint: 800,
-            settings: {
-              slidesToShow: 2,
+              slidesToShow: 2.25,
+              slidesToScroll: 1,
             },
           },
           {
             breakpoint: 650,
             settings: {
               slidesToShow: 1.5,
-            },
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 1,
+              slidesToScroll: 1,
             },
           },
         ],
@@ -162,7 +123,7 @@ export default {
   methods: {
     getFeatured() {
       axios
-        .get(`${process.env.MIX_DATASTORE_URL}playlists/12`)
+        .get(`${process.env.MIX_DATASTORE_URL}playlists/Featured`)
         .then((response) => {
           this.featured = response.data.data.videos;
         });
@@ -176,6 +137,11 @@ export default {
           this.videos = response.data.videos;
           this.topics = response.data.topics;
         });
+    },
+    seeAllLinkText(topic) {
+      const count = topic.count;
+      const videos = count > 1 ? 'videos' : 'video';
+      return `See all ${count} ${videos} tagged`;
     },
   },
 };

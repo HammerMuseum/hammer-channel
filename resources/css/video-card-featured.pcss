@@ -1,0 +1,21 @@
+.video-card--featured {
+  height: 100%;
+}
+
+.video-card--featured .video-card__thumbnail {
+  flex: 1;
+}
+
+.video-card--featured .video-card__title {
+  color: var(--text-secondary);
+}
+
+@media screen and (min-width: 800px) {
+  .video-card--featured {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 250px;
+    height: auto;
+  }
+}

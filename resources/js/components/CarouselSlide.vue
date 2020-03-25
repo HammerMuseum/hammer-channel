@@ -1,23 +1,43 @@
 <template>
-  <router-link
-    :to="{name: 'video', params: {id: slug }}"
-    class="carousel-slide"
+  <content-loader
+    v-if="!item"
+    :speed="2"
+    :animate="true"
+  />
+  <div
+    v-else
+    class="carousel__slide"
   >
-    <div class="video__thumbnail">
-      <span class="video__duration">{{ duration }}</span>
-      <img
-        :src="thumbnailUrl"
-        class="video__thumbnail-image"
-      >
-    </div>
-    <div class="video__title">
-      <span>{{ title }}</span>
-    </div>
-  </router-link>
+    <router-link
+      :to="{name: 'video', params: {id: slug }}"
+      class="video-card"
+    >
+      <div class="video-card__thumbnail">
+        <span class="video-card__duration">{{ duration }}</span>
+        <img
+          :src="thumbnailUrl"
+          class="video-card__thumbnail-image"
+        >
+      </div>
+      <article>
+        <h2 class="video-card__title">
+          <span>{{ title }}</span>
+        </h2>
+        <p class="video-card__description">
+          {{ description }}
+        </p>
+      </article>
+    </router-link>
+  </div>
 </template>
 
 <script>
+import { ContentLoader } from 'vue-content-loader';
+
 export default {
+  components: {
+    ContentLoader,
+  },
   props: {
     item: {
       type: Object,
@@ -27,6 +47,9 @@ export default {
     },
   },
   computed: {
+    description() {
+      return this.item.description.substr(0, 150);
+    },
     duration() {
       return this.item.duration;
     },
