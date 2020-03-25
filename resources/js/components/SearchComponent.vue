@@ -76,6 +76,7 @@
                 @click="toggleFacetPanel(this, 'topics')"
               >Close</span>
               <searchable-facet
+                v-if="facets != null"
                 :active-facets="activeFacets"
                 :facetList="topicsAndTags"
                 :panelName="'topics'"
@@ -87,6 +88,7 @@
               Speakers
             </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
               :facet="facets.speakers"
             />
@@ -96,6 +98,7 @@
               Playlists
             </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
               :facet="facets.in_playlists"
             />
@@ -105,6 +108,7 @@
               Year Recorded
             </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
               :facet="facets.date_recorded"
             />
@@ -315,8 +319,10 @@ export default {
       this.combineTopicsTags();
     },
     combineTopicsTags() {
-      this.topicsAndTags.push(this.facets.topics);
-      this.topicsAndTags.push(this.facets.tags);
+      if (this.topicsAndTags.length <= 0) {
+        this.topicsAndTags.push(this.facets.topics);
+        this.topicsAndTags.push(this.facets.tags);
+      }
     },
     toggleFacetPanel(name) {
       if (this.activeFacet === name) {
