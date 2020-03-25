@@ -4,7 +4,7 @@
       <label for="facet-search">Filter by: </label>
       <input type="search" name="facet-search" id="facet-search" v-model="facetSearch" />
     </div>
-    <div v-if="noResults">No results found</div>
+    <div v-if="noResults" class="no-results">No results found</div>
     <div v-if="!noResults" v-for="facet in filteredFacetList" class="searchable-facet">
       <span class="searchable-facet__label">{{ facet.label }}</span>
       <div class="searchable-facet__items">
