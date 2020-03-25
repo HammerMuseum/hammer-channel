@@ -31,9 +31,8 @@ class Api
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
                     if (isset($data['data']) && !empty($data['data'])) {
-                        $dataCount = count($data['data']);
                         // Only retrieve AWS URLs for videos if this is an individual video page
-                        if ($dataCount == 1) {
+                        if ($type === 'video') {
                             foreach ($data['data'] as $key => $item) {
                                 if (isset($item['video_url'])) {
                                     $videoUrl = $item['video_url'] . '/url';
@@ -61,6 +60,8 @@ class Api
                 ];
             }
         } catch (\Exception $e) {
+            echo $e->getMessage();
+            die;
             //@todo Implement more descriptive/friendly error messages
             return [
                 'success' => false,
