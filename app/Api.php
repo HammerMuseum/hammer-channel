@@ -60,8 +60,6 @@ class Api
                 ];
             }
         } catch (\Exception $e) {
-            echo $e->getMessage();
-            die;
             //@todo Implement more descriptive/friendly error messages
             return [
                 'success' => false,
