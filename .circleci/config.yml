@@ -62,7 +62,7 @@ build_and_test: &build_and_test
     - run: echo "MIX_DATASTORE_URL=$PUSHER_LIVE_APP_KEY" >> .env
 
     - run: |
-        echo "MIX_DATASTORE_URL=https://dev.datastore.hammer.cogapp.com/api/" > .envt
+        echo "MIX_DATASTORE_URL=https://dev.datastore.hammer.cogapp.com/api/" > .env
         if [ "$CIRCLE_BRANCH" = "master" ]; then
             echo "MIX_DATASTORE_URL=https://datastore.hammer.cogapp.com/api/" > .env
         fi
