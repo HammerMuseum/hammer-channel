@@ -68,8 +68,8 @@
               Topics & tags
             </p>
             <div class="searchable-facet__container"
-               v-show="activeFacet === 'topics'"
-               :class="{active: activeFacet === 'topics'}"
+              v-show="activeFacet === 'topics'"
+              :class="{active: activeFacet === 'topics'}"
             >
               <span
                 class="close-button"
@@ -180,7 +180,6 @@ import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
-import { directive as onClickaway } from 'vue-clickaway';
 
 export default {
   name: 'Search',
@@ -188,9 +187,6 @@ export default {
     ResultGrid,
     SearchFacet,
     SearchableFacet,
-  },
-  directives: {
-    onClickaway,
   },
   filters: {
     capitalize(value) {
@@ -275,11 +271,6 @@ export default {
         this.showFilters = true;
       } else {
         this.showFilters = false;
-      }
-    },
-    away() {
-      if (this.activeFacet) {
-        this.activeFacet = null;
       }
     },
     getPageData(params = '') {
