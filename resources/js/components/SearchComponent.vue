@@ -63,13 +63,54 @@
           class="facets"
         >
           <h2>Filter by</h2>
-          <div
-            v-for="facet in facets"
-            :key="facet.id"
-          >
+          <div>
+            <p class="search-facet__label" @click="toggleFacetPanel('topics')">
+              Topics & tags
+            </p>
+            <div class="searchable-facet__container"
+              v-show="activeFacet === 'topics'"
+              :class="{active: activeFacet === 'topics'}"
+            >
+              <span
+                class="close-button"
+                @click="toggleFacetPanel(this, 'topics')"
+              >Close</span>
+              <searchable-facet
+                v-if="facets != null"
+                :active-facets="activeFacets"
+                :facetList="topicsAndTags"
+                :panelName="'topics'"
+              />
+            </div>
+          </div>
+          <div>
+            <p class="facet__label">
+              People
+            </p>
             <search-facet
+              v-if="facets != null"
               :active-facets="activeFacets"
-              :facet="facet"
+              :facet="facets.speakers"
+            />
+          </div>
+          <div>
+            <p class="facet__label">
+              Playlist
+            </p>
+            <search-facet
+              v-if="facets != null"
+              :active-facets="activeFacets"
+              :facet="facets.in_playlists"
+            />
+          </div>
+          <div>
+            <p class="facet__label">
+              Year Recorded
+            </p>
+            <search-facet
+              v-if="facets != null"
+              :active-facets="activeFacets"
+              :facet="facets.date_recorded"
             />
           </div>
         </div>
@@ -130,12 +171,14 @@ import ResultGrid from './ResultGridComponent.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import SearchFacet from './SearchFacet.vue';
+import SearchableFacet from './SearchableFacet.vue';
 
 export default {
   name: 'Search',
   components: {
     ResultGrid,
     SearchFacet,
+    SearchableFacet,
   },
   filters: {
     capitalize(value) {
@@ -166,6 +209,8 @@ export default {
       currentResultStart: null,
       currentResultEnd: null,
       noResults: false,
+      topicsAndTags: [],
+      activeFacet: null,
     };
   },
   computed: {
@@ -262,6 +307,20 @@ export default {
       this.total = data.totals.total;
       this.currentPage = this.totalsInfo.currentPage;
       this.getPageTotals();
+      this.combineTopicsTags();
+    },
+    combineTopicsTags() {
+      if (this.topicsAndTags.length <= 0) {
+        this.topicsAndTags.push(this.facets.topics);
+        this.topicsAndTags.push(this.facets.tags);
+      }
+    },
+    toggleFacetPanel(name) {
+      if (this.activeFacet === name) {
+        this.activeFacet = null;
+      } else {
+        this.activeFacet = name;
+      }
     },
   },
 };
