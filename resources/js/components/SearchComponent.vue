@@ -103,7 +103,7 @@
           </div>
           <div>
             <p class="facet__label">
-              Playlists
+              Playlist
             </p>
             <search-facet
               v-if="facets != null"
