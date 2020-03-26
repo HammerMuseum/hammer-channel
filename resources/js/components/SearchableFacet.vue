@@ -6,7 +6,9 @@
     </div>
     <div v-if="noResults" class="no-results">No results found</div>
     <div v-if="!noResults" v-for="facet in filteredFacetList" class="searchable-facet">
-      <span class="searchable-facet__label">{{ facet.label }}</span>
+      <span class="searchable-facet__label">
+        {{ facet.label }}
+      </span>
       <div class="searchable-facet__items">
         <div class="searchable-facet__item"
           v-for="item in facet.items"

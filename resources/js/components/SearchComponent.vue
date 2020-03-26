@@ -84,7 +84,7 @@
             </div>
           </div>
           <p class="search-facet__label" @click="toggleFacetPanel('speakers')">
-            Speakers
+            People
           </p>
           <div class="searchable-facet__container"
            v-show="activeFacet === 'speakers'"
