@@ -71,7 +71,7 @@
         >
         <img
           class="footer-logo__mellon"
-          src="/images/logo-header.svg"
+          src="/images/logo-mellon.png"
         >
       </div>
     </div>
