@@ -102,6 +102,8 @@ build_and_test: &build_and_test
           - vendor/
           - public/css/
           - public/js/
+          - public/fonts/
+          - public/images/
 
 deploy: &deploy
   <<: *defaults
