@@ -68,8 +68,8 @@
               Topics & tags
             </p>
             <div class="searchable-facet__container"
-               v-show="activeFacet === 'topics'"
-               :class="{active: activeFacet === 'topics'}"
+              v-show="activeFacet === 'topics'"
+              :class="{active: activeFacet === 'topics'}"
             >
               <span
                 class="close-button"
@@ -85,7 +85,7 @@
           </div>
           <div>
             <p class="facet__label">
-              Speakers
+              People
             </p>
             <search-facet
               v-if="facets != null"
@@ -95,7 +95,7 @@
           </div>
           <div>
             <p class="facet__label">
-              Playlists
+              Playlist
             </p>
             <search-facet
               v-if="facets != null"
