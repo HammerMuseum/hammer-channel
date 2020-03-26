@@ -24,7 +24,7 @@
           title="Previous"
           class="icon icon--rotate"
         >
-          <use xlink:href="/dist/sprite.svg#sprite-next" />
+          <use xlink:href="/images/sprite.svg#sprite-next" />
         </svg>
         <span class="icon-text visually-hidden">Previous</span>
       </button>
@@ -39,7 +39,7 @@
           title="Next"
           class="icon"
         >
-          <use xlink:href="/dist/sprite.svg#sprite-next" />
+          <use xlink:href="/images/sprite.svg#sprite-next" />
         </svg>
         <span class="icon-text visually-hidden">Next</span>
       </button>

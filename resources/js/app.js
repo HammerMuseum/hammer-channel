@@ -1,15 +1,9 @@
 // TODO: Is there a way we can use the runtime only build?
-import './bootstrap';
+// import './bootstrap';
 import 'svgxuse';
 import Vue from 'vue';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import router from './router';
-
-// Move into Video player?
-import 'videojs-overlay';
-import 'video.js';
-
-window.VIDEOJS_NO_BASE_THEME = true;
 
 // /**
 //  * The following block of code may be used to automatically register your

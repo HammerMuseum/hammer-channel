@@ -21,6 +21,9 @@
 
 <script>
 import videojs from 'video.js';
+import overlay from 'videojs-overlay';
+
+window.VIDEOJS_NO_BASE_THEME = true;
 
 export default {
   name: 'VideoPlayer',

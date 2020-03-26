@@ -8,7 +8,7 @@
         >
           <img
             class="link__image"
-            src="/assets/images/logo-hammer.png"
+            src="/images/logo-hammer.png"
             alt="The Hammer Museum Logo"
           >
         </a>
@@ -23,7 +23,7 @@
         >
           <img
             class="link__image"
-            src="/assets/images/logo-hammer-video.png"
+            src="/images/logo-hammer-video.png"
             alt="The Hammer Video Logo"
           >
         </router-link>
@@ -37,7 +37,7 @@
         title="Open search"
         class="icon"
       >
-        <use xlink:href="/dist/sprite.svg#sprite-search" />
+        <use xlink:href="/images/sprite.svg#sprite-search" />
       </svg>
       <span class="icon-text visually-hidden">Open search</span>
     </button>

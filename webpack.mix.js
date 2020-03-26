@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -42,12 +44,28 @@ mix
       disableHostCheck: true,
     },
     plugins: [
+      new SVGSpritemapPlugin(
+        'resources/images/icons/*.svg',
+        {
+          output: {
+            filename: 'images/sprite.svg',
+          },
+        },
+      ),
       new StyleLintPlugin({
         files: '**/*.pcss',
         context: 'resources/css',
         quiet: true,
       }),
+      new ImageminPlugin({
+        pngquant: {
+          quality: '95-100',
+        },
+        test: /\.png$/i,
+      }),
     ],
     devtool: dev ? 'source-map' : false,
   })
+  .copy('resources/images/static', 'public/images', false)
+  .copy('resources/fonts', 'public/fonts', false)
   .sourceMaps(dev);

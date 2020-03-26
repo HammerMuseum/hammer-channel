@@ -59,7 +59,6 @@ build_and_test: &build_and_test
     - restore_cache: *restore_node_cache
     - run: npm install
     - save_cache: *save_node_cache
-    - run: echo "MIX_DATASTORE_URL=$PUSHER_LIVE_APP_KEY" >> .env
 
     - run: |
         echo "MIX_DATASTORE_URL=https://dev.datastore.hammer.cogapp.com/api/" > .env

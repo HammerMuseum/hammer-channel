@@ -67,11 +67,11 @@
       <div class="footer-logo">
         <img
           class="footer-logo__hammer"
-          src="/assets/images/logo-hammer.png"
+          src="/images/logo-hammer.png"
         >
         <img
           class="footer-logo__mellon"
-          src="/assets/images/logo-header.svg"
+          src="/images/logo-header.svg"
         >
       </div>
     </div>

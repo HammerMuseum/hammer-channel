@@ -5,6 +5,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   plugins: [
@@ -23,10 +25,16 @@ module.exports = {
       'resources/images/icons/*.svg',
       {
         output: {
-          filename: '../dist/sprite.svg',
+          filename: '../images/sprite.svg',
         },
       },
     ),
+    // Copy the images folder and optimize all the images
+    new CopyWebpackPlugin([
+      { from: 'resources/images/static', to: '../images' },
+      { from: 'resources/fonts', to: '../fonts' }
+    ]),
+    new ImageminPlugin({ test: /\.(jpe?g|png)$/i })
   ],
   resolve: {
     alias: {vue: 'vue/dist/vue.js'}
