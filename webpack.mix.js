@@ -1,7 +1,8 @@
 const mix = require('laravel-mix');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const ImageminPlugin = require('imagemin-webpack');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -57,15 +58,29 @@ mix
         context: 'resources/css',
         quiet: true,
       }),
+      // Copy the images folder and optimize all the images
+      new CopyWebpackPlugin([
+        { from: 'resources/images/static', to: '../images' },
+        { from: 'resources/fonts', to: '../fonts' },
+      ]),
+      // Make sure that the plugin is after any plugins that add images, example `CopyWebpackPlugin`
       new ImageminPlugin({
-        pngquant: {
-          quality: '95-100',
+        bail: false, // Ignore errors on corrupted images
+        name: '../images/[name].[ext]',
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        imageminOptions: {
+          plugins: [
+            ['gifsicle', { interlaced: true }],
+            ['jpegtran', { progressive: true }],
+            ['optipng', { optimizationLevel: 5 }],
+            ['svgo', {
+              plugins: [{ removeViewBox: false }],
+            }],
+          ],
         },
-        test: /\.png$/i,
       }),
     ],
     devtool: dev ? 'source-map' : false,
   })
-  .copy('resources/images/static', 'public/images', false)
   .copy('resources/fonts', 'public/fonts', false)
   .sourceMaps(dev);
