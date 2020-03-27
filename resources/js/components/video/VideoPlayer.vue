@@ -156,13 +156,13 @@ export default {
           content: overlayContent,
           end() {
             if (self.player.controlBar.hasClass('vjs-user-inactive')) {
-              $('.vjs-overlay').removeClass('vjs-user-inactive');
+              document.querySelector('.vjs-overlay').classList.remove("vjs-user-inactive");
             }
           },
           align: 'top',
         }],
       });
-      $('.vjs-overlay').addClass('vjs-control-bar');
+      document.querySelector('.vjs-overlay').classList.add("vjs-control-bar");
     },
     setSliderAppearance() {
       const sliderBar = document.querySelector('.vjs-play-progress');
