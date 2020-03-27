@@ -26,6 +26,10 @@ class Facets
             'label' => 'Topic',
             'type' => 'term'
         ],
+        'tags' => [
+            'label' => 'Tags',
+            'type' => 'term'
+        ]
     ];
 
     /**

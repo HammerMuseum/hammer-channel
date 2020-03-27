@@ -31,9 +31,8 @@ class Api
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
                     if (isset($data['data']) && !empty($data['data'])) {
-                        $dataCount = count($data['data']);
                         // Only retrieve AWS URLs for videos if this is an individual video page
-                        if ($dataCount == 1) {
+                        if ($type === 'video') {
                             foreach ($data['data'] as $key => $item) {
                                 if (isset($item['video_url'])) {
                                     $videoUrl = $item['video_url'] . '/url';
@@ -46,8 +45,8 @@ class Api
                     return [
                         'success' => true,
                         'data' => $data['data'],
-                        'pages' => $data['pages'],
-                        'aggregations' => $data['aggregations']
+                        'pages' => isset($data['pages']) ? $data['pages'] : [],
+                        'aggregations' => isset($data['aggregations']) ? $data['aggregations'] : []
                     ];
                 }
                 return [

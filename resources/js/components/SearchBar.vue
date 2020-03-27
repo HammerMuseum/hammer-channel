@@ -44,13 +44,13 @@
               <span class="search-bar__option-label">or try</span>
               <div class="search-bar__option-content">
                 <router-link
-                  v-for="item in searchLinks"
+                  v-for="item in cannedTerms"
                   :key="item.id"
                   class="link link--text"
                   :to="{ name: 'search', query: item.query }"
                   @click.native="toggleSearchActive"
                 >
-                  {{ item.name }}
+                  {{ item.term }}
                 </router-link>
               </div>
             </div>
@@ -70,6 +70,7 @@
 <script>
 import { FocusTrap } from 'focus-trap-vue';
 import { store, mutations } from '../store';
+import axios from 'axios';
 
 export default {
   components: {
@@ -77,12 +78,7 @@ export default {
   },
   data() {
     return {
-      searchLinks: [
-        { name: 'Art', query: { tags: 'Art' } },
-        { name: 'Social Justice', query: { topics: 'Social Justice' } },
-        { name: 'Los Angeles', query: { tags: 'Los Angeles' } },
-        { name: 'Poetry', query: { topics: 'Poetry' } },
-      ],
+      cannedTerms: []
     };
   },
   computed: {
@@ -106,6 +102,12 @@ export default {
         }
       });
     },
+    $route: {
+      immediate: true,
+      handler(to, from) {
+        this.getCannedTerms();
+      }
+    },
   },
   methods: {
     toggleSearchActive: mutations.toggleSearchActive,
@@ -114,6 +116,13 @@ export default {
       this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch();
       this.toggleSearchActive();
     },
+    getCannedTerms() {
+      axios
+        .get('/suggestions')
+        .then((response) => {
+          this.cannedTerms = response.data;
+        });
+    }
   },
 };
 </script>

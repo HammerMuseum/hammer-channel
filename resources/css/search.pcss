@@ -107,6 +107,48 @@
   background: var(--search-overlay-background);
 }
 
+.facets {
+  position: relative;
+}
+
+.search-facet__label {
+  cursor: pointer;
+}
+
+.searchable-facet__container {
+  position: absolute;
+  background: white;
+  z-index: 20;
+  width: 500px;
+  left: 200px;
+  height: 500px;
+  overflow-y: scroll;
+  top: 0;
+}
+
+.searchable-facet--open {
+  display: block;
+}
+
+.searchable-facet__filter {
+  padding: 1em;
+}
+
+.searchable-facet {
+  border-top: 1px solid black;
+  padding: 1em;
+}
+
+.searchable-facet__label {
+  display: block;
+  width: 100%;
+}
+
+.searchable-facet__item {
+  display: inline-block;
+  padding: 5px;
+}
+
 @media screen and (min-width: 600px) {
   .search-overlay-toggle {
     top: 14px;

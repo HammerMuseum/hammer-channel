@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api;
 use App\Library\Pagination;
+use App\Library\Metadata;
 use Illuminate\Http\Request;
 
 /**
@@ -18,17 +19,23 @@ class ListingController extends Controller
     /** @var Pagination */
     protected $pagination;
 
+    /** @var Metadata */
+    protected $metadata;
+
     /**
      * ListingController constructor.
      * @param Api $api
      * @param Pagination $pagination
+     * @param Metadata $metadata
      */
     public function __construct(
         Api $api,
-        Pagination $pagination
+        Pagination $pagination,
+        Metadata $metadata
     ) {
         $this->api = $api;
         $this->pagination = $pagination;
+        $this->metadata = $metadata;
     }
 
     /**
@@ -42,7 +49,8 @@ class ListingController extends Controller
         $params = $request->all();
         $videos = $this->api->request('term', 'term=all');
         return view('app', [
-            'state' => $this->getAppState($videos, $params)
+            'state' => $this->getAppState($videos, $params),
+            'metadata' => $this->getMetadata($videos)
         ]);
     }
 
@@ -60,6 +68,13 @@ class ListingController extends Controller
         return response()->json($state);
     }
 
+    /**
+     * Get JSON of the app state to inject into the head and populate the frontend
+     *
+     * @param $data
+     * @param $params
+     * @return array
+     */
     public function getAppState($data, $params)
     {
         $pagerLinks = [];
@@ -85,6 +100,15 @@ class ListingController extends Controller
             'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
         ];
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function getMetadata($data)
+    {
+        return $this->metadata->getMetadata($data);
     }
 
     /**
@@ -119,5 +143,55 @@ class ListingController extends Controller
             'pagerLinks' => [],
             'show_clear' => false,
         ]);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSuggestions()
+    {
+        $cannedTerms = [];
+        $featuredPlaylist = $this->api->request('playlists/Featured');
+        if (isset($featuredPlaylist['success']) && $featuredPlaylist['success']) {
+            $playlistData = $featuredPlaylist['data'];
+            foreach ($playlistData['videos'] as $video) {
+                if (!empty($video['topics'])) {
+                    foreach ($video['topics'] as $topic) {
+                        $cannedTerms[] = [
+                            'term'=> $topic,
+                            'query' => [
+                                'topic' => $topic
+                            ]
+                        ];
+                    }
+                }
+                if (!empty($video['tags'])) {
+                    foreach ($video['tags'] as $tag) {
+                        $cannedTerms[] = [
+                            'term' => $tag,
+                            'query' => [
+                                'tags' => $tag
+                            ]
+                        ];
+                    }
+                }
+                if (isset($video['people'])) {
+                    foreach ($video['people'] as $person) {
+                        $cannedTerms[] = [
+                            'term' => $person,
+                            'query' => [
+                                'speakers' => $person
+                            ]
+                        ];
+                    }
+                }
+            }
+        }
+        // Randomise and limit to 12
+        if (!empty($cannedTerms)) {
+            shuffle($cannedTerms);
+            $cannedTerms = array_slice($cannedTerms, 0, 12);
+        }
+        return response()->json($cannedTerms);
     }
 }
