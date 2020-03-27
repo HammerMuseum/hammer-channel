@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { truncate } from 'lodash';
+
 export default {
   props: {
     item: {
@@ -48,7 +50,9 @@ export default {
   },
   computed: {
     description() {
-      return this.item.description.substr(0, 200);
+      return truncate(this.item.description, {
+        length: 100,
+      });
     },
     duration() {
       return this.item.duration;

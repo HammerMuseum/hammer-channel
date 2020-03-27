@@ -19,7 +19,6 @@ files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], file
 Vue.use(VueFilterDateFormat);
 Vue.use(SocialSharing);
 
-
 const app = new Vue({ // eslint-disable-line
   el: '#main-content',
   router,

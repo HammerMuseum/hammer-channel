@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { truncate } from 'lodash';
 import { ContentLoader } from 'vue-content-loader';
 
 export default {
@@ -48,7 +49,9 @@ export default {
   },
   computed: {
     description() {
-      return this.item.description.substr(0, 150);
+      return truncate(this.item.description, {
+        length: 100,
+      });
     },
     duration() {
       return this.item.duration;

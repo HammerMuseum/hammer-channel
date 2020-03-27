@@ -96,13 +96,13 @@ export default {
         slidesToScroll: 1,
       },
       carouselSettings: {
-        slidesToShow: 2.5,
-        slidesToScroll: 1,
+        slidesToShow: 3.5,
+        slidesToScroll: 2,
         responsive: [
           {
             breakpoint: 1200,
             settings: {
-              slidesToShow: 2.25,
+              slidesToShow: 2.5,
               slidesToScroll: 1,
             },
           },
