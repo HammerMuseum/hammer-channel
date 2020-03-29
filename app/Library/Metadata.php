@@ -84,6 +84,6 @@ class Metadata
         if (isset($data['thumbnail_url'])) {
             return $data['thumbnail_url'];
         }
-        return config('app.url') . '/assets/images/logo-hammer-video.png';
+        return config('app.url') . '/images/logo-hammer-video.png';
     }
 }
