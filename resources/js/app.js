@@ -2,8 +2,9 @@
 // import './bootstrap';
 import 'svgxuse';
 import Vue from 'vue';
+import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
-import SocialSharing from 'vue-social-sharing';
+import VueSocialSharing from 'vue-social-sharing';
 import router from './router';
 
 // /**
@@ -17,7 +18,8 @@ const files = require.context('./', true, /\.vue$/i);
 files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.use(VueFilterDateFormat);
-Vue.use(SocialSharing);
+Vue.use(VueSocialSharing);
+Vue.use(VueCheckView);
 
 const app = new Vue({ // eslint-disable-line
   el: '#main-content',

@@ -1,20 +1,58 @@
 <template>
   <div class="listing">
-    <NavigationBar :items="topics" />
-
+    <NavigationBar
+      :items="topics"
+      :active-item="currentSectionInView"
+      :classes="['topic-menu']"
+    />
     <content-loader
       v-if="!featured"
       :width="800"
       :height="250"
       :animate="false"
-      primaryColor="#c6c6c6"
-      secondaryColor="#c6c6c6"
+      primary-color="#c6c6c6"
+      secondary-color="#c6c6c6"
     >
-      <rect x="425" y="3" rx="2" ry="2" width="361" height="26" />
-      <rect x="425" y="44" rx="2" ry="2" width="361" height="26" />
-      <rect x="6" y="2" rx="2" ry="2" width="400" height="192" />
-      <rect x="425" y="83" rx="2" ry="2" width="361" height="26" />
-      <rect x="425" y="124" rx="2" ry="2" width="361" height="26" />
+      <rect
+        x="425"
+        y="3"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+      <rect
+        x="425"
+        y="44"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+      <rect
+        x="6"
+        y="2"
+        rx="2"
+        ry="2"
+        width="400"
+        height="192"
+      />
+      <rect
+        x="425"
+        y="83"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+      <rect
+        x="425"
+        y="124"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
     </content-loader>
 
     <Carousel
@@ -33,29 +71,34 @@
       />
     </Carousel>
 
-    <carousel
-      v-for="(topic, topic_name) in topics"
-      :id="topic_name"
-      :key="topic_name"
-      :controls="true"
-      :title="topic_name"
-      :options="carouselSettings"
+    <div
+      v-for="(topic, name) in topics"
+      :key="topic.id"
+      v-view="viewHandler"
+      :data-section-id="topic.id"
     >
-      <carousel-slide
-        v-for="video in topic.videos"
-        :key="video.id"
-        :item="video._source"
-      />
-      <div class="video topic__see-all">
-        <router-link
-          class="topic-link"
-          :to="{name: 'search', query: {topics: topic_name}}"
-        >
-          {{ seeAllLinkText(topic) }}
-          <span class="topic-name">{{ topic_name }}</span>
-        </router-link>
-      </div>
-    </carousel>
+      <carousel
+        :id="topic.id"
+        :controls="true"
+        :title="name"
+        :options="carouselSettings"
+      >
+        <carousel-slide
+          v-for="video in topic.videos"
+          :key="video.id"
+          :item="video._source"
+        />
+        <div class="video topic__see-all">
+          <router-link
+            class="topic-link"
+            :to="{name: 'search', query: {topics: name}}"
+          >
+            {{ seeAllLinkText(topic) }}
+            <span class="topic-name">{{ name }}</span>
+          </router-link>
+        </div>
+      </carousel>
+    </div>
   </div>
 </template>
 
@@ -88,6 +131,7 @@ export default {
       pager: null,
       topics: null,
       featured: false,
+      currentSectionInView: null,
       featuredSettings: {
         edgeFriction: 0.35,
         infinite: false,
@@ -142,6 +186,11 @@ export default {
       const count = topic.count;
       const videos = count > 1 ? 'videos' : 'video';
       return `See all ${count} ${videos} tagged`;
+    },
+    viewHandler(e) {
+      if (e.percentInView >= 0.5) {
+        this.currentSectionInView = e.target.element.dataset.sectionId;
+      }
     },
   },
 };

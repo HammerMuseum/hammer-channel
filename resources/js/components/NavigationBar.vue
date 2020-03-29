@@ -2,19 +2,20 @@
   <flickity
     v-if="items && Object.keys(items).length > 0"
     ref="flickity"
-    class="topic-menu scrolling-menu"
+    :class="navigationClasses"
     :options="flickityOptions"
     @init="initNavigationBar"
   >
     <div
-      v-for="(idx, item) in items"
-      :key="item"
-      class="scrolling-menu__item"
+      v-for="(item, name) in items"
+      :key="item.id"
+      :data-selector="item.id"
+      class="navigation-bar__item"
     >
       <a
-        :href="item | filterId | anchorLink"
-        class="topic__link"
-      >{{ item }}</a>
+        :href="item.id | anchorLink"
+        :class="['link', {'link--active': activeItem === item.id }]"
+      >{{ name }}</a>
     </div>
   </flickity>
 </template>
@@ -42,11 +43,24 @@ export default {
         return {};
       },
     },
+    activeItem: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
+    classes: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {
       flickityOptions: {
         freeScroll: true,
+        wrapAround: true,
         contain: false,
         prevNextButtons: false,
         pageDots: false,
@@ -54,7 +68,22 @@ export default {
       },
     };
   },
+  computed: {
+    navigationClasses() {
+      return ['navigation-bar', ...this.classes];
+    },
+  },
+  watch: {
+    activeItem(item) {
+      if (item) {
+        this.selectNavigationItem(item);
+      }
+    },
+  },
   methods: {
+    selectNavigationItem(item) {
+      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, true);
+    },
     initNavigationBar() {
       const FLICKITY_EVENTS = [
         'change',
@@ -87,42 +116,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.topic-menu {
-  position: fixed;
-  background: #fff;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-  font-size: 24px;
-  padding-left: 20px;
-}
-
-.scrolling-menu::after {
-  content: "";
-  height: 100%;
-  position: absolute;
-  width: 150px;
-  top: 0;
-  right: 0;
-  background: linear-gradient(270deg, rgb(255, 255, 255) 0%, rgba(255,255,255,0) 100%);
-}
-
-.scrolling-menu__item {
-  padding: 14px 0;
-  margin: 0 32px;
-  white-space: nowrap;
-}
-
-.topic__link {
-  text-decoration: none;
-  color: #4d4b4d;
-}
-
-.topic__link--active {
-  font-weight: 600;
-  color: pink;
-}
-</style>
