@@ -1,134 +1,104 @@
 <template>
   <div class="listing">
-    <ul class="nav-list">
-      <li class="nav-item">
-        <router-link :to="{name: 'app'}">
-          Home
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link :to="{name: 'search'}">
-          Search
-        </router-link>
-      </li>
-    </ul>
-    <h1 class="title">
-      {{ title }}
-    </h1>
-    <div class="topics">
-      <ul class="topics__list">
-        <li
-          v-for="(items, topic) in topics"
-          :key="topic"
-          class="topics__list-item"
-        >
-          <a :href="`#${stripChars(topic)}`">{{ topic }}</a>
-        </li>
-      </ul>
-    </div>
+    <NavigationBar
+      :items="topics"
+      :active-item="currentSectionInView"
+      :classes="['topic-menu']"
+    />
+    <content-loader
+      v-if="!featured"
+      :width="800"
+      :height="250"
+      :animate="false"
+      primary-color="#c6c6c6"
+      secondary-color="#c6c6c6"
+    >
+      <rect
+        x="425"
+        y="3"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+      <rect
+        x="425"
+        y="44"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+      <rect
+        x="6"
+        y="2"
+        rx="2"
+        ry="2"
+        width="400"
+        height="192"
+      />
+      <rect
+        x="425"
+        y="83"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+      <rect
+        x="425"
+        y="124"
+        rx="2"
+        ry="2"
+        width="361"
+        height="26"
+      />
+    </content-loader>
 
-    <div class="videos">
+    <Carousel
+      v-else
+      id="featured"
+      title="Featured programs"
+      :controls="true"
+      :classes="['carousel--featured']"
+      :options="featuredSettings"
+      :show-heading="false"
+    >
+      <featured-carousel-slide
+        v-for="video in featured"
+        :key="video.id"
+        :item="video"
+      />
+    </Carousel>
+
+    <div class="container">
       <div
-        v-if="featured"
-        id="featured"
-        class="topic"
+        v-for="(topic, name) in topics"
+        :key="topic.id"
+        v-view="viewHandler"
+        :data-section-id="topic.id"
       >
-        <VueSlickCarousel
-          v-bind="featuredSettings"
-          :arrows="true"
-          class="featured-carousel"
+        <carousel
+          :id="topic.id"
+          :controls="true"
+          :title="name"
+          :options="carouselSettings"
         >
-          <!-- Custom arrow -->
-          <template #prevArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-          <div
-            v-for="video in featured"
+          <carousel-slide
+            v-for="video in topic.videos"
             :key="video.id"
-            class="video featured-video"
-          >
-            <router-link
-              :to="{name: 'video', params: {id: video['title_slug']}}"
-            >
-              <div class="featured-video__thumbnail">
-                <span class="video__duration">{{ video['duration'] }}</span>
-                <img :src="video['thumbnail_url']">
-                <div class="video__info">
-                  <span class="video__info-title">{{ getTitle(video) }}</span>
-                  <div class="video__info-teaser">
-                    <div class="video__info-subtitle">
-                      {{ getTitle(video, true) }}
-                    </div>
-                    {{ video['description'].substr(0, 200) }}
-                  </div>
-                </div>
-              </div>
-            </router-link>
-          </div>
-          <!-- Custom arrow -->
-          <template #nextArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-        </VueSlickCarousel>
-      </div>
-      <div
-        v-for="(topic, topic_name) in topics"
-        :id="stripChars(topic_name)"
-        :key="topic_name"
-        :class="`topic`"
-      >
-        <h2 class="topic__name video-meta__title">
-          {{ topic_name }}
-        </h2>
-        <VueSlickCarousel
-          v-bind="settings"
-          :arrows="true"
-        >
-          <!-- Custom arrow -->
-          <template #prevArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-          <div
-            v-for="video in topic['videos']"
-            :key="video.id"
-            class="video"
-          >
-            <router-link
-              :to="{name: 'video', params: {id: video._source['title_slug']}}"
-            >
-              <div class="video__thumbnail">
-                <span class="video__duration">{{ video._source['duration'] }}</span>
-                <img :src="video._source['thumbnail_url']">
-                <div class="video__title">
-                  <span>{{ video._source['title'] }}</span>
-                </div>
-              </div>
-            </router-link>
-          </div>
+            :item="video._source"
+          />
           <div class="video topic__see-all">
-            <div class="video__thumbnail">
-              <router-link
-                class="topic-link"
-                :to="{name: 'search', query: {topics: topic_name}}"
-              >
-                See all {{ topic['count'] }} videos tagged
-                <span class="topic-name">{{ topic_name }}</span>
-              </router-link>
-            </div>
+            <router-link
+              class="topic-link"
+              :to="{name: 'search', query: {topics: name}}"
+            >
+              {{ seeAllLinkText(topic) }}
+              <span class="topic-name">{{ name }}</span>
+            </router-link>
           </div>
-          <!-- Custom arrow -->
-          <template #nextArrow="arrowOption">
-            <div class="videos__navigation">
-              {{ arrowOption.currentSlide }}/{{ arrowOption.slideCount }}
-            </div>
-          </template>
-        </VueSlickCarousel>
+        </carousel>
       </div>
     </div>
   </div>
@@ -136,13 +106,24 @@
 
 <script>
 import axios from 'axios';
-import VueSlickCarousel from 'vue-slick-carousel';
+import { ContentLoader } from 'vue-content-loader';
+import Carousel from './Carousel.vue';
+import CarouselSlide from './CarouselSlide.vue';
+import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
 import mixin from '../mixins/getRouteData';
 
 export default {
   name: 'Home',
   components: {
-    VueSlickCarousel,
+    Carousel,
+    CarouselSlide,
+    ContentLoader,
+    FeaturedCarouselSlide,
+  },
+  filters: {
+    filterId(value) {
+      return value.replace(/[\s&]/gi, '').toLowerCase();
+    },
   },
   mixins: [mixin],
   data() {
@@ -152,6 +133,7 @@ export default {
       pager: null,
       topics: null,
       featured: false,
+      currentSectionInView: null,
       featuredSettings: {
         edgeFriction: 0.35,
         infinite: false,
@@ -159,39 +141,22 @@ export default {
         slidesToShow: 1,
         slidesToScroll: 1,
       },
-      settings: {
-        slidesToShow: 2.5,
-        infinite: false,
-        touchThreshold: 5,
+      carouselSettings: {
+        slidesToShow: 3.5,
+        slidesToScroll: 2,
         responsive: [
           {
             breakpoint: 1200,
             settings: {
               slidesToShow: 2.5,
-            },
-          },
-          {
-            breakpoint: 965,
-            settings: {
-              slidesToShow: 2,
-            },
-          },
-          {
-            breakpoint: 800,
-            settings: {
-              slidesToShow: 2,
+              slidesToScroll: 1,
             },
           },
           {
             breakpoint: 650,
             settings: {
               slidesToShow: 1.5,
-            },
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 1,
+              slidesToScroll: 1,
             },
           },
         ],
@@ -199,9 +164,7 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.getFeatured();
-    });
+    this.getFeatured();
   },
   methods: {
     getFeatured() {
@@ -221,18 +184,15 @@ export default {
           this.topics = response.data.topics;
         });
     },
-    stripChars(topic) {
-      const strippedTopic = topic.replace(' & ', '');
-      return strippedTopic.replace(' ', '');
+    seeAllLinkText(topic) {
+      const count = topic.count;
+      const videos = count > 1 ? 'videos' : 'video';
+      return `See all ${count} ${videos} tagged`;
     },
-    getTitle(metadata, subtitle = false) {
-      if (subtitle && metadata.quote === '') {
-        return '';
+    viewHandler(e) {
+      if (e.percentInView === 1 && e.percentTop < 0.6) {
+        this.currentSectionInView = e.target.element.dataset.sectionId;
       }
-      if (metadata.quote !== '' && !subtitle) {
-        return `"${metadata.quote}"`;
-      }
-      return metadata.title;
     },
   },
 };

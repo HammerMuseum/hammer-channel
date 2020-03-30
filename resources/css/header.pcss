@@ -1,0 +1,51 @@
+.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  height: 54px;
+  align-content: center;
+  justify-content: center;
+  background: var(--header-background);
+}
+
+.header__title {
+  display: inline-flex;
+  align-items: center;
+  z-index: 1;
+  max-width: 140px;
+}
+
+.header__logo {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 138px;
+  z-index: 0;
+}
+
+.link--with-image,
+.link__image {
+  display: block;
+}
+
+@media screen and (min-width: 600px) {
+  .header {
+    height: 72px;
+  }
+
+  .header__logo {
+    display: block;
+  }
+
+  .header__title {
+    max-width: 100%;
+  }
+}

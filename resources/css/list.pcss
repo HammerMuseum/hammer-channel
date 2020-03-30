@@ -1,147 +1,15 @@
-.topics__list {
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-
-.topics__list-item {
-  padding: 5px;
-  margin: 5px;
-}
-
-.topics__list-item > a {
-  text-decoration: none;
-  background: white;
-  border: 1px solid white;
-  padding: 5px;
-  color: black;
-}
-
-.topics {
-  position: fixed;
-  bottom: 2vh;
-  background: #f36cb5;
-  padding: 5px;
-  z-index: 1;
-}
-
-.featured-video__thumbnail {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 250px;
-}
-
-.video__info {
-  background-color: var(--background-secondary);
-  width: 100%;
-  flex-basis: 70%;
-  color: var(--text-secondary);
-  padding: 1rem;
-}
-
-.video__info > .video__info-title {
-  font-family: 'lft-etica-display', sans-serif;
-  font-weight: 200;
-  font-size: 34px;
-  padding-bottom: 1rem;
-  display: block;
-}
-
-.video__info-subtitle {
-  font-weight: 600;
-}
-
-.featured-video__thumbnail > img {
-  flex-basis: 50%;
-}
-
 .videos {
   display: flex;
   flex-direction: column;
-  max-height: 80vh;
-  overflow: auto;
 }
 
-.topic__name {
-  font-size: 34px;
-}
-
-.video {
-  padding: 0 1rem 0 0;
-}
-
-.video > a {
-  text-decoration: none;
-}
-
-.video__thumbnail {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.video__duration {
-  display: block;
-  position: absolute;
-  right: 0;
-  background: var(--background-secondary);
-  color: var(--body-bg);
-  z-index: 1;
-}
-
-.video__thumbnail > img {
-  width: 100%;
-}
-
-.video__title {
-  display: block;
-  padding: 10px 0;
-  background: white;
-  min-height: 40px;
-}
-
-.videos__navigation.slick-next,
-.videos__navigation.slick-prev {
-  width: 40px;
-  height: 40px;
-  background: var(--background-secondary);
-  z-index: 1;
-  right: 0;
-  padding: 10px;
-}
-
-.videos__navigation.slick-prev:focus,
-.videos__navigation.slick-next:focus,
-.videos__navigation.slick-next:hover,
-.videos__navigation.slick-prev:hover {
-  background: var(--background-secondary);
-  border-bottom: 4px solid var(--highlight-color-primary);
-}
-
-.videos__navigation.slick-prev {
-  left: 0;
-}
-
-.videos__navigation.slick-disabled {
-  display: none;
-}
-
-.topic__see-all {
-  min-height: 170px;
-  text-align: center;
-  background: #808285;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
+.listing {
+  margin-bottom: 50vh;
 }
 
 .topic-link {
-  text-decoration: none;
-  color: white;
-  transition: all 0.5s ease;
-  background: black;
+  font-size: 48px;
+  color: var(--body-text-color);
 }
 
 .no-results {

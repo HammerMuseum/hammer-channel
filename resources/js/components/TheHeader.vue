@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-container">
     <div class="header">
       <div class="header__logo">
         <a
@@ -8,7 +8,7 @@
         >
           <img
             class="link__image"
-            src="/assets/images/logo-hammer.png"
+            src="/images/logo-hammer.png"
             alt="The Hammer Museum Logo"
           >
         </a>
@@ -23,17 +23,23 @@
         >
           <img
             class="link__image"
-            src="/assets/images/logo-hammer-video.png"
+            src="/images/logo-hammer-video.png"
             alt="The Hammer Video Logo"
           >
         </router-link>
       </div>
     </div>
     <button
-      class="search-overlay-toggle"
+      class="button search-overlay-toggle"
       @click="toggleSearchActive"
     >
-      Open search
+      <svg
+        title="Open search"
+        class="icon"
+      >
+        <use xlink:href="/images/sprite.svg#sprite-search" />
+      </svg>
+      <span class="icon-text visually-hidden">Open search</span>
     </button>
     <SearchBar />
   </div>
@@ -53,45 +59,3 @@ export default {
   },
 };
 </script>
-
-<style>
-img {
-  max-width: 100%;
-  height: auto;
-  width: auto;
-}
-
-.header {
-  position: relative;
-  height: 72px;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  background: var(--header-background);
-}
-
-.header__title {
-  display: inline-flex;
-  align-items: center;
-  z-index: 1;
-}
-
-.header__logo {
-  display: none;
-  position: absolute;
-  left: 0;
-  width: 138px;
-  z-index: 0;
-}
-
-.link--with-image,
-.link__image {
-  display: block;
-}
-
-@media screen and (min-width: 600px) {
-  .header__logo {
-    display: block;
-  }
-}
-</style>

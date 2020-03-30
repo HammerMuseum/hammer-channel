@@ -218,7 +218,7 @@ export default {
     VideoPlayer,
     UseThis,
     ClippingTool,
-    Share
+    Share,
   },
   mixins: [getRouteData],
   data() {
