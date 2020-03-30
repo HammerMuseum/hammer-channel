@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 3;
 }
 
 .header {
@@ -19,6 +19,7 @@
   display: inline-flex;
   align-items: center;
   z-index: 1;
+  max-width: 140px;
 }
 
 .header__logo {
@@ -42,5 +43,9 @@
 
   .header__logo {
     display: block;
+  }
+
+  .header__title {
+    max-width: auto;
   }
 }

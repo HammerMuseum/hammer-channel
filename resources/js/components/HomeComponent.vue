@@ -71,33 +71,35 @@
       />
     </Carousel>
 
-    <div
-      v-for="(topic, name) in topics"
-      :key="topic.id"
-      v-view="viewHandler"
-      :data-section-id="topic.id"
-    >
-      <carousel
-        :id="topic.id"
-        :controls="true"
-        :title="name"
-        :options="carouselSettings"
+    <div class="container">
+      <div
+        v-for="(topic, name) in topics"
+        :key="topic.id"
+        v-view="viewHandler"
+        :data-section-id="topic.id"
       >
-        <carousel-slide
-          v-for="video in topic.videos"
-          :key="video.id"
-          :item="video._source"
-        />
-        <div class="video topic__see-all">
-          <router-link
-            class="topic-link"
-            :to="{name: 'search', query: {topics: name}}"
-          >
-            {{ seeAllLinkText(topic) }}
-            <span class="topic-name">{{ name }}</span>
-          </router-link>
-        </div>
-      </carousel>
+        <carousel
+          :id="topic.id"
+          :controls="true"
+          :title="name"
+          :options="carouselSettings"
+        >
+          <carousel-slide
+            v-for="video in topic.videos"
+            :key="video.id"
+            :item="video._source"
+          />
+          <div class="video topic__see-all">
+            <router-link
+              class="topic-link"
+              :to="{name: 'search', query: {topics: name}}"
+            >
+              {{ seeAllLinkText(topic) }}
+              <span class="topic-name">{{ name }}</span>
+            </router-link>
+          </div>
+        </carousel>
+      </div>
     </div>
   </div>
 </template>
