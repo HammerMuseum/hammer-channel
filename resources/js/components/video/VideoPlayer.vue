@@ -1,6 +1,6 @@
 <template>
-  <div class="video-player-container vjs-hd">
-    <span class="video__duration">{{ duration }}</span>
+  <div class="video-player-container hammer-video-player vjs-hd">
+    <span class="hammer-video-player__duration">{{ duration }}</span>
     <video
       ref="videoPlayer"
       class="video-js video-player vjs-default-skin"
