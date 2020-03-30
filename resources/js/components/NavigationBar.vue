@@ -1,23 +1,28 @@
 <template>
-  <flickity
-    v-if="items && Object.keys(items).length > 0"
-    ref="flickity"
+  <div
     :class="navigationClasses"
-    :options="flickityOptions"
-    @init="initNavigationBar"
   >
-    <div
-      v-for="(item, name) in items"
-      :key="item.id"
-      :data-selector="item.id"
-      class="navigation-bar__item"
+    <flickity
+      v-if="items && Object.keys(items).length > 0"
+      ref="flickity"
+      :options="flickityOptions"
+      @init="initNavigationBar"
     >
-      <a
-        :href="item.id | anchorLink"
-        :class="['link', {'link--active': activeItem === item.id }]"
-      >{{ name }}</a>
-    </div>
-  </flickity>
+      <div
+        v-for="(item, name) in items"
+        :key="item.id"
+        :data-selector="item.id"
+        class="navigation-bar__item"
+        role="navigation"
+        aria-label="Video topics"
+      >
+        <a
+          :href="item.id | anchorLink"
+          :class="['link', {'link--active': activeItem === item.id }]"
+        >{{ name }}</a>
+      </div>
+    </flickity>
+  </div>
 </template>
 
 <script>
