@@ -17,7 +17,8 @@
         aria-label="Video topics"
       >
         <a
-          :href="item.id | anchorLink"
+          v-scroll-to="{ el: `#${item.id}`, duration: 0, offset: -80 }"
+          href="#"
           :class="['link', {'link--active': activeItem === item.id }]"
         >{{ name }}</a>
       </div>
@@ -87,7 +88,7 @@ export default {
   },
   methods: {
     selectNavigationItem(item) {
-      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, true);
+      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, true, true);
     },
     initNavigationBar() {
       const FLICKITY_EVENTS = [

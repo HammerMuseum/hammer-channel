@@ -4,6 +4,7 @@ import 'svgxuse';
 import Vue from 'vue';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
+import VueScrollTo from 'vue-scrollto';
 import VueSocialSharing from 'vue-social-sharing';
 import router from './router';
 
@@ -20,6 +21,7 @@ files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], file
 Vue.use(VueFilterDateFormat);
 Vue.use(VueSocialSharing);
 Vue.use(VueCheckView);
+Vue.use(VueScrollTo);
 
 const app = new Vue({ // eslint-disable-line
   el: '#main-content',
