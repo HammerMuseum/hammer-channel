@@ -66,7 +66,7 @@ export default {
     return {
       flickityOptions: {
         freeScroll: true,
-        wrapAround: true,
+        wrapAround: false,
         contain: false,
         prevNextButtons: false,
         pageDots: false,
@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     selectNavigationItem(item) {
-      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, true, true);
+      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false, true);
     },
     initNavigationBar() {
       const FLICKITY_EVENTS = [
