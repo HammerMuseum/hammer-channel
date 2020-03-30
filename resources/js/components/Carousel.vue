@@ -141,9 +141,11 @@ export default {
 
 .carousel-controls .control--previous {
   left: 0;
+  padding-left: 8px;
 }
 
 .carousel-controls .control--next {
   right: 0;
+  padding-right: 8px;
 }
 </style>
