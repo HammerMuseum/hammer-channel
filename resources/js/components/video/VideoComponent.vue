@@ -142,7 +142,7 @@
             :title="title"
             :track="track"
             :timecode="timecode"
-            :video-url="video_url"
+            :video-url="src"
             @playbackerror="onPlayerError"
             @timeupdate="onTimeUpdate"
           />
@@ -241,7 +241,7 @@ export default {
       transcriptItems: [],
       transcriptLoaded: false,
       videoOptions: null,
-      video_url: null,
+      src: null,
     };
   },
   computed: {
@@ -273,14 +273,14 @@ export default {
         });
       }
     },
-    video_url() {
+    src() {
       this.videoOptions = {
         autoplay: false,
         controls: true,
         fill: true,
         sources: [
           {
-            src: this.video_url,
+            src: this.src,
             type: 'video/mp4',
           },
         ],
@@ -301,7 +301,7 @@ export default {
       axios
         .get(`/api/video/${this.$route.params.id}`)
         .then((response) => {
-          this.videoUrl = response.data.data.video_url;
+          this.videoUrl = response.data.data.src;
         });
     },
     toggleActivePanel(event, name) {

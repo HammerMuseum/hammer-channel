@@ -30,18 +30,6 @@ class Api
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);
                 if (!is_null($data)) {
-                    if (isset($data['data']) && !empty($data['data'])) {
-                        // Only retrieve AWS URLs for videos if this is an individual video page
-                        if ($type === 'video') {
-                            foreach ($data['data'] as $key => $item) {
-                                if (isset($item['video_url'])) {
-                                    $videoUrl = $item['video_url'] . '/url';
-                                    $contentUrl = $this->getPlaybackUrl($videoUrl);
-                                    $data['data'][$key]['video_url'] = $contentUrl;
-                                }
-                            }
-                        }
-                    }
                     return [
                         'success' => true,
                         'data' => $data['data'],
@@ -70,16 +58,5 @@ class Api
                 'aggregations' => []
             ];
         }
-    }
-
-    /**
-     * @param string $contentUrl
-     * @return \Psr\Http\Message\StreamInterface
-     */
-    public function getPlaybackUrl($contentUrl)
-    {
-        $client = new Client();
-        $response = $client->request('GET', $contentUrl);
-        return $response->getBody()->getContents();
     }
 }
