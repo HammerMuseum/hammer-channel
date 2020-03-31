@@ -21,11 +21,12 @@
           class="link link--with-image"
           :to="{name: 'app'}"
         >
-          <img
-            class="link__image"
-            src="/images/logo-hammer-video.png"
-            alt="The Hammer Video Logo"
+          <svg
+            title="Hammer video logo"
+            class="icon"
           >
+            <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
+          </svg>
         </router-link>
       </div>
     </div>
