@@ -89,13 +89,19 @@
             :key="video.id"
             :item="video._source"
           />
-          <div class="video topic__see-all">
+          <div class="carousel__slide see-more">
             <router-link
-              class="topic-link"
+              class="video-card"
               :to="{name: 'search', query: {topics: name}}"
             >
-              {{ seeAllLinkText(topic) }}
-              <span class="topic-name">{{ name }}</span>
+              <div class="see-more__content">
+                <span class="see-more__content-inner" />
+              </div>
+              <article>
+                <h2 class="video-card__title">
+                  <span>{{ seeAllLinkText(topic, name) }}</span>
+                </h2>
+              </article>
             </router-link>
           </div>
         </carousel>
@@ -184,10 +190,10 @@ export default {
           this.topics = response.data.topics;
         });
     },
-    seeAllLinkText(topic) {
+    seeAllLinkText(topic, name) {
       const count = topic.count;
       const videos = count > 1 ? 'videos' : 'video';
-      return `See all ${count} ${videos} tagged`;
+      return `See all ${count} ${videos} tagged ${name}`;
     },
     viewHandler(e) {
       if (e.percentInView === 1 && e.percentTop < 0.6) {
