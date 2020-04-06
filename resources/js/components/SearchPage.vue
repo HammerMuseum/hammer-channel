@@ -149,22 +149,8 @@
                   <h2 class="ui-card__title">
                     <span>{{ item.title }}</span>
                   </h2>
-                  <!-- <p class="ui-card__description">
-                    {{ item.description }}
-                  </p> -->
                 </article>
               </RouterLink>
-
-              <!-- <span class="video__duration">{{ item.duration }}</span>
-              <RouterLink
-                :to="{name: 'video', params: {id: item.title_slug}}"
-              >
-                <img
-                  class="result-item__image"
-                  :src="`${ item.thumbnail_url }`"
-                >
-                <span class="result-item__title">{{ item.title }}</span>
-              </RouterLink> -->
             </UiCard>
           </UiGrid>
 
