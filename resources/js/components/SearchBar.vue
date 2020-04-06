@@ -10,57 +10,61 @@
         @keyup.escape="toggleSearchActive"
       >
         <div
-          class="search-bar"
+          class="search-bar__body"
         >
           <div
-            ref="searchBar"
-            class="search-bar__action"
-            tabindex="0"
+            class="search-bar"
           >
-            <input
-              ref="searchInput"
-              v-model="searchTerm"
-              class="search-bar__input"
-              type="text"
-              name="search"
-              aria-label="Search"
-              placeholder="Search"
-              @keyup.enter="search"
+            <div
+              ref="searchBar"
+              class="search-bar__action"
+              tabindex="0"
             >
-          </div>
-
-          <div class="search-bar__options">
-            <div class="search-bar__option">
-              <span>or</span>
-              <router-link
-                class="link link--text"
-                :to="{ name: 'search' }"
-                @click.native="toggleSearchActive"
+              <input
+                ref="searchInput"
+                v-model="searchTerm"
+                class="search-bar__input"
+                type="text"
+                name="search"
+                aria-label="Search"
+                placeholder="Search"
+                @keyup.enter="search"
               >
-                show me everything
-              </router-link>
             </div>
-            <div class="search-bar__option">
-              <span class="search-bar__option-label">or try</span>
-              <div class="search-bar__option-content">
+
+            <div class="search-bar__options">
+              <div class="search-bar__option">
+                <span>or</span>
                 <router-link
-                  v-for="item in cannedTerms"
-                  :key="item.id"
                   class="link link--text"
-                  :to="{ name: 'search', query: item.query }"
+                  :to="{ name: 'search' }"
                   @click.native="toggleSearchActive"
                 >
-                  {{ item.term }}
+                  show me everything
                 </router-link>
               </div>
+              <div class="search-bar__option">
+                <span class="search-bar__option-label">or try</span>
+                <div class="search-bar__option-content">
+                  <router-link
+                    v-for="item in cannedTerms"
+                    :key="item.id"
+                    class="link link--text"
+                    :to="{ name: 'search', query: item.query }"
+                    @click.native="toggleSearchActive"
+                  >
+                    {{ item.term }}
+                  </router-link>
+                </div>
+              </div>
             </div>
+            <button
+              class="button--close-search"
+              @click="toggleSearchActive"
+            >
+              close
+            </button>
           </div>
-          <button
-            class="button--close-search"
-            @click="toggleSearchActive"
-          >
-            close
-          </button>
         </div>
       </div>
     </transition>
@@ -69,8 +73,8 @@
 
 <script>
 import { FocusTrap } from 'focus-trap-vue';
-import { store, mutations } from '../store';
 import axios from 'axios';
+import { store, mutations } from '../store';
 
 export default {
   components: {
@@ -78,7 +82,7 @@ export default {
   },
   data() {
     return {
-      cannedTerms: []
+      cannedTerms: [],
     };
   },
   computed: {
@@ -106,7 +110,7 @@ export default {
       immediate: true,
       handler(to, from) {
         this.getCannedTerms();
-      }
+      },
     },
   },
   methods: {
@@ -122,7 +126,7 @@ export default {
         .then((response) => {
           this.cannedTerms = response.data;
         });
-    }
+    },
   },
 };
 </script>
@@ -130,7 +134,7 @@ export default {
 <style>
 .slide-down-enter-active,
 .slide-down-leave-active {
-  transition: transform 1.2s cubic-bezier(.19,1,.22,1);
+  transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .slide-down-enter,
