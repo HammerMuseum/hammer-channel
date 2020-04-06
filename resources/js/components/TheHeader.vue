@@ -1,5 +1,5 @@
 <template>
-  <div class="header-container">
+  <div class="container-fixed container-fixed--top header-container">
     <div class="header">
       <div class="header__logo">
         <a

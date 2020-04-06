@@ -1,5 +1,5 @@
 <template>
-  <div class="listing">
+  <div class="container">
     <NavigationBar
       :items="topics"
       :active-item="currentSectionInView"
@@ -71,7 +71,7 @@
       />
     </Carousel>
 
-    <div class="container">
+    <div class="carousels">
       <div
         v-for="(topic, name) in topics"
         :key="topic.id"

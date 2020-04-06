@@ -1,7 +1,7 @@
 <template>
   <div
     v-on-clickaway="away"
-    class="footer-wrapper"
+    class="container-fixed container-fixed--bottom footer-container"
   >
     <div class="footer-toggle">
       <button
