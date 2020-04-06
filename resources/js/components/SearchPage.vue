@@ -1,7 +1,19 @@
 <template>
   <div class="container">
-    <div class="search">
-      <div class="search__sidebar">
+    <div class="search-page">
+      <SearchPageHeader>
+        <div class="totals">
+          Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
+        </div>
+      </SearchPageHeader>
+      <div class="search-page__sidebar">
+        <button
+          class="filters__toggle"
+          @click="showFilters = !showFilters"
+        >
+          {{ showFilters ? 'Hide filters' : 'Show filters' }}
+        </button>
+
         <div class="search__form">
           <label
             for="search-main"
@@ -50,7 +62,7 @@
                   class="close-button"
                   @click="toggleFacetPanel(this, 'topics')"
                 >Close</span>
-                <searchable-facet
+                <SearchableFacet
                   v-if="facets"
                   :active-facets="activeFacets"
                   :facet-list="topicsAndTags"
@@ -73,7 +85,7 @@
                 class="close-button"
                 @click="toggleFacetPanel(this, 'speakers')"
               >Close</span>
-              <searchable-facet
+              <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
@@ -85,7 +97,7 @@
               <p class="facet__label">
                 Playlist
               </p>
-              <search-facet
+              <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
@@ -96,7 +108,7 @@
               <p class="facet__label">
                 Year Recorded
               </p>
-              <search-facet
+              <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
@@ -106,43 +118,7 @@
         </div>
       </div>
 
-      <div class="search__main">
-        <div class="search__header">
-          <h1>Search results</h1>
-          <button
-            class="filters__toggle"
-            @click="showFilters = !showFilters"
-          >
-            {{ showFilters ? 'Hide filters' : 'Show filters' }}
-          </button>
-
-          <div class="search__sorting">
-            <label>Order by</label>
-            <RouterLink
-              :to="{
-                name: 'search',
-                query: {
-                  ...$route.query,
-                  ...{ sort: 'date_recorded', order: 'asc' }
-                }
-              }"
-            >
-              Date (ASC)
-            </RouterLink>
-            <RouterLink
-              :to="{
-                name: 'search',
-                query: {
-                  ...$route.query,
-                  ...{ sort: 'date_recorded', order: 'desc' }
-                }
-              }"
-            >
-              Date (DESC)
-            </RouterLink>
-          </div>
-        </div>
-
+      <div class="search-page__main">
         <div
           v-if="noResults"
           class="no-results"
@@ -154,12 +130,8 @@
           v-else
           class="search__results"
         >
-          <div class="totals">
-            Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
-          </div>
-
-          <ui-grid>
-            <ui-card
+          <UiGrid>
+            <UiCard
               v-for="item in videos"
               :key="item.title_slug"
             >
@@ -193,8 +165,8 @@
                 >
                 <span class="result-item__title">{{ item.title }}</span>
               </RouterLink> -->
-            </ui-card>
-          </ui-grid>
+            </UiCard>
+          </UiGrid>
 
           <div class="pager">
             <ul>
@@ -225,6 +197,7 @@ import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
+import SearchPageHeader from './SearchPageHeader.vue';
 
 export default {
   name: 'Search',
@@ -233,6 +206,7 @@ export default {
     UiGrid,
     SearchFacet,
     SearchableFacet,
+    SearchPageHeader,
   },
   filters: {
     capitalize(value) {
@@ -313,7 +287,7 @@ export default {
   },
   methods: {
     handleResize() {
-      if (window.innerWidth >= 850) {
+      if (window.innerWidth >= 840) {
         this.showFilters = true;
       } else {
         this.showFilters = false;

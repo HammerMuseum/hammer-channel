@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../components/HomeComponent.vue';
-import Search from '../components/SearchComponent.vue';
+import Search from '../components/SearchPage.vue';
 import NotFound from '../components/NotFoundComponent.vue';
 import Video from '../components/video/VideoComponent.vue';
 
