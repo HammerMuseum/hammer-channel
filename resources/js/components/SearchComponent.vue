@@ -1,172 +1,180 @@
 <template>
-  <div class="listing">
-    <ul class="nav-list">
-      <li class="nav-item">
-        <router-link :to="{name: 'app'}">
-          Home
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link :to="{name: 'search'}">
-          Search
-        </router-link>
-      </li>
-    </ul>
+  <div class="container">
     <div class="search">
-      <label
-        for="search-main"
-        class="search__label"
-      />
-      <div class="search__item-wrapper">
-        <input
-          id="search-main"
-          v-model="term"
-          type="search"
-          name="term"
-          title="Search"
-          placeholder="Search"
-          class="search__item search__input"
-          @keyup.enter="search()"
-        >
-        <div class="search__item search__submit-wrapper">
-          <button
-            class="search__submit"
-            @click="search()"
-          >
-            Search
-          </button>
+      <div class="search__sidebar">
+        <div class="search__form">
+          <label
+            for="search-main"
+            class="search__label"
+          />
+          <div class="search__item-wrapper">
+            <input
+              id="search-main"
+              v-model="term"
+              type="search"
+              name="term"
+              title="Search"
+              placeholder="Search"
+              class="search__item search__input"
+              @keyup.enter="search()"
+            >
+            <div class="search__item search__submit-wrapper">
+              <button
+                class="search__submit"
+                @click="search()"
+              >
+                Search
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div
-      v-if="noResults"
-      class="search__area"
-    >
-      <div class="no-results">
-        <span class="label">
-          There are no results that match your criteria.</span>
-      </div>
-    </div>
-    <div
-      v-if="!noResults"
-      class="search__area"
-    >
-      <button
-        class="filters__toggle"
-        @click="showFilters = !showFilters"
-      >
-        {{ showFilters ? 'Hide filters' : 'Show filters' }}
-      </button>
-      <div class="filters">
-        <div
-          v-show="showFilters && hasFacets"
-          class="facets"
-        >
-          <h2>Filter by</h2>
-          <div>
-            <p class="search-facet__label" @click="toggleFacetPanel('topics')">
-              Topics & tags
+        <div class="search__filters">
+          <div
+            v-show="showFilters && hasFacets"
+            class="facets"
+          >
+            <h2>Filter by</h2>
+            <div>
+              <p
+                class="search-facet__label"
+                @click="toggleFacetPanel('topics')"
+              >
+                Topics & tags
+              </p>
+              <div
+                v-show="activeFacet === 'topics'"
+                class="searchable-facet__container"
+                :class="{active: activeFacet === 'topics'}"
+              >
+                <span
+                  class="close-button"
+                  @click="toggleFacetPanel(this, 'topics')"
+                >Close</span>
+                <searchable-facet
+                  v-if="facets"
+                  :active-facets="activeFacets"
+                  :facet-list="topicsAndTags"
+                  :panel-name="'topics'"
+                />
+              </div>
+            </div>
+            <p
+              class="search-facet__label"
+              @click="toggleFacetPanel('speakers')"
+            >
+              People
             </p>
-            <div class="searchable-facet__container"
-              v-show="activeFacet === 'topics'"
-              :class="{active: activeFacet === 'topics'}"
+            <div
+              v-show="activeFacet === 'speakers'"
+              class="searchable-facet__container"
+              :class="{active: activeFacet === 'speakers'}"
             >
               <span
                 class="close-button"
-                @click="toggleFacetPanel(this, 'topics')"
+                @click="toggleFacetPanel(this, 'speakers')"
               >Close</span>
               <searchable-facet
-                v-if="facets != null"
+                v-if="facets"
                 :active-facets="activeFacets"
-                :facetList="topicsAndTags"
-                :panelName="'topics'"
+                :facet-list="[facets.speakers]"
+                :panel-name="'speakers'"
+              />
+            </div>
+
+            <div>
+              <p class="facet__label">
+                Playlist
+              </p>
+              <search-facet
+                v-if="facets"
+                :active-facets="activeFacets"
+                :facet="facets.in_playlists"
+              />
+            </div>
+
+            <div>
+              <p class="facet__label">
+                Year Recorded
+              </p>
+              <search-facet
+                v-if="facets"
+                :active-facets="activeFacets"
+                :facet="facets.date_recorded"
               />
             </div>
           </div>
-          <p class="search-facet__label" @click="toggleFacetPanel('speakers')">
-            People
-          </p>
-          <div class="searchable-facet__container"
-           v-show="activeFacet === 'speakers'"
-           :class="{active: activeFacet === 'speakers'}"
-          >
-            <span
-              class="close-button"
-              @click="toggleFacetPanel(this, 'speakers')"
-            >Close</span>
-            <searchable-facet
-              v-if="facets != null"
-              :active-facets="activeFacets"
-              :facetList="[facets.speakers]"
-              :panelName="'speakers'"
-            />
-          </div>
-          <div>
-            <p class="facet__label">
-              Playlist
-            </p>
-            <search-facet
-              v-if="facets != null"
-              :active-facets="activeFacets"
-              :facet="facets.in_playlists"
-            />
-          </div>
-          <div>
-            <p class="facet__label">
-              Year Recorded
-            </p>
-            <search-facet
-              v-if="facets != null"
-              :active-facets="activeFacets"
-              :facet="facets.date_recorded"
-            />
-          </div>
         </div>
       </div>
-      <div class="results">
-        <div class="facets__sort">
-          <span class="facet__label">Order by</span>
-          <router-link
-            :to="{
-              name: 'search',
-              query: {
-                ...$route.query,
-                ...{ sort: 'date_recorded', order: 'asc' }
-              }
-            }"
+
+      <div class="search__main">
+        <div class="search__header">
+          <h1>Search results</h1>
+          <button
+            class="filters__toggle"
+            @click="showFilters = !showFilters"
           >
-            Date (ASC)
-          </router-link>
-          <router-link
-            :to="{
-              name: 'search',
-              query: {
-                ...$route.query,
-                ...{ sort: 'date_recorded', order: 'desc' }
-              }
-            }"
-          >
-            Date (DESC)
-          </router-link>
-        </div>
-        <div class="totals">
-          Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
-        </div>
-        <result-grid :videos="videos" />
-        <div class="pager">
-          <ul>
-            <li
-              v-for="(item, label) in filteredPager"
-              :key="item"
+            {{ showFilters ? 'Hide filters' : 'Show filters' }}
+          </button>
+
+          <div class="search__sorting">
+            <label>Order by</label>
+            <router-link
+              :to="{
+                name: 'search',
+                query: {
+                  ...$route.query,
+                  ...{ sort: 'date_recorded', order: 'asc' }
+                }
+              }"
             >
-              <router-link
-                v-if="item"
-                :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
+              Date (ASC)
+            </router-link>
+            <router-link
+              :to="{
+                name: 'search',
+                query: {
+                  ...$route.query,
+                  ...{ sort: 'date_recorded', order: 'desc' }
+                }
+              }"
+            >
+              Date (DESC)
+            </router-link>
+          </div>
+        </div>
+
+        <div
+          v-if="noResults"
+          class="no-results"
+        >
+          <span class="label">
+            There are no results that match your criteria.</span>
+        </div>
+        <div
+          v-else
+          class="search__results"
+        >
+          <div class="totals">
+            Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
+          </div>
+
+          <result-grid :items="videos" />
+
+          <div class="pager">
+            <ul>
+              <li
+                v-for="(item, label) in filteredPager"
+                :key="item"
               >
-                {{ label | capitalize }}
-              </router-link>
-            </li>
-          </ul>
+                <router-link
+                  v-if="item"
+                  :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
+                >
+                  {{ label | capitalize }}
+                </router-link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -318,17 +326,13 @@ export default {
       this.combineTopicsTags();
     },
     combineTopicsTags() {
-      if (this.topicsAndTags.length <= 0) {
+      if (!this.topicsAndTags.length) {
         this.topicsAndTags.push(this.facets.topics);
         this.topicsAndTags.push(this.facets.tags);
       }
     },
     toggleFacetPanel(name) {
-      if (this.activeFacet === name) {
-        this.activeFacet = null;
-      } else {
-        this.activeFacet = name;
-      }
+      this.activeFacet = this.activeFacet === name ? null : name;
     },
   },
 };

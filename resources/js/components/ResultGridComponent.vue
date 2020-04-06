@@ -1,18 +1,19 @@
 <template>
   <div class="result-grid">
     <div
-      v-for="video in videos"
+      v-for="item in items"
+      :key="item.title_slug"
       class="result-item"
     >
-      <span class="video__duration">{{ video['duration'] }}</span>
+      <span class="video__duration">{{ item.duration }}</span>
       <router-link
-        :to="{name: 'video', params: {id: video.title_slug}}"
+        :to="{name: 'video', params: {id: item.title_slug}}"
       >
         <img
           class="result-item__image"
-          :src="`${ video.thumbnail_url }`"
+          :src="`${ item.thumbnail_url }`"
         >
-        <span class="result-item__title">{{ video['title'] }}</span>
+        <span class="result-item__title">{{ item.title }}</span>
       </router-link>
     </div>
   </div>
@@ -22,7 +23,7 @@
 export default {
   name: 'ResultGrid',
   props: {
-    videos: Array,
+    items: Array,
   },
 };
 </script>

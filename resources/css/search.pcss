@@ -1,20 +1,27 @@
+.search {
+  padding-top: 72px;
+  margin: 0 48px 48px;
+}
+
 .search-bar-container {
+  height: 100vh;
+  width: 100%;
+}
+
+.search-bar__body {
   width: 100%;
   display: flex;
   justify-content: center;
-  position: absolute;
-  padding: 4em 0;
+  position: relative;
   z-index: 4;
   background-color: #fff;
-  background-image: url(/images/sprite.svg#sprite-grate);
+  background-image: url(/images/grate.svg);
   background-repeat: repeat;
-  backface-visibility: hidden;
-  -webkit-perspective: 1000;
 }
 
 .search-bar {
   width: 100%;
-  padding: 50px 1rem;
+  padding: 54px 22px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -169,7 +176,7 @@
 @media screen and (min-width: 1024px) {
   .search-bar {
     width: 50vw;
-    padding: 50px 0;
+    padding: 72px 22px;
   }
 
   .search-bar__options {
