@@ -22,20 +22,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.ui-card {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  padding-right: 24px;
-}
-
-.ui-card > a {
-  text-decoration: none;
-}
-
-.ui-card:focus {
-  background-color: initial;
-}
-</style>
