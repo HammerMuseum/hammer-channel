@@ -118,7 +118,7 @@
 
           <div class="search__sorting">
             <label>Order by</label>
-            <router-link
+            <RouterLink
               :to="{
                 name: 'search',
                 query: {
@@ -128,8 +128,8 @@
               }"
             >
               Date (ASC)
-            </router-link>
-            <router-link
+            </RouterLink>
+            <RouterLink
               :to="{
                 name: 'search',
                 query: {
@@ -139,7 +139,7 @@
               }"
             >
               Date (DESC)
-            </router-link>
+            </RouterLink>
           </div>
         </div>
 
@@ -163,7 +163,7 @@
               v-for="item in videos"
               :key="item.title_slug"
             >
-              <router-link
+              <RouterLink
                 :to="{name: 'video', params: {id: item.slug }}"
               >
                 <div class="ui-card__thumbnail">
@@ -181,10 +181,10 @@
                     {{ item.description }}
                   </p> -->
                 </article>
-              </router-link>
+              </RouterLink>
 
               <!-- <span class="video__duration">{{ item.duration }}</span>
-              <router-link
+              <RouterLink
                 :to="{name: 'video', params: {id: item.title_slug}}"
               >
                 <img
@@ -192,7 +192,7 @@
                   :src="`${ item.thumbnail_url }`"
                 >
                 <span class="result-item__title">{{ item.title }}</span>
-              </router-link> -->
+              </RouterLink> -->
             </ui-card>
           </ui-grid>
 
@@ -202,12 +202,12 @@
                 v-for="(item, label) in filteredPager"
                 :key="item"
               >
-                <router-link
+                <RouterLink
                   v-if="item"
                   :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
                 >
                   {{ label | capitalize }}
-                </router-link>
+                </RouterLink>
               </li>
             </ul>
           </div>

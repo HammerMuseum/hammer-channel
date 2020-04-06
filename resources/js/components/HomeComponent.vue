@@ -90,13 +90,13 @@
             :item="video._source"
           />
           <div class="video topic__see-all">
-            <router-link
+            <RouterLink
               class="topic-link"
               :to="{name: 'search', query: {topics: name}}"
             >
               {{ seeAllLinkText(topic) }}
               <span class="topic-name">{{ name }}</span>
-            </router-link>
+            </RouterLink>
           </div>
         </carousel>
       </div>

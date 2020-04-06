@@ -1,7 +1,6 @@
 module.exports = {
   "extends": [
     "airbnb-base",
-    "plugin:vue/essential",
     "plugin:vue/recommended",
   ],
   "globals": {
@@ -15,5 +14,6 @@ module.exports = {
     "prefer-arrow-callback": ["off"],
     "prefer-destructuring": ["off"],
     "no-debugger": "warn",
+    "vue/component-name-in-template-casing": "error"
   }
 }

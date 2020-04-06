@@ -17,7 +17,7 @@
         <h1 class="visually-hidden">
           Hammer Video
         </h1>
-        <router-link
+        <RouterLink
           class="link link--with-image"
           :to="{name: 'app'}"
         >
@@ -26,7 +26,7 @@
             src="/images/logo-hammer-video.png"
             alt="The Hammer Video Logo"
           >
-        </router-link>
+        </RouterLink>
       </div>
     </div>
     <button

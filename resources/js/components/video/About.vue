@@ -6,11 +6,11 @@
         v-for="item in playlists"
         :key="item"
       >
-        <router-link
+        <RouterLink
           :to="{name: 'search', query: { in_playlists: item } }"
         >
           {{ item }}
-        </router-link>
+        </RouterLink>
       </span>
     </div>
     <div v-if="people">
@@ -19,11 +19,11 @@
         v-for="item in people"
         :key="item"
       >
-        <router-link
+        <RouterLink
           :to="{name: 'search', query: { speakers: item } }"
         >
           {{ item }}
-        </router-link>
+        </RouterLink>
       </span>
     </div>
 
@@ -36,7 +36,7 @@
     </div>
 
     <div class="video-meta__date-recorded">
-      Recorded: {{ new Date(date_recorded) | dateFormat('dddd, DD MMMM, YYYY') }}
+      Recorded: {{ new Date(dateRecorded) | dateFormat('dddd, DD MMMM, YYYY') }}
     </div>
   </div>
 </template>
@@ -45,7 +45,7 @@
 export default {
   name: 'About',
   props: {
-    date_recorded: {
+    dateRecorded: {
       type: String,
       default: '',
     },

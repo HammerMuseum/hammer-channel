@@ -1,7 +1,7 @@
 <template>
   <div class="carousel__slide carousel__slide--featured">
     <ui-card :extra-classes="['ui-card--featured']">
-      <router-link
+      <RouterLink
         :to="{name: 'video', params: {id: slug}}"
         class="featured-slide"
       >
@@ -33,7 +33,7 @@
             </div>
           </template>
         </article>
-      </router-link>
+      </RouterLink>
     </ui-card>
   </div>
 </template>

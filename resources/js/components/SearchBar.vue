@@ -1,5 +1,5 @@
 <template>
-  <focus-trap
+  <FocusTrap
     :active="searchActive"
     :escape-deactivates="false"
   >
@@ -35,18 +35,18 @@
             <div class="search-bar__options">
               <div class="search-bar__option">
                 <span>or</span>
-                <router-link
+                <RouterLink
                   class="link link--text"
                   :to="{ name: 'search' }"
                   @click.native="toggleSearchActive"
                 >
                   show me everything
-                </router-link>
+                </RouterLink>
               </div>
               <div class="search-bar__option">
                 <span class="search-bar__option-label">or try</span>
                 <div class="search-bar__option-content">
-                  <router-link
+                  <RouterLink
                     v-for="item in cannedTerms"
                     :key="item.id"
                     class="link link--text"
@@ -54,7 +54,7 @@
                     @click.native="toggleSearchActive"
                   >
                     {{ item.term }}
-                  </router-link>
+                  </RouterLink>
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@
         </div>
       </div>
     </transition>
-  </focus-trap>
+  </FocusTrap>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <content-loader
+  <ContentLoader
     v-if="!item"
     :speed="2"
     :animate="true"
@@ -8,8 +8,8 @@
     v-else
     class="carousel__slide"
   >
-    <ui-card>
-      <router-link
+    <UiCard>
+      <RouterLink
         :to="{name: 'video', params: {id: slug }}"
       >
         <div class="ui-card__thumbnail">
@@ -27,8 +27,8 @@
             {{ description }}
           </p>
         </article>
-      </router-link>
-    </ui-card>
+      </RouterLink>
+    </UiCard>
   </div>
 </template>
 

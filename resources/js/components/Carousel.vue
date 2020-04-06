@@ -44,7 +44,7 @@
         <span class="icon-text visually-hidden">Next</span>
       </button>
     </div>
-    <vue-slick-carousel
+    <VueSlickCarousel
       ref="carousel"
       :class="['carousel', ...classes]"
       v-bind="settings"
@@ -55,7 +55,7 @@
       @reInit="setSlideCount"
     >
       <slot />
-    </vue-slick-carousel>
+    </VueSlickCarousel>
   </div>
 </template>
 

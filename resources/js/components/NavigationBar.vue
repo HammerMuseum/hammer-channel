@@ -2,7 +2,7 @@
   <div
     :class="navigationClasses"
   >
-    <flickity
+    <Flickity
       v-if="items && Object.keys(items).length > 0"
       ref="flickity"
       :options="flickityOptions"
@@ -22,7 +22,7 @@
           :class="['link', {'link--active': activeItem === item.id }]"
         >{{ name }}</a>
       </div>
-    </flickity>
+    </Flickity>
   </div>
 </template>
 
