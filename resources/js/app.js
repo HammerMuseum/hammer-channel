@@ -24,6 +24,6 @@ Vue.use(VueCheckView);
 Vue.use(VueScrollTo);
 
 const app = new Vue({ // eslint-disable-line
-  el: '#main-content',
+  el: '#app',
   router,
 });
