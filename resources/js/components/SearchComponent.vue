@@ -158,7 +158,43 @@
             Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
           </div>
 
-          <result-grid :items="videos" />
+          <ui-grid>
+            <ui-card
+              v-for="item in videos"
+              :key="item.title_slug"
+            >
+              <router-link
+                :to="{name: 'video', params: {id: item.slug }}"
+              >
+                <div class="ui-card__thumbnail">
+                  <span class="ui-card__duration">{{ item.duration }}</span>
+                  <img
+                    :src="item.thumbnail_url"
+                    class="ui-card__thumbnail-image"
+                  >
+                </div>
+                <article>
+                  <h2 class="ui-card__title">
+                    <span>{{ item.title }}</span>
+                  </h2>
+                  <!-- <p class="ui-card__description">
+                    {{ item.description }}
+                  </p> -->
+                </article>
+              </router-link>
+
+              <!-- <span class="video__duration">{{ item.duration }}</span>
+              <router-link
+                :to="{name: 'video', params: {id: item.title_slug}}"
+              >
+                <img
+                  class="result-item__image"
+                  :src="`${ item.thumbnail_url }`"
+                >
+                <span class="result-item__title">{{ item.title }}</span>
+              </router-link> -->
+            </ui-card>
+          </ui-grid>
 
           <div class="pager">
             <ul>
@@ -183,7 +219,8 @@
 
 <script>
 import axios from 'axios';
-import ResultGrid from './ResultGridComponent.vue';
+import UiCard from './UiCard.vue';
+import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import SearchFacet from './SearchFacet.vue';
@@ -192,7 +229,8 @@ import SearchableFacet from './SearchableFacet.vue';
 export default {
   name: 'Search',
   components: {
-    ResultGrid,
+    UiCard,
+    UiGrid,
     SearchFacet,
     SearchableFacet,
   },
