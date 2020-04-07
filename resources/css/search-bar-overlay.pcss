@@ -1,0 +1,126 @@
+.search-bar-container {
+  height: 100vh;
+  width: 100%;
+}
+
+.search-bar__body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 4;
+  background-color: #fff;
+  background-image: url(/images/grate.svg);
+  background-repeat: repeat;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 54px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.search-overlay-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 16px;
+  background-color: #fff;
+}
+
+.search-overlay-toggle .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.search-bar__input {
+  padding: 20px;
+  color: #fff;
+  border: none;
+  background: var(--background-secondary);
+  font-size: 48px;
+  font-weight: 200;
+}
+
+.search-bar__input:focus {
+  outline: none;
+}
+
+.search-bar__input::placeholder {
+  color: var(--text-secondary);
+  display: block;
+  border-left: 1px solid var(--highlight-primary);
+  padding-left: 1rem;
+}
+
+.search-bar__action,
+.search-bar__input,
+.search-bar__options,
+.search-bar__option {
+  width: 100%;
+}
+
+.search-bar__options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search-bar__option {
+  display: flex;
+  background: var(--background-secondary);
+  color: var(--text-secondary);
+  padding: 20px;
+  font-weight: 200;
+}
+
+.search-bar__option-label {
+  flex: 1 0 auto;
+}
+
+.button--search {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px;
+  border: none;
+  align-self: flex-end;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 4px solid var(--highlight-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--background-secondary);
+}
+
+.button--close-search {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px;
+  border: none;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--background-secondary);
+}
+
+@media screen and (min-width: 1024px) {
+  .search-bar {
+    width: 50vw;
+    padding: 72px 22px;
+  }
+
+  .search-bar__options {
+    align-items: baseline;
+    flex-wrap: no-wrap;
+  }
+
+  .search-bar__option {
+    width: 50%;
+  }
+}
