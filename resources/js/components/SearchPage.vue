@@ -105,6 +105,7 @@
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
+                @change="changeFacetOverlay"
               />
             </SearchPageOverlay>
 
@@ -119,6 +120,7 @@
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
+                @change="changeFacetOverlay"
               />
             </SearchPageOverlay>
 
@@ -132,6 +134,7 @@
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
+                @change="changeFacetOverlay"
               />
             </SearchPageOverlay>
 
@@ -145,6 +148,7 @@
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
+                @change="changeFacetOverlay"
               />
             </SearchPageOverlay>
           </transition>
