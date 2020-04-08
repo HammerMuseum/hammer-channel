@@ -2,6 +2,10 @@
   margin-bottom: 40px;
 }
 
+.search__filters .page-heading--secondary {
+  margin-bottom: 22px;
+}
+
 @media screen and (min-width: 600px) {
   .search-overlay-toggle {
     top: 14px;
@@ -17,35 +21,36 @@
 }
 
 .search-page {
-  padding: 72px 0;
+  padding-top: 54px;
 }
 
 .search-page__sidebar {
   position: relative;
-  padding: 0 24px 0 48px;
   z-index: 3;
 }
 
 .search-page__main {
   position: relative;
-  padding: 0 48px 0 0;
+}
+
+@media (min-width: 600px) {
+  .search-page {
+    padding-top: 72px;
+  }
 }
 
 @media (min-width: 840px) {
-  .search-page__header {
-    margin-left: 25%;
-    margin-bottom: 40px;
-  }
-
   .search-page__content {
     display: flex;
   }
 
   .search-page__sidebar {
-    flex-basis: 25%;
+    flex: 1;
+    padding: 0 24px 0 48px;
   }
 
   .search-page__main {
-    flex-basis: 75%;
+    flex: 3;
+    padding: 0 48px 0 0;
   }
 }

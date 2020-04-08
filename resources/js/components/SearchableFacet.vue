@@ -1,12 +1,17 @@
 <template>
-  <div class="facet">
-    <div class="searchable-facet__filter">
-      <label for="facet-search">Filter by: </label>
+  <div class="searchable-facet">
+    <div class="searchable-facet__search-input">
+      <label
+        class="visually-hidden"
+        for="facet-search"
+      >Type to filter list...</label>
       <input
-        id="facet-search"
         v-model="facetSearch"
-        type="search"
+        type="text"
         name="facet-search"
+        class="search__input"
+        aria-label="Search to filter list"
+        placeholder="Search to filter list"
       >
     </div>
     <div
@@ -15,37 +20,48 @@
     >
       No results found
     </div>
+
     <div
       v-for="facet in filteredItems"
-      v-if="!noResults"
-      class="searchable-facet"
+      v-else
+      :key="facet.label"
+      class="search-facet__list"
     >
-      <span class="searchable-facet__label">
+      <h4 class="visually-hidden search-facet__list-label">
         {{ facet.label }}
-      </span>
-      <div class="searchable-facet__items">
-        <div
-          v-for="item in facet.items"
-          class="searchable-facet__item"
-          :class="{facets__item: true, 'facets__item--active': isActive(getValue(item, facet.type))}"
+      </h4>
+      <div
+        v-for="item in facet.items"
+        :key="item.key"
+        :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(item, facet.type))}"
+      >
+        <a
+          :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
+          class="search-facet__item-link"
+          @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
         >
-          <a
-            :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
-            class="facets__item-link"
-            @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
-          >
+          <template v-if="!isActive(getValue(item, facet.type))">
             <span
-              v-if="!isActive(getValue(item, facet.type))"
-              class="facets__item-link-text"
+              class="search-facet__item-text"
             >{{ getValue(item, facet.type) }}</span>
+          </template>
+          <template v-else>
             <span
-              v-else
-              class="facets__item-link-text"
-            >{{ getValue(item, facet.type) }} (Remove selection)</span>
-          </a>
-        </div>
+              class="search-facet__item-text"
+            >{{ getValue(item, facet.type) }}</span>
+            <button
+              class="button button--icon search-facet__item-remove"
+              aria-label="Remove selection"
+            >
+              <svg class="icon icon--close">
+                <use xlink:href="/images/sprite.svg#sprite-close" />
+              </svg>
+            </button>
+          </template>
+        </a>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

@@ -135,7 +135,13 @@ p {
   border-bottom: 4px solid var(--highlight-primary);
 }
 
-.page-title {
+.page-heading {
+  font-size: 48px;
+  font-family: 'lft-etica-display', sans-serif;
+  font-weight: 200;
+}
+
+.page-heading--secondary {
   font-size: 36px;
   font-family: 'lft-etica-display', sans-serif;
   font-weight: 200;
@@ -151,8 +157,14 @@ p {
     line-height: 21px;
     margin-bottom: 50px;
   }
+}
 
-  .page-title {
+@media (min-width: 840px) {
+  .page-heading {
+    font-size: 60px;
+  }
+
+  .page-heading--secondary {
     font-size: 48px;
   }
 }

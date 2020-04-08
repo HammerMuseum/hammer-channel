@@ -23,7 +23,7 @@
               <input
                 ref="searchInput"
                 v-model="searchTerm"
-                class="search-bar__input"
+                class="search__input search__input--search-bar"
                 type="text"
                 name="search"
                 aria-label="Search"

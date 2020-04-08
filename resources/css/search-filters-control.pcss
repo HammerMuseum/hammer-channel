@@ -1,0 +1,20 @@
+.button--ui-toggle {
+  margin: 0 24px 24px;
+  font-size: 18px;
+  background: var(--background-dark);
+  color: var(--text-on-dark);
+  padding: 16px;
+  border-bottom: 2px solid var(--highlight-primary);
+  transition: all 0.2s cubic-bezier(0.25, 1.1, 0.68, 0.94);
+}
+
+.button--ui-toggle:hover {
+  text-decoration: underline;
+  box-shadow: 1px 1px 1px 1px var(--highlight-primary);
+}
+
+@media screen and (min-width: 840px) {
+  .button--ui-toggle {
+    display: none;
+  }
+}

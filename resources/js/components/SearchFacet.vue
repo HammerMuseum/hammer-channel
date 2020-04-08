@@ -1,23 +1,32 @@
 <template>
-  <div>
+  <div class="search-facet__list">
     <div
       v-for="option in facet.items"
       :key="option.key"
-      :class="{facets__item: true, 'facets__item--active': isActive(getValue(option, facet.type))}"
+      :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(option, facet.type))}"
     >
       <a
         :href="`/search?${query(facet.id, getValue(option, facet.type))}`"
-        class="facets__item-link"
+        class="search-facet__item-link"
         @click.prevent="handleClick($event, facet.id, getValue(option, facet.type))"
       >
         <span
           v-if="!isActive(getValue(option, facet.type))"
-          class="facets__item-link-text"
-        >{{ getValue(option, facet.type) }} {{ `(${option.count})` }}</span>
+          class="search-facet__item-text"
+        >{{ getValue(option, facet.type) }}</span>
         <span
           v-else
-          class="facets__item-link-text"
-        >{{ getValue(option, facet.type) }} (Remove selection)</span>
+          class="search-facet__item-text"
+        >{{ getValue(option, facet.type) }}
+          <button
+            class="button button--icon search-facet__item-remove"
+            aria-label="Remove selection"
+          >
+            <svg class="icon icon--close">
+              <use xlink:href="/images/sprite.svg#sprite-close" />
+            </svg>
+          </button>
+        </span>
       </a>
     </div>
   </div>
@@ -68,35 +77,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.facets__item {
-  margin: 4px 0 6px 0;
-}
-
-.facets__item-link {
-  display: inline-block;
-  text-decoration: none;
-  color: var(--body-text-color);
-}
-
-.facets__item-link:hover {
-  display: inline-block;
-  text-decoration: none;
-}
-
-.facets__item-link-text {
-  border-bottom: 2px solid var(--highlight-color-primary);
-}
-
-.facets__item--active .facets__item-link {
-  padding: 4px 0;
-  color: white;
-  background: #484848;
-}
-
-.facets__item--active .facets__item-link-text {
-  border-bottom: none;
-}
-
-</style>

@@ -1,0 +1,73 @@
+.search-facet__label {
+  display: block;
+  width: 100%;
+  padding: 24px 0;
+  text-align: left;
+  cursor: pointer;
+  font-size: 24px;
+  border-bottom: 1px solid var(--text-primary);
+  transition: all 0.4s linear 0.4s;
+}
+
+.search-facet__label--active span {
+  padding-left: 16px;
+}
+
+.search-facet__label--active span::before {
+  content: "\2022";
+  color: var(--highlight-primary);
+  font-weight: bold;
+  display: inline-block;
+  width: 16px;
+}
+
+.seach-facet__label:hover,
+.search-facet__label--active {
+  color: var(--text-on-dark);
+  background: var(--background-dark);
+}
+
+.search-facet__list {
+  margin-top: 22px;
+  margin-bottom: 40px;
+}
+
+.search-facet__list-label {
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.search-facet__item {
+  margin: 6px 0;
+}
+
+.search-facet__item--active .search-facet__item-link {
+  margin: 6px 0;
+}
+
+.search-facet__item--active .search-facet__item-text {
+  border-bottom: 2px solid var(--highlight-primary);
+}
+
+.search-facet__item-link {
+  display: flex;
+  text-decoration: none;
+  color: var(--text-secondary);
+}
+
+.search-facet__item-link:hover {
+  text-decoration: none;
+}
+
+.search-facet__item-remove {
+  margin-left: 4px;
+}
+
+.search-facet__item-remove .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.searchable-facet__search-input {
+  margin-bottom: 16px;
+}

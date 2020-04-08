@@ -1,6 +1,6 @@
 <template>
   <div class="search-page__header">
-    <h1 class="page-title">
+    <h1 class="page-heading">
       Search results
     </h1>
     <slot />

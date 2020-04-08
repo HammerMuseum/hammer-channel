@@ -6,172 +6,204 @@
           Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
         </div>
       </SearchPageHeader>
-      <div class="search-page__sidebar">
-        <button
-          class="filters__toggle"
-          @click="showFilters = !showFilters"
-        >
-          {{ showFilters ? 'Hide filters' : 'Show filters' }}
-        </button>
-
-        <div class="search__form">
-          <label
-            for="search-main"
-            class="search__label"
-          />
-          <div class="search__item-wrapper">
-            <input
-              id="search-main"
-              v-model="term"
-              type="search"
-              name="term"
-              title="Search"
-              placeholder="Search"
-              class="search__item search__input"
-              @keyup.enter="search()"
-            >
-            <div class="search__item search__submit-wrapper">
-              <button
-                class="search__submit"
-                @click="search()"
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="search__filters">
-          <div
-            v-show="showFilters && hasFacets"
-            class="facets"
+      <div class="search-page__content">
+        <div class="search-page__sidebar">
+          <button
+            class="button button--ui-toggle"
+            @click="showFilters = !showFilters"
           >
-            <h2>Filter by</h2>
-            <div>
-              <p
-                class="search-facet__label"
-                @click="toggleFacetPanel('topics')"
-              >
-                Topics & tags
-              </p>
+            {{ !showFilters ? 'Search and filter' : 'Hide filters' }}
+          </button>
+
+          <transition name="slide-in">
+            <div
+              v-show="showFilters && hasFacets"
+              :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
+            >
               <div
-                v-show="activeFacet === 'topics'"
-                class="searchable-facet__container"
-                :class="{active: activeFacet === 'topics'}"
+                :class="['search__filters']"
               >
-                <span
-                  class="close-button"
-                  @click="toggleFacetPanel(this, 'topics')"
-                >Close</span>
-                <SearchableFacet
-                  v-if="facets"
-                  :active-facets="activeFacets"
-                  :facet-list="topicsAndTags"
-                  :panel-name="'topics'"
-                />
+                <div class="search-page__form">
+                  <label
+                    class="visually-hidden search__label"
+                    for="search-main"
+                  >Search the video archive</label>
+                  <div class="search__input-wrapper">
+                    <input
+                      id="search-main"
+                      v-model="term"
+                      name="term"
+                      title="Search"
+                      placeholder="Search"
+                      class="search__input"
+                      type="text"
+                      aria-label="Search"
+                      @keyup.enter="search()"
+                    >
+                    <div class="search__submit-wrapper">
+                      <button
+                        :class="['search__submit', 'button', 'button--icon']"
+                        @click="search()"
+                      >
+                        <svg
+                          title="Search"
+                          class="icon"
+                        >
+                          <use xlink:href="/images/sprite.svg#sprite-search" />
+                        </svg>
+                        <span class="icon-text visually-hidden">Search</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <h2 class="page-heading--secondary">
+                  Filter
+                </h2>
+                <button
+                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'topics'}]"
+                  @click="changeFacetOverlay('topics')"
+                >
+                  <span>Topics & Tags</span>
+                </button>
+                <button
+                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'people'}]"
+                  @click="changeFacetOverlay('people')"
+                >
+                  <span>People</span>
+                </button>
+                <button
+                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'playlists'}]"
+                  @click="changeFacetOverlay('playlists')"
+                >
+                  <span>Playlists</span>
+                </button>
+                <button
+                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'date'}]"
+                  @click="changeFacetOverlay('date')"
+                >
+                  <span>Date</span>
+                </button>
               </div>
             </div>
-            <p
-              class="search-facet__label"
-              @click="toggleFacetPanel('speakers')"
+          </transition>
+        </div>
+
+        <div class="search-page__main">
+          <transition
+            name="slide-out"
+            mode="out-in"
+          >
+            <SearchPageOverlay
+              v-if="activeFacet === 'topics'"
+              id="topics"
+              key="topics"
+              @closePanel="changeFacetOverlay"
             >
-              People
-            </p>
-            <div
-              v-show="activeFacet === 'speakers'"
-              class="searchable-facet__container"
-              :class="{active: activeFacet === 'speakers'}"
+              <SearchableFacet
+                v-if="facets"
+                :active-facets="activeFacets"
+                :facet-list="topicsAndTags"
+                :panel-name="'topics'"
+              />
+            </SearchPageOverlay>
+
+            <SearchPageOverlay
+              v-if="activeFacet === 'people'"
+              id="people"
+              key="people"
+              @closePanel="changeFacetOverlay"
             >
-              <span
-                class="close-button"
-                @click="toggleFacetPanel(this, 'speakers')"
-              >Close</span>
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
-                :panel-name="'speakers'"
+                :panel-name="'people'"
               />
-            </div>
+            </SearchPageOverlay>
 
-            <div>
-              <p class="facet__label">
-                Playlist
-              </p>
+            <SearchPageOverlay
+              v-if="activeFacet === 'playlists'"
+              id="playlists"
+              key="playlists"
+              @closePanel="changeFacetOverlay"
+            >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
               />
-            </div>
+            </SearchPageOverlay>
 
-            <div>
-              <p class="facet__label">
-                Year Recorded
-              </p>
+            <SearchPageOverlay
+              v-if="activeFacet === 'date'"
+              id="date"
+              key="date"
+              @closePanel="changeFacetOverlay"
+            >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
               />
+            </SearchPageOverlay>
+          </transition>
+
+          <div
+            v-if="noResults"
+            class="no-results"
+          >
+            <span class="label">
+              There are no results that match your criteria.</span>
+          </div>
+          <div
+            v-else
+            class="search__results"
+          >
+            <UiGrid>
+              <UiCard
+                v-for="item in videos"
+                :key="item.title_slug"
+              >
+                <RouterLink
+                  :to="{name: 'video', params: {id: item.slug }}"
+                >
+                  <div class="ui-card__thumbnail">
+                    <span class="ui-card__duration">{{ item.duration }}</span>
+                    <img
+                      :src="item.thumbnail_url"
+                      class="ui-card__thumbnail-image"
+                    >
+                  </div>
+                  <article>
+                    <h2 class="ui-card__title">
+                      <span>{{ item.title }}</span>
+                    </h2>
+                  </article>
+                </RouterLink>
+              </UiCard>
+            </UiGrid>
+
+            <div class="pager">
+              <ul>
+                <li
+                  v-for="(item, label) in filteredPager"
+                  :key="item"
+                >
+                  <RouterLink
+                    v-if="item"
+                    :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
+                  >
+                    {{ label | capitalize }}
+                  </RouterLink>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="search-page__main">
-        <div
-          v-if="noResults"
-          class="no-results"
-        >
-          <span class="label">
-            There are no results that match your criteria.</span>
-        </div>
-        <div
-          v-else
-          class="search__results"
-        >
-          <UiGrid>
-            <UiCard
-              v-for="item in videos"
-              :key="item.title_slug"
-            >
-              <RouterLink
-                :to="{name: 'video', params: {id: item.slug }}"
-              >
-                <div class="ui-card__thumbnail">
-                  <span class="ui-card__duration">{{ item.duration }}</span>
-                  <img
-                    :src="item.thumbnail_url"
-                    class="ui-card__thumbnail-image"
-                  >
-                </div>
-                <article>
-                  <h2 class="ui-card__title">
-                    <span>{{ item.title }}</span>
-                  </h2>
-                </article>
-              </RouterLink>
-            </UiCard>
-          </UiGrid>
-
-          <div class="pager">
-            <ul>
-              <li
-                v-for="(item, label) in filteredPager"
-                :key="item"
-              >
-                <RouterLink
-                  v-if="item"
-                  :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
-                >
-                  {{ label | capitalize }}
-                </RouterLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -184,6 +216,7 @@ import stringifyQuery from '../mixins/stringifyQuery';
 import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
+import SearchPageOverlay from './SearchPageOverlay.vue';
 
 export default {
   name: 'Search',
@@ -193,6 +226,7 @@ export default {
     SearchFacet,
     SearchableFacet,
     SearchPageHeader,
+    SearchPageOverlay,
   },
   filters: {
     capitalize(value) {
@@ -225,6 +259,7 @@ export default {
       noResults: false,
       topicsAndTags: [],
       activeFacet: null,
+      overlayOpen: false,
     };
   },
   computed: {
@@ -262,6 +297,21 @@ export default {
         }
         this.getPageData(stringifyQuery(to.query));
       },
+    },
+    activeFacet(to) {
+      document.body.style.overflow = this.activeFacet ? 'hidden' : '';
+      this.$nextTick(() => {
+        if (to) {
+          document.querySelector(`#${to}`).focus({ preventScroll: true });
+        }
+      });
+    },
+    showFilters(to) {
+      if (to) {
+        document.body.classList.add('search-filters-are-open');
+      } else {
+        document.body.classList.remove('search-filters-are-open');
+      }
     },
     videos(value) {
       this.noResults = (value.length === 0);
@@ -329,7 +379,7 @@ export default {
         this.topicsAndTags.push(this.facets.tags);
       }
     },
-    toggleFacetPanel(name) {
+    changeFacetOverlay(name) {
       this.activeFacet = this.activeFacet === name ? null : name;
     },
   },
