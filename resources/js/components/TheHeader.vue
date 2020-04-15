@@ -1,6 +1,6 @@
 <template>
   <div class="header-container">
-    <div class="header">
+    <header class="header">
       <div class="header__title">
         <h1 class="visually-hidden">
           Hammer Video
@@ -17,7 +17,7 @@
           </svg>
         </router-link>
       </div>
-    </div>
+    </header>
     <button
       class="button search-overlay-toggle"
       @click="toggleSearchActive"
