@@ -6,6 +6,8 @@
       v-if="items && Object.keys(items).length > 0"
       ref="flickity"
       :options="flickityOptions"
+      role="navigation"
+      aria-label="Video topics"
       @init="initNavigationBar"
     >
       <div
@@ -13,14 +15,28 @@
         :key="item.id"
         :data-selector="item.id"
         class="navigation-bar__item"
-        role="navigation"
-        aria-label="Video topics"
       >
         <a
           v-scroll-to="{ el: `#${item.id}`, duration: 0, offset: -80 }"
           href="#"
           :class="['link', {'link--active': activeItem === item.id }]"
         >{{ name }}</a>
+      </div>
+      <div
+        class="navigation-bar__item"
+      >
+        <a
+          v-scroll-to="{ el: `body`, duration: 0, offset: -80 }"
+          href="#"
+          :class="['link']"
+        >back to top
+        </a>
+        <svg
+          title="Back to top"
+          class="icon icon-arrow--point-up"
+        >
+          <use xlink:href="/images/sprite.svg#sprite-next" />
+        </svg>
       </div>
     </flickity>
   </div>
