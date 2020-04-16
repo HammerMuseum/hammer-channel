@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-right: 24px;
   text-decoration: none;
 }
 
@@ -12,10 +11,6 @@
 
 .ui-card:focus {
   background-color: initial;
-}
-
-.ui-card:not(.ui-card--featured):hover .ui-card__title {
-  color: var(--highlight-color-primary);
 }
 
 .ui-card__description {
@@ -59,7 +54,7 @@
   position: relative;
 }
 
-.see-more__content
+.see-more__content,
 .ui-card__thumbnail::before {
   display: block;
   content: "";
