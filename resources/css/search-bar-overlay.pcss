@@ -1,14 +1,21 @@
 .search-bar-container {
-  height: 100vh;
+  position: absolute;
+  top: 54px;
+  height: 100%;
   width: 100%;
+  transition: all var(--overlay-transition);
+  background: var(--overlay-dark);
+  z-index: 11;
 }
 
 .search-bar__body {
   width: 100%;
+  max-height: 100%;
   display: flex;
   justify-content: center;
   position: relative;
   z-index: 4;
+  transition: transform var(--overlay-transition);
   background-color: #fff;
   background-image: url(/images/grate.svg);
   background-repeat: repeat;
@@ -113,6 +120,10 @@
 }
 
 @media screen and (min-width: 1024px) {
+  .search-bar-container {
+    top: 72px;
+  }
+
   .search-bar {
     width: 50vw;
     padding: 72px 22px;
@@ -123,7 +134,11 @@
     flex-wrap: nowrap;
   }
 
-  .search-bar__option {
-    width: 50%;
+  .search-bar__option--left {
+    flex: 1;
+  }
+
+  .search-bar__option--right {
+    flex: 3;
   }
 }
