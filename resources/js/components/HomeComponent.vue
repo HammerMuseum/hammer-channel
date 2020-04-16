@@ -5,7 +5,7 @@
       :active-item="currentSectionInView"
       :classes="['topic-menu']"
     />
-    <content-loader
+    <ContentLoader
       v-if="!featured"
       :width="800"
       :height="250"
@@ -53,7 +53,7 @@
         width="361"
         height="26"
       />
-    </content-loader>
+    </ContentLoader>
 
     <Carousel
       v-else
@@ -64,7 +64,7 @@
       :options="featuredSettings"
       :show-heading="false"
     >
-      <featured-carousel-slide
+      <FeaturedCarouselSlide
         v-for="video in featured"
         :key="video.id"
         :item="video"
@@ -78,27 +78,37 @@
         v-view="viewHandler"
         :data-section-id="topic.id"
       >
-        <carousel
+        <Carousel
           :id="topic.id"
           :controls="true"
           :title="name"
           :options="carouselSettings"
         >
-          <carousel-slide
+          <CarouselSlide
             v-for="video in topic.videos"
             :key="video.id"
             :item="video._source"
           />
-          <div class="video topic__see-all">
-            <RouterLink
-              class="topic-link"
+          <div class="carousel__slide see-more">
+            <router-link
+              class="video-card"
               :to="{name: 'search', query: {topics: name}}"
             >
-              {{ seeAllLinkText(topic) }}
-              <span class="topic-name">{{ name }}</span>
-            </RouterLink>
+              <div class="see-more__content">
+                <span class="see-more__content-inner" />
+              </div>
+              <span class="see-more__link">
+                {{ seeAllLinkText(topic, name) }}
+                <svg
+                  :title="`See all items tagged with ${name}`"
+                  class="icon"
+                >
+                  <use xlink:href="/images/sprite.svg#sprite-next" />
+                </svg>
+              </span>
+            </router-link>
           </div>
-        </carousel>
+        </Carousel>
       </div>
     </div>
   </div>
@@ -184,10 +194,10 @@ export default {
           this.topics = response.data.topics;
         });
     },
-    seeAllLinkText(topic) {
+    seeAllLinkText(topic, name) {
       const count = topic.count;
       const videos = count > 1 ? 'videos' : 'video';
-      return `See all ${count} ${videos} tagged`;
+      return `See all ${count} ${videos} tagged ${name}`;
     },
     viewHandler(e) {
       if (e.percentInView === 1 && e.percentTop < 0.6) {

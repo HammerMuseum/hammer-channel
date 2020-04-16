@@ -1,4 +1,5 @@
-.ui-card__quote {
+.ui-card__quote,
+.ui-card--featured .ui-card__title {
   display: block;
   padding-bottom: 1rem;
   font-size: 36px;
@@ -26,8 +27,20 @@
 }
 
 .ui-card--featured .ui-card__teaser .ui-card__title {
-  padding: 16px 0 12px 0;
+  padding: 16px 0 0 0;
   font-size: 18px;
+  font-family: 'lft-etica', sans-serif;
+  font-weight: 600;
+}
+
+.video-card--featured .video-card__thumbnail {
+  flex: 1;
+}
+
+.video-card--featured .video-card__description {
+  color: var(--text-secondary);
+  font-family: 'lft-etica', sans-serif;
+  font-weight: 600;
 }
 
 .featured-slide {
