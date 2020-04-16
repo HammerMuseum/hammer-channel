@@ -3,9 +3,9 @@
     :active="searchActive"
     :escape-deactivates="false"
   >
-    <transition name="slide-down">
+    <transition name="open-overlay-down">
       <div
-        v-if="searchActive"
+        v-show="searchActive"
         :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchActive }"
         @keyup.escape="toggleSearchActive"
       >
@@ -33,7 +33,7 @@
             </div>
 
             <div class="search-bar__options">
-              <div class="search-bar__option">
+              <div class="search-bar__option search-bar__option--left">
                 <span>or</span>
                 <RouterLink
                   class="link link--text"
@@ -43,7 +43,7 @@
                   show me everything
                 </RouterLink>
               </div>
-              <div class="search-bar__option">
+              <div class="search-bar__option search-bar__option--right">
                 <span class="search-bar__option-label">or try</span>
                 <div class="search-bar__option-content">
                   <RouterLink
@@ -130,20 +130,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.slide-down-enter,
-.slide-down-leave-to {
-  transform: translate3d(0, calc(-100% - 72px), 0);
-}
-
-.slide-down-leave,
-.slide-down-enter-to {
-  transform: translate3d(0, 0, 0);
-}
-</style>

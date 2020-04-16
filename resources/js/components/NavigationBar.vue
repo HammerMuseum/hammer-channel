@@ -29,14 +29,14 @@
           v-scroll-to="{ el: `body`, duration: 0, offset: -80 }"
           href="#"
           :class="['link']"
-        >back to top
+        >Back to top
+          <svg
+            title="Back to top"
+            class="icon icon--nav-bar-link"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-next" />
+          </svg>
         </a>
-        <svg
-          title="Back to top"
-          class="icon icon--nav-bar-link"
-        >
-          <use xlink:href="/images/sprite.svg#sprite-next" />
-        </svg>
       </div>
     </Flickity>
   </div>

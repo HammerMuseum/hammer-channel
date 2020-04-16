@@ -91,7 +91,7 @@
           />
           <div class="carousel__slide see-more">
             <router-link
-              class="video-card"
+              class="ui-card"
               :to="{name: 'search', query: {topics: name}}"
             >
               <div class="see-more__content">

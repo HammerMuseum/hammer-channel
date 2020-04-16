@@ -30,7 +30,6 @@
       </svg>
       <span class="icon-text visually-hidden">Open search</span>
     </button>
-    <SearchBar />
   </div>
 </template>
 
