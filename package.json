@@ -87,6 +87,6 @@
     "vue-scrollto": "^2.17.1",
     "vue-slick-carousel": "^1.0.2",
     "vue-social-sharing": "^2.4.7",
-    "vuetensils": "^0.5.2"
+    "vuetensils": "^0.5.6"
   }
 }
