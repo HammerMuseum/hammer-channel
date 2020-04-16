@@ -1,18 +1,6 @@
 <template>
   <div class="header-container">
-    <div class="header">
-      <div class="header__logo">
-        <a
-          class="link link--with-image"
-          href="https://hammer.ucla.edu"
-        >
-          <img
-            class="link__image"
-            src="/images/logo-hammer.png"
-            alt="The Hammer Museum Logo"
-          >
-        </a>
-      </div>
+    <header class="header">
       <div class="header__title">
         <h1 class="visually-hidden">
           Hammer Video
@@ -29,7 +17,7 @@
           </svg>
         </router-link>
       </div>
-    </div>
+    </header>
     <button
       class="button search-overlay-toggle"
       @click="toggleSearchActive"

@@ -97,11 +97,15 @@
               <div class="see-more__content">
                 <span class="see-more__content-inner" />
               </div>
-              <article>
-                <h2 class="video-card__title">
-                  <span>{{ seeAllLinkText(topic, name) }}</span>
-                </h2>
-              </article>
+              <span class="see-more__link">
+                {{ seeAllLinkText(topic, name) }}
+                <svg
+                  :title="`See all items tagged with ${name}`"
+                  class="icon"
+                >
+                  <use xlink:href="/images/sprite.svg#sprite-next" />
+                </svg>
+              </span>
             </router-link>
           </div>
         </carousel>
