@@ -4,30 +4,34 @@
       Search results
     </h1>
     <slot />
-    <div class="search-page__sorting">
-      <label>Order by</label>
-      <RouterLink
-        :to="{
-          name: 'search',
-          query: {
-            ...$route.query,
-            ...{ sort: 'date_recorded', order: 'asc' }
-          }
-        }"
-      >
-        Date (ASC)
-      </RouterLink>
-      <RouterLink
-        :to="{
-          name: 'search',
-          query: {
-            ...$route.query,
-            ...{ sort: 'date_recorded', order: 'desc' }
-          }
-        }"
-      >
-        Date (DESC)
-      </RouterLink>
-    </div>
+    <VToggle
+      label="Sort by"
+      transition="slide-down"
+      class="search-page__sorting-control"
+    >
+    <template #label="{ isOpen }">
+      <span aria-hidden>
+        <svg
+          title="Search"
+          class="icon"
+        >
+          <use xlink:href="/images/sprite.svg#sprite-search" />
+        </svg>
+        {{ isOpen ? "🔼" : "🔽" }}</span>
+      Sort by
+    </template>
+
+    <template #default="{isOpen}">isOpen: {{ isOpen }}</template>
+
+    </VToggle>
   </div>
 </template>
+<script>
+import { VToggle } from 'vuetensils';
+
+export default {
+  components: {
+    VToggle,
+  },
+};
+</script>

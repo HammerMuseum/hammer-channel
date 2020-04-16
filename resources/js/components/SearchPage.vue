@@ -3,7 +3,12 @@
     <div class="search-page">
       <SearchPageHeader>
         <div class="totals">
-          Showing {{ currentResultStart }} to {{ currentResultEnd }} of {{ total }}
+          {{ searchInfo }}
+          <!-- <RouterLink
+            :to="{name: 'search'}"
+          >
+            Clear search
+          </RouterLink> -->
         </div>
       </SearchPageHeader>
       <div class="search-page__content">
@@ -267,9 +272,6 @@ export default {
     };
   },
   computed: {
-    hasFacets() {
-      return !!this.facets;
-    },
     activeFacets() {
       const active = [];
       const query = this.$route.query;
@@ -287,6 +289,12 @@ export default {
       }
       return false;
     },
+    hasFacets() {
+      return !!this.facets;
+    },
+    searchInfo() {
+      return this.term && this.total ? `${this.total} results for ${this.term}` : ``;
+    },
   },
   watch: {
     $route: {
@@ -298,8 +306,8 @@ export default {
           if (oldQuery !== newQuery) {
             this.term = newQuery;
           }
+          this.getPageData(stringifyQuery(to.query));
         }
-        this.getPageData(stringifyQuery(to.query));
       },
     },
     activeFacet(to) {
@@ -317,8 +325,8 @@ export default {
         document.body.classList.remove('search-filters-are-open');
       }
     },
-    videos(value) {
-      this.noResults = (value.length === 0);
+    videos(to) {
+      this.noResults = (to.length === 0);
     },
   },
   mounted() {
