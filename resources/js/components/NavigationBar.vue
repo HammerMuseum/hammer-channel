@@ -33,7 +33,7 @@
         </a>
         <svg
           title="Back to top"
-          class="icon icon-arrow--point-up"
+          class="icon icon--nav-bar-link"
         >
           <use xlink:href="/images/sprite.svg#sprite-next" />
         </svg>
