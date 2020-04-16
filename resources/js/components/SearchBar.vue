@@ -62,7 +62,13 @@
               class="button--close-search"
               @click="toggleSearchActive"
             >
-              close
+              <span class="visually-hidden">Close search</span>
+              <svg
+                title="Close search"
+                class="icon icon--hover-rotate"
+              >
+                <use xlink:href="/images/sprite.svg#sprite-close" />
+              </svg>
             </button>
           </div>
         </div>
