@@ -1,37 +1,37 @@
 <template>
-  <div class="search-page__header">
-    <h1 class="page-heading">
+  <header class="search-header">
+    <h1 :class="headingClasses">
       Search results
     </h1>
-    <slot />
-    <VToggle
-      label="Sort by"
-      transition="slide-down"
-      class="search-page__sorting-control"
-    >
-    <template #label="{ isOpen }">
-      <span aria-hidden>
-        <svg
-          title="Search"
-          class="icon"
-        >
-          <use xlink:href="/images/sprite.svg#sprite-search" />
-        </svg>
-        {{ isOpen ? "🔼" : "🔽" }}</span>
-      Sort by
-    </template>
-
-    <template #default="{isOpen}">isOpen: {{ isOpen }}</template>
-
-    </VToggle>
-  </div>
+    <div class="search-header__summary">
+      <slot name="summary" />
+    </div>
+    <div class="search-header__extras">
+      <slot name="extras" />
+    </div>
+  </header>
 </template>
-<script>
-import { VToggle } from 'vuetensils';
 
+<script>
 export default {
-  components: {
-    VToggle,
+  name: 'SearchPageHeader',
+  props: {
+    extraClasses: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+  },
+  data() {
+    return {
+      classes: ['search-header__heading'],
+    };
+  },
+  computed: {
+    headingClasses() {
+      return [this.classes, ...this.extraClasses];
+    },
   },
 };
 </script>
