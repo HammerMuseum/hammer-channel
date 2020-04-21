@@ -36,8 +36,8 @@
               <div class="search-bar__option search-bar__option--left">
                 <span>or</span>
                 <RouterLink
-                  class="link link--text"
-                  :to="{ name: 'search' }"
+                  :class="tagClasses"
+                  :to="{ name: 'search', query: {} }"
                   @click.native="toggleSearchActive"
                 >
                   show me everything
@@ -49,7 +49,7 @@
                   <RouterLink
                     v-for="item in cannedTerms"
                     :key="item.id"
-                    class="link link--text"
+                    :class="tagClasses"
                     :to="{ name: 'search', query: item.query }"
                     @click.native="toggleSearchActive"
                   >
@@ -88,10 +88,13 @@ export default {
   },
   data() {
     return {
-      cannedTerms: [],
+      cannedTerms: null,
     };
   },
   computed: {
+    tagClasses() {
+      return ['link', 'link--text', 'link--tag'];
+    },
     searchTerm: {
       get() {
         return store.searchTerm;
@@ -112,12 +115,9 @@ export default {
         }
       });
     },
-    $route: {
-      immediate: true,
-      handler(to, from) {
-        this.getCannedTerms();
-      },
-    },
+  },
+  mounted() {
+    this.getCannedTerms();
   },
   methods: {
     toggleSearchActive: mutations.toggleSearchActive,
