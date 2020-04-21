@@ -121,7 +121,6 @@ export default {
       const target = e.currentTarget;
       this.$router.push(`${target.pathname}${target.search}`);
       this.$emit('change', key, value);
-      this.$parent.toggleFacetPanel(this.panelName);
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;

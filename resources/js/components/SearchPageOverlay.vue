@@ -3,6 +3,7 @@
     class="search-page__overlay"
     tabindex="0"
   >
+    <div class="canvas-overlay" />
     <div class="search-page__overlay__body">
       <div class="search-page__overlay__inner">
         <button

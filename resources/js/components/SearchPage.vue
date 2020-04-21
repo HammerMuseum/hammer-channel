@@ -29,7 +29,6 @@
             {{ !showFilters ? 'Search and filter' : 'Hide filters' }}
           </button>
           <VToggle
-            label="Sort by"
             transition="slide-down"
             :classes="{
               root: 'search-page__sorting',
@@ -38,7 +37,10 @@
             }"
           >
             <template #label>
-              <span class="search-page__sorting-control-label" aria-hidden>
+              <span
+                class="search-page__sorting-control-label"
+                aria-hidden
+              >
                 <span>Sort by</span>
                 <svg
                   title="Sorting options"
@@ -84,6 +86,9 @@
           </VToggle>
         </template>
       </SearchPageHeader>
+
+      <!-- <div class="search-page__current-search"></div> -->
+
       <div class="search-page__content">
         <aside class="search-page__sidebar">
           <transition name="slide-in">
@@ -94,6 +99,13 @@
               <div
                 :class="['search__filters']"
               >
+                <button
+                  v-show="showFilters"
+                  class="button button--search-toggle button--small-devices"
+                  @click="showFilters = false"
+                >
+                  {{ 'Hide filters' }}
+                </button>
                 <div class="search-page__form">
                   <label
                     class="visually-hidden search__label"
@@ -131,30 +143,48 @@
                 <h2 class="page-heading--secondary">
                   Filter
                 </h2>
-                <button
-                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'topics'}]"
-                  @click="changeFacetOverlay('topics')"
+                <div
+                  v-if="facets"
+                  class="search-page__facet-buttons"
                 >
-                  <span>Topics & Tags</span>
-                </button>
-                <button
-                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'people'}]"
-                  @click="changeFacetOverlay('people')"
-                >
-                  <span>People</span>
-                </button>
-                <button
-                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'playlists'}]"
-                  @click="changeFacetOverlay('playlists')"
-                >
-                  <span>Playlists</span>
-                </button>
-                <button
-                  :class="['button', 'search-facet__label', {'search-facet__label--active': activeFacet === 'date'}]"
-                  @click="changeFacetOverlay('date')"
-                >
-                  <span>Date</span>
-                </button>
+                  <button
+                    :class="['button',
+                             'search-facet__label',
+                             {'search-facet__label--active': activeFacetList === 'topics'}
+                    ]"
+                    :disabled="!topicsAndTags.length"
+                    @click="toggleFacetOverlay('topics')"
+                  >
+                    <span>Topics & Tags</span>
+                  </button>
+                  <button
+                    :class="['button',
+                             'search-facet__label',
+                             {'search-facet__label--active': activeFacetList === 'people'}]"
+                    :disabled="!facets.speakers.items.length"
+                    @click="toggleFacetOverlay('people')"
+                  >
+                    <span>People</span>
+                  </button>
+                  <button
+                    :class="['button',
+                             'search-facet__label',
+                             {'search-facet__label--active': activeFacetList === 'playlists'}]"
+                    :disabled="!facets.in_playlists.items.length"
+                    @click="toggleFacetOverlay('playlists')"
+                  >
+                    <span>Playlists</span>
+                  </button>
+                  <button
+                    :class="['button',
+                             'search-facet__label',
+                             {'search-facet__label--active': activeFacetList === 'date'}]"
+                    :disabled="!facets.date_recorded.items.length"
+                    @click="toggleFacetOverlay('date')"
+                  >
+                    <span>Date</span>
+                  </button>
+                </div>
               </div>
             </div>
           </transition>
@@ -166,60 +196,60 @@
             mode="out-in"
           >
             <SearchPageOverlay
-              v-if="activeFacet === 'topics'"
+              v-if="activeFacetList === 'topics'"
               id="topics"
               key="topics"
-              @closePanel="changeFacetOverlay"
+              @closePanel="closeFacetOverlay"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
-                @change="changeFacetOverlay"
+                @change="toggleFacetOverlay"
               />
             </SearchPageOverlay>
 
             <SearchPageOverlay
-              v-if="activeFacet === 'people'"
+              v-if="activeFacetList === 'people'"
               id="people"
               key="people"
-              @closePanel="changeFacetOverlay"
+              @closePanel="closeFacetOverlay"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
-                @change="changeFacetOverlay"
+                @change="toggleFacetOverlay"
               />
             </SearchPageOverlay>
 
             <SearchPageOverlay
-              v-if="activeFacet === 'playlists'"
+              v-if="activeFacetList === 'playlists'"
               id="playlists"
               key="playlists"
-              @closePanel="changeFacetOverlay"
+              @closePanel="closeFacetOverlay"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
-                @change="changeFacetOverlay"
+                @change="toggleFacetOverlay"
               />
             </SearchPageOverlay>
 
             <SearchPageOverlay
-              v-if="activeFacet === 'date'"
+              v-if="activeFacetList === 'date'"
               id="date"
               key="date"
-              @closePanel="changeFacetOverlay"
+              @closePanel="closeFacetOverlay"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
-                @change="changeFacetOverlay"
+                @change="toggleFacetOverlay"
               />
             </SearchPageOverlay>
           </transition>
@@ -259,21 +289,9 @@
               </UiCard>
             </UiGrid>
 
-            <div class="pager">
-              <ul>
-                <li
-                  v-for="(item, label) in filteredPager"
-                  :key="item"
-                >
-                  <RouterLink
-                    v-if="item"
-                    :to="{ name: 'search', query: { ...$route.query, ...{ page: item.split('=').pop() } } }"
-                  >
-                    {{ label | capitalize }}
-                  </RouterLink>
-                </li>
-              </ul>
-            </div>
+            <Pagination
+              :pagination-links="paginationLinks"
+            />
           </div>
         </div>
       </div>
@@ -289,6 +307,7 @@ import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
+import Pagination from './Pagination.vue';
 import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
@@ -297,6 +316,7 @@ import SearchPageOverlay from './SearchPageOverlay.vue';
 export default {
   name: 'Search',
   components: {
+    Pagination,
     SearchableFacet,
     SearchFacet,
     SearchPageHeader,
@@ -304,12 +324,6 @@ export default {
     UiCard,
     UiGrid,
     VToggle,
-  },
-  filters: {
-    capitalize(value) {
-      if (!value) return '';
-      return value.toString().charAt(0).toUpperCase() + value.slice(1);
-    },
   },
   mixins: [getRouteData],
   props: {
@@ -320,7 +334,7 @@ export default {
   },
   data() {
     return {
-      activeFacet: null,
+      activeFacetList: null,
       clearedSortQuery: null,
       clearPageQuery: null,
       currentQuery: null,
@@ -347,7 +361,7 @@ export default {
       }
       return [].concat(...active);
     },
-    filteredPager() {
+    paginationLinks() {
       if (this.pager) {
         // Filter out empty properties in the pager.
         return Object.entries(this.pager).reduce((a, [k, v]) => (v ? { ...a, [k]: v } : a), {});
@@ -395,23 +409,22 @@ export default {
     $route: {
       immediate: true,
       handler(to, from) {
-        // if (from) {
         const oldQuery = from && from.query && from.query.term ? from.query.term : '';
         const newQuery = to && to.query && to.query.term ? to.query.term : '';
         if (oldQuery !== newQuery) {
           this.term = newQuery;
         }
         this.getPageData(stringifyQuery(to.query));
-        // }
+        const bodyClasses = document.body.classList;
       },
     },
-    activeFacet(to) {
-      document.body.style.overflow = this.activeFacet ? 'hidden' : '';
-      this.$nextTick(() => {
-        if (to) {
-          document.querySelector(`#${to}`).focus({ preventScroll: true });
-        }
-      });
+    activeFacetList(to) {
+      // document.body.style.overflow = this.activeFacetList ? 'hidden' : '';
+      // this.$nextTick(() => {
+      //   if (to) {
+      //     document.querySelector(`#${to}`).focus({ preventScroll: true });
+      //   }
+      // });
     },
     showFilters(to) {
       if (to) {
@@ -431,11 +444,7 @@ export default {
   },
   methods: {
     handleResize() {
-      if (window.innerWidth >= 960) {
-        this.showFilters = true;
-      } else {
-        this.showFilters = false;
-      }
+      this.showFilters = window.innerWidth >= 960;
     },
     getPageData(params = '') {
       axios
@@ -465,8 +474,11 @@ export default {
       this.currentQuery = data.currentQuery;
       this.totals = data.totals;
     },
-    changeFacetOverlay(name) {
-      this.activeFacet = this.activeFacet === name ? null : name;
+    toggleFacetOverlay(name) {
+      this.activeFacetList = this.activeFacetList === name ? null : name;
+    },
+    closeFacetOverlay() {
+      this.activeFacetList = null;
     },
   },
 };

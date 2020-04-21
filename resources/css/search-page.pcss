@@ -29,9 +29,25 @@
   position: relative;
 }
 
+.pagination {
+  font-size: 20px;
+  border-top: 1px solid var(--text-primary);
+}
+
 @media (min-width: 30em) {
   .search-page {
     padding-top: 72px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 144px);
+  }
+
+  .search-header {
+    flex: 0;
+  }
+
+  .search-page__content {
+    flex: 1;
   }
 }
 

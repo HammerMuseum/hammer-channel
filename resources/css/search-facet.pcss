@@ -2,15 +2,16 @@
   display: block;
   width: 100%;
   padding: 22px 0;
+  margin-bottom: 2px;
   text-align: left;
   cursor: pointer;
   font-size: 21px;
-  border-bottom: 2px solid var(--text-primary);
+  border-bottom: 1px solid var(--text-primary);
   transition: all var(--overlay-transition);
 }
 
-.search-facet__label--active span {
-  padding-left: 16px;
+.search-facet__label:hover {
+  color: var(--highlight-primary);
 }
 
 .search-facet__label--active span::before {
@@ -19,12 +20,11 @@
   font-weight: bold;
   display: inline-block;
   width: 16px;
+  transition: all var(--overlay-transition);
 }
 
-.seach-facet__label:hover,
 .search-facet__label--active {
-  color: var(--text-on-dark);
-  background: var(--background-dark);
+  color: var(--highlight-primary);
 }
 
 .search-facet__list {
@@ -46,7 +46,7 @@
 }
 
 .search-facet__item--active .search-facet__item-text {
-  border-bottom: 2px solid var(--highlight-primary);
+  border-bottom: 1px solid var(--highlight-primary);
 }
 
 .search-facet__item-link {
