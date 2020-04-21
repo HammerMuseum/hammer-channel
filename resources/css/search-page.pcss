@@ -16,6 +16,10 @@
   padding-top: 54px;
 }
 
+.search-page__content {
+  padding: 22px;
+}
+
 .search-page__sidebar {
   position: relative;
   z-index: 3;
@@ -25,24 +29,26 @@
   position: relative;
 }
 
-@media (min-width: 37.5em) {
+@media (min-width: 30em) {
   .search-page {
     padding-top: 72px;
   }
 }
 
-@media (min-width: 52.5em) {
+/* min-width: 960px */
+@media (min-width: 60em) {
   .search-page__content {
     display: flex;
+    padding: 0;
   }
 
   .search-page__sidebar {
-    flex: 1;
+    flex-basis: 25%;
     padding: 0 24px 0 48px;
   }
 
   .search-page__main {
-    flex: 3;
+    flex-basis: 75%;
     padding: 0 48px 0 0;
   }
 }

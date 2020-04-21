@@ -1,25 +1,91 @@
 <template>
   <div class="container">
     <div class="search-page">
-      <SearchPageHeader>
-        <div class="totals">
-          {{ searchInfo }}
-          <!-- <RouterLink
-            :to="{name: 'search'}"
+      <SearchPageHeader :extra-classes="['page-heading', 'page-heading--search']">
+        <template #summary>
+          <span>{{ hitInfo }}</span>
+          <RouterLink
+            v-if="searchSummary"
+            :to="{ name: 'search' }"
+            class="link link--text link--text-and-button"
+            title="Clear term and reset search"
           >
-            Clear search
-          </RouterLink> -->
-        </div>
-      </SearchPageHeader>
-      <div class="search-page__content">
-        <div class="search-page__sidebar">
+            <span style="border:none;padding-bottom:2px;">for&nbsp;</span><span>{{ searchSummary }}</span>
+            <button
+              class="button button--icon search-facet__item-remove"
+              aria-label="Clear term and reset search"
+            >
+              <svg class="icon icon--close">
+                <use xlink:href="/images/sprite.svg#sprite-close" />
+              </svg>
+            </button>
+          </RouterLink>
+        </template>
+        <template #extras>
           <button
-            class="button button--ui-toggle"
+            class="button button--search-toggle button--small-devices"
             @click="showFilters = !showFilters"
           >
             {{ !showFilters ? 'Search and filter' : 'Hide filters' }}
           </button>
+          <VToggle
+            label="Sort by"
+            transition="slide-down"
+            :classes="{
+              root: 'search-page__sorting',
+              label: 'search-page__sorting-control button--search-toggle',
+              content: 'search-page__sorting-content'
+            }"
+          >
+            <template #label>
+              <span class="search-page__sorting-control-label" aria-hidden>
+                <span>Sort by</span>
+                <svg
+                  title="Sorting options"
+                  class="icon icon--small"
+                >
+                  <use xlink:href="/images/sprite.svg#sprite-dropdown" />
+                </svg>
+              </span>
+            </template>
 
+            <template #default>
+              <ul>
+                <li>
+                  <RouterLink
+                    class="link link--text link--text-secondary"
+                    :to="{
+                      name: 'search',
+                      query: {
+                        ...$route.query,
+                        ...{ sort: 'date_recorded', order: 'asc' }
+                      }
+                    }"
+                  >
+                    Date (ASC)
+                  </RouterLink>
+                </li>
+                <li>
+                  <RouterLink
+                    class="link link--text link--text-secondary"
+                    :to="{
+                      name: 'search',
+                      query: {
+                        ...$route.query,
+                        ...{ sort: 'date_recorded', order: 'desc' }
+                      }
+                    }"
+                  >
+                    Date (DESC)
+                  </RouterLink>
+                </li>
+              </ul>
+            </template>
+          </VToggle>
+        </template>
+      </SearchPageHeader>
+      <div class="search-page__content">
+        <aside class="search-page__sidebar">
           <transition name="slide-in">
             <div
               v-show="showFilters && hasFacets"
@@ -92,7 +158,7 @@
               </div>
             </div>
           </transition>
-        </div>
+        </aside>
 
         <div class="search-page__main">
           <transition
@@ -171,11 +237,11 @@
           >
             <UiGrid>
               <UiCard
-                v-for="item in videos"
-                :key="item.title_slug"
+                v-for="item in hits"
+                :key="item.asset_id"
               >
                 <RouterLink
-                  :to="{name: 'video', params: {id: item.slug }}"
+                  :to="{name: 'video', params: {id: item.title_slug }}"
                 >
                   <div class="ui-card__thumbnail">
                     <span class="ui-card__duration">{{ item.duration }}</span>
@@ -218,6 +284,7 @@
 
 <script>
 import axios from 'axios';
+import { VToggle } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
@@ -230,12 +297,13 @@ import SearchPageOverlay from './SearchPageOverlay.vue';
 export default {
   name: 'Search',
   components: {
-    UiCard,
-    UiGrid,
-    SearchFacet,
     SearchableFacet,
+    SearchFacet,
     SearchPageHeader,
     SearchPageOverlay,
+    UiCard,
+    UiGrid,
+    VToggle,
   },
   filters: {
     capitalize(value) {
@@ -252,23 +320,20 @@ export default {
   },
   data() {
     return {
-      showFilters: true,
-      title: null,
-      videos: null,
-      pager: null,
-      term: null,
-      facets: null,
-      clearPageQuery: null,
-      clearedSortQuery: null,
-      currentQuery: null,
-      totalsInfo: null,
-      total: null,
-      currentResultStart: null,
-      currentResultEnd: null,
-      noResults: false,
-      topicsAndTags: [],
       activeFacet: null,
+      clearedSortQuery: null,
+      clearPageQuery: null,
+      currentQuery: null,
+      facets: null,
+      noResults: false,
       overlayOpen: false,
+      pager: null,
+      searchSummary: '',
+      showFilters: true,
+      term: null,
+      title: null,
+      totals: null,
+      videos: null,
     };
   },
   computed: {
@@ -292,22 +357,52 @@ export default {
     hasFacets() {
       return !!this.facets;
     },
-    searchInfo() {
-      return this.term && this.total ? `${this.total} results for ${this.term}` : ``;
+    hits() {
+      return this.videos;
+    },
+    hitInfo() {
+      return this.total ? `${this.total} results` : '0 results';
+    },
+    topicsAndTags() {
+      return [this.facets.topics, this.facets.tags];
+    },
+    total() {
+      return this.totals ? this.totals.total : null;
+    },
+    searchTerm() {
+      if (this.term) return this.term;
+      return this.$route.query.term ? this.$route.query.term : null;
+    },
+    currentPage() {
+      return this.totals ? this.totals.currentPage : null;
+    },
+    currentResultEnd() {
+      if (!this.totals || !this.currentPage) return null;
+      if (this.totals.totalPages === this.currentPage || this.totals.totalPages === 0) {
+        return this.total;
+      }
+      return this.currentPage * 12;
+    },
+    currentResultStart() {
+      if (!this.currentPage) return null;
+      if (this.currentPage === 0) {
+        return 1;
+      }
+      return 12 * (this.currentPage - 1) + 1;
     },
   },
   watch: {
     $route: {
       immediate: true,
       handler(to, from) {
-        if (from) {
-          const oldQuery = from.query.term;
-          const newQuery = to.query.term;
-          if (oldQuery !== newQuery) {
-            this.term = newQuery;
-          }
-          this.getPageData(stringifyQuery(to.query));
+        // if (from) {
+        const oldQuery = from && from.query && from.query.term ? from.query.term : '';
+        const newQuery = to && to.query && to.query.term ? to.query.term : '';
+        if (oldQuery !== newQuery) {
+          this.term = newQuery;
         }
+        this.getPageData(stringifyQuery(to.query));
+        // }
       },
     },
     activeFacet(to) {
@@ -326,7 +421,8 @@ export default {
       }
     },
     videos(to) {
-      this.noResults = (to.length === 0);
+      this.noResults = to.length === 0;
+      this.searchSummary = this.term;
     },
   },
   mounted() {
@@ -335,7 +431,7 @@ export default {
   },
   methods: {
     handleResize() {
-      if (window.innerWidth >= 840) {
+      if (window.innerWidth >= 960) {
         this.showFilters = true;
       } else {
         this.showFilters = false;
@@ -347,18 +443,6 @@ export default {
         .then((response) => {
           this.setVars(response);
         });
-    },
-    getPageTotals() {
-      if (this.totalsInfo.totalPages === this.currentPage || this.totalsInfo.totalPages === 0) {
-        this.currentResultEnd = this.total;
-      } else {
-        this.currentResultEnd = this.currentPage * 12;
-      }
-      if (this.currentPage === 0) {
-        this.currentResultStart = 1;
-      } else {
-        this.currentResultStart = 12 * (this.currentPage - 1) + 1;
-      }
     },
     // Perform a search
     search() {
@@ -379,17 +463,7 @@ export default {
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
-      this.totalsInfo = data.totals;
-      this.total = data.totals.total;
-      this.currentPage = this.totalsInfo.currentPage;
-      this.getPageTotals();
-      this.combineTopicsTags();
-    },
-    combineTopicsTags() {
-      if (!this.topicsAndTags.length) {
-        this.topicsAndTags.push(this.facets.topics);
-        this.topicsAndTags.push(this.facets.tags);
-      }
+      this.totals = data.totals;
     },
     changeFacetOverlay(name) {
       this.activeFacet = this.activeFacet === name ? null : name;

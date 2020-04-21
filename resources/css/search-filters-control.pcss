@@ -1,20 +1,36 @@
-.button--ui-toggle {
-  margin: 0 24px 24px;
-  font-size: 18px;
+.button--search-toggle {
+  position: relative;
+  font-size: 16px;
   background: var(--background-dark);
   color: var(--text-on-dark);
-  padding: 16px;
+  padding: 6px;
   border-bottom: 2px solid var(--highlight-primary);
   transition: all 0.2s cubic-bezier(0.25, 1.1, 0.68, 0.94);
+  cursor: pointer;
 }
 
-.button--ui-toggle:hover {
+.button--search-toggle:hover {
   text-decoration: underline;
   box-shadow: 1px 1px 1px 1px var(--highlight-primary);
 }
 
-@media screen and (min-width: 52.5em) {
-  .button--ui-toggle {
+.search-page__sorting-content {
+  overflow: visible;
+  position: absolute;
+  background: var(--background-dark);
+  color: var(--text-on-dark);
+  padding: 22px 6px;
+  z-index: 2;
+  right: 24px;
+  width: 120px;
+}
+
+@media screen and (min-width: 60em) {
+  .button--small-devices {
     display: none;
+  }
+
+  .search-page__sorting-content {
+    right: 48px;
   }
 }
