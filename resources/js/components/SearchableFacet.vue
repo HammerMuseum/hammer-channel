@@ -1,18 +1,13 @@
 <template>
   <div class="searchable-facet">
     <div class="searchable-facet__search-input">
-      <label
-        class="visually-hidden"
-        for="facet-search"
-      >Type to filter list...</label>
-      <input
-        v-model="facetSearch"
-        type="text"
-        name="facet-search"
-        class="search__input"
-        aria-label="Search to filter list"
+      <VInput
+        v-model="searchTerm"
+        label="Type to filter list..."
+        name="searchTerm"
+        :classes="{ text: 'visually-hidden', input: 'search__input' }"
         placeholder="Search to filter list"
-      >
+      />
     </div>
     <div
       v-if="noResults"
@@ -66,12 +61,22 @@
 </template>
 
 <script>
+import { VInput } from 'vuetensils/src/components';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
+  components: {
+    VInput,
+  },
   props: {
-    facetList: Array,
-    panelName: String,
+    facetList: {
+      type: Array,
+      required: true,
+    },
+    panelName: {
+      type: String,
+      required: true,
+    },
     activeFacets: {
       type: Array,
       required: true,
@@ -79,7 +84,7 @@ export default {
   },
   data() {
     return {
-      facetSearch: '',
+      searchTerm: '',
       noResults: false,
     };
   },
@@ -87,10 +92,10 @@ export default {
     filteredItems() {
       const filteredOptions = [];
       const self = this;
-      if (this.facetSearch !== '') {
+      if (this.searchTerm !== '') {
         for (let i = 0; i < this.facetList.length; i += 1) {
           const filteredItemsArray = self.facetList[i].items.filter(function (itemValue) {
-            return itemValue.key.toLowerCase().includes(self.facetSearch.toLowerCase());
+            return itemValue.key.toLowerCase().includes(self.searchTerm.toLowerCase());
           });
           const newFacet = {
             id: self.facetList[i].id,

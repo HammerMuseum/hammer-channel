@@ -26,7 +26,7 @@
             class="button button--search-toggle button--small-devices"
             @click="showFilters = !showFilters"
           >
-            {{ !showFilters ? 'Search and filter' : 'Hide filters' }}
+            {{ !showFilters ? 'Search and filter' : 'Show results' }}
           </button>
           <VToggle
             transition="slide-down"
@@ -104,7 +104,7 @@
                   class="button button--search-toggle button--small-devices"
                   @click="showFilters = false"
                 >
-                  {{ 'Hide filters' }}
+                  {{ 'Show results' }}
                 </button>
                 <div class="search-page__form">
                   <label
@@ -121,7 +121,6 @@
                       class="search__input"
                       type="text"
                       aria-label="Search"
-                      @keyup.enter="search()"
                     >
                     <div class="search__submit-wrapper">
                       <button
@@ -289,9 +288,11 @@
               </UiCard>
             </UiGrid>
 
-            <Pagination
-              :pagination-links="paginationLinks"
-            />
+            <template v-if="paginationLinks">
+              <Pagination
+                :pagination-links="paginationLinks"
+              />
+            </template>
           </div>
         </div>
       </div>
@@ -439,18 +440,23 @@ export default {
     },
   },
   mounted() {
+    this.width = window.innerWidth;
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
   },
   methods: {
     handleResize() {
-      this.showFilters = window.innerWidth >= 960;
+      if (this.width !== window.innerWidth) {
+        this.showFilters = window.innerWidth >= 960;
+      }
     },
     getPageData(params = '') {
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
+        }).catch((err) => {
+          console.log(err);
         });
     },
     // Perform a search
