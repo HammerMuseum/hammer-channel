@@ -28,7 +28,7 @@ export default {
   },
   props: {
     paginationLinks: {
-      type: Array,
+      type: Object,
       default() {
         return {};
       },
