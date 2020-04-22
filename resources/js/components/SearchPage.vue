@@ -4,22 +4,28 @@
       <SearchPageHeader :extra-classes="['page-heading', 'page-heading--search']">
         <template #summary>
           <span>{{ hitInfo }}</span>
-          <RouterLink
+          <div
             v-if="searchSummary"
-            :to="{ name: 'search' }"
-            class="link link--text link--text-and-button"
-            title="Clear term and reset search"
+            style="display:inline;"
           >
-            <span style="border:none;padding-bottom:2px;">for&nbsp;</span><span>{{ searchSummary }}</span>
-            <button
-              class="button button--icon search-facet__item-remove"
-              aria-label="Clear term and reset search"
+            <span style="border:none;padding-bottom:2px;">for&nbsp;</span>
+            <RouterLink
+              v-if="searchSummary"
+              :to="{ name: 'search' }"
+              class="link link--text link--text-and-button"
+              title="Clear term and reset search"
             >
-              <svg class="icon icon--close">
-                <use xlink:href="/images/sprite.svg#sprite-close" />
-              </svg>
-            </button>
-          </RouterLink>
+              <span>{{ searchSummary }}</span>
+              <button
+                class="button button--icon search-facet__item-remove"
+                aria-label="Clear term and reset search"
+              >
+                <svg class="icon icon--close">
+                  <use xlink:href="/images/sprite.svg#sprite-close" />
+                </svg>
+              </button>
+            </RouterLink>
+          </div>
         </template>
         <template #extras>
           <button
@@ -32,7 +38,7 @@
             transition="slide-down"
             :classes="{
               root: 'search-page__sorting',
-              label: 'search-page__sorting-control button--search-toggle',
+              label: 'search-page__sorting-control button button--search-toggle',
               content: 'search-page__sorting-content'
             }"
           >
@@ -91,12 +97,17 @@
 
       <div class="search-page__content">
         <aside class="search-page__sidebar">
-          <transition name="slide-in">
+          <transition
+            name="slide-in"
+            @after-enter="afterEnter"
+            @after-leave="afterLeave"
+          >
             <div
               v-show="showFilters && hasFacets"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
             >
               <div
+                v-clickout="onClickout"
                 :class="['search__filters']"
               >
                 <button
@@ -106,21 +117,14 @@
                   {{ 'Show results' }}
                 </button>
                 <div class="search-page__form">
-                  <label
-                    class="visually-hidden search__label"
-                    for="search-main"
-                  >Search the video archive</label>
                   <div class="search__input-wrapper">
-                    <input
-                      id="search-main"
+                    <VInput
                       v-model="term"
+                      label="Search the video archive"
                       name="term"
-                      title="Search"
-                      placeholder="Search"
-                      class="search__input"
-                      type="text"
-                      aria-label="Search"
-                    >
+                      :classes="{ text: 'visually-hidden', input: 'search__input' }"
+                      placeholder="Search the video archive"
+                    />
                     <div class="search__submit-wrapper">
                       <button
                         :class="['search__submit', 'button', 'button--icon']"
@@ -148,7 +152,7 @@
                   <button
                     :class="['button',
                              'search-facet__label',
-                             {'search-facet__label--active': activeFacetList === 'topics'}
+                             {'search-facet__label--active': openFacetName === 'topics'}
                     ]"
                     :disabled="!topicsAndTags.length"
                     @click="toggleFacetOverlay('topics')"
@@ -158,7 +162,7 @@
                   <button
                     :class="['button',
                              'search-facet__label',
-                             {'search-facet__label--active': activeFacetList === 'people'}]"
+                             {'search-facet__label--active': openFacetName === 'people'}]"
                     :disabled="!facets.speakers.items.length"
                     @click="toggleFacetOverlay('people')"
                   >
@@ -167,7 +171,7 @@
                   <button
                     :class="['button',
                              'search-facet__label',
-                             {'search-facet__label--active': activeFacetList === 'playlists'}]"
+                             {'search-facet__label--active': openFacetName === 'playlists'}]"
                     :disabled="!facets.in_playlists.items.length"
                     @click="toggleFacetOverlay('playlists')"
                   >
@@ -176,7 +180,7 @@
                   <button
                     :class="['button',
                              'search-facet__label',
-                             {'search-facet__label--active': activeFacetList === 'date'}]"
+                             {'search-facet__label--active': openFacetName === 'date'}]"
                     :disabled="!facets.date_recorded.items.length"
                     @click="toggleFacetOverlay('date')"
                   >
@@ -193,8 +197,8 @@
             name="slide-out"
             mode="out-in"
           >
-            <SearchPageOverlay
-              v-if="activeFacetList === 'topics'"
+            <Overlay
+              v-if="openFacetName === 'topics'"
               id="topics"
               key="topics"
               @closePanel="closeFacetOverlay"
@@ -206,10 +210,10 @@
                 :panel-name="'topics'"
                 @change="toggleFacetOverlay"
               />
-            </SearchPageOverlay>
+            </Overlay>
 
-            <SearchPageOverlay
-              v-if="activeFacetList === 'people'"
+            <Overlay
+              v-if="openFacetName === 'people'"
               id="people"
               key="people"
               @closePanel="closeFacetOverlay"
@@ -221,10 +225,10 @@
                 :panel-name="'people'"
                 @change="toggleFacetOverlay"
               />
-            </SearchPageOverlay>
+            </Overlay>
 
-            <SearchPageOverlay
-              v-if="activeFacetList === 'playlists'"
+            <Overlay
+              v-if="openFacetName === 'playlists'"
               id="playlists"
               key="playlists"
               @closePanel="closeFacetOverlay"
@@ -235,10 +239,10 @@
                 :facet="facets.in_playlists"
                 @change="toggleFacetOverlay"
               />
-            </SearchPageOverlay>
+            </Overlay>
 
-            <SearchPageOverlay
-              v-if="activeFacetList === 'date'"
+            <Overlay
+              v-if="openFacetName === 'date'"
               id="date"
               key="date"
               @closePanel="closeFacetOverlay"
@@ -249,7 +253,7 @@
                 :facet="facets.date_recorded"
                 @change="toggleFacetOverlay"
               />
-            </SearchPageOverlay>
+            </Overlay>
           </transition>
 
           <div
@@ -302,7 +306,7 @@
 
 <script>
 import axios from 'axios';
-import { VToggle } from 'vuetensils';
+import { clickout, VToggle, VInput } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
@@ -311,7 +315,7 @@ import Pagination from './Pagination.vue';
 import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
-import SearchPageOverlay from './SearchPageOverlay.vue';
+import Overlay from './Overlay.vue';
 
 export default {
   name: 'Search',
@@ -320,10 +324,14 @@ export default {
     SearchableFacet,
     SearchFacet,
     SearchPageHeader,
-    SearchPageOverlay,
+    Overlay,
     UiCard,
     UiGrid,
+    VInput,
     VToggle,
+  },
+  directives: {
+    clickout,
   },
   mixins: [getRouteData],
   props: {
@@ -334,7 +342,7 @@ export default {
   },
   data() {
     return {
-      activeFacetList: null,
+      openFacetName: null,
       clearedSortQuery: null,
       clearPageQuery: null,
       currentQuery: null,
@@ -415,11 +423,10 @@ export default {
           this.term = newQuery;
         }
         this.getPageData(stringifyQuery(to.query));
-        const bodyClasses = document.body.classList;
       },
     },
-    activeFacetList(to) {
-      // document.body.style.overflow = this.activeFacetList ? 'hidden' : '';
+    openFacetName(to) {
+      // document.body.style.overflow = this.openFacetName ? 'hidden' : '';
       // this.$nextTick(() => {
       //   if (to) {
       //     document.querySelector(`#${to}`).focus({ preventScroll: true });
@@ -444,11 +451,6 @@ export default {
     this.handleResize();
   },
   methods: {
-    handleResize() {
-      if (this.width !== window.innerWidth) {
-        this.showFilters = window.innerWidth >= 960;
-      }
-    },
     getPageData(params = '') {
       axios
         .get(`/api/search${params}`)
@@ -457,6 +459,24 @@ export default {
         }).catch((err) => {
           console.log(err);
         });
+    },
+    handleResize() {
+      if (this.width !== window.innerWidth) {
+        this.showFilters = window.innerWidth >= 960;
+      }
+    },
+    afterEnter() {
+      this.filtersAreOpen = true;
+    },
+    afterLeave() {
+      this.filtersAreOpen = false;
+    },
+    onClickout(e) {
+      const facetList = e.target.parentNode.classList.contains('icon--close');
+      if (!facetList && window.innerWidth < 960 && this.filtersAreOpen) {
+        this.showFilters = false;
+      }
+      return false;
     },
     // Perform a search
     search() {
@@ -480,10 +500,10 @@ export default {
       this.totals = data.totals;
     },
     toggleFacetOverlay(name) {
-      this.activeFacetList = this.activeFacetList === name ? null : name;
+      this.openFacetName = this.openFacetName === name ? null : name;
     },
     closeFacetOverlay() {
-      this.activeFacetList = null;
+      this.openFacetName = null;
     },
   },
 };

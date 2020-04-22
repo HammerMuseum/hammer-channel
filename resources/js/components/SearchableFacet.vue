@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
+import { VInput } from 'vuetensils';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
