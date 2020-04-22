@@ -182,6 +182,8 @@ export default {
         .get(`${process.env.MIX_DATASTORE_URL}playlists/Featured`)
         .then((response) => {
           this.featured = response.data.data.videos;
+        }).catch((err) => {
+          console.log(err);
         });
     },
     getPageData() {
@@ -192,6 +194,8 @@ export default {
           this.pager = response.data.pager;
           this.videos = response.data.videos;
           this.topics = response.data.topics;
+        }).catch((err) => {
+          console.log(err);
         });
     },
     seeAllLinkText(topic, name) {

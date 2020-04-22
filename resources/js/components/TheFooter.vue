@@ -151,6 +151,8 @@ export default {
           if (response.data.success) {
             emailAddress.value = '';
           }
+        }).catch((err) => {
+          console.log(err);
         });
     },
   },

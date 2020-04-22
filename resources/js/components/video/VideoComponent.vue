@@ -302,6 +302,8 @@ export default {
         .get(`/api/video/${this.$route.params.id}`)
         .then((response) => {
           this.videoUrl = response.data.data.src;
+        }).catch((err) => {
+          console.log(err);
         });
     },
     toggleActivePanel(event, name) {
@@ -332,6 +334,8 @@ export default {
           });
           this.transcriptItems = paras;
           this.transcriptLoaded = true;
+        }).catch((err) => {
+          console.log(err);
         });
     },
     onTimeUpdate(value) {

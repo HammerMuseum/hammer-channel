@@ -131,6 +131,8 @@ export default {
         .get('/suggestions')
         .then((response) => {
           this.cannedTerms = response.data;
+        }).catch((err) => {
+          console.log(err);
         });
     },
   },
