@@ -100,7 +100,6 @@
                 :class="['search__filters']"
               >
                 <button
-                  v-show="showFilters"
                   class="button button--search-toggle button--small-devices"
                   @click="showFilters = false"
                 >
