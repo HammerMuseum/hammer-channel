@@ -1,13 +1,12 @@
 <template>
   <div
-    class="search-page__overlay"
+    class="overlay"
     tabindex="0"
   >
-    <div class="canvas-overlay" />
-    <div class="search-page__overlay__body">
-      <div class="search-page__overlay__inner">
+    <div class="overlay__body">
+      <div class="overlay__inner">
         <button
-          class="button button--icon search-page__overlay__close-button"
+          class="button button--icon overlay__close-button"
           aria-label="Close"
           @click.prevent="$emit('closePanel')"
         >
@@ -23,7 +22,7 @@
 
 <script>
 export default {
-  name: 'SearchPageOverlay',
+  name: 'Overlay',
 };
 </script>
 

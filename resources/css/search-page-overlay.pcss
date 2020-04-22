@@ -1,4 +1,4 @@
-.search-page__overlay {
+.overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -10,13 +10,13 @@
 }
 
 @media (max-width: 52.5em) {
-  .search-page__overlay {
+  .overlay {
     position: fixed;
     z-index: 4;
   }
 }
 
-.search-page__overlay__body {
+.overlay__body {
   position: absolute;
   top: 0;
   height: 100%;
@@ -28,13 +28,13 @@
   overflow-x: hidden;
 }
 
-.search-page__overlay__inner {
+.overlay__inner {
   color: var(--text-on-dark);
   background: var(--background-dark);
   padding: 24px 24px 40px 24px;
 }
 
-.search-page__overlay__close-button {
+.overlay__close-button {
   position: absolute;
   right: 12px;
   top: 12px;
@@ -64,17 +64,17 @@
     opacity: 1;
   }
 
-  .search-page__overlay__body {
+  .overlay__body {
     max-width: calc(75% / 1.5);
   }
 
-  .slide-out-enter .search-page__overlay__body,
-  .slide-out-leave-to .search-page__overlay__body {
+  .slide-out-enter .overlay__body,
+  .slide-out-leave-to .overlay__body {
     transform: translateX(calc(-100% - 24px));
   }
 
-  .slide-out-enter-to .search-page__overlay__body,
-  .slide-out-leave .search-page__overlay__body {
+  .slide-out-enter-to .overlay__body,
+  .slide-out-leave .overlay__body {
     transform: translateX(0%);
   }
 }
