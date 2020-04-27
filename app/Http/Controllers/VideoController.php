@@ -40,6 +40,9 @@ class VideoController extends Controller
     public function view(Request $request, $slug)
     {
         $data = $this->api->request('videos/' . $slug);
+        if (empty($data['data'])) {
+            abort(503);
+        }
         return view('app', [
             'state' => $this->getAppState('/video/' . $slug, $data),
             'metadata' => $this->getMetadata($data)
@@ -66,8 +69,10 @@ class VideoController extends Controller
     {
         $flatData = [];
         $flatData['path'] = $path;
-        foreach ($data['data'][0] as $k => $v) {
-            $flatData[$k] = $v;
+        if (!empty($data['data'])) {
+            foreach ($data['data'][0] as $k => $v) {
+                $flatData[$k] = $v;
+            }
         }
         return $flatData;
     }
