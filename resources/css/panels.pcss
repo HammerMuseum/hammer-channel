@@ -1,0 +1,31 @@
+.panels {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+.panel--left {
+  flex: 0 1 auto;
+}
+
+.panel--right {
+  flex: 1 0 auto;
+}
+
+@media screen and (min-width: 52.5em) {
+  .panels {
+    flex-direction: row;
+    max-height: 500px;
+  }
+
+  .panel--left {
+    flex: 1;
+    min-width: 60%;
+    margin-right: 16px;
+  }
+
+  .panel--right {
+    flex: 1;
+  }
+}

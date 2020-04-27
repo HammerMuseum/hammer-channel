@@ -1,5 +1,5 @@
 <template>
-  <div class="container--fixed container--fixed--top header-container">
+  <div class="container container--fixed container--top header-container">
     <header class="header">
       <div class="header__title">
         <h1 class="visually-hidden">

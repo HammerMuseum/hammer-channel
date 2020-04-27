@@ -2,8 +2,8 @@
   <div
     v-on-clickaway="away"
     :class="[
-      'container--fixed',
-      'container--fixed--bottom',
+      'container container--fixed',
+      'container--bottom',
       'footer-container',
       {'footer--open': footerIsActive}
     ]"

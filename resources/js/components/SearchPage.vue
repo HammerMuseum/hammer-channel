@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="search-page">
+    <div class="page-wrapper page--search">
       <SearchPageHeader :extra-classes="['page-heading', 'page-heading--search']">
         <template #summary>
           <AnimatedNumber
