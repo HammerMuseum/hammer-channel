@@ -8,75 +8,63 @@
       twitter-user="hammer_museum"
       inline-template
     >
-      <!-- These icons come from font awesome and need attribution -->
-
+    <!-- Below icons are from Font Awesome -->
+    <!-- https://creativecommons.org/licenses/by/4.0/ -->
       <div class="share-buttons">
-        <Network network="email">
-          <span class="fa fa-envelope share-button" />
+        <network network="facebook">
           <svg
-            title="Previous"
-            class="icon share-buttons__icon"
-          >
-            <use xlink:href="/images/sprite.svg#sprite-envelope" />
-          </svg>
-          <span class="icon-text visually-hidden">Email</span>
-        </Network>
-        <Network network="facebook">
-          <span class="fa fa-facebook share-button" />
-          <svg
-            title="Previous"
+            title="Facebook"
             class="icon share-buttons__icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-facebook" />
           </svg>
           <span class="icon-text visually-hidden">Share on Facebook</span>
-        </Network>
-        <Network network="twitter">
-          <span class="fa fa-twitter share-button" />
+        </network>
+        <network network="twitter">
           <svg
-            title="Previous"
+            title="Twitter"
             class="icon share-buttons__icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-twitter" />
           </svg>
           <span class="icon-text visually-hidden">Share on Twitter</span>
-        </Network>
-        <Network network="whatsapp">
-          <span class="fa fa-whatsapp share-button" />
+        </network>
+
+        <div>
           <svg
-            title="Previous"
+            title="Citation"
             class="icon share-buttons__icon"
           >
-            <use xlink:href="/images/sprite.svg#sprite-whatsapp" />
+            <use xlink:href="/images/sprite.svg#sprite-cite" />
           </svg>
-          <span class="icon-text visually-hidden">Share on whatsapp</span>
-        </Network>
+          <span class="icon-text visually-hidden">Cite</span>
+          <!-- <textarea
+            id="citation"
+            name="citation"
+            class="citation__content"
+          >"{{ title }}", Hammer Museum Video Archive, recorded {{ new Date(dateRecorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{ siteUrl }}{{ fullPath }}
+          </textarea>
+          <button
+            class="citation__copy"
+            @click="copyCitation"
+          >
+            Copy to clipboard
+          </button> -->
+        </div>
       </div>
     </SocialSharing>
-    <div class="citation">
-      <label
-        for="citation"
-        class="citation__label"
-      >Cite this</label>
-      <textarea
-        id="citation"
-        name="citation"
-        class="citation__content"
-      >"{{ title }}", Hammer Museum Video Archive, recorded {{ new Date(dateRecorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{ siteUrl }}{{ fullPath }}
-      </textarea>
-      <button
-        class="citation__copy"
-        @click="copyCitation"
-      >
-        Copy to clipboard
-      </button>
-    </div>
+
   </div>
 </template>
 
 <script>
+import SocialSharing from 'vue-social-sharing';
+
 export default {
   name: 'Share',
+  components: {
+    SocialSharing,
+  },
   props: {
     title: {
       type: String,

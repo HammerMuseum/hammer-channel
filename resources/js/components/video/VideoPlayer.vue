@@ -1,21 +1,24 @@
 <template>
-  <div class="video-player-container hammer-video-player vjs-hd">
-    <span class="hammer-video-player__duration">{{ duration }}</span>
-    <video
-      ref="videoPlayer"
-      class="video-js video-player vjs-default-skin"
-    >
-      <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a
-        web browser that
-        <a
-          href="https://videojs.com/html5-video-support/"
-          target="_blank"
+  <div class="video-player__wrapper">
+    <div class="video-player__wrapper-inner">
+      <div class="video-player__container vjs-hd">
+        <video
+          ref="videoPlayer"
+          class="video-js video-player vjs-default-skin"
         >
-          supports HTML5 video
-        </a>
-      </p>
-    </video>
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a
+              href="https://videojs.com/html5-video-support/"
+              target="_blank"
+            >
+              supports HTML5 video
+            </a>
+          </p>
+        </video>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -144,7 +147,7 @@ export default {
       });
 
       this.player.ready(function () {
-        self.player.addRemoteTextTrack(self.track);
+        self.player.addRemoteTextTrack(self.track, true);
       });
 
       // Setup overlay content. Move up to parent?
@@ -156,13 +159,13 @@ export default {
           content: overlayContent,
           end() {
             if (self.player.controlBar.hasClass('vjs-user-inactive')) {
-              document.querySelector('.vjs-overlay').classList.remove("vjs-user-inactive");
+              document.querySelector('.vjs-overlay').classList.remove('vjs-user-inactive');
             }
           },
           align: 'top',
         }],
       });
-      document.querySelector('.vjs-overlay').classList.add("vjs-control-bar");
+      document.querySelector('.vjs-overlay').classList.add('vjs-control-bar');
     },
     setSliderAppearance() {
       const sliderBar = document.querySelector('.vjs-play-progress');
@@ -245,3 +248,34 @@ export default {
   },
 };
 </script>
+
+<style>
+.video-player__wrapper {
+  min-width: 100%;
+  margin: 0 -16px;
+}
+
+.video-player__wrapper-inner {
+  position: relative;
+  padding-top: calc((9 / 16) * 100%);
+}
+
+.video-player__container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 52.5em) {
+  .video-player__wrapper {
+    margin: 0;
+  }
+}
+</style>

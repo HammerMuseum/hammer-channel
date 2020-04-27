@@ -3,6 +3,7 @@ import Vue from 'vue';
 export const store = Vue.observable({
   searchActive: false,
   searchTerm: '',
+  transcriptInit: false,
 });
 
 export const mutations = {
@@ -11,5 +12,8 @@ export const mutations = {
   },
   setSearchTerm(term) {
     store.searchTerm = term;
+  },
+  toggleTranscriptInit() {
+    store.transcriptInit = !store.transcriptInit;
   },
 };

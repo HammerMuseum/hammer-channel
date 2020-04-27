@@ -1,44 +1,83 @@
 <template>
-  <div>
-    <div v-if="playlists">
-      Part of:
-      <span
-        v-for="item in playlists"
-        :key="item"
+  <VideoMeta>
+    <template v-slot:highlighted>
+      <div
+        v-if="playlists.length"
+        class="ui-meta-grid"
       >
-        <RouterLink
-          :to="{name: 'search', query: { in_playlists: item } }"
+        <h4 class="ui-list__title">
+          Part of
+        </h4>
+        <ul
+          class="ui-list"
         >
-          {{ item }}
-        </RouterLink>
-      </span>
-    </div>
-    <div v-if="people">
-      Featuring:
-      <span
-        v-for="item in people"
-        :key="item"
+          <li
+            v-for="item in playlists"
+            :key="item"
+            class="ui-list__item"
+          >
+            <RouterLink
+              :class="['link', 'link--text', 'link--text-secondary']"
+              :to="{name: 'search', query: { in_playlists: item } }"
+            >
+              {{ item }}
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div
+        v-if="people.length"
+        class="ui-meta-grid"
       >
-        <RouterLink
-          :to="{name: 'search', query: { speakers: item } }"
+        <h4 class="ui-list__title">
+          Featuring
+        </h4>
+        <ul
+          class="ui-list"
         >
-          {{ item }}
-        </RouterLink>
-      </span>
-    </div>
-
-    <h3 class="video-meta__section-title">
-      Description
-    </h3>
-
+          <li
+            v-for="item in people"
+            :key="item"
+            class="ui-list__item"
+          >
+            <RouterLink
+              :class="['link', 'link--text', 'link--text-secondary']"
+              :to="{name: 'search', query: { speakers: item } }"
+            >
+              {{ item }}
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div
+        v-if="topics.length"
+        class="ui-meta-grid"
+      >
+        <h4 class="ui-list__title">
+          Topics
+        </h4>
+        <ul
+          class="ui-list"
+        >
+          <li
+            v-for="item in topics"
+            :key="item"
+            class="ui-list__item"
+          >
+            <RouterLink
+              :class="['link', 'link--text', 'link--text-secondary']"
+              :to="{name: 'search', query: { topic: item } }"
+            >
+              {{ item }}
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+    </template>
     <div class="video-meta__description">
       <p>{{ description }}</p>
     </div>
-
-    <div class="video-meta__date-recorded">
-      Recorded: {{ new Date(dateRecorded) | dateFormat('dddd, DD MMMM, YYYY') }}
-    </div>
-  </div>
+  </VideoMeta>
 </template>
 
 <script>
@@ -60,6 +99,12 @@ export default {
       },
     },
     playlists: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    topics: {
       type: Array,
       default() {
         return [];
