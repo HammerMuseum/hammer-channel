@@ -6,22 +6,22 @@
           <span>{{ hitInfo }}</span>
           <div
             v-if="searchSummary"
-            style="display:inline;"
+            style="display: inline;"
           >
-            <span style="border:none;padding-bottom:2px;">for&nbsp;</span>
+            <span style="border: none; padding-bottom: 2px;">for&nbsp;</span>
             <RouterLink
               v-if="searchSummary"
               :to="{ name: 'search' }"
               class="link link--text link--text-and-button"
               title="Clear term and reset search"
             >
-              <span>{{ searchSummary }}</span>
+              <strong>{{ searchSummary }}</strong>
               <button
                 class="button button--icon search-facet__item-remove"
                 aria-label="Clear term and reset search"
               >
-                <svg class="icon icon--close">
-                  <use xlink:href="/images/sprite.svg#sprite-close" />
+                <svg class="icon icon--close-pink">
+                  <use xlink:href="/images/sprite.svg#sprite-close-pink" />
                 </svg>
               </button>
             </RouterLink>
@@ -30,7 +30,7 @@
         <template #extras>
           <button
             class="button button--search-toggle button--small-devices"
-            @click="showFilters = !showFilters"
+            @click="toggleSearchFilters"
           >
             {{ !showFilters ? 'Search and filter' : 'Show results' }}
           </button>
@@ -38,7 +38,7 @@
             transition="slide-down"
             :classes="{
               root: 'search-page__sorting',
-              label: 'search-page__sorting-control button button--search-toggle',
+              label: 'search-page__sorting-control button',
               content: 'search-page__sorting-content'
             }"
           >
@@ -61,7 +61,7 @@
               <ul>
                 <li>
                   <RouterLink
-                    class="link link--text link--text-secondary"
+                    class="link link--text"
                     :to="{
                       name: 'search',
                       query: {
@@ -70,12 +70,12 @@
                       }
                     }"
                   >
-                    Date (ASC)
+                    Date (asc)
                   </RouterLink>
                 </li>
                 <li>
                   <RouterLink
-                    class="link link--text link--text-secondary"
+                    class="link link--text"
                     :to="{
                       name: 'search',
                       query: {
@@ -84,7 +84,7 @@
                       }
                     }"
                   >
-                    Date (DESC)
+                    Date (desc)
                   </RouterLink>
                 </li>
               </ul>
@@ -107,8 +107,10 @@
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
             >
               <div
+                ref="searchFilters"
                 v-clickout="onClickout"
                 :class="['search__filters']"
+                tabindex="0"
               >
                 <button
                   class="button button--search-toggle button--small-devices"
@@ -119,16 +121,18 @@
                 <div class="search-page__form">
                   <div class="search__input-wrapper">
                     <VInput
+                      ref="search"
                       v-model="term"
                       label="Search the video archive"
                       name="term"
                       :classes="{ text: 'visually-hidden', input: 'search__input' }"
-                      placeholder="Search the video archive"
+                      placeholder="Search"
+                      @keyup.enter="search"
                     />
                     <div class="search__submit-wrapper">
                       <button
                         :class="['search__submit', 'button', 'button--icon']"
-                        @click="search()"
+                        @click="search"
                       >
                         <svg
                           title="Search"
@@ -286,6 +290,9 @@
                     <h2 class="ui-card__title">
                       <span>{{ item.title }}</span>
                     </h2>
+                    <div class="ui-card__date">
+                      {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
+                    </div>
                   </article>
                 </RouterLink>
               </UiCard>
@@ -425,14 +432,6 @@ export default {
         this.getPageData(stringifyQuery(to.query));
       },
     },
-    openFacetName(to) {
-      // document.body.style.overflow = this.openFacetName ? 'hidden' : '';
-      // this.$nextTick(() => {
-      //   if (to) {
-      //     document.querySelector(`#${to}`).focus({ preventScroll: true });
-      //   }
-      // });
-    },
     showFilters(to) {
       if (to) {
         document.body.classList.add('search-filters-are-open');
@@ -501,6 +500,12 @@ export default {
     },
     toggleFacetOverlay(name) {
       this.openFacetName = this.openFacetName === name ? null : name;
+    },
+    toggleSearchFilters() {
+      this.showFilters = !this.showFilters;
+      if (this.showFilters) {
+        this.$refs.searchFilters.focus();
+      }
     },
     closeFacetOverlay() {
       this.openFacetName = null;

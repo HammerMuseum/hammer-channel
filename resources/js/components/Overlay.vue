@@ -4,7 +4,10 @@
     tabindex="0"
   >
     <div class="overlay__body">
-      <div class="overlay__inner">
+      <div
+        class="overlay__inner"
+        @keyup.escape.stop="$emit('closePanel')"
+      >
         <button
           class="button button--icon overlay__close-button"
           aria-label="Close"

@@ -8,13 +8,12 @@
 }
 
 .search__filters-overlay {
-  background: var(--overlay-dark);
-  transition: all var(--overlay-transition);
   position: fixed;
   top: 54px;
   left: 0;
   z-index: 2;
   width: 100%;
+  background: var(--overlay-dark);
 }
 
 .search__filters .button--search-toggle {
@@ -26,13 +25,18 @@
 .slide-in-enter,
 .slide-in-leave-to {
   transform: none;
-  opacity: 0;
+  background: rgba(0, 0, 0, 0);
 }
 
 .slide-in-enter-to,
 .slide-in-leave {
   transform: none;
-  opacity: 1;
+  background: var(--overlay-dark);
+}
+
+.slide-in-leave-active,
+.slide-in-enter-active {
+  transition: transform var(--overlay-transition), background var(--overlay-transition) 0.4s;
 }
 
 .slide-in-enter .search__filters,
@@ -56,7 +60,7 @@
   }
 }
 
-@media (min-width: 50em) {
+@media (min-width: 60em) {
   .search__filters-overlay {
     background: var(--background-primary);
     position: relative;
@@ -70,6 +74,7 @@
     max-height: 100%;
     padding-top: 0;
     overflow-y: auto;
+    max-width: 100%;
   }
 
   .slide-in-enter,
@@ -85,8 +90,9 @@
   }
 }
 
-@media screen and (min-width: 52.5em) {
+@media screen and (min-width: 60em) {
   .search__filters {
+    padding: 0 24px 40px 0;
     max-width: 100%;
   }
 

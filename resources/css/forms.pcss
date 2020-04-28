@@ -18,6 +18,10 @@
   vertical-align: top;
   -webkit-appearance: none;
   appearance: none;
+
+  &:hover {
+    color: var(--highlight-primary);
+  }
 }
 
 .button--disabled {
@@ -43,12 +47,16 @@
   display: inline-flex;
   width: 100%;
   background: #fff;
+
+  .vts-input--text {
+    width: 100%;
+  }
 }
 
 .search__input {
   position: relative;
   text-transform: none;
-  padding: 16px 12px 18px 12px;
+  padding: 16px 0 18px 24px;
   width: 100%;
   border: none;
   background: #fff;
@@ -63,7 +71,7 @@
   background-color: var(--background-secondary);
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 12px 24px 12px 12px;
 }
 
 .search__submit .icon {

@@ -1,42 +1,54 @@
 <template>
-  <div class="search-facet__list">
+  <FocusTrap
+    :active="true"
+    :escape-deactivates="false"
+  >
     <div
-      v-for="option in facet.items"
-      :key="option.key"
-      :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(option, facet.type))}"
+      class="search-facet__list"
     >
-      <a
-        :href="`/search?${query(facet.id, getValue(option, facet.type))}`"
-        class="search-facet__item-link"
-        @click.prevent="handleClick($event, facet.id, getValue(option, facet.type))"
+      <div
+        v-for="option in facet.items"
+        ref="listChildren"
+        :key="option.key"
+        :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(option, facet.type))}"
       >
-        <span
-          v-if="!isActive(getValue(option, facet.type))"
-          class="search-facet__item-text"
-        >{{ getValue(option, facet.type) }}</span>
-        <span
-          v-else
-          class="search-facet__item-text"
-        >{{ getValue(option, facet.type) }}
-          <button
-            class="button button--icon search-facet__item-remove"
-            aria-label="Remove selection"
-          >
-            <svg class="icon icon--close">
-              <use xlink:href="/images/sprite.svg#sprite-close" />
-            </svg>
-          </button>
-        </span>
-      </a>
+        <a
+          :href="`/search?${query(facet.id, getValue(option, facet.type))}`"
+          class="search-facet__item-link"
+          @click.prevent="handleClick($event, facet.id, getValue(option, facet.type))"
+        >
+          <span
+            v-if="!isActive(getValue(option, facet.type))"
+            class="search-facet__item-text"
+          >{{ getValue(option, facet.type) }}</span>
+          <span
+            v-else
+            class="search-facet__item-text"
+          >{{ getValue(option, facet.type) }}
+            <button
+              class="button button--icon search-facet__item-remove"
+              aria-label="Remove selection"
+            >
+              <svg class="icon icon--close">
+                <use xlink:href="/images/sprite.svg#sprite-close" />
+              </svg>
+            </button>
+          </span>
+        </a>
+      </div>
     </div>
-  </div>
+  </FocusTrap>
 </template>
 
 <script>
+import { FocusTrap } from 'focus-trap-vue';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
   name: 'SearchFacet',
+  components: {
+    FocusTrap,
+  },
   props: {
     facet: {
       type: Object,
@@ -46,6 +58,9 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  mounted() {
+    this.$refs.listChildren[0].firstChild.focus();
   },
   methods: {
     handleClick(e, key, value) {

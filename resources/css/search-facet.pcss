@@ -14,15 +14,6 @@
   color: var(--highlight-primary);
 }
 
-.search-facet__label--active span::before {
-  content: "\2022";
-  color: var(--highlight-primary);
-  font-weight: bold;
-  display: inline-block;
-  width: 16px;
-  transition: all var(--overlay-transition);
-}
-
 .search-facet__label--active {
   color: var(--highlight-primary);
 }
@@ -46,7 +37,7 @@
   margin: 6px 0;
 }
 
-.search-facet__item--active .search-facet__item-text {
+.search-facet__item-text {
   border-bottom: var(--primary-border-highlight);
 }
 
@@ -71,6 +62,10 @@
 
 .searchable-facet__search-input {
   margin-bottom: 16px;
+
+  .search__input {
+    padding-left: 0;
+  }
 }
 
 @media (min-width: 37.5em) {

@@ -2,6 +2,7 @@
   <div class="searchable-facet">
     <div class="searchable-facet__search-input">
       <VInput
+        ref="search"
         v-model="searchTerm"
         label="Type to filter list..."
         name="searchTerm"
@@ -56,7 +57,6 @@
         </a>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -120,6 +120,9 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    this.$refs.search.$refs.input.focus();
   },
   methods: {
     handleClick(e, key, value) {
