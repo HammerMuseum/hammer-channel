@@ -91,9 +91,8 @@
             </template>
           </VToggle>
         </template>
+        <CurrentSearch />
       </SearchPageHeader>
-
-      <!-- <div class="search-page__current-search"></div> -->
 
       <div class="search-page__content">
         <aside class="search-page__sidebar">
@@ -308,7 +307,6 @@
       </div>
     </div>
   </div>
-  </div>
 </template>
 
 <script>
@@ -319,6 +317,7 @@ import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import Pagination from './Pagination.vue';
+import CurrentSearch from './CurrentSearch.vue';
 import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
@@ -327,6 +326,7 @@ import Overlay from './Overlay.vue';
 export default {
   name: 'Search',
   components: {
+    CurrentSearch,
     Pagination,
     SearchableFacet,
     SearchFacet,

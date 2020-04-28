@@ -1,14 +1,17 @@
 <template>
   <header class="search-header">
-    <h1 :class="headingClasses">
-      Search results
-    </h1>
-    <div class="search-header__summary">
-      <slot name="summary" />
+    <div class="search-header__inner">
+      <h1 :class="headingClasses">
+        Search results
+      </h1>
+      <div class="search-header__summary">
+        <slot name="summary" />
+      </div>
+      <div class="search-header__extras">
+        <slot name="extras" />
+      </div>
     </div>
-    <div class="search-header__extras">
-      <slot name="extras" />
-    </div>
+    <slot />
   </header>
 </template>
 
