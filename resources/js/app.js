@@ -4,6 +4,7 @@ import 'svgxuse';
 import Vue from 'vue';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
+import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import VueSocialSharing from 'vue-social-sharing';
 import router from './router';
@@ -22,6 +23,11 @@ Vue.use(VueFilterDateFormat);
 Vue.use(VueSocialSharing);
 Vue.use(VueCheckView);
 Vue.use(VueScrollTo);
+Vue.use(VueProgressBar, {
+  color: '#ee2a7b',
+  failedColor: 'red',
+  height: '2px',
+});
 
 const app = new Vue({ // eslint-disable-line
   el: '#app',

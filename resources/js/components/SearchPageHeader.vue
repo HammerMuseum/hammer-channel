@@ -1,6 +1,6 @@
 <template>
   <header class="search-header">
-    <div class="search-header__inner">
+    <div class="search-header__inner search-header__inner-layout">
       <h1 :class="headingClasses">
         Search results
       </h1>
@@ -11,7 +11,9 @@
         <slot name="extras" />
       </div>
     </div>
-    <slot />
+    <div class="search-header__inner">
+      <slot />
+    </div>
   </header>
 </template>
 

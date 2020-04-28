@@ -3,7 +3,11 @@
     <div class="search-page">
       <SearchPageHeader :extra-classes="['page-heading', 'page-heading--search']">
         <template #summary>
-          <span>{{ hitInfo }}</span>
+          <AnimatedNumber
+            :value="total"
+            :duration="400"
+            :round="1"
+          /><span v-show="total"> results</span>
           <div
             v-if="searchSummary"
             style="display: inline;"
@@ -95,6 +99,7 @@
       </SearchPageHeader>
 
       <div class="search-page__content">
+        <vue-progress-bar class="search-page__progress-bar" />
         <aside class="search-page__sidebar">
           <transition
             name="slide-in"
@@ -311,6 +316,7 @@
 
 <script>
 import axios from 'axios';
+import AnimatedNumber from 'animated-number-vue';
 import { clickout, VToggle, VInput } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
@@ -326,6 +332,7 @@ import Overlay from './Overlay.vue';
 export default {
   name: 'Search',
   components: {
+    AnimatedNumber,
     CurrentSearch,
     Pagination,
     SearchableFacet,
@@ -354,6 +361,7 @@ export default {
       clearPageQuery: null,
       currentQuery: null,
       facets: null,
+      loading: false,
       noResults: false,
       overlayOpen: false,
       pager: null,
@@ -390,7 +398,7 @@ export default {
       return this.videos;
     },
     hitInfo() {
-      return this.total ? `${this.total} results` : '0 results';
+      return this.total;
     },
     topicsAndTags() {
       return [this.facets.topics, this.facets.tags];
@@ -451,12 +459,15 @@ export default {
   },
   methods: {
     getPageData(params = '') {
+      this.$Progress.start();
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
+          this.$Progress.finish();
         }).catch((err) => {
           console.log(err);
+          this.$Progress.fail();
         });
     },
     handleResize() {
