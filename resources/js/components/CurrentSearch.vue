@@ -36,7 +36,7 @@ export default {
   computed: {
     filteredQuery() {
       const query = this.$route.query;
-      const allowed = ['topics', 'tags', 'speakers', 'dates', 'playlists'];
+      const allowed = ['topics', 'tags', 'speakers', 'date_recorded', 'in_playlists'];
       return Object.keys(query)
         .filter((key) => allowed.includes(key))
         .reduce((obj, key) => {
