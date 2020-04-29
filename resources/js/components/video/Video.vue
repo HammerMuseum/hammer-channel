@@ -144,7 +144,6 @@ export default {
   mixins: [getRouteData],
   data() {
     return {
-      activePanel: null,
       asset_id: null,
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
@@ -187,16 +186,6 @@ export default {
     },
   },
   watch: {
-    activePanel() {
-      if (window.innerWidth < 760) {
-        this.$nextTick(() => {
-          if (document.querySelector('.video-wrapper__item.active')) {
-            const height = document.documentElement.offsetHeight - document.querySelector('video').offsetHeight;
-            document.querySelector('.video-wrapper__item.active').setAttribute('style', `height:${height}px`);
-          }
-        });
-      }
-    },
     src() {
       this.videoOptions = {
         autoplay: false,
@@ -254,21 +243,6 @@ export default {
         }).catch((err) => {
           console.log(err);
         });
-    },
-    toggleActivePanel(event, name) {
-      const clickedElem = event.target;
-      if (document.querySelector('.active-panel')) {
-        document.querySelector('.active-panel').classList.remove('active-panel');
-      }
-
-      if (this.activePanel === name) {
-        this.activePanel = null;
-        document.querySelector('.panel--left').classList.remove('panel--left--open');
-      } else {
-        this.activePanel = name;
-        clickedElem.classList.add('active-panel');
-        document.querySelector('.panel--left').classList.add('panel--left--open');
-      }
     },
     fetchTranscript() {
       axios
