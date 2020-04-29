@@ -92,10 +92,8 @@
                 </h3>
               </template>
               <Share
-                :description="description"
                 :title="title"
-                :title-slug="title_slug"
-                :date-recorded="date_recorded"
+                :date="date_recorded"
               />
             </BTab>
 
