@@ -47,7 +47,7 @@
             >{{ getValue(item, facet.type) }}</span>
             <button
               class="button button--icon search-facet__item-remove"
-              aria-label="Remove selection"
+              :aria-label="`Remove ${getValue(item, facet.type)} filter from selection`"
             >
               <svg class="icon icon--close">
                 <use xlink:href="/images/sprite.svg#sprite-close" />
@@ -132,18 +132,18 @@ export default {
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;
-      let qs = stringifyQuery(this.$route.query);
-      const r = this.$route.query;
+      let queryStr = stringifyQuery(this.$route.query);
+      const routeQuery = this.$route.query;
       // If the query string contains pagination info, remove it
-      if (r.page) {
-        qs = qs.replace(`page=${r.page}`, '');
+      if (routeQuery.page) {
+        queryStr = queryStr.replace(`page=${routeQuery.page}`, '');
       }
       // If the querystring contains the current facet, generate a new one without it.
-      if (r[key] && (r[key] === value || r[key].includes(value))) {
-        const processed = qs.replace(param, '');
+      if (routeQuery[key] && (routeQuery[key] === value || routeQuery[key].includes(value))) {
+        const processed = queryStr.replace(param, '');
         return processed;
       }
-      return qs === '' ? `${qs}${param}` : `${qs}&${param}`;
+      return queryStr === '' ? `${queryStr}${param}` : `${queryStr}&${param}`;
     },
     isActive(value) {
       return this.activeFacets && this.activeFacets.includes(value);

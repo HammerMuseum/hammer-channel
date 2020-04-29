@@ -183,7 +183,7 @@ export default {
         .then((response) => {
           this.featured = response.data.data.videos;
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     getPageData() {
@@ -195,7 +195,7 @@ export default {
           this.videos = response.data.videos;
           this.topics = response.data.topics;
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     seeAllLinkText(topic, name) {

@@ -17,13 +17,13 @@ export default {
   grid-template-columns: repeat(1, 1fr);
 }
 
-@media (min-width: 480px) {
+@media (min-width: 30em) {
   .ui-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1353px) {
+@media (min-width: 84.5em) {
   .ui-grid {
     grid-template-columns: repeat(3, 1fr);
   }

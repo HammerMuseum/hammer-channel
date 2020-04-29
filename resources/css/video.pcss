@@ -46,7 +46,7 @@
 
 .item-list {
   display: flex;
-  margin: 1rem;
+  margin: 16px;
 }
 
 .item-list ul {
@@ -58,8 +58,8 @@
 
 .item-list__item {
   cursor: pointer;
-  padding: 1rem;
-  background: var(--background-darker);
+  padding: 16px;
+  background: var(--background-secondary);
 }
 
 .item-list__item a {
@@ -112,7 +112,7 @@
   }
 
   .active-panel {
-    margin-right: -1rem;
+    margin-right: -16px;
   }
 
   .video-options {
@@ -126,11 +126,32 @@
 
   .video-wrapper {
     flex-direction: row;
-    margin-right: 1rem;
+    margin-right: 16px;
   }
 
   .video-content {
-    margin-top: 1rem;
+    margin-top: 16px;
+  }
+
+  .panel--left {
+    position: relative;
+    bottom: initial;
+    left: initial;
+    flex-basis: 0;
+  }
+
+  .panel--left--open {
+    align-self: flex-start;
+    flex-basis: 80%;
+    margin-right: 16px;
+  }
+
+  .panel--right {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    flex-basis: 100%;
+    transition: all 0.8s;
   }
 
   .item-list {
@@ -149,13 +170,13 @@
   }
 
   .item-list__item {
-    margin-bottom: 1rem;
+    margin-bottom: 16px;
   }
 
   .video-wrapper__item {
     height: calc(100vh - 132px);
     max-height: calc(100vh - 132px);
-    padding: 1rem;
+    padding: 16px;
   }
 
   .close-button {

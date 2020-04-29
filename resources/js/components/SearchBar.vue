@@ -132,7 +132,7 @@ export default {
         .then((response) => {
           this.cannedTerms = response.data;
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
   },

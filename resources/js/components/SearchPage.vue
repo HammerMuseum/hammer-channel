@@ -404,7 +404,7 @@ export default {
       return [this.facets.topics, this.facets.tags];
     },
     total() {
-      return this.totals ? this.totals.total : null;
+      return this.totals ? this.totals.total : 0;
     },
     searchTerm() {
       if (this.term) return this.term;
@@ -466,7 +466,7 @@ export default {
           this.setVars(response);
           this.$Progress.finish();
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
           this.$Progress.fail();
         });
     },
