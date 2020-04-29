@@ -466,7 +466,7 @@ export default {
           this.setVars(response);
           this.$Progress.finish();
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
           this.$Progress.fail();
         });
     },
