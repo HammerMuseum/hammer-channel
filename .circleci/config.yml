@@ -241,6 +241,8 @@ workflows:
           requires:
             - build_and_test
           filters:
+            tags:
+              only: /^stage-.*/
             branches:
               only: develop
       - deploy:
