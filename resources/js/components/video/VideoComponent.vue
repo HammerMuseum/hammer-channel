@@ -34,14 +34,14 @@
             <a href="#clip">Clip</a>
           </li>
           <li class="">
-            <router-link :to="{name: 'app'}">
+            <RouterLink :to="{name: 'app'}">
               Home
-            </router-link>
+            </RouterLink>
           </li>
           <li class="">
-            <router-link :to="{name: 'search'}">
+            <RouterLink :to="{name: 'search'}">
               Search
-            </router-link>
+            </RouterLink>
           </li>
         </ul>
       </div>
@@ -56,10 +56,10 @@
               class="close-button"
               @click="toggleActivePanel($event, activePanel);"
             >Close</span>
-            <about
+            <About
               v-show="activePanel === 'about'"
               :description="description"
-              :date_recorded="date_recorded"
+              :date-recorded="date_recorded"
               :people="speakers"
               :playlists="in_playlists"
               :current-panel="activePanel"
@@ -75,13 +75,13 @@
               class="close-button"
               @click="toggleActivePanel($event, activePanel);"
             >Close</span>
-            <share
+            <Share
               v-show="activePanel === 'share'"
               :current-panel="activePanel"
               :description="description"
               :title="title"
-              :title_slug="title_slug"
-              :date_recorded="date_recorded"
+              :title-slug="title_slug"
+              :date-recorded="date_recorded"
             />
           </div>
 
@@ -94,7 +94,7 @@
               class="close-button"
               @click="toggleActivePanel($event, activePanel);"
             >Close</span>
-            <use-this
+            <UseThis
               v-show="activePanel === 'use'"
               :current-panel="activePanel"
             />
@@ -112,7 +112,7 @@
             <p v-show="!transcriptLoaded">
               Loading...
             </p>
-            <transcript
+            <Transcript
               :items="paraText"
               :current-timecode="currentTimecode"
               @updateTimecode="updateTimecode"
@@ -127,7 +127,7 @@
               class="close-button"
               @click="toggleActivePanel($event, activePanel);"
             >Close</span>
-            <clipping-tool
+            <ClippingTool
               v-show="activePanel === 'clip'"
               :current-panel="activePanel"
               :current-timecode="this.currentTimecode"
@@ -135,7 +135,7 @@
           </div>
         </div>
         <div class="panel--right">
-          <video-player
+          <VideoPlayer
             dusk="video-player-component"
             :duration="duration"
             :options="videoOptions"
@@ -151,7 +151,7 @@
               {{ title }}
             </h1>
             <div class="video-description--mobile">
-              <about
+              <About
                 :description="description"
                 :date_recorded="date_recorded"
                 :people="speakers"
@@ -302,6 +302,8 @@ export default {
         .get(`/api/video/${this.$route.params.id}`)
         .then((response) => {
           this.videoUrl = response.data.data.src;
+        }).catch((err) => {
+          console.log(err);
         });
     },
     toggleActivePanel(event, name) {
@@ -332,6 +334,8 @@ export default {
           });
           this.transcriptItems = paras;
           this.transcriptLoaded = true;
+        }).catch((err) => {
+          console.log(err);
         });
     },
     onTimeUpdate(value) {

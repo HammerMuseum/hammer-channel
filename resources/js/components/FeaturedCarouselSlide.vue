@@ -1,45 +1,51 @@
 <template>
   <div class="carousel__slide carousel__slide--featured">
-    <router-link
-      :to="{name: 'video', params: {id: slug}}"
-      class="video-card video-card--featured"
-    >
-      <div class="video-card__thumbnail">
-        <span class="video-card__duration">{{ duration }}</span>
-        <img
-          class="video-card__thumbnail-image"
-          :src="thumbnailUrl"
-        >
-      </div>
-      <article class="video-card__info">
-        <template v-if="quote">
-          <q class="video-card__quote">{{ quote }}</q>
-          <div class="video-card__teaser">
-            <h2 class="video-card__title">
-              {{ title }}
-            </h2>
-          </div>
-        </template>
-        <template v-else>
-          <span class="video-card__title">{{ title }}</span>
-          <div class="video-card__teaser">
-            <h2 class="video-card__subtitle">
-              {{ subtitle }}
-            </h2>
-            <p class="video-card__description">
-              {{ description }}
-            </p>
-          </div>
-        </template>
-      </article>
-    </router-link>
+    <ui-card :extra-classes="['ui-card--featured']">
+      <RouterLink
+        :to="{name: 'video', params: {id: slug}}"
+        class="featured-slide"
+      >
+        <div class="ui-card__thumbnail">
+          <span class="ui-card__duration">{{ duration }}</span>
+          <img
+            class="ui-card__thumbnail-image"
+            :src="thumbnailUrl"
+          >
+        </div>
+        <article class="ui-card__info">
+          <template v-if="quote">
+            <q class="ui-card__quote">{{ quote }}</q>
+            <div class="ui-card__teaser">
+              <h2 class="ui-card__title">
+                {{ title }}
+              </h2>
+            </div>
+          </template>
+          <template v-else>
+            <span class="ui-card__title">{{ title }}</span>
+            <div class="ui-card__teaser">
+              <h2 class="ui-card__subtitle">
+                {{ subtitle }}
+              </h2>
+              <p class="ui-card__description">
+                {{ description }}
+              </p>
+            </div>
+          </template>
+        </article>
+      </RouterLink>
+    </ui-card>
   </div>
 </template>
 
 <script>
 import { truncate } from 'lodash';
+import UiCard from './UiCard.vue';
 
 export default {
+  components: {
+    UiCard,
+  },
   props: {
     item: {
       type: Object,

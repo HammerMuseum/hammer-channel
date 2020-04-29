@@ -1,6 +1,6 @@
 <template>
   <div>
-    <social-sharing
+    <SocialSharing
       :url="`${siteUrl}${fullPath}`"
       :title="title"
       :description="description"
@@ -11,7 +11,7 @@
       <!-- These icons come from font awesome and need attribution -->
 
       <div class="share-buttons">
-        <network network="email">
+        <Network network="email">
           <span class="fa fa-envelope share-button" />
           <svg
             title="Previous"
@@ -20,8 +20,8 @@
             <use xlink:href="/images/sprite.svg#sprite-envelope" />
           </svg>
           <span class="icon-text visually-hidden">Email</span>
-        </network>
-        <network network="facebook">
+        </Network>
+        <Network network="facebook">
           <span class="fa fa-facebook share-button" />
           <svg
             title="Previous"
@@ -30,8 +30,8 @@
             <use xlink:href="/images/sprite.svg#sprite-facebook" />
           </svg>
           <span class="icon-text visually-hidden">Share on Facebook</span>
-        </network>
-        <network network="twitter">
+        </Network>
+        <Network network="twitter">
           <span class="fa fa-twitter share-button" />
           <svg
             title="Previous"
@@ -40,8 +40,8 @@
             <use xlink:href="/images/sprite.svg#sprite-twitter" />
           </svg>
           <span class="icon-text visually-hidden">Share on Twitter</span>
-        </network>
-        <network network="whatsapp">
+        </Network>
+        <Network network="whatsapp">
           <span class="fa fa-whatsapp share-button" />
           <svg
             title="Previous"
@@ -50,9 +50,9 @@
             <use xlink:href="/images/sprite.svg#sprite-whatsapp" />
           </svg>
           <span class="icon-text visually-hidden">Share on whatsapp</span>
-        </network>
+        </Network>
       </div>
-    </social-sharing>
+    </SocialSharing>
     <div class="citation">
       <label
         for="citation"
@@ -62,7 +62,7 @@
         id="citation"
         name="citation"
         class="citation__content"
-      >"{{ title }}", Hammer Museum Video Archive, recorded {{ new Date(date_recorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{ siteUrl }}{{ fullPath }}
+      >"{{ title }}", Hammer Museum Video Archive, recorded {{ new Date(dateRecorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{ siteUrl }}{{ fullPath }}
       </textarea>
       <button
         class="citation__copy"
@@ -86,11 +86,11 @@ export default {
       type: String,
       default: '',
     },
-    title_slug: {
+    titleSlug: {
       type: String,
       default: '',
     },
-    date_recorded: {
+    dateRecorded: {
       type: String,
       default: '',
     },
@@ -104,7 +104,6 @@ export default {
   methods: {
     copyCitation() {
       const citation = document.querySelector('[name=citation]');
-      console.log(citation);
       citation.select();
       document.execCommand('copy');
     },

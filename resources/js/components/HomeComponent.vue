@@ -1,11 +1,11 @@
 <template>
-  <div class="listing">
+  <div class="container">
     <NavigationBar
       :items="topics"
       :active-item="currentSectionInView"
       :classes="['topic-menu']"
     />
-    <content-loader
+    <ContentLoader
       v-if="!featured"
       :width="800"
       :height="250"
@@ -53,7 +53,7 @@
         width="361"
         height="26"
       />
-    </content-loader>
+    </ContentLoader>
 
     <Carousel
       v-else
@@ -64,34 +64,34 @@
       :options="featuredSettings"
       :show-heading="false"
     >
-      <featured-carousel-slide
+      <FeaturedCarouselSlide
         v-for="video in featured"
         :key="video.id"
         :item="video"
       />
     </Carousel>
 
-    <div class="container">
+    <div class="carousels">
       <div
         v-for="(topic, name) in topics"
         :key="topic.id"
         v-view="viewHandler"
         :data-section-id="topic.id"
       >
-        <carousel
+        <Carousel
           :id="topic.id"
           :controls="true"
           :title="name"
           :options="carouselSettings"
         >
-          <carousel-slide
+          <CarouselSlide
             v-for="video in topic.videos"
             :key="video.id"
             :item="video._source"
           />
           <div class="carousel__slide see-more">
             <router-link
-              class="video-card"
+              class="ui-card"
               :to="{name: 'search', query: {topics: name}}"
             >
               <div class="see-more__content">
@@ -108,7 +108,7 @@
               </span>
             </router-link>
           </div>
-        </carousel>
+        </Carousel>
       </div>
     </div>
   </div>
@@ -182,6 +182,8 @@ export default {
         .get(`${process.env.MIX_DATASTORE_URL}playlists/Featured`)
         .then((response) => {
           this.featured = response.data.data.videos;
+        }).catch((err) => {
+          console.error(err);
         });
     },
     getPageData() {
@@ -192,6 +194,8 @@ export default {
           this.pager = response.data.pager;
           this.videos = response.data.videos;
           this.topics = response.data.topics;
+        }).catch((err) => {
+          console.error(err);
         });
     },
     seeAllLinkText(topic, name) {

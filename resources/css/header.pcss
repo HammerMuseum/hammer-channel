@@ -1,18 +1,16 @@
 .header-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 3;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-white);
 }
 
 .header {
   position: relative;
   display: flex;
   height: 54px;
-  align-content: center;
-  justify-content: center;
-  background: var(--header-background);
+  background: var(--background-white);
 }
 
 .header__title {
@@ -39,7 +37,7 @@
   display: block;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 37.5em) {
   .header {
     height: 72px;
   }

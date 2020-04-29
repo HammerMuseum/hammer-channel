@@ -1,0 +1,85 @@
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transition: all var(--overlay-transition);
+  background: var(--overlay-dark);
+  z-index: 2;
+}
+
+@media (max-width: 60em) {
+  .overlay {
+    position: fixed;
+    z-index: 4;
+  }
+}
+
+.overlay__body {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  transition: transform var(--overlay-transition);
+  overflow: auto;
+  max-height: 100%;
+  overflow-x: hidden;
+}
+
+.overlay__inner {
+  color: var(--text-on-dark);
+  background: var(--background-dark);
+  padding: 24px 24px 40px 24px;
+}
+
+.overlay__close-button {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 1;
+}
+
+.slide-out-enter,
+.slide-out-leave-to {
+  transform: translateY(100%);
+}
+
+.slide-out-enter-to,
+.slide-out-leave {
+  transform: translateY(0%);
+}
+
+@media (min-width: 50em) {
+  .overlay__body {
+    max-width: calc(75% / 1.5);
+  }
+
+  .slide-out-enter,
+  .slide-out-leave-to {
+    transform: none;
+    background: rgba(0, 0, 0, 0);
+  }
+
+  .slide-out-enter-to,
+  .slide-out-leave {
+    transform: none;
+    background: var(--overlay-dark);
+  }
+
+  .slide-out-leave-active,
+  .slide-out-enter-active {
+    transition: transform var(--overlay-transition), background var(--overlay-transition) 0.4s;
+  }
+
+  .slide-out-enter .overlay__body,
+  .slide-out-leave-to .overlay__body {
+    transform: translateX(calc(-100% - 24px));
+  }
+
+  .slide-out-enter-to .overlay__body,
+  .slide-out-leave .overlay__body {
+    transform: translateX(0%);
+  }
+}

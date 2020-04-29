@@ -13,20 +13,17 @@
   height: 16px;
 }
 
-.footer-wrapper {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+.footer-container {
   display: flex;
   align-items: center;
-  z-index: 3;
+  z-index: 10;
   width: 100%;
-  transition: background 0.4s;
+  transition: background var(--overlay-transition);
 }
 
-.footer-wrapper.footer--open {
+.footer-container.footer--open {
   height: 100%;
-  background: rgba(77, 75, 75, 0.7);
+  background: var(--overlay-dark);
 }
 
 .footer {
@@ -36,7 +33,7 @@
   padding: 16px 48px 26px 48px;
   display: flex;
   align-items: flex-start;
-  background: var(--body-background);
+  background: var(--background-primary);
   z-index: 3;
 }
 
@@ -48,35 +45,9 @@
   font-size: 14px;
 }
 
-.styled.vts-tabs {
-  display: flex;
-  flex-direction: column-reverse;
-  width: calc(1300px - 1rem);
-}
-
 .vts-tabs__tablist {
   position: absolute;
   bottom: 26px;
-}
-
-.footer-logo {
-  display: flex;
-  flex-direction: column;
-}
-
-.vts-tabs__tab {
-  -webkit-appearance: none;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
-  margin-right: 22px;
-  padding: 0;
-  background: none;
-}
-
-.vts-tabs__panel {
-  color: black;
-  max-width: 80%;
 }
 
 .email-signup {
@@ -86,7 +57,7 @@
 }
 
 .footer-logo__hammer {
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   max-width: 200px;
 }
 
@@ -94,7 +65,7 @@
   width: 150px;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 50em) {
   .footer__text {
     font-size: 18px;
   }

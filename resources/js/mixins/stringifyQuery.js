@@ -26,9 +26,9 @@ export default function stringifyQuery(obj, parentName) {
           return;
         }
         if (val2 === null) {
-          result.push(encodeURIComponent(`${ckey}[]`));
+          result.push(encodeURIComponent(`${ckey}`));
         } else {
-          result.push(`${encodeURIComponent(`${ckey}[]`)}=${encodeURIComponent(val2)}`);
+          result.push(`${encodeURIComponent(`${ckey}`)}=${encodeURIComponent(val2)}`);
         }
       });
 

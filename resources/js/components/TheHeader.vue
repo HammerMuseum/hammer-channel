@@ -1,11 +1,11 @@
 <template>
-  <div class="header-container">
+  <div class="container--fixed container--fixed--top header-container">
     <header class="header">
       <div class="header__title">
         <h1 class="visually-hidden">
           Hammer Video
         </h1>
-        <router-link
+        <RouterLink
           class="link link--with-image"
           :to="{name: 'app'}"
         >
@@ -15,7 +15,7 @@
           >
             <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
           </svg>
-        </router-link>
+        </RouterLink>
       </div>
     </header>
     <button
@@ -30,7 +30,6 @@
       </svg>
       <span class="icon-text visually-hidden">Open search</span>
     </button>
-    <SearchBar />
   </div>
 </template>
 

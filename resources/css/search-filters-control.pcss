@@ -1,0 +1,21 @@
+.button--search-toggle {
+  position: relative;
+  font-size: 16px;
+  background: var(--background-dark);
+  color: var(--text-on-dark);
+  padding: 6px;
+  border-bottom: var(--primary-border-highlight);
+  transition: all 0.2s cubic-bezier(0.25, 1.1, 0.68, 0.94);
+  cursor: pointer;
+}
+
+.button--search-toggle:hover {
+  text-decoration: underline;
+  box-shadow: 1px 1px 1px 1px var(--highlight-primary);
+}
+
+@media screen and (min-width: 60em) {
+  .button--small-devices {
+    display: none;
+  }
+}

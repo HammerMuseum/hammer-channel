@@ -1,76 +1,86 @@
 <template>
-  <focus-trap
+  <FocusTrap
     :active="searchActive"
     :escape-deactivates="false"
   >
-    <transition name="slide-down">
+    <transition name="open-overlay-down">
       <div
-        v-if="searchActive"
+        v-show="searchActive"
         :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchActive }"
         @keyup.escape="toggleSearchActive"
       >
         <div
-          class="search-bar"
+          class="search-bar__body"
         >
           <div
-            ref="searchBar"
-            class="search-bar__action"
-            tabindex="0"
+            class="search-bar"
           >
-            <input
-              ref="searchInput"
-              v-model="searchTerm"
-              class="search-bar__input"
-              type="text"
-              name="search"
-              aria-label="Search"
-              placeholder="Search"
-              @keyup.enter="search"
+            <div
+              ref="searchBar"
+              class="search-bar__action"
+              tabindex="0"
             >
-          </div>
-
-          <div class="search-bar__options">
-            <div class="search-bar__option">
-              <span>or</span>
-              <router-link
-                class="link link--text"
-                :to="{ name: 'search' }"
-                @click.native="toggleSearchActive"
+              <input
+                ref="searchInput"
+                v-model="searchTerm"
+                class="search__input search__input--search-bar"
+                type="text"
+                name="search"
+                aria-label="Search"
+                placeholder="Search"
+                @keyup.enter="search"
               >
-                show me everything
-              </router-link>
             </div>
-            <div class="search-bar__option">
-              <span class="search-bar__option-label">or try</span>
-              <div class="search-bar__option-content">
-                <router-link
-                  v-for="item in cannedTerms"
-                  :key="item.id"
-                  class="link link--text"
-                  :to="{ name: 'search', query: item.query }"
+
+            <div class="search-bar__options">
+              <div class="search-bar__option search-bar__option--left">
+                <span>or</span>
+                <RouterLink
+                  :class="tagClasses"
+                  :to="{ name: 'search', query: {} }"
                   @click.native="toggleSearchActive"
                 >
-                  {{ item.term }}
-                </router-link>
+                  show me everything
+                </RouterLink>
+              </div>
+              <div class="search-bar__option search-bar__option--right">
+                <span class="search-bar__option-label">or try</span>
+                <div class="search-bar__option-content">
+                  <RouterLink
+                    v-for="item in cannedTerms"
+                    :key="item.id"
+                    :class="tagClasses"
+                    :to="{ name: 'search', query: item.query }"
+                    @click.native="toggleSearchActive"
+                  >
+                    {{ item.term }}
+                  </RouterLink>
+                </div>
               </div>
             </div>
+            <button
+              class="button--close-search"
+              @click="toggleSearchActive"
+            >
+              <span class="visually-hidden">Close search</span>
+              <svg
+                title="Close search"
+                class="icon icon--hover-rotate"
+              >
+                <use xlink:href="/images/sprite.svg#sprite-close" />
+              </svg>
+            </button>
           </div>
-          <button
-            class="button--close-search"
-            @click="toggleSearchActive"
-          >
-            close
-          </button>
         </div>
       </div>
     </transition>
-  </focus-trap>
+  </FocusTrap>
 </template>
 
 <script>
 import { FocusTrap } from 'focus-trap-vue';
-import { store, mutations } from '../store';
 import axios from 'axios';
+import { store, mutations } from '../store';
 
 export default {
   components: {
@@ -78,10 +88,13 @@ export default {
   },
   data() {
     return {
-      cannedTerms: []
+      cannedTerms: null,
     };
   },
   computed: {
+    tagClasses() {
+      return ['link', 'link--text', 'link--tag'];
+    },
     searchTerm: {
       get() {
         return store.searchTerm;
@@ -102,12 +115,9 @@ export default {
         }
       });
     },
-    $route: {
-      immediate: true,
-      handler(to, from) {
-        this.getCannedTerms();
-      }
-    },
+  },
+  mounted() {
+    this.getCannedTerms();
   },
   methods: {
     toggleSearchActive: mutations.toggleSearchActive,
@@ -121,25 +131,10 @@ export default {
         .get('/suggestions')
         .then((response) => {
           this.cannedTerms = response.data;
+        }).catch((err) => {
+          console.error(err);
         });
-    }
+    },
   },
 };
 </script>
-
-<style>
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: transform 1.2s cubic-bezier(.19,1,.22,1);
-}
-
-.slide-down-enter,
-.slide-down-leave-to {
-  transform: translate3d(0, calc(-100% - 72px), 0);
-}
-
-.slide-down-leave,
-.slide-down-enter-to {
-  transform: translate3d(0, 0, 0);
-}
-</style>
