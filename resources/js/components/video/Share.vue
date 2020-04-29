@@ -52,12 +52,21 @@
         {{ citation }}
       </p>
       <button
-        class="citation__copy"
-        @click="copyCitation"
+        :class="['citation__copy', 'button', 'button--action']"
+        aria-label="Copy citation to clipboard"
+        @click="copyToClipboard(citation)"
       >
         Copy to clipboard
       </button>
     </div>
+    <transition name="fade">
+      <div
+        v-if="copied"
+        class="copy-status"
+      >
+        Copied
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -75,6 +84,7 @@ export default {
   },
   data() {
     return {
+      copied: false,
       name: 'Hammer Museum Video Archive',
       url: window.location.href,
       providers: {
@@ -101,11 +111,21 @@ export default {
       return this.providers.twitter.replace(':url', this.url).replace(':text', this.text);
     },
   },
+  watch: {
+    copied() {
+      setTimeout(() => {
+        this.copied = false;
+      }, 2000);
+    },
+  },
   methods: {
-    copyCitation() {
-      const citation = document.querySelector('[name=citation]');
-      citation.select();
-      document.execCommand('copy');
+    async copyToClipboard(content) {
+      try {
+        await navigator.clipboard.writeText(content);
+        this.copied = true;
+      } catch (err) {
+        console.error('Failed to copy to clipboard: ', err);
+      }
     },
     share(url) {
       window.open(url, 'sharer', 'toolbar=0,status=0,width=648,height=395');

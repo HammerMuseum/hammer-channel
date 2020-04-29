@@ -39,33 +39,32 @@
         <div class="share-link">
           <input
             v-show="canGenerateClip"
-            ref="copy"
-            v-model="shareableLink"
+            v-model="clipUrl"
             class="clip__control__input clip__control__input--unrestrained"
           >
         </div>
         <div class="clip__controls clip__sharing">
-          <!-- <a
-            role="button"
-            class="link link--text link--text-secondary"
-            name="make_link"
-            @click="generateLink()"
-          >
-            Generate shareable link
-          </a> -->
           <span
             v-show="error"
             class="clip-error"
           >Please set a valid start and/or end time.</span>
-          <a
-            role="button"
-            class="link link--text link--text-secondary"
-            name="copy_link"
-            @click="copyLink()"
+          <button
+            :class="['button', 'button--action', {'button--disabled': !canGenerateClip}]"
+            aria-label="Copy citation to clipboard"
+            :disabled="!canGenerateClip"
+            @click="copyToClipboard(clipUrl)"
           >
             Copy link to clipboard
-          </a>
+          </button>
         </div>
+        <transition name="fade">
+          <div
+            v-if="copied"
+            class="copy-status"
+          >
+            Copied
+          </div>
+        </transition>
       </div>
     </template>
   </VideoMeta>
@@ -85,6 +84,7 @@ export default {
     return {
       clipStart: null,
       clipEnd: null,
+      copied: false,
       error: false,
     };
   },
@@ -96,7 +96,7 @@ export default {
       }
       return false;
     },
-    shareableLink() {
+    clipUrl() {
       if (this.canGenerateClip) {
         const domain = window.location.origin;
         const path = this.$route.path;
@@ -105,6 +105,13 @@ export default {
         return `${domain + path}?start=${startSeconds}&end=${endSeconds}`;
       }
       return false;
+    },
+  },
+  watch: {
+    copied() {
+      setTimeout(() => {
+        this.copied = false;
+      }, 2000);
     },
   },
   methods: {
@@ -124,10 +131,12 @@ export default {
     convertToSeconds(timeStr) {
       return new Date(`1970-01-01T${timeStr}Z`).getTime() / 1000;
     },
-    copyLink() {
-      if (this.canGenerateClip) {
-        this.$refs.copy.select();
-        document.execCommand('copy');
+    async copyToClipboard(content) {
+      try {
+        await navigator.clipboard.writeText(content);
+        this.copied = true;
+      } catch (err) {
+        console.error('Failed to copy to clipboard: ', err);
       }
     },
   },
