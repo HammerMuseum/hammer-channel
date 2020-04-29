@@ -12,11 +12,10 @@
         class="link link--text link--text-and-button"
         @click.prevent="handleClick($event)"
       >
-        <span
-          :title="`Remove ${item.value} filter from search`"
-        ><strong>{{ item.value }}</strong>
+        <span><strong>{{ item.value }}</strong>
           <button
             class="button button--icon search-facet__item-remove"
+            :aria-label="`Remove ${item.value} filter from selection`"
           >
             <svg class="icon icon--close-pink">
               <use xlink:href="/images/sprite.svg#sprite-close-pink" />

@@ -27,7 +27,7 @@
           >{{ getValue(option, facet.type) }}
             <button
               class="button button--icon search-facet__item-remove"
-              aria-label="Remove selection"
+              :aria-label="`Remove ${getValue(option, facet.type)} filter from selection`"
             >
               <svg class="icon icon--close">
                 <use xlink:href="/images/sprite.svg#sprite-close" />
