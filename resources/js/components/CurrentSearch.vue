@@ -73,22 +73,22 @@ export default {
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;
-      let qs = stringifyQuery(this.$route.query);
-      const r = this.$route.query;
+      let queryStr = stringifyQuery(this.$route.query);
+      const routeQuery = this.$route.query;
 
       // If the query string contains pagination info, remove it
-      if (r.page) {
-        qs = qs.replace(`page=${r.page}`, '');
+      if (routeQuery.page) {
+        queryStr = queryStr.replace(`page=${routeQuery.page}`, '');
       }
       // If the querystring contains the current facet, genearate a new one without it.
-      if (r[key] && (r[key] === value || r[key].includes(value))) {
-        let processed = qs.replace(param, '');
+      if (routeQuery[key] && (routeQuery[key] === value || routeQuery[key].includes(value))) {
+        let processed = queryStr.replace(param, '');
         if (processed.slice(-1) === '&') {
           processed = processed.slice(0, -1);
         }
         return processed;
       }
-      return qs === '' ? `${qs}${param}` : `${qs}&${param}`;
+      return queryStr === '' ? `${queryStr}${param}` : `${queryStr}&${param}`;
     },
     getValue(item, type) {
       return type === 'date' ? new Date(item.key_as_string).getFullYear() : item.key;
