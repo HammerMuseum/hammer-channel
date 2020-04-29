@@ -23,6 +23,14 @@
     line-height: 40px;
   }
 
+  .vjs-volume-bar {
+    margin: 1.75em 0.45em;
+  }
+
+  .vjs-volume-bar.vjs-slider-horizontal {
+    height: 0.4em;
+  }
+
   .vjs-remaining-time-display {
     font-size: 15px;
     line-height: 40px;
@@ -31,7 +39,8 @@
 
   .vjs-control-bar {
     display: flex;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+    background: var(--background-darker);
+    background: rgba(0, 0, 0, 0.8);
     padding: 0 8px 0 0;
     height: 40px;
   }
@@ -78,27 +87,23 @@
   }
   /* stylelint-enable selector-max-combinators, selector-max-compound-selectors */
 
-  .vjs-volume-bar {
-    margin: 1.75em 0.45em;
-  }
-
-  .vjs-volume-bar.vjs-slider-horizontal {
-    height: 0.4em;
+  .vjs-progress-control:hover .vjs-progress-holder {
+    font-size: 1em;
   }
 
   .vjs-progress-control {
     position: absolute;
-    width: calc(100% - 40px);
-    left: 20px;
+    width: 100%;
     bottom: 36px;
     height: 16px;
+    background: rgba(0, 0, 0, 0.8);
 
     .vjs-play-progress {
       background-color: var(--highlight-primary) !important;
     }
 
     .vjs-progress-holder {
-      margin: 0 !important;
+      margin: 0 20px 0 15px;
     }
   }
 

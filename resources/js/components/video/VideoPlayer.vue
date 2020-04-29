@@ -168,8 +168,10 @@ export default {
       document.querySelector('.vjs-overlay').classList.add('vjs-control-bar');
     },
     setSliderAppearance() {
-      const sliderBar = document.querySelector('.vjs-play-progress');
-      const sliderWidth = sliderBar.style.width;
+      // const sliderBar = document.querySelector('.vjs-play-progress');
+      // const sliderWidth = sliderBar.style.width;
+      const controlBar = this.player.getChild('ControlBar');
+      const sliderWidth = controlBar.getChild('ProgressControl').currentWidth();
 
       const progressHolder = document.querySelector('.vjs-progress-holder');
       const clipDuration = this.getClipDuration();
