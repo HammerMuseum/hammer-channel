@@ -40,25 +40,27 @@
         </button>
       </div>
     </div>
-    <div
-      v-show="showCitation"
-      class="citation"
-    >
-      <p
-        id="citation"
-        name="citation"
-        class="citation__content"
+    <transition name="fade">
+      <div
+        v-show="showCitation"
+        class="citation"
       >
-        {{ citation }}
-      </p>
-      <button
-        :class="['citation__copy', 'button', 'button--action']"
-        aria-label="Copy citation to clipboard"
-        @click="copyToClipboard(citation)"
-      >
-        Copy to clipboard
-      </button>
-    </div>
+        <p
+          id="citation"
+          name="citation"
+          class="citation__content"
+        >
+          {{ citation }}
+        </p>
+        <button
+          :class="['citation__copy', 'button', 'button--action']"
+          aria-label="Copy citation to clipboard"
+          @click="copyToClipboard(citation)"
+        >
+          Copy to clipboard
+        </button>
+      </div>
+    </transition>
     <transition name="fade">
       <div
         v-if="copied"
@@ -71,7 +73,10 @@
 </template>
 
 <script>
+import CopyTo from '../../mixins/copyToClipboard';
+
 export default {
+  mixins: [CopyTo],
   props: {
     date: {
       type: String,
@@ -84,7 +89,6 @@ export default {
   },
   data() {
     return {
-      copied: false,
       name: 'Hammer Museum Video Archive',
       url: window.location.href,
       providers: {
@@ -111,22 +115,7 @@ export default {
       return this.providers.twitter.replace(':url', this.url).replace(':text', this.text);
     },
   },
-  watch: {
-    copied() {
-      setTimeout(() => {
-        this.copied = false;
-      }, 2000);
-    },
-  },
   methods: {
-    async copyToClipboard(content) {
-      try {
-        await navigator.clipboard.writeText(content);
-        this.copied = true;
-      } catch (err) {
-        console.error('Failed to copy to clipboard: ', err);
-      }
-    },
     share(url) {
       window.open(url, 'sharer', 'toolbar=0,status=0,width=648,height=395');
       return true;

@@ -71,7 +71,10 @@
 </template>
 
 <script>
+import CopyTo from '../../mixins/copyToClipboard';
+
 export default {
+  mixins: [CopyTo],
   props: {
     currentTimecode: {
       type: Number,
@@ -84,7 +87,6 @@ export default {
     return {
       clipStart: null,
       clipEnd: null,
-      copied: false,
       error: false,
     };
   },
@@ -107,13 +109,6 @@ export default {
       return false;
     },
   },
-  watch: {
-    copied() {
-      setTimeout(() => {
-        this.copied = false;
-      }, 2000);
-    },
-  },
   methods: {
     setTime(input) {
       const inputField = document.querySelector(`input[name=${input}_time]`);
@@ -130,14 +125,6 @@ export default {
     },
     convertToSeconds(timeStr) {
       return new Date(`1970-01-01T${timeStr}Z`).getTime() / 1000;
-    },
-    async copyToClipboard(content) {
-      try {
-        await navigator.clipboard.writeText(content);
-        this.copied = true;
-      } catch (err) {
-        console.error('Failed to copy to clipboard: ', err);
-      }
     },
   },
 };
