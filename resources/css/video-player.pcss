@@ -1,25 +1,117 @@
-.video-player .vjs-big-play-button {
-  display: none;
-}
+.video-js {
+  .vjs-big-play-button {
+    display: none;
+  }
 
-.video-player .vjs-control-bar {
-  display: flex;
-}
+  .vjs-fullscreen-control {
+    color: var(--highlight-primary);
+  }
 
-.video-player .vjs-overlay-top {
-  display: flex;
-  width: 100%;
-  left: 0;
-  top: 0;
-  align-items: center;
-  margin-left: 0;
-  font-family: 'lft-etica', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  text-align: left;
-  padding: 10px;
-}
+  .vjs-play-control,
+  .vjs-volume-panel,
+  .vjs-subs-caps-button {
+    color: var(--highlight-primary);
+    margin-right: 10px;
+  }
 
-.vjs-overlay p {
-  margin: 0;
+  .vjs-subs-caps-button {
+    margin-left: auto;
+  }
+
+  .vjs-button > .vjs-icon-placeholder::before {
+    font-size: 22px;
+    line-height: 40px;
+  }
+
+  .vjs-remaining-time-display {
+    font-size: 15px;
+    line-height: 40px;
+    font-family: var(--font-family--body);
+  }
+
+  .vjs-control-bar {
+    display: flex;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+    padding: 0 8px 0 0;
+    height: 40px;
+  }
+
+  .vjs-overlay-top {
+    display: flex;
+    width: 100%;
+    left: 0;
+    top: 0;
+    align-items: center;
+    margin-left: 0;
+    font-family: var(--font-family--body);
+    font-weight: 600;
+    font-size: 14px;
+    text-align: left;
+    padding: 10px;
+  }
+
+  .vjs-overlay p {
+    margin: 0;
+  }
+
+  .vjs-time-tooltip,
+  .vjs-mouse-display .vjs-time-tooltip {
+    font-family: var(--font-family--body);
+    top: -34px;
+    border-radius: 0;
+    padding: 6px 6px 4px 6px;
+    background-color: var(--background-light);
+  }
+
+  .vjs-mouse-display .vjs-time-tooltip {
+    background-color: var(--background-darker);
+  }
+
+  .vjs-slider {
+    background-color: var(--background-light);
+  }
+
+  /* stylelint-disable selector-max-combinators, selector-max-compound-selectors */
+  .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip,
+  .vjs-progress-control:hover .vjs-time-tooltip {
+    font-size: 15px;
+  }
+  /* stylelint-enable selector-max-combinators, selector-max-compound-selectors */
+
+  .vjs-volume-bar {
+    margin: 1.75em 0.45em;
+  }
+
+  .vjs-volume-bar.vjs-slider-horizontal {
+    height: 0.4em;
+  }
+
+  .vjs-progress-control {
+    position: absolute;
+    width: calc(100% - 40px);
+    left: 20px;
+    bottom: 36px;
+    height: 16px;
+
+    .vjs-play-progress {
+      background-color: var(--highlight-primary) !important;
+    }
+
+    .vjs-progress-holder {
+      margin: 0 !important;
+    }
+  }
+
+  .hammer-progress-bar {
+    background-color: #de00e1;
+    position: absolute;
+    display: block;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vjs-play-progress {
+    background: transparent !important;
+  }
 }

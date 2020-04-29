@@ -202,6 +202,13 @@ export default {
     src() {
       this.videoOptions = {
         autoplay: false,
+        controlBar: {
+          muteToggle: false,
+          pictureInPictureToggle: false,
+          progressControl: {
+            keepTooltipsInside: true,
+          },
+        },
         controls: true,
         fill: true,
         sources: [
@@ -245,7 +252,7 @@ export default {
       axios
         .get(`/api/video/${this.$route.params.id}`)
         .then((response) => {
-          this.videoUrl = response.data.src;
+          this.src = response.data.src;
         }).catch((err) => {
           console.log(err);
         });
