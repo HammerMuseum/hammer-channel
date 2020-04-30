@@ -15,7 +15,7 @@ const routes = [
     path: '/search/:params?', name: 'search', component: Search, props: (route) => ({ facetQuery: route.query.facets }),
   },
   {
-    path: '/video/:id', name: 'video', component: Video, props: true,
+    path: '/video/:id/:slug', name: 'video', component: Video, props: true,
   },
   {
     path: '*', component: NotFound,

@@ -10,7 +10,7 @@
   >
     <UiCard>
       <RouterLink
-        :to="{name: 'video', params: {id: slug }}"
+        :to="{name: 'video', params: {id: id, slug: slug }}"
       >
         <div class="ui-card__thumbnail">
           <span class="ui-card__duration">{{ duration }}</span>
@@ -58,6 +58,9 @@ export default {
     },
     duration() {
       return this.item.duration;
+    },
+    id() {
+      return this.item.asset_id;
     },
     slug() {
       return this.item.title_slug;

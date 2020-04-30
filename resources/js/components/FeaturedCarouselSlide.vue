@@ -1,8 +1,8 @@
 <template>
   <div class="carousel__slide carousel__slide--featured">
-    <ui-card :extra-classes="['ui-card--featured']">
+    <UiCard :extra-classes="['ui-card--featured']">
       <RouterLink
-        :to="{name: 'video', params: {id: slug}}"
+        :to="{name: 'video', params: {id: id, slug: slug}}"
         class="featured-slide"
       >
         <div class="ui-card__thumbnail">
@@ -34,7 +34,7 @@
           </template>
         </article>
       </RouterLink>
-    </ui-card>
+    </UiCard>
   </div>
 </template>
 
@@ -65,6 +65,9 @@ export default {
     },
     quote() {
       return this.item.quote;
+    },
+    id() {
+      return this.item.asset_id;
     },
     slug() {
       return this.item.title_slug;

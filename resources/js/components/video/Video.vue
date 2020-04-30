@@ -155,7 +155,6 @@ export default {
       thumbnailUrl: null,
       timecode: 0,
       title: null,
-      title_slug: null,
       topics: [],
       track: null,
       transcript: [],
