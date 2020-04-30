@@ -37,14 +37,15 @@ class VideoController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function view(Request $request, $slug)
+    public function view(Request $request, $id, $slug)
     {
-        $data = $this->api->request('videos/' . $slug);
+        $path = '/video/' . $id . '/' . $slug;
+        $data = $this->api->request('videos/' . $id);
         if (empty($data['data'])) {
             abort(503);
         }
         return view('app', [
-            'state' => $this->getAppState('/video/' . $slug, $data),
+            'state' => $this->getAppState($path, $data),
             'metadata' => $this->getMetadata($data)
         ]);
     }
@@ -54,10 +55,11 @@ class VideoController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function viewJson(Request $request, $slug)
+    public function viewJson(Request $request, $id, $slug)
     {
-        $data = $this->api->request('videos/' . $slug);
-        $state = $this->getAppState('/video/' . $slug, $data);
+        $path = '/video/' . $id . '/' . $slug;
+        $data = $this->api->request('videos/' . $id);
+        $state = $this->getAppState($path, $data);
         return response()->json($state);
     }
 
