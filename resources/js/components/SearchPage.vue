@@ -281,7 +281,7 @@
                 :key="item.asset_id"
               >
                 <RouterLink
-                  :to="{name: 'video', params: {id: item.title_slug }}"
+                  :to="{name: 'video', params: {id: item.asset_id, slug: item.title_slug }}"
                 >
                   <div class="ui-card__thumbnail">
                     <span class="ui-card__duration">{{ item.duration }}</span>
