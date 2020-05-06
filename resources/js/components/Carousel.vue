@@ -15,9 +15,9 @@
     >
       <button
         type="submit"
-        :class="['control', 'control--previous', 'button', 'button--icon', {'button--disabled': currentSlide === 0}]"
-        :disabled="currentSlide === 0"
-        :aria-disabled="currentSlide === 0"
+        :class="['control', 'control--previous', 'button', 'button--icon', {'button--disabled': isFirstSlide}]"
+        :disabled="isFirstSlide"
+        :aria-disabled="isFirstSlide"
         @click="$refs.carousel.prev()"
       >
         <svg
@@ -107,6 +107,9 @@ export default {
         return this.currentSlide + sts >= this.slideCount;
       }
       return null;
+    },
+    isFirstSlide() {
+      return !this.settings.infinite && this.currentSlide === 0;
     },
   },
   methods: {
