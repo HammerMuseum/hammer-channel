@@ -202,6 +202,7 @@ export default {
             keepTooltipsInside: true,
           },
         },
+        textTrackSettings: false,
         controls: true,
         fill: true,
         sources: [
@@ -218,7 +219,7 @@ export default {
         kind: 'captions',
         language: 'en',
         label: 'English',
-        default: true,
+        default: false,
       };
     },
     transcriptInit(init) {
