@@ -63,8 +63,7 @@ class Metadata
         if (isset($data['description'])) {
             return $data['description'];
         }
-        return 'In the Hammer\'s video archive, people will discover 
-        ideas that will illuminate their lives in new ways.';
+        return 'A program from the Hammer Museusm\'s archive of public programs.';
     }
 
     /**
@@ -81,8 +80,10 @@ class Metadata
      */
     public function getMetadataImage($data)
     {
-        if (isset($data['thumbnail_url'])) {
-            return $data['thumbnail_url'];
+        if (isset($data['thumbnailId'])) {
+            $baseUrl = config('constants.imagesPath');
+            $id = $data['thumbnailId'];
+            return "{$baseUrl}{$id}/large";
         }
         return config('app.url') . '/images/logo-hammer-video.png';
     }

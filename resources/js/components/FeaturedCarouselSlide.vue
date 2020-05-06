@@ -73,7 +73,7 @@ export default {
       return this.item.subtitle;
     },
     thumbnailUrl() {
-      return this.item.thumbnail_url;
+      return `/images/${this.item.thumbnailId}/large`;
     },
     title() {
       return this.item.title;
