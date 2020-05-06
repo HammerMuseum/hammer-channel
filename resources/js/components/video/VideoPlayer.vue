@@ -5,6 +5,7 @@
         <video
           ref="videoPlayer"
           class="video-js video-player vjs-default-skin"
+          :poster="poster"
         >
           <p class="vjs-no-js">
             To view this video please enable JavaScript, and consider upgrading to a
@@ -32,6 +33,12 @@ export default {
   name: 'VideoPlayer',
   props: {
     title: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
+    poster: {
       type: String,
       default() {
         return '';

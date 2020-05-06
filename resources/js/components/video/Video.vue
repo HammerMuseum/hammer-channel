@@ -14,6 +14,7 @@
           <VideoPlayer
             :duration="duration"
             :options="videoOptions"
+            :poster="poster"
             :title="title"
             :track="track"
             :timecode="timecode"
@@ -152,7 +153,7 @@ export default {
       duration: null,
       in_playlists: [],
       speakers: [],
-      thumbnailUrl: null,
+      thumbnailId: null,
       timecode: 0,
       title: null,
       topics: [],
@@ -179,6 +180,12 @@ export default {
           end: para[para.length - 1].time / 1000,
         };
       });
+    },
+    poster() {
+      if (!this.thumbnailId) {
+        return '';
+      }
+      return `/images/${this.thumbnailId}/large`;
     },
     transcriptInit() {
       return store.transcriptInit;
