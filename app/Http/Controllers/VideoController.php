@@ -41,9 +41,11 @@ class VideoController extends Controller
     {
         $path = '/video/' . $id . '/' . $slug;
         $data = $this->api->request('videos/' . $id);
+
         if (empty($data['data'])) {
             abort(503);
         }
+
         return view('app', [
             'state' => $this->getAppState($path, $data),
             'metadata' => $this->getMetadata($data)
