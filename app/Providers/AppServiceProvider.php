@@ -21,10 +21,6 @@ class AppServiceProvider extends ServiceProvider
                 'App\FakeApi'
             );
         }
-
-        if ($this->app->environment('local')) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }
     }
 
     /**
