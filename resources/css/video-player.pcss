@@ -1,6 +1,21 @@
 .video-js {
-  .vjs-big-play-button {
-    display: none;
+  .vjs-time-control {
+    display: block;
+    font-size: 15px;
+    line-height: 40px;
+    font-family: var(--font-family--body);
+    min-width: auto;
+    width: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .vjs-time-divider {
+    padding: 0 4px;
+  }
+
+  .vjs-text-track-display {
+    bottom: 4.8em;
   }
 
   .vjs-fullscreen-control {
@@ -31,12 +46,6 @@
     height: 0.4em;
   }
 
-  .vjs-remaining-time-display {
-    font-size: 15px;
-    line-height: 40px;
-    font-family: var(--font-family--body);
-  }
-
   .vjs-control-bar {
     display: flex;
     background: var(--background-darker);
@@ -45,7 +54,7 @@
     height: 40px;
   }
 
-  .vjs-overlay-top {
+  .vjs-fullscreen .vjs-overlay-top {
     display: flex;
     width: 100%;
     left: 0;
@@ -118,5 +127,12 @@
 
   .vjs-play-progress {
     background: transparent !important;
+  }
+
+  .vjs-texttrack-settings,
+  .vjs-big-play-button,
+  .vjs-remaining-time,
+  .vjs-play-progress .vjs-time-tooltip {
+    display: none;
   }
 }
