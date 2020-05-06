@@ -66,7 +66,7 @@ export default {
       return this.item.title_slug;
     },
     thumbnailUrl() {
-      return this.item.thumbnail_url;
+      return `/images/${this.item.thumbnailId}/medium`;
     },
     title() {
       return this.item.title;

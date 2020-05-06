@@ -286,7 +286,7 @@
                   <div class="ui-card__thumbnail">
                     <span class="ui-card__duration">{{ item.duration }}</span>
                     <img
-                      :src="item.thumbnail_url"
+                      :src="`/images/${item.thumbnailId}/medium`"
                       class="ui-card__thumbnail-image"
                     >
                   </div>
