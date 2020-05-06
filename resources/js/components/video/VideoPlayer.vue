@@ -157,22 +157,16 @@ export default {
         self.player.addRemoteTextTrack(self.track, true);
       });
 
-      // Setup overlay content. Move up to parent?
-      const overlayContent = `<p>${this.title}</p>`;
+      // Setup title overlay content.
       this.player.overlay({
         overlays: [{
-          start: 'pause',
+          start: 'fullscreenchange',
+          end: 'fullscreenchange',
           class: 'hammer-video-overlay',
-          content: overlayContent,
-          end() {
-            if (self.player.controlBar.hasClass('vjs-user-inactive')) {
-              document.querySelector('.vjs-overlay').classList.remove('vjs-user-inactive');
-            }
-          },
-          align: 'top',
+          content: `<p>${this.title}</p>`,
+          align: 'top-left',
         }],
       });
-      document.querySelector('.vjs-overlay').classList.add('vjs-control-bar');
     },
     setSliderAppearance() {
       // const sliderBar = document.querySelector('.vjs-play-progress');
