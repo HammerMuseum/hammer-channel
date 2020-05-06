@@ -1,6 +1,7 @@
 {
   "browserslist": [
-    "defaults"
+    "defaults",
+    "not dead"
   ],
   "private": true,
   "scripts": {
