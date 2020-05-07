@@ -2,8 +2,8 @@
   .vjs-time-control {
     display: block;
     font-size: 15px;
-    line-height: 40px;
     font-family: var(--font-family--body);
+    line-height: 40px;
     min-width: auto;
     width: auto;
     padding-left: 0;
@@ -133,6 +133,17 @@
   .vjs-big-play-button,
   .vjs-remaining-time,
   .vjs-play-progress .vjs-time-tooltip {
-    display: none;
+    visibility: hidden !important;
   }
+}
+
+.vjs-menu li {
+  font-size: 14px;
+  font-family: var(--font-family--body);
+  text-transform: capitalize;
+}
+
+.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  background-color: var(--background-darker);
+  color: var(--text-secondary);
 }
