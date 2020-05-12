@@ -102,11 +102,11 @@ export default {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      if (this.slideCount) {
+      if (!this.settings.infinite && this.slideCount) {
         const sts = this.$refs.carousel.$refs.innerSlider.slidesToShow;
         return this.currentSlide + sts >= this.slideCount;
       }
-      return null;
+      return false;
     },
     isFirstSlide() {
       return !this.settings.infinite && this.currentSlide === 0;
