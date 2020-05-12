@@ -91,7 +91,7 @@ export default {
         infinite: false,
         touchThreshold: 5,
       },
-      slideCount: null,
+      slideCount: 0,
     };
   },
   computed: {
