@@ -114,7 +114,6 @@
                 ref="searchFilters"
                 v-clickout="onClickout"
                 :class="['search__filters']"
-                tabindex="0"
               >
                 <button
                   class="button button--search-toggle button--small-devices"
@@ -124,19 +123,19 @@
                 </button>
                 <div class="search-page__form">
                   <div class="search__input-wrapper">
-                    <VInput
+                    <input
                       ref="search"
                       v-model="term"
                       label="Search the video archive"
                       name="term"
-                      :classes="{ text: 'visually-hidden', input: 'search__input search__input--light' }"
+                      class="search__input search__input--light"
                       placeholder="Search"
-                      @keyup.enter="search"
-                    />
+                      @keyup.enter="submitSearch($event)"
+                    >
                     <div class="search__submit-wrapper">
                       <button
                         :class="['search__submit', 'button', 'button--icon']"
-                        @click="search"
+                        @click="submitSearch($event)"
                       >
                         <svg
                           title="Search"
@@ -158,6 +157,7 @@
                   class="search-page__facet-controls"
                 >
                   <button
+                    data-facet-id="topics"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'topics'}
@@ -168,6 +168,7 @@
                     <span>Topics & Tags</span>
                   </button>
                   <button
+                    data-facet-id="people"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'people'}]"
@@ -177,6 +178,7 @@
                     <span>People</span>
                   </button>
                   <button
+                    data-facet-id="playlists"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'playlists'}]"
@@ -186,6 +188,7 @@
                     <span>Playlists</span>
                   </button>
                   <button
+                    data-facet-id="date"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'date'}]"
@@ -283,6 +286,7 @@
               >
                 <RouterLink
                   :to="{name: 'video', params: {id: item.asset_id, slug: item.title_slug }}"
+                  tabindex="0"
                 >
                   <div class="ui-card__thumbnail">
                     <span class="ui-card__duration">{{ item.duration }}</span>
@@ -318,7 +322,7 @@
 <script>
 import axios from 'axios';
 import AnimatedNumber from 'animated-number-vue';
-import { clickout, VToggle, VInput } from 'vuetensils';
+import { clickout, VToggle } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
@@ -342,7 +346,6 @@ export default {
     Overlay,
     UiCard,
     UiGrid,
-    VInput,
     VToggle,
   },
   directives: {
@@ -368,7 +371,7 @@ export default {
       pager: null,
       searchSummary: '',
       showFilters: true,
-      term: null,
+      term: '',
       title: null,
       totals: null,
       videos: null,
@@ -407,10 +410,6 @@ export default {
     total() {
       return this.totals ? this.totals.total : 0;
     },
-    searchTerm() {
-      if (this.term) return this.term;
-      return this.$route.query.term ? this.$route.query.term : null;
-    },
     currentPage() {
       return this.totals ? this.totals.currentPage : null;
     },
@@ -432,12 +431,7 @@ export default {
   watch: {
     $route: {
       immediate: true,
-      handler(to, from) {
-        const oldQuery = from && from.query && from.query.term ? from.query.term : '';
-        const newQuery = to && to.query && to.query.term ? to.query.term : '';
-        if (oldQuery !== newQuery) {
-          this.term = newQuery;
-        }
+      handler(to) {
         this.getPageData(stringifyQuery(to.query));
       },
     },
@@ -489,13 +483,14 @@ export default {
       }
       return false;
     },
-    // Perform a search
-    search() {
+    submitSearch() {
       let searchParams = {};
       if (this.term) {
         searchParams = { term: this.term };
       }
-      this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } });
+      this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } }).catch(() => {});
+      this.$refs.search.blur();
+      this.term = '';
     },
     setElementHeight(selector, parent) {
       const el = document.querySelector(selector);
@@ -510,7 +505,6 @@ export default {
       this.pager = data.pager;
       this.videos = data.videos;
       this.facets = data.facets;
-      this.term = data.term;
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
@@ -527,7 +521,7 @@ export default {
     toggleSearchFilters() {
       this.showFilters = !this.showFilters;
       if (this.showFilters) {
-        this.$refs.searchFilters.focus();
+        document.querySelector(`button[data-facet-id="topics"]`).focus();
       }
     },
     closeFacetOverlay() {
