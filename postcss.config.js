@@ -1,16 +1,28 @@
+const autoprefixer = require('autoprefixer');
+const postcssImport = require('postcss-import');
+const postcssNested = require('postcss-nested');
+const postcssColor = require('postcss-color-function');
+const postcssHexrgba = require('postcss-hexrgba');
+const postcssCustomProperties = require('postcss-custom-properties');
+const postcssPxtorem = require('postcss-pxtorem');
+const cssDeclarationSorter = require('css-declaration-sorter');
+const cssnano = require('cssnano');
+
 module.exports = (ctx) => ({
   map: !ctx.env || ctx.env !== 'production' ? { inline: false } : false,
   plugins: [
-    require('autoprefixer'),
-    require('postcss-import'),
-    require('postcss-nested'),
-    require('postcss-color-function'),
-    require('postcss-hexrgba'),
-    require('postcss-custom-properties')({
+    autoprefixer(),
+    postcssImport(),
+    postcssNested(),
+    postcssColor(),
+    postcssHexrgba(),
+    postcssCustomProperties({
       preserve: false,
     }),
-    require('postcss-pxtorem')({
+    postcssPxtorem({
       rootValue: 16,
     }),
+    cssDeclarationSorter({ order: 'smacss' }),
+    cssnano(),
   ],
 });
