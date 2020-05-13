@@ -17,9 +17,7 @@
             class="search-bar"
           >
             <div
-              ref="searchBar"
               class="search-bar__action"
-              tabindex="0"
             >
               <input
                 ref="searchInput"
@@ -116,7 +114,7 @@ export default {
     searchActive() {
       this.$nextTick(() => {
         if (this.searchActive) {
-          this.$refs.searchBar.focus();
+          this.$refs.searchInput.focus();
         }
       });
     },
