@@ -66,8 +66,19 @@
   padding: 8px 8px 0 8px;
   z-index: 2;
   right: 0;
-  width: 120px;
+  width: 180px;
   text-align: right;
+  box-shadow: none;
+}
+
+.vts-toggle--open {
+  .search-page__sorting-content {
+    box-shadow: 1px 1px 1px 1px var(--highlight-primary);
+  }
+
+  .search-page__sorting-control-label {
+    color: var(--highlight-primary);
+  }
 }
 
 .search-page__sorting .icon {

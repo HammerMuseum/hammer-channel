@@ -74,7 +74,7 @@
                       }
                     }"
                   >
-                    Date (asc)
+                    Date (newest-oldest)
                   </RouterLink>
                 </li>
                 <li>
@@ -88,7 +88,7 @@
                       }
                     }"
                   >
-                    Date (desc)
+                    Date (oldest-newest)
                   </RouterLink>
                 </li>
               </ul>
