@@ -29,7 +29,10 @@
       <div
         v-for="item in facet.items"
         :key="item.key"
-        :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(item, facet.type))}"
+        :class="{
+          'search-facet__item': true,
+          'search-facet__item--active': isActive(getValue(item, facet.type))
+        }"
       >
         <a
           :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
@@ -63,6 +66,7 @@
 
 <script>
 import { VInput } from 'vuetensils';
+import matchSorter from 'match-sorter';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
@@ -92,23 +96,20 @@ export default {
   computed: {
     filteredItems() {
       const filteredOptions = [];
-      const self = this;
-      if (this.searchTerm !== '') {
-        for (let i = 0; i < this.facetList.length; i += 1) {
-          const filteredItemsArray = self.facetList[i].items.filter(function (itemValue) {
-            return itemValue.key.toLowerCase().includes(self.searchTerm.toLowerCase());
+      const list = this.facetList;
+      const query = this.searchTerm.toLowerCase();
+      if (query) {
+        for (let i = 0; i < list.length; i += 1) {
+          const {
+            id, items, label, type,
+          } = list[i];
+          filteredOptions.push({
+            id, label, type, items: matchSorter(items, query, { keys: ['key'] }),
           });
-          const newFacet = {
-            id: self.facetList[i].id,
-            items: filteredItemsArray,
-            label: self.facetList[i].label,
-            type: self.facetList[i].type,
-          };
-          filteredOptions.push(newFacet);
         }
         return filteredOptions;
       }
-      return this.facetList;
+      return list;
     },
   },
   watch: {
