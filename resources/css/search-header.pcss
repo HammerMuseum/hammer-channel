@@ -61,24 +61,20 @@
 .search-page__sorting-content {
   overflow: visible;
   position: absolute;
-  background: var(--background-light);
-  color: var(--text-primary);
+  background: var(--background-darker);
   padding: 8px 8px 0 8px;
   z-index: 2;
   right: 0;
   width: 180px;
   text-align: right;
-  box-shadow: none;
 }
 
-.vts-toggle--open {
-  .search-page__sorting-content {
-    box-shadow: 1px 1px 1px 1px var(--highlight-primary);
-  }
+.search-page__sorting-content {
+  color: var(--text-secondary);
+}
 
-  .search-page__sorting-control-label {
-    color: var(--highlight-primary);
-  }
+.vts-toggle--open .search-page__sorting-control-label {
+  color: var(--highlight-primary);
 }
 
 .search-page__sorting .icon {

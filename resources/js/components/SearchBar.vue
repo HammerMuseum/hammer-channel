@@ -5,11 +5,12 @@
   >
     <transition name="open-overlay-down">
       <div
-        v-show="searchActive"
+        v-if="searchActive"
         :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchActive }"
         @keyup.escape="toggleSearchActive"
       >
         <div
+          v-on-clickaway="toggleSearchActive"
           class="search-bar__body"
         >
           <div
@@ -78,6 +79,7 @@
 </template>
 
 <script>
+import { mixin as clickaway } from 'vue-clickaway';
 import { FocusTrap } from 'focus-trap-vue';
 import axios from 'axios';
 import { store, mutations } from '../store';
@@ -86,6 +88,9 @@ export default {
   components: {
     FocusTrap,
   },
+  mixins: [
+    clickaway,
+  ],
   data() {
     return {
       cannedTerms: null,
