@@ -34,6 +34,7 @@
         <a
           :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
           class="search-facet__item-link"
+          tabindex="0"
           @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
         >
           <template v-if="!isActive(getValue(item, facet.type))">
