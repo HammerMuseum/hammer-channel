@@ -5,7 +5,6 @@
   height: 100%;
   width: calc(100% - 48px);
   transition: all var(--overlay-transition);
-  background: var(--overlay-dark);
   z-index: 2;
 }
 
@@ -23,20 +22,18 @@
   width: 100%;
   color: #fff;
   transition: transform var(--overlay-transition);
-  overflow: auto;
-  max-height: 100%;
-  overflow-x: hidden;
 }
 
 .overlay__inner {
   color: var(--text-secondary);
   background: var(--background-darker);
   padding: 24px 24px 40px 24px;
+  overflow-y: auto;
 }
 
 .overlay__close-button {
   position: absolute;
-  right: 12px;
+  right: 16px;
   top: 12px;
   z-index: 1;
 }
@@ -59,18 +56,16 @@
   .slide-out-enter,
   .slide-out-leave-to {
     transform: none;
-    background: rgba(0, 0, 0, 0);
   }
 
   .slide-out-enter-to,
   .slide-out-leave {
     transform: none;
-    background: var(--overlay-dark);
   }
 
   .slide-out-leave-active,
   .slide-out-enter-active {
-    transition: transform var(--overlay-transition), background var(--overlay-transition) 0.4s;
+    transition: transform var(--overlay-transition);
   }
 
   .slide-out-enter .overlay__body,

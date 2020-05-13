@@ -76,9 +76,10 @@
   .search__filters {
     height: auto;
     max-height: 100%;
+    max-width: 100%;
     padding-top: 0;
     overflow-y: auto;
-    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .slide-in-enter,
@@ -96,7 +97,7 @@
 
 @media screen and (min-width: 60em) {
   .search__filters {
-    padding: 0 24px 40px 0;
+    padding: 0 0 40px;
     max-width: 100%;
   }
 
@@ -105,12 +106,10 @@
   }
 }
 
-@media screen  and (max-width: 50em) {
-  .search-filters-are-open {
-    overflow: hidden;
-  }
+.search-filters-are-open {
+  overflow: hidden;
+}
 
-  .search-filters-are-open .footer-container {
-    z-index: 0;
-  }
+.search-filters-are-open .footer-container {
+  z-index: 0;
 }

@@ -129,7 +129,7 @@
                       v-model="term"
                       label="Search the video archive"
                       name="term"
-                      :classes="{ text: 'visually-hidden', input: 'search__input' }"
+                      :classes="{ text: 'visually-hidden', input: 'search__input search__input--light' }"
                       placeholder="Search"
                       @keyup.enter="search"
                     />
@@ -155,7 +155,7 @@
                 </h2>
                 <div
                   v-if="facets"
-                  class="search-page__facet-buttons"
+                  class="search-page__facet-controls"
                 >
                   <button
                     :class="['button',
@@ -204,6 +204,7 @@
           <transition
             name="slide-out"
             mode="out-in"
+            @enter="setElementHeight('.overlay__inner', '.search-page__content')"
           >
             <Overlay
               v-if="openFacetName === 'topics'"
@@ -496,6 +497,12 @@ export default {
       }
       this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } });
     },
+    setElementHeight(selector, parent) {
+      const el = document.querySelector(selector);
+      const parentOffset = document.querySelector(parent).offsetTop;
+      const h = window.innerHeight - parentOffset;
+      el.style.height = `${h}px`;
+    },
     // Set component data when a response is fetched.
     setVars(response) {
       const data = response.data;
@@ -511,6 +518,11 @@ export default {
     },
     toggleFacetOverlay(name) {
       this.openFacetName = this.openFacetName === name ? null : name;
+      if (this.openFacetName === name) {
+        document.body.classList.add('search-filters-are-open');
+      } else {
+        document.body.classList.remove('search-filters-are-open');
+      }
     },
     toggleSearchFilters() {
       this.showFilters = !this.showFilters;
