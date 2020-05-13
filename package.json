@@ -15,8 +15,9 @@
     "away": "npm run watch-dev"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.9.0",
     "autoprefixer": "^9.7.6",
     "babel-loader": "^8.1.0",
