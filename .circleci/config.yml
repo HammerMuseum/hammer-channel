@@ -57,7 +57,7 @@ build_and_test: &build_and_test
 
     # Install Node dependencies.
     - restore_cache: *restore_node_cache
-    - run: npm install
+    - run: npm ci
     - save_cache: *save_node_cache
 
     - run:
