@@ -47,7 +47,11 @@ body {
   background-color: #f4f4f4;
 }
 
-:focus {
+[data-interaction-mode="pointer"] :focus {
+  outline: none;
+}
+
+[data-interaction-mode="keyboard"] :focus {
   outline: var(--highlight-primary) auto 4px;
   outline-offset: -2px;
 }

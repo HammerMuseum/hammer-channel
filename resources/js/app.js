@@ -1,5 +1,4 @@
-// TODO: Is there a way we can use the runtime only build?
-// import './bootstrap';
+// TODO: Is there a way we can use the runtime only build of vue?
 import 'svgxuse';
 import Vue from 'vue';
 import VueCheckView from 'vue-check-view';
@@ -32,4 +31,21 @@ Vue.use(VueProgressBar, {
 const app = new Vue({ // eslint-disable-line
   el: '#app',
   router,
+  created() {
+    document.addEventListener('keydown', this.onKeyDown, true);
+    document.addEventListener('mousedown', this.onPointerDown, true);
+  },
+  destroyed() {
+    document.removeEventListener('keydown', this.onKeyDown, true);
+    document.removeEventListener('mousedown', this.onPointerDown, true);
+  },
+  methods: {
+    onKeyDown(e) {
+      if (e.metaKey || e.altKey || e.ctrlKey) return;
+      document.body.dataset.interactionMode = 'keyboard';
+    },
+    onPointerDown() {
+      document.body.dataset.interactionMode = 'pointer';
+    },
+  },
 });
