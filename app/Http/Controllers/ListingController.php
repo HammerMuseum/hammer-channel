@@ -161,7 +161,7 @@ class ListingController extends Controller
                         $cannedTerms[] = [
                             'term'=> $topic,
                             'query' => [
-                                'topic' => $topic
+                                'topics' => $topic
                             ]
                         ];
                     }
