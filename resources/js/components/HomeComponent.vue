@@ -98,12 +98,6 @@
                 <span class="see-more__content-inner">
                   <span class="see-more__link">
                     {{ seeAllLinkText(topic, name) }}
-                    <svg
-                      :title="`See all items tagged with ${name}`"
-                      class="icon"
-                    >
-                      <use xlink:href="/images/sprite.svg#sprite-next" />
-                    </svg>
                   </span>
                 </span>
               </div>
