@@ -1,17 +1,18 @@
 <template>
   <div
-    v-on-clickaway="away"
     :class="[
       'container container--fixed',
       'container--bottom',
       'footer-container',
-      {'footer--open': footerIsActive}
+      {'footer--open': isFooterActive}
     ]"
+    @click.stop="away($event)"
+    @keyup.escape="away($event)"
   >
     <div class="footer-toggle">
       <button
         :class="['button', 'button--icon']"
-        @click="toggleFooterIsActive"
+        @click="toggleFooterActive"
       >
         <svg
           title="Toggle footer menu visibility"
@@ -19,93 +20,97 @@
         >
           <use xlink:href="/images/sprite.svg#sprite-footer-menu" />
         </svg>
-        <span class="icon-text visually-hidden">Toggle footer menu visibility</span>
+        <span class="icon-text visually-hidden">
+          {{ isFooterActive ? 'Close' : 'Open' }} the footer menu
+        </span>
       </button>
     </div>
     <transition name="slide-up">
       <footer
-        v-show="footerIsActive"
-        :class="['footer']"
+        v-show="isFooterActive"
+        class="footer"
       >
-        <VTabs class="styled">
-          <template slot="About">
-            <h2>About</h2>
-            <div class="about">
-              <p class="footer__text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            </div>
-          </template>
+        <button
+          @click="layout = !layout"
+        >
+          Switch layout
+        </button>
 
-          <template slot="Terms and conditions">
-            <h2>Terms and conditions</h2>
-            <p class="footer__text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure
-              dolor in reprehenderit in voluptate velit esse cillum
-              dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </template>
+        <div
+          class="footer__inner"
+        >
+          <button
+            :class="['footer__close-button', 'button', 'button--icon']"
+            @click.stop="toggleFooterActive"
+          >
+            <svg
+              class="icon icon--close-pink"
+            >
+              <use xlink:href="/images/sprite.svg#sprite-close-pink" />
+            </svg>
+            <span class="icon-text visually-hidden">Close the footer menu</span>
+          </button>
 
-          <template slot="Privacy policy">
-            <h2>Privacy policy</h2>
-            <p class="footer__text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure
-              dolor in reprehenderit in voluptate velit esse cillum
-              dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </template>
-
-          <template slot="Email sign up">
-            <div class="email-signup">
-              <VInput
-                type="email"
-                name="email"
-                label="Enter your email address:"
-                :class="`email-signup__item`"
-              />
-              <button
-                class="email-signup__button email-signup__item"
-                @click="submitNewsletterForm()"
+          <h2 class="heading heading--footer">
+            Welcome to Hammer ON
+          </h2>
+          <div class="footer__body">
+            <span class="footer__subheading">Sign Up for Email from the Hammer</span>
+            <div :class="['footer__actions', { 'footer__actions--column': layout}]">
+              <form
+                class="form__input-wrapper form__input-wrapper--footer"
+                action="https://hammer.ucla.edu/sign-up-for-email-from-the-hammer"
+                method="get"
               >
-                Submit
-              </button>
-              <span class="email-signup__result email-signup__item" />
-              <div class="email-signup__info">
-                Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in
-                culpa qui officia deserunt mollit anim id est laborum.
-              </div>
-            </div>
-          </template>
+                <VInput
+                  ref="search"
+                  label="Enter your email to sign up to our newsletters"
+                  :classes="{ text: 'visually-hidden', input: 'form__input form__input--footer' }"
+                  placeholder="Email address"
+                  autocomplete="new-password"
+                />
+                <div class="form__submit-wrapper form__submit-wrapper--footer">
+                  <button
+                    :class="['form__submit', 'form__submit--footer', 'button', 'button--icon']"
+                  >
+                    <span class="icon-text">Go</span>
+                    <svg
+                      class="icon"
+                    >
+                      <use xlink:href="/images/sprite.svg#sprite-envelope" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
 
-          <template slot="Visit the main Hammer site">
-            <a href="https://hammer.ucla.edu">https://hammer.ucla.edu</a>
-          </template>
-        </VTabs>
-        <div class="footer-logo">
-          <img
-            class="footer-logo__hammer"
-            src="/images/logo-hammer.png"
-          >
-          <img
-            class="footer-logo__mellon"
-            src="/images/logo-mellon.png"
-          >
+              <a
+                href="https://hammer.ucla.edu/programs-events"
+                target="_blank"
+                class="link"
+              >
+                Talks happening soon
+                <svg
+                  class="icon"
+                >
+                  <use xlink:href="/images/sprite.svg#sprite-next" />
+                </svg>
+              </a>
+            </div>
+            <div class="footer__info">
+              <p>Hammer ON is the video archive of the Hammer Museum. The archive was made possible thanks to a grant from the Mellon Foundation.</p>
+              <p>If you would like to use any of the footage for broadacst, please contact example@example.org</p>
+            </div>
+            <div class="footer__links">
+              <a
+                class="link link--pink"
+                href="https://hammer.ucla.edu/privacy-policy"
+              >Privacy Policy</a>
+              <a
+                class="link link--pink"
+                href="https://hammer.ucla.edu/terms-of-use"
+              >Terms of Use</a>
+            </div>
+          </div>
         </div>
       </footer>
     </transition>
@@ -113,48 +118,31 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { VTabs, VInput } from 'vuetensils';
-import { directive as onClickaway } from 'vue-clickaway';
+import { VInput } from 'vuetensils';
+import { store, mutations } from '../store';
 
 export default {
-  directives: {
-    onClickaway,
-  },
   components: {
-    VTabs,
     VInput,
   },
   data() {
     return {
-      footerIsActive: false,
+      layout: true,
     };
   },
+  computed: {
+    isFooterActive() {
+      return store.footerActive;
+    },
+  },
   methods: {
-    toggleFooterIsActive() {
-      this.footerIsActive = !this.footerIsActive;
-    },
-    away() {
-      this.footerIsActive = false;
-    },
-    submitNewsletterForm() {
-      const emailAddress = document.querySelector('[name=email]');
-      const result = document.querySelector('.email-signup__result');
-      if (emailAddress.value === '') {
-        result.innerHTML = 'Please enter a valid email address.';
-        return false;
+    away(event) {
+      if (event.target !== event.currentTarget) {
+        return;
       }
-      axios
-        .get(`/submit?email=${emailAddress.value}`)
-        .then((response) => {
-          result.innerHTML = response.data.message;
-          if (response.data.success) {
-            emailAddress.value = '';
-          }
-        }).catch((err) => {
-          console.error(err);
-        });
+      this.toggleFooterActive();
     },
+    toggleFooterActive: mutations.toggleFooterActive,
   },
 };
 </script>

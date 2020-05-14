@@ -112,7 +112,7 @@
             >
               <div
                 ref="searchFilters"
-                v-clickout="onClickout"
+                v-click-outside="onClickout"
                 :class="['search__filters']"
               >
                 <button
@@ -122,19 +122,19 @@
                   {{ 'Show results' }}
                 </button>
                 <div class="search-page__form">
-                  <div class="search__input-wrapper">
+                  <div class="form__input-wrapper">
                     <input
                       ref="search"
                       v-model="term"
                       label="Search the video archive"
                       name="term"
-                      class="search__input search__input--light"
+                      class="form__input form__input--light form__input--search"
                       placeholder="Search"
                       @keyup.enter="submitSearch($event)"
                     >
-                    <div class="search__submit-wrapper">
+                    <div class="form__submit-wrapper">
                       <button
-                        :class="['search__submit', 'button', 'button--icon']"
+                        :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
                         @click="submitSearch($event)"
                       >
                         <svg
@@ -321,8 +321,9 @@
 
 <script>
 import axios from 'axios';
+import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
-import { clickout, VToggle } from 'vuetensils';
+import { VToggle } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import getRouteData from '../mixins/getRouteData';
@@ -348,9 +349,6 @@ export default {
     UiGrid,
     VToggle,
   },
-  directives: {
-    clickout,
-  },
   mixins: [getRouteData],
   props: {
     facetQuery: {
@@ -370,11 +368,12 @@ export default {
       overlayOpen: false,
       pager: null,
       searchSummary: '',
-      showFilters: true,
+      showFilters: false,
       term: '',
       title: null,
       totals: null,
       videos: null,
+      debouncedResize: null,
     };
   },
   computed: {
@@ -436,7 +435,7 @@ export default {
       },
     },
     showFilters(to) {
-      if (to) {
+      if (this.width < 960 && to) {
         document.body.classList.add('search-filters-are-open');
       } else {
         document.body.classList.remove('search-filters-are-open');
@@ -449,8 +448,13 @@ export default {
   },
   mounted() {
     this.width = window.innerWidth;
-    window.addEventListener('resize', this.handleResize);
+    this.showFilters = this.width >= 960;
+    this.debouncedResize = debounce(this.handleResize, 200);
+    window.addEventListener('resize', this.debouncedResize, false);
     this.handleResize();
+  },
+  beforeDestroy() {
+    window.addEventListener('resize', this.debouncedResize, false);
   },
   methods: {
     getPageData(params = '') {

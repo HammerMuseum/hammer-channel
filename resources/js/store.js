@@ -2,11 +2,15 @@ import Vue from 'vue';
 
 export const store = Vue.observable({
   searchActive: false,
+  footerActive: false,
   searchTerm: '',
   transcriptInit: false,
 });
 
 export const mutations = {
+  toggleFooterActive() {
+    store.footerActive = !store.footerActive;
+  },
   toggleSearchActive() {
     store.searchActive = !store.searchActive;
   },

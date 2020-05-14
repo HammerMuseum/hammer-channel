@@ -1,4 +1,4 @@
-.search__input:-internal-autofill-selected {
+.form__input:-internal-autofill-selected {
   background: var(--background-darker) !important;
 }
 
@@ -32,20 +32,10 @@
   background: none;
 }
 
-.search__label {
-  display: block;
-  font-size: 19px;
-  position: absolute;
-  left: 15px;
-  top: 1px;
-  z-index: 1;
-  color: #626a6e;
-}
-
-.search__input-wrapper {
-  color: #212121;
+.form__input-wrapper {
   display: inline-flex;
   width: 100%;
+  height: 56px;
   background: var(--background-darker);
 
   .vts-input--text {
@@ -53,12 +43,13 @@
   }
 }
 
-.search__input {
-  font-family: var(--font-family-sans-serif);
+.form__input {
+  font-family: var(--font-family--body);
   position: relative;
   text-transform: none;
-  padding: 16px 0 18px 24px;
   width: 100%;
+  height: 100%;
+  padding-left: 24px;
   box-sizing: border-box;
   -webkit-appearance: none;
   font-size: 22px;
@@ -69,43 +60,78 @@
   background: var(--background-darker);
 }
 
-.search__input:focus {
+.form__input:focus {
   outline: none;
 }
 
-.search__input::placeholder {
+.form__input::placeholder {
   color: var(--text-secondary);
+}
+
+.form__input--search::placeholder {
   display: block;
   border-left: var(--primary-border-highlight);
   padding-left: 16px;
 }
 
-.search__input--light {
+.form__input--light {
   background: var(--background-light);
   color: var(--text-primary);
 }
 
-.search__input--light::placeholder {
+.form__input--light::placeholder {
   color: var(--text-primary);
 }
 
-.search__submit-wrapper {
+.form__submit-wrapper {
   background-color: var(--background-darker);
   display: flex;
   align-items: center;
-  padding: 12px 24px 12px 12px;
+  height: 100%;
 }
 
-.search__submit .icon {
+.form__submit {
+  padding: 0 24px;
+}
+
+.form__submit--small .icon {
   width: 20px;
   height: 20px;
 }
 
-.search-page__form .search__input-wrapper {
+.search-page__form .form__input-wrapper {
   background: var(--background-light);
   border: 1px solid var(--text-primary);
 }
 
-.search-page__form .search__submit-wrapper {
+.search-page__form .form__submit-wrapper {
   background-color: var(--background-primary);
+}
+
+.form__input-wrapper--search-bar {
+  height: 112px;
+}
+
+.form__input-wrapper--footer {
+  width: auto;
+  border: 1px solid var(--background-darker);
+}
+
+.form__input--footer {
+  font-size: 18px;
+}
+
+.form__submit--footer {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+
+  &:hover .icon {
+    fill: var(--highlight-primary);
+  }
+}
+
+.form__submit-wrapper--footer {
+  background-color: var(--background-light);
+  padding: 0 24px;
 }

@@ -10,7 +10,7 @@
         @keyup.escape="toggleSearchActive"
       >
         <div
-          v-on-clickaway="toggleSearchActive"
+          v-click-outside="toggleSearchActive"
           class="search-bar__body"
         >
           <div
@@ -19,56 +19,70 @@
             <div
               class="search-bar__action"
             >
-              <input
-                ref="searchInput"
-                v-model="searchTerm"
-                class="search__input search__input--search-bar"
-                type="text"
-                name="search"
-                aria-label="Search"
-                placeholder="Search"
-                @keyup.enter="search"
-              >
-            </div>
-
-            <div class="search-bar__options">
-              <div class="search-bar__option search-bar__option--left">
-                <span>or</span>
-                <RouterLink
-                  :class="tagClasses"
-                  :to="{ name: 'search', query: {} }"
-                  @click.native="toggleSearchActive"
+              <div class="form__input-wrapper form__input-wrapper--search-bar">
+                <input
+                  ref="searchInput"
+                  class="form__input form__input--search form__input--search-bar"
+                  type="text"
+                  name="search"
+                  aria-label="Search"
+                  placeholder="Search"
+                  @keyup.enter="search"
                 >
-                  show me everything
-                </RouterLink>
-              </div>
-              <div class="search-bar__option search-bar__option--right">
-                <span class="search-bar__option-label">or try</span>
-                <div class="search-bar__option-content">
-                  <RouterLink
-                    v-for="item in cannedTerms"
-                    :key="item.id"
-                    :class="tagClasses"
-                    :to="{ name: 'search', query: item.query }"
-                    @click.native="toggleSearchActive"
+                <div class="form__submit-wrapper">
+                  <button
+                    :class="['form__submit', 'button', 'button--icon']"
+                    @click="search"
                   >
-                    {{ item.term }}
-                  </RouterLink>
+                    <svg
+                      class="icon"
+                    >
+                      <use xlink:href="/images/sprite.svg#sprite-search" />
+                    </svg>
+                    <span class="icon-text visually-hidden">Search</span>
+                  </button>
                 </div>
               </div>
-            </div>
-            <button
-              class="button--close-search"
-              @click="toggleSearchActive"
-            >
-              <span class="visually-hidden">Close search</span>
-              <svg
-                title="Close search"
-                class="icon icon--hover-rotate"
+
+              <div class="search-bar__options">
+                <div class="search-bar__option search-bar__option--left">
+                  <span>or</span>
+                  <RouterLink
+                    :class="tagClasses"
+                    :to="{ name: 'search', query: {} }"
+                    @click.native="toggleSearchActive"
+                  >
+                    show me everything
+                  </RouterLink>
+                </div>
+                <div class="search-bar__option search-bar__option--right">
+                  <span class="search-bar__option-label">or try</span>
+                  <div class="search-bar__option-content">
+                    <RouterLink
+                      v-for="item in cannedTerms"
+                      :key="item.id"
+                      :class="tagClasses"
+                      :to="{ name: 'search', query: item.query }"
+                      @click.native="toggleSearchActive"
+                    >
+                      {{ item.term }}
+                    </RouterLink>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="button--close-search"
+                @click="toggleSearchActive"
               >
-                <use xlink:href="/images/sprite.svg#sprite-close" />
-              </svg>
-            </button>
+                <span class="visually-hidden">Close search</span>
+                <svg
+                  title="Close search"
+                  class="icon icon--hover-rotate"
+                >
+                  <use xlink:href="/images/sprite.svg#sprite-close" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +91,6 @@
 </template>
 
 <script>
-import { mixin as clickaway } from 'vue-clickaway';
 import { FocusTrap } from 'focus-trap-vue';
 import axios from 'axios';
 import { store, mutations } from '../store';
@@ -86,9 +99,6 @@ export default {
   components: {
     FocusTrap,
   },
-  mixins: [
-    clickaway,
-  ],
   data() {
     return {
       cannedTerms: null,
@@ -126,7 +136,10 @@ export default {
     toggleSearchActive: mutations.toggleSearchActive,
     setSearchTerm: mutations.setSearchTerm,
     search() {
-      this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch();
+      this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
+        // @todo Log these to Laravel, not the console
+        console.error(err);
+      });
       this.toggleSearchActive();
     },
     getCannedTerms() {
@@ -135,6 +148,7 @@ export default {
         .then((response) => {
           this.cannedTerms = response.data;
         }).catch((err) => {
+          // @todo Log these to Laravel, not the console
           console.error(err);
         });
     },
