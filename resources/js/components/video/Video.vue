@@ -2,7 +2,7 @@
   <div class="container">
     <div class="page-wrapper page-wrapper--frame page--video">
       <header class="video-meta">
-        <h1 class="page-heading video-meta__title">
+        <h1 class="heading heading--primary video-meta__title">
           {{ title }}
         </h1>
         <div class="video-meta__date">

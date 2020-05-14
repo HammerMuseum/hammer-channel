@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="page-wrapper page--search">
-      <SearchPageHeader :extra-classes="['page-heading', 'page-heading--search']">
+      <SearchPageHeader :extra-classes="['heading', 'heading--primary', 'heading--search']">
         <template #summary>
           <AnimatedNumber
             :value="total"
@@ -149,7 +149,7 @@
                   </div>
                 </div>
 
-                <h2 class="page-heading--secondary">
+                <h2 class="heading heading--secondary">
                   Filter
                 </h2>
                 <div
