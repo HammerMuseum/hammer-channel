@@ -22,7 +22,7 @@
               <div class="form__input-wrapper form__input-wrapper--search-bar">
                 <input
                   ref="searchInput"
-                  v-model="searchTerm"
+                  v-model="clonedTerm"
                   class="form__input form__input--search form__input--search-bar"
                   type="text"
                   name="search"
@@ -103,6 +103,7 @@ export default {
   data() {
     return {
       cannedTerms: null,
+      clonedTerm: '',
     };
   },
   computed: {
@@ -137,11 +138,13 @@ export default {
     toggleSearchActive: mutations.toggleSearchActive,
     setSearchTerm: mutations.setSearchTerm,
     search() {
+      this.setSearchTerm(this.clonedTerm);
+      this.toggleSearchActive();
+      this.clonedTerm = '';
       this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
         // @todo Log these to Laravel, not the console
         console.error(err);
       });
-      this.toggleSearchActive();
     },
     getCannedTerms() {
       axios

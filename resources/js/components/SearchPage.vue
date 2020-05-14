@@ -125,7 +125,7 @@
                   <div class="form__input-wrapper">
                     <input
                       ref="search"
-                      v-model="term"
+                      v-model="clonedTerm"
                       label="Search the video archive"
                       name="term"
                       class="form__input form__input--light form__input--search"
@@ -370,7 +370,7 @@ export default {
       pager: null,
       searchSummary: '',
       showFilters: false,
-      term: '',
+      clonedTerm: '',
       title: null,
       totals: null,
       videos: null,
@@ -467,6 +467,7 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     getPageData(params = '') {
       this.$Progress.start();
+      this.videos = null;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
@@ -497,13 +498,13 @@ export default {
     },
     submitSearch() {
       let searchParams = {};
-      if (this.term) {
-        searchParams = { term: this.term };
+      if (this.clonedTerm) {
+        searchParams = { term: this.clonedTerm };
       }
-      this.$router.push({ name: 'search', query: { searchParams } }).catch(() => {});
+      this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
       this.$refs.search.blur();
-      this.setSearchTerm(this.term);
-      this.term = '';
+      this.setSearchTerm(this.clonedTerm);
+      this.clonedTerm = '';
     },
     setElementHeight(selector, parent) {
       const el = document.querySelector(selector);
