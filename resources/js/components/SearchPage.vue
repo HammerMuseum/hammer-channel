@@ -442,11 +442,11 @@ export default {
       },
     },
     showFilters(to) {
-      if (this.width < 960 && to) {
-        document.body.classList.add('search-filters-are-open');
-      } else {
-        document.body.classList.remove('search-filters-are-open');
-      }
+      // if (this.width < 960 && to) {
+      //   document.body.classList.add('search-filters-are-open');
+      // } else {
+      //   document.body.classList.remove('search-filters-are-open');
+      // }
     },
     videos(to) {
       this.noResults = to.length === 0;
@@ -526,11 +526,11 @@ export default {
     },
     toggleFacetOverlay(name) {
       this.openFacetName = this.openFacetName === name ? null : name;
-      if (this.openFacetName === name) {
-        document.body.classList.add('search-filters-are-open');
-      } else {
-        document.body.classList.remove('search-filters-are-open');
-      }
+      // if (this.openFacetName === name) {
+        // document.body.classList.add('search-filters-are-open');
+      // } else {
+        // document.body.classList.remove('search-filters-are-open');
+      // }
     },
     toggleSearchFilters() {
       this.showFilters = !this.showFilters;
