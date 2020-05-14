@@ -22,6 +22,7 @@
               <div class="form__input-wrapper form__input-wrapper--search-bar">
                 <input
                   ref="searchInput"
+                  v-model="searchTerm"
                   class="form__input form__input--search form__input--search-bar"
                   type="text"
                   name="search"
