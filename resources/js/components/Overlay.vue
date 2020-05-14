@@ -4,7 +4,7 @@
     tabindex="0"
   >
     <div
-      v-on-clickaway="closeOverlayPanel"
+      v-click-outside="closeOverlayPanel"
       class="overlay__body"
     >
       <FocusTrap
@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import { mixin as clickaway } from 'vue-clickaway';
 import { FocusTrap } from 'focus-trap-vue';
 
 export default {
@@ -40,9 +39,6 @@ export default {
   components: {
     FocusTrap,
   },
-  mixins: [
-    clickaway,
-  ],
   methods: {
     closeOverlayPanel() {
       this.$emit('closePanel');

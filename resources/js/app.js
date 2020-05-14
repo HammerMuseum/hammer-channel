@@ -6,6 +6,7 @@ import VueFilterDateFormat from 'vue-filter-date-format';
 import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import VueSocialSharing from 'vue-social-sharing';
+import vClickOutside from 'v-click-outside';
 import router from './router';
 
 // /**
@@ -18,6 +19,7 @@ import router from './router';
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+Vue.use(vClickOutside);
 Vue.use(VueFilterDateFormat);
 Vue.use(VueSocialSharing);
 Vue.use(VueCheckView);
