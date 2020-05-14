@@ -334,6 +334,7 @@ import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
 import Overlay from './Overlay.vue';
+import { store, mutations } from '../store';
 
 export default {
   name: 'Search',
@@ -426,11 +427,17 @@ export default {
       }
       return 12 * (this.currentPage - 1) + 1;
     },
+    searchTerm() {
+      return store.searchTerm;
+    },
   },
   watch: {
     $route: {
       immediate: true,
       handler(to) {
+        if (to.query && to.query.term) {
+          this.setSearchTerm(to.query.term);
+        }
         this.getPageData(stringifyQuery(to.query));
       },
     },
@@ -443,7 +450,7 @@ export default {
     },
     videos(to) {
       this.noResults = to.length === 0;
-      this.searchSummary = this.term;
+      this.searchSummary = this.searchTerm;
     },
   },
   mounted() {
@@ -457,6 +464,7 @@ export default {
     window.addEventListener('resize', this.debouncedResize, false);
   },
   methods: {
+    setSearchTerm: mutations.setSearchTerm,
     getPageData(params = '') {
       this.$Progress.start();
       axios
@@ -492,8 +500,9 @@ export default {
       if (this.term) {
         searchParams = { term: this.term };
       }
-      this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } }).catch(() => {});
+      this.$router.push({ name: 'search', query: { searchParams } }).catch(() => {});
       this.$refs.search.blur();
+      this.setSearchTerm(this.term);
       this.term = '';
     },
     setElementHeight(selector, parent) {
