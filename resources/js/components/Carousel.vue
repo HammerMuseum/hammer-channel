@@ -117,12 +117,12 @@ export default {
     },
   },
   mounted() {
-    // this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
-    // window.addEventListener('resize', this.debouncedSetControlsPosition, false);
-    // this.setControlsPosition();
+    this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
+    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    this.setControlsPosition();
   },
   beforeDestroy() {
-    // window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
     reInit() {
