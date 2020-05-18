@@ -55,34 +55,17 @@
             Welcome to Hammer ON
           </h2>
           <div class="footer__body">
-            <span class="footer__subheading">Sign Up for Email from the Hammer</span>
             <div :class="['footer__actions', { 'footer__actions--column': layout}]">
-              <form
-                class="form__input-wrapper form__input-wrapper--footer"
-                action="https://hammer.ucla.edu/sign-up-for-email-from-the-hammer"
-                method="get"
+              <a
+                href="https://hammer.ucla.edu/programs-events"
+                target="_blank"
+                class="link"
               >
-                <VInput
-                  ref="search"
-                  label="Enter your email to sign up to our newsletters"
-                  :classes="{ text: 'visually-hidden', input: 'form__input form__input--footer' }"
-                  placeholder="Email address"
-                  autocomplete="new-password"
-                />
-                <div class="form__submit-wrapper form__submit-wrapper--footer">
-                  <button
-                    :class="['form__submit', 'form__submit--footer', 'button', 'button--icon']"
-                  >
-                    <span class="icon-text">Go</span>
-                    <svg
-                      class="icon"
-                    >
-                      <use xlink:href="/images/sprite.svg#sprite-envelope" />
-                    </svg>
-                  </button>
-                </div>
-              </form>
-
+                Sign up to our newsletters
+                <svg class="icon">
+                  <use xlink:href="/images/sprite.svg#sprite-envelope" />
+                </svg>
+              </a>
               <a
                 href="https://hammer.ucla.edu/programs-events"
                 target="_blank"
