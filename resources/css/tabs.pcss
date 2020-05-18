@@ -1,13 +1,16 @@
 .nav {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
 }
 
 .nav-tabs {
+  padding: 0 48px;
+  margin: 0 -16px 16px;
+  background: var(--background-darker);
   border-bottom: 0;
 }
 
@@ -21,8 +24,9 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-.nav-tabs .nav-item {
+.nav-item {
   margin-bottom: -1px;
+  padding: 16px 8px 16px 8px;
 }
 
 .nav-tabs .nav-link {
@@ -44,23 +48,15 @@
   display: block;
 }
 
-.vp__tabs {
-  .nav-tabs {
-    padding: 16px;
-    margin: 0 -16px 16px;
-    background: var(--background-darker);
-  }
+.nav-link .icon {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 8px;
+  fill: rgba(255, 255, 255, 0.6);
+}
 
-  .nav-link .icon {
-    width: 18px;
-    height: 18px;
-    margin-bottom: 8px;
-    fill: rgba(255, 255, 255, 0.6);
-  }
-
-  .nav-link.active .icon {
-    fill: var(--highlight-primary);
-  }
+.nav-link.active .icon {
+  fill: var(--highlight-primary);
 }
 
 .vp__tabs__label {
@@ -70,12 +66,18 @@
 }
 
 @media (min-width: 52.5em) {
-  .vp__tabs {
-    .nav-tabs {
-      margin: 0;
-      background: none;
-      padding: 0 0 16px 0;
-    }
+  .nav {
+    justify-content: space-between;
+  }
+
+  .nav-tabs {
+    padding: 0;
+    margin: 0;
+    background: none;
+  }
+
+  .nav-item {
+    padding-top: 0;
   }
 
   .vp__tabs__label {

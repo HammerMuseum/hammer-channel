@@ -1,6 +1,6 @@
 .search-bar-container {
   position: absolute;
-  top: var(--small-header-height);
+  top: var(--header-height--small);
   height: 100%;
   width: 100%;
   transition: all var(--overlay-transition);
@@ -23,7 +23,7 @@
 
 .search-bar {
   width: 100%;
-  padding: var(--small-header-height) 22px;
+  padding: var(--header-height--small) 22px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -110,7 +110,7 @@
 
 @media screen and (min-width: 37.5em) {
   .search-bar-container {
-    top: var(--large-header-height);
+    top: var(--header-height);
   }
 
   .form__input--search-bar {
@@ -125,7 +125,7 @@
 
   .search-bar {
     width: 70vw;
-    padding: var(--large-header-height) 22px;
+    padding: var(--header-height) 22px;
   }
 
   .search-bar__options {

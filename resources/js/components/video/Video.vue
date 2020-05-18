@@ -1,11 +1,14 @@
 <template>
   <div class="container">
     <div class="page-wrapper page-wrapper--frame page--video">
-      <header class="video-meta">
+      <header class="video-meta video-meta__header">
         <h1 class="heading heading--primary video-meta__title">
           {{ title }}
         </h1>
-        <div class="video-meta__date">
+        <div
+          v-show="date_recorded"
+          class="video-meta__date"
+        >
           {{ new Date(date_recorded) | dateFormat('MMM D, YYYY') }}
         </div>
       </header>
@@ -238,13 +241,15 @@ export default {
   },
   methods: {
     setTranscriptHeight() {
-      const el = this.$refs.transcript.$el;
-      const h = window.innerHeight - el.offsetTop - 56;
-      el.style.maxHeight = `${h}px`;
+      if (window.innerWidth > 960) {
+        const el = this.$refs.transcript.$el;
+        const h = window.innerHeight - el.offsetTop - 56;
+        el.style.maxHeight = `${h}px`;
+      }
     },
     onPlayerError() {
       axios
-        .get(`/api/video/${this.$route.params.id}`)
+        .get(`/api/video/${this.$route.params.id}/${this.$route.params.slug}`)
         .then((response) => {
           this.src = response.data.src;
         }).catch((err) => {

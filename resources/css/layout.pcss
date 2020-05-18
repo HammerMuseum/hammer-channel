@@ -1,7 +1,6 @@
 .container {
   max-width: 1344px;
   margin: 0 auto;
-  overflow-x: hidden;
 }
 
 .container--fixed {
@@ -20,22 +19,24 @@
   bottom: 0;
 }
 
-.main {
-  padding: var(--small-header-height) 0 0 0;
-}
-
 .page-wrapper {
-  padding-top: var(--small-header-height);
+  padding: var(--wrapper-padding--small);
 }
 
 @media (min-width: 37.5em) {
-  .main {
-    padding-top: var(--large-header-height);
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: var(--wrapper-padding--medium);
+  }
+}
+
+@media (min-width: 86em) {
+  .container {
+    overflow-x: hidden;
   }
 
   .page-wrapper {
-    padding-top: var(--large-header-height);
-    display: flex;
-    flex-direction: column;
+    padding: var(--wrapper-padding--large);
   }
 }

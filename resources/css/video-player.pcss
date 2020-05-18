@@ -48,28 +48,36 @@
 
   .vjs-control-bar {
     display: flex;
-    background: var(--background-darker);
-    background: rgba(0, 0, 0, 0.8);
+    align-items: flex-end;
+    height: var(--video-player-control-bar-height);
     padding: 0 8px 0 0;
-    height: 40px;
+    background: #262626;
+    background: var(--video-player-control-bar-background);
+    opacity: 0.9;
   }
 
-  .vjs-fullscreen .vjs-overlay-top {
-    display: flex;
-    width: 100%;
-    left: 0;
+  .vjs-control,
+  .vjs-time-control {
+    height: calc((var(--video-player-control-bar-height) / 2) - 4px);
+  }
+
+  .vjs-overlay-background {
     top: 0;
-    align-items: center;
-    margin-left: 0;
-    font-family: var(--font-family--body);
-    font-weight: 600;
-    font-size: 14px;
+    left: 0;
+    width: 100%;
+    padding: 4px;
     text-align: left;
-    padding: 10px;
+    background: #262626;
+    background: var(--video-player-overlay-background);
+    border-radius: 0;
   }
 
   .vjs-overlay p {
     margin: 0;
+    font-family: var(--font-family--body);
+    font-weight: 200;
+    font-size: 24px;
+    line-height: 30px;
   }
 
   .vjs-time-tooltip,
@@ -103,9 +111,8 @@
   .vjs-progress-control {
     position: absolute;
     width: 100%;
-    bottom: 36px;
-    height: 16px;
-    background: rgba(0, 0, 0, 0.8);
+    bottom: calc((var(--video-player-control-bar-height) / 2) - var(--video-player-progress-bar-height));
+    height: var(--video-player-progress-bar-height);
 
     .vjs-play-progress {
       background-color: var(--highlight-primary) !important;
@@ -113,6 +120,7 @@
 
     .vjs-progress-holder {
       margin: 0 20px 0 15px;
+      height: 0.2em;
     }
   }
 

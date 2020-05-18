@@ -18,14 +18,27 @@
   /* Accent colors */
   --highlight-primary: #ee2a7b;
   --highlight-secondary: #00b3e6;
+  --primary-border-highlight: 1px solid var(--highlight-primary);
 
   /* Header sizes */
-  --small-header-height: 54px;
-  --large-header-height: 72px;
-  --primary-border-highlight: 1px solid var(--highlight-primary);
+  --header-height--small: 54px;
+  --header-height: 72px;
+  --footer-height: 40px;
+
+  /* Layout related */
+  --column-width: 112px;
+  --wrapper-padding--small: var(--header-height--small) 16px 0 16px;
+  --wrapper-padding--medium: var(--header-height) 48px 0 48px;
+  --wrapper-padding--large: var(--header-height) 0;
 
   /* Overlays */
   --overlay-dark: rgba(77, 75, 75, 0.7);
   --overlay-transition: 0.8s cubic-bezier(0.4, 0, 1, 1);
   --rotation-transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Video player */
+  --video-player-control-bar-height: 88px;
+  --video-player-progress-bar-height: 10px;
+  --video-player-control-bar-background: linear-gradient(rgba(60, 60, 60, 0) 0%, rgba(0, 0, 0, 0.75) 61.08%, #000 100%);
+  --video-player-overlay-background: linear-gradient(#000 0%, rgba(0, 0, 0, 0.75) 40%, rgba(60, 60, 60, 0) 100%);
 }
