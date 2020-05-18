@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     selectNavigationItem(item) {
-      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false, true);
+      this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);
     },
     initNavigationBar() {
       const FLICKITY_EVENTS = [

@@ -23,6 +23,10 @@
   padding: var(--wrapper-padding--small);
 }
 
+.page-wrapper.page-wrapper--full {
+  padding: var(--header-height--small) 0;
+}
+
 @media (min-width: 37.5em) {
   .page-wrapper {
     display: flex;
@@ -38,5 +42,9 @@
 
   .page-wrapper {
     padding: var(--wrapper-padding--large);
+  }
+
+  .page-wrapper.page-wrapper--full {
+    padding: var(--header-height) 0;
   }
 }
