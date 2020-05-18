@@ -25,3 +25,8 @@
     - Privacy policy
     - Email sign up
     - Upcoming programs at Hammer
+  - Does clicking outside the footer hide it?
+  - Does clicking the close icon hide the footer?
+  - Does the footer appear and hide correctly on the front page?
+  - Does the footer appear and hide correctly on the Search page?
+  - Does the footer appear and hide correctly on the Videp page?
