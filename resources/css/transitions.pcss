@@ -17,10 +17,25 @@
 
 .open-overlay-down-enter .search-bar__body,
 .open-overlay-down-leave-to .search-bar__body {
-  transform: translate3d(0, calc(-100% - 72px), 0);
+  transform: translate3d(0, calc(-100% - var(--large-header-height)), 0);
 }
 
 .open-overlay-down-leave .search-bar__body,
 .open-overlay-down-enter-to .search-bar__body {
+  transform: translate3d(0, 0, 0);
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.slide-up-enter,
+.slide-up-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
+
+.slide-up-leave,
+.slide-up-enter-to {
   transform: translate3d(0, 0, 0);
 }

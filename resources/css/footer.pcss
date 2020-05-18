@@ -21,6 +21,7 @@
   align-items: center;
   z-index: 10;
   width: 100%;
+  overflow: hidden;
   transition: background var(--overlay-transition);
 
   &.footer--open {
@@ -29,26 +30,11 @@
   }
 }
 
-/* On video page only */
-
-.vp {
-  .footer-container {
-    height: 40px;
-    background: var(--background-light);
-  }
-
-  .footer-toggle {
-    bottom: 4px;
-    left: 12px;
-    position: absolute;
-  }
-}
-
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  max-height: calc(100vh - 54px);
+  max-height: calc(100vh - var(--small-header-height));
   background: var(--background-white);
   z-index: 3;
   padding-bottom: 64px;
@@ -149,6 +135,7 @@
 @media screen and (min-width: 48em) {
   .footer {
     padding-bottom: 96px;
+    max-height: calc(100vh - var(--large-header-height));
   }
 
   .footer__body {

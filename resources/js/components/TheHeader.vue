@@ -20,7 +20,7 @@
     </header>
     <button
       class="button search-overlay-toggle"
-      @click="toggleSearchActive"
+      @click="toggleSearchOverlayActive"
     >
       <svg
         title="Open search"
@@ -43,7 +43,7 @@ export default {
     };
   },
   methods: {
-    toggleSearchActive: mutations.toggleSearchActive,
+    toggleSearchOverlayActive: mutations.toggleSearchOverlayActive,
   },
 };
 </script>

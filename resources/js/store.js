@@ -1,7 +1,8 @@
 import Vue from 'vue';
 
 export const store = Vue.observable({
-  searchActive: false,
+  searchOverlayActive: false,
+  facetOverlayActive: false,
   footerActive: false,
   searchTerm: '',
   transcriptInit: false,
@@ -11,8 +12,11 @@ export const mutations = {
   toggleFooterActive() {
     store.footerActive = !store.footerActive;
   },
-  toggleSearchActive() {
-    store.searchActive = !store.searchActive;
+  toggleFacetOverlayActive() {
+    store.facetOverlayActive = !store.facetOverlayActive;
+  },
+  toggleSearchOverlayActive() {
+    store.searchOverlayActive = !store.searchOverlayActive;
   },
   setSearchTerm(term) {
     store.searchTerm = term;

@@ -8,6 +8,7 @@ import VueScrollTo from 'vue-scrollto';
 import VueSocialSharing from 'vue-social-sharing';
 import vClickOutside from 'v-click-outside';
 import router from './router';
+import { store } from './store';
 
 // /**
 //  * The following block of code may be used to automatically register your
@@ -33,6 +34,20 @@ Vue.use(VueProgressBar, {
 const app = new Vue({ // eslint-disable-line
   el: '#app',
   router,
+  computed: {
+    overlayOpen() {
+      return store.searchOverlayActive || store.facetOverlayActive || store.footerActive;
+    },
+  },
+  watch: {
+    overlayOpen() {
+      if (this.overlayOpen) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    },
+  },
   created() {
     document.addEventListener('keydown', this.onKeyDown, true);
     document.addEventListener('mousedown', this.onPointerDown, true);

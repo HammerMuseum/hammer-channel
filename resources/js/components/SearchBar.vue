@@ -1,16 +1,16 @@
 <template>
   <FocusTrap
-    :active="searchActive"
+    :active="searchOverlayActive"
     :escape-deactivates="false"
   >
     <transition name="open-overlay-down">
       <div
-        v-if="searchActive"
-        :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchActive }"
-        @keyup.escape="toggleSearchActive"
+        v-if="searchOverlayActive"
+        :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchOverlayActive }"
+        @keyup.escape="toggleSearchOverlayActive"
+        @click.stop="away"
       >
         <div
-          v-click-outside="toggleSearchActive"
           class="search-bar__body"
         >
           <div
@@ -51,7 +51,7 @@
                   <RouterLink
                     :class="tagClasses"
                     :to="{ name: 'search', query: {} }"
-                    @click.native="toggleSearchActive"
+                    @click.native="toggleSearchOverlayActive"
                   >
                     show me everything
                   </RouterLink>
@@ -64,7 +64,7 @@
                       :key="item.id"
                       :class="tagClasses"
                       :to="{ name: 'search', query: item.query }"
-                      @click.native="toggleSearchActive"
+                      @click.native="toggleSearchOverlayActive"
                     >
                       {{ item.term }}
                     </RouterLink>
@@ -73,7 +73,7 @@
               </div>
               <button
                 class="button--close-search"
-                @click="toggleSearchActive"
+                @click="toggleSearchOverlayActive"
               >
                 <span class="visually-hidden">Close search</span>
                 <svg
@@ -118,14 +118,14 @@ export default {
         this.setSearchTerm(value);
       },
     },
-    searchActive() {
-      return store.searchActive;
+    searchOverlayActive() {
+      return store.searchOverlayActive;
     },
   },
   watch: {
-    searchActive() {
+    searchOverlayActive() {
       this.$nextTick(() => {
-        if (this.searchActive) {
+        if (this.searchOverlayActive) {
           this.$refs.searchInput.focus();
         }
       });
@@ -135,11 +135,17 @@ export default {
     this.getCannedTerms();
   },
   methods: {
-    toggleSearchActive: mutations.toggleSearchActive,
+    toggleSearchOverlayActive: mutations.toggleSearchOverlayActive,
     setSearchTerm: mutations.setSearchTerm,
+    away(event) {
+      if (event.target !== event.currentTarget) {
+        return;
+      }
+      this.toggleSearchOverlayActive();
+    },
     search() {
       this.setSearchTerm(this.clonedTerm);
-      this.toggleSearchActive();
+      this.toggleSearchOverlayActive();
       this.clonedTerm = '';
       this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
         // @todo Log these to Laravel, not the console

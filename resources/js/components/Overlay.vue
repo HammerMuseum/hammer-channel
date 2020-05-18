@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     closeOverlayPanel() {
-      this.$emit('closePanel');
+      this.$emit('close-panel');
     },
   },
 };

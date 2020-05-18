@@ -101,13 +101,9 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils';
 import { store, mutations } from '../store';
 
 export default {
-  components: {
-    VInput,
-  },
   data() {
     return {
       layout: true,
@@ -116,6 +112,9 @@ export default {
   computed: {
     isFooterActive() {
       return store.footerActive;
+    },
+    isBodyOverflowActive() {
+      return store.bodyOverflow;
     },
   },
   methods: {
@@ -133,7 +132,7 @@ export default {
 <style>
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .slide-up-enter,

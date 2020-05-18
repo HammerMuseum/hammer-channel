@@ -112,8 +112,8 @@
             >
               <div
                 ref="searchFilters"
-                v-click-outside="onClickout"
                 :class="['search__filters']"
+                @click.stop="away"
               >
                 <button
                   class="button button--search-toggle button--small-devices"
@@ -208,12 +208,14 @@
             name="slide-out"
             mode="out-in"
             @enter="setElementHeight('.overlay__inner', '.search-page__content')"
+            @before-enter="toggleFacetOverlayActive()"
+            @before-leave="toggleFacetOverlayActive()"
           >
             <Overlay
               v-if="openFacetName === 'topics'"
               id="topics"
               key="topics"
-              @closePanel="closeFacetOverlay"
+              @close-panel="closeFacetOverlay"
             >
               <SearchableFacet
                 v-if="facets"
@@ -228,7 +230,7 @@
               v-if="openFacetName === 'people'"
               id="people"
               key="people"
-              @closePanel="closeFacetOverlay"
+              @close-panel="closeFacetOverlay"
             >
               <SearchableFacet
                 v-if="facets"
@@ -243,7 +245,7 @@
               v-if="openFacetName === 'playlists'"
               id="playlists"
               key="playlists"
-              @closePanel="closeFacetOverlay"
+              @close-panel="closeFacetOverlay"
             >
               <SearchFacet
                 v-if="facets"
@@ -257,7 +259,7 @@
               v-if="openFacetName === 'date'"
               id="date"
               key="date"
-              @closePanel="closeFacetOverlay"
+              @close-panel="closeFacetOverlay"
             >
               <SearchFacet
                 v-if="facets"
@@ -366,7 +368,6 @@ export default {
       facets: null,
       loading: false,
       noResults: false,
-      overlayOpen: false,
       pager: null,
       searchSummary: '',
       showFilters: false,
@@ -441,13 +442,6 @@ export default {
         this.getPageData(stringifyQuery(to.query));
       },
     },
-    showFilters(to) {
-      // if (this.width < 960 && to) {
-      //   document.body.classList.add('search-filters-are-open');
-      // } else {
-      //   document.body.classList.remove('search-filters-are-open');
-      // }
-    },
     videos(to) {
       this.noResults = to.length === 0;
       this.searchSummary = this.searchTerm;
@@ -458,13 +452,13 @@ export default {
     this.showFilters = this.width >= 960;
     this.debouncedResize = debounce(this.handleResize, 200);
     window.addEventListener('resize', this.debouncedResize, false);
-    this.handleResize();
   },
   beforeDestroy() {
     window.addEventListener('resize', this.debouncedResize, false);
   },
   methods: {
     setSearchTerm: mutations.setSearchTerm,
+    toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
       this.$Progress.start();
       this.videos = null;
@@ -489,7 +483,7 @@ export default {
     afterLeave() {
       this.filtersAreOpen = false;
     },
-    onClickout(e) {
+    away(e) {
       const facetList = e.target.parentNode.classList.contains('icon--close');
       if (!facetList && window.innerWidth < 960 && this.filtersAreOpen) {
         this.showFilters = false;
@@ -526,11 +520,6 @@ export default {
     },
     toggleFacetOverlay(name) {
       this.openFacetName = this.openFacetName === name ? null : name;
-      // if (this.openFacetName === name) {
-        // document.body.classList.add('search-filters-are-open');
-      // } else {
-        // document.body.classList.remove('search-filters-are-open');
-      // }
     },
     toggleSearchFilters() {
       this.showFilters = !this.showFilters;
@@ -540,6 +529,7 @@ export default {
     },
     closeFacetOverlay() {
       this.openFacetName = null;
+      this.toggleFacetOverlayActive();
     },
   },
 };
