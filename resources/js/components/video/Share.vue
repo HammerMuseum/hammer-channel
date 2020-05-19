@@ -25,20 +25,20 @@
         </svg>
         <span class="icon-text visually-hidden">Share on Twitter</span>
       </a>
-      <div class="share-button">
-        <button
-          class="share-button button button--icon"
-          aria-label="Show citation"
-          @click="showCitation = !showCitation;"
+      <a
+        class="share-button button button--icon"
+        aria-label="Show citation"
+        role="button"
+        @click.prevent="showCitation = !showCitation;"
+      >
+        <svg
+          title="Citation"
+          class="icon share-buttons__icon"
         >
-          <svg
-            title="Citation"
-            class="icon share-buttons__icon"
-          >
-            <use xlink:href="/images/sprite.svg#sprite-cite" />
-          </svg>
-        </button>
-      </div>
+          <use xlink:href="/images/sprite.svg#sprite-cite" />
+        </svg>
+        <span class="icon-text visually-hidden">Cite this video</span>
+      </a>
     </div>
     <transition name="fade">
       <div
