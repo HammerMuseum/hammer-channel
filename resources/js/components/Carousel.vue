@@ -50,8 +50,6 @@
         :class="['carousel', ...classes]"
         v-bind="settings"
         :aria-labelledby="headingId"
-        :arrows="false"
-        :dots="false"
         @beforeChange="setCurrentSlide"
         @reInit="reInit"
       >
@@ -94,6 +92,8 @@ export default {
       defaultSettings: {
         infinite: false,
         touchThreshold: 5,
+        arrows: false,
+        dots: false,
       },
       slideCount: 0,
     };
