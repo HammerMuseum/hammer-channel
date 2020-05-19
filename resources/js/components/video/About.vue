@@ -3,7 +3,7 @@
     <template v-slot:highlighted>
       <div
         v-if="playlists.length"
-        class="ui-meta-grid"
+        class="ui-table"
       >
         <h4 class="ui-list__title">
           Part of
@@ -27,7 +27,7 @@
       </div>
       <div
         v-if="people.length"
-        class="ui-meta-grid"
+        class="ui-table"
       >
         <h4 class="ui-list__title">
           Featuring
@@ -51,7 +51,7 @@
       </div>
       <div
         v-if="topics.length"
-        class="ui-meta-grid"
+        class="ui-table"
       >
         <h4 class="ui-list__title">
           Topics
