@@ -109,11 +109,12 @@
             <div
               v-show="showFilters && hasFacets"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
+              @click.stop="away($event)"
+              @keyup.escape="away($event)"
             >
               <div
                 ref="searchFilters"
                 :class="['search__filters']"
-                @click.stop="away"
               >
                 <button
                   class="button button--search-toggle button--small-devices"
@@ -498,12 +499,16 @@ export default {
     afterLeave() {
       this.filtersAreOpen = false;
     },
-    away(e) {
-      const facetList = e.target.parentNode.classList.contains('icon--close');
-      if (!facetList && window.innerWidth < 960 && this.filtersAreOpen) {
-        this.showFilters = false;
+    away(event) {
+      // const facetList = e.target.parentNode.classList.contains('icon--close');
+      // if (!facetList && window.innerWidth < 960 && this.filtersAreOpen) {
+      //   this.showFilters = false;
+      // }
+      // return false;
+      if (event.target !== event.currentTarget) {
+        return;
       }
-      return false;
+      this.showFilters = false;
     },
     submitSearch() {
       let searchParams = {};
@@ -517,9 +522,13 @@ export default {
     },
     setElementHeight(selector, parent) {
       const el = document.querySelector(selector);
-      const parentOffset = document.querySelector(parent).offsetTop;
-      const h = window.innerHeight - parentOffset;
-      el.style.height = `${h}px`;
+      if (window.innerWidth > 960) {
+        const parentOffset = document.querySelector(parent).offsetTop;
+        const h = window.innerHeight - parentOffset;
+        el.style.height = `${h}px`;
+      } else {
+        el.style.height = '';
+      }
     },
     // Set component data when a response is fetched.
     setVars(response) {

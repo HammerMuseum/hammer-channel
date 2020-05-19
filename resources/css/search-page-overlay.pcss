@@ -29,6 +29,7 @@
   background: var(--background-darker);
   padding: 24px 24px 40px 24px;
   overflow-y: auto;
+  height: 100%;
 }
 
 .overlay__close-button {
@@ -76,5 +77,11 @@
   .slide-out-enter-to .overlay__body,
   .slide-out-leave .overlay__body {
     transform: translateX(0%);
+  }
+}
+
+@media (min-width: 60em) {
+  .overlay__inner {
+    height: auto;
   }
 }
