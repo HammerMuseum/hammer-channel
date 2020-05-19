@@ -299,11 +299,14 @@
                   </div>
                   <article>
                     <h2 class="ui-card__title">
-                      <span>{{ item.title }}</span>
+                      <span v-html="highlight(item)" />
                     </h2>
                     <div class="ui-card__date">
                       {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
                     </div>
+                    <SearchSnippets
+                      :snippets="item.snippets"
+                    />
                   </article>
                 </RouterLink>
               </UiCard>
@@ -323,11 +326,12 @@
 
 <script>
 import axios from 'axios';
-import { debounce } from 'lodash';
+import { debounce, _escape } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
 import { VToggle } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
+import SearchSnippets from './SearchSnippets.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import Pagination from './Pagination.vue';
@@ -345,6 +349,7 @@ export default {
     CurrentSearch,
     Pagination,
     SearchableFacet,
+    SearchSnippets,
     SearchFacet,
     SearchPageHeader,
     Overlay,
@@ -443,7 +448,7 @@ export default {
       },
     },
     videos(to) {
-      this.noResults = to.length === 0;
+      this.noResults = to && to.length === 0;
       this.searchSummary = this.searchTerm;
     },
   },
@@ -476,6 +481,16 @@ export default {
       if (this.width !== window.innerWidth) {
         this.showFilters = window.innerWidth >= 960;
       }
+    },
+    highlight(item) {
+      if (this.searchTerm) {
+        const div = document.createElement('div');
+        div.innerText = this.searchTerm;
+        const escapedTerm = div.innerHTML;
+        const regex = new RegExp(`(${escapedTerm.replace(/([-/\\^$*+?.()|[\]{}])/i, '\\$&')})`, 'i');
+        return item.title.replace(regex, '<em>$1</em>');
+      }
+      return item.title;
     },
     afterEnter() {
       this.filtersAreOpen = true;
