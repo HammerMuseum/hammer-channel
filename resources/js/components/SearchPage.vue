@@ -4,20 +4,21 @@
       <SearchPageHeader :extra-classes="['heading', 'heading--primary', 'heading--search']">
         <template #summary>
           <AnimatedNumber
+            v-show="total"
             :value="total"
             :duration="400"
             :round="1"
           /><span v-show="total"> results</span>
           <div
             v-if="searchSummary"
-            style="display: inline;"
+            class="search-page__summary"
           >
-            <span style="border: none; padding-bottom: 2px;">for&nbsp;</span>
-            <RouterLink
+            <span class="search-page__summary__span">for&nbsp;</span>
+            <a
               v-if="searchSummary"
-              :to="{ name: 'search' }"
-              class="link link--text link--text-and-button"
+              class="search-page__summary__link link link--text link--text-and-button"
               title="Clear term and reset search"
+              @click="resetSearch"
             >
               <strong>{{ searchSummary }}</strong>
               <button
@@ -28,7 +29,7 @@
                   <use xlink:href="/images/sprite.svg#sprite-close-pink" />
                 </svg>
               </button>
-            </RouterLink>
+            </a>
           </div>
         </template>
         <template #extras>
@@ -510,6 +511,11 @@ export default {
       }
       this.showFilters = false;
     },
+    resetSearch() {
+      this.$router.push({ name: 'search' }).catch(() => {});
+      this.clonedTerm = '';
+      this.setSearchTerm(this.clonedTerm);
+    },
     submitSearch() {
       let searchParams = {};
       if (this.clonedTerm) {
@@ -533,6 +539,7 @@ export default {
     // Set component data when a response is fetched.
     setVars(response) {
       const data = response.data;
+      this.totals = data.totals;
       this.title = data.title;
       this.pager = data.pager;
       this.videos = data.videos;
@@ -540,7 +547,6 @@ export default {
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
-      this.totals = data.totals;
     },
     toggleFacetOverlay(name) {
       this.openFacetName = this.openFacetName === name ? null : name;
