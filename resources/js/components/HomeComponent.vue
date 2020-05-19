@@ -172,6 +172,10 @@ export default {
   },
   mounted() {
     this.getFeatured();
+    document.body.classList.add('front');
+  },
+  destroyed() {
+    document.body.classList.remove('front');
   },
   methods: {
     getFeatured() {

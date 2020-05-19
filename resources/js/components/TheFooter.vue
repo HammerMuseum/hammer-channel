@@ -9,21 +9,23 @@
     @click.stop="away($event)"
     @keyup.escape="away($event)"
   >
-    <div class="footer-toggle">
-      <button
-        :class="['button', 'button--icon']"
-        @click="toggleFooterActive"
-      >
-        <svg
-          title="Toggle footer menu visibility"
-          class="icon"
+    <div class="footer-toggle__wrapper">
+      <div class="footer-toggle">
+        <button
+          :class="['button', 'button--icon']"
+          @click="toggleFooterActive"
         >
-          <use xlink:href="/images/sprite.svg#sprite-footer-menu" />
-        </svg>
-        <span class="icon-text visually-hidden">
-          {{ isFooterActive ? 'Close' : 'Open' }} the footer menu
-        </span>
-      </button>
+          <svg
+            title="Toggle footer menu visibility"
+            class="icon"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-footer-menu" />
+          </svg>
+          <span class="icon-text visually-hidden">
+            {{ isFooterActive ? 'Close' : 'Open' }} the footer menu
+          </span>
+        </button>
+      </div>
     </div>
     <transition name="slide-up">
       <footer
