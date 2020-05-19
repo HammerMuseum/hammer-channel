@@ -241,6 +241,7 @@ export default {
   },
   methods: {
     setTranscriptHeight() {
+      if (!this.$refs.transcript) return;
       const el = this.$refs.transcript.$el;
       if (window.innerWidth > 960) {
         const h = window.innerHeight - el.offsetTop - 56;

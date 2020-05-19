@@ -136,6 +136,7 @@ export default {
       this.currentSlide = next;
     },
     setControlsPosition() {
+      if (!this.$refs.carousel) return;
       const carousel = this.$refs.carousel.$el;
       const itemHeight = carousel.querySelector('.ui-card__thumbnail-image').height;
       const top = itemHeight / 1.4;
