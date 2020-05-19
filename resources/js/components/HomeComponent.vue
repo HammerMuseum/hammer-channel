@@ -95,12 +95,12 @@
                 class="ui-card"
                 :to="{name: 'search', query: {topics: name}}"
               >
-                <div class="see-more__content">
-                  <span class="see-more__content-inner">
+                <div class="ui-card__thumbnail">
+                  <div class="ui-card__thumbnail-image">
                     <span class="see-more__link">
                       {{ seeAllLinkText(topic, name) }}
                     </span>
-                  </span>
+                  </div>
                 </div>
               </router-link>
             </div>
