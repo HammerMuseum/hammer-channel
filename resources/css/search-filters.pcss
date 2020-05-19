@@ -4,7 +4,6 @@
   padding: 40px 24px;
   background: var(--background-light);
   overflow-y: scroll;
-  transition: transform var(--overlay-transition);
 }
 
 .search__filters-overlay {
@@ -46,11 +45,13 @@
 .slide-in-enter .search__filters,
 .slide-in-leave-to .search__filters {
   transform: translateX(-100%);
+  transition: transform var(--overlay-transition), background var(--overlay-transition) 0.4s;
 }
 
 .slide-in-enter-to .search__filters,
 .slide-in-leave .search__filters {
   transform: translateX(0%);
+  transition: transform var(--overlay-transition), background var(--overlay-transition) 0.4s;
 }
 
 @media (min-width: 37.5em) {
