@@ -241,10 +241,12 @@ export default {
   },
   methods: {
     setTranscriptHeight() {
+      const el = this.$refs.transcript.$el;
       if (window.innerWidth > 960) {
-        const el = this.$refs.transcript.$el;
         const h = window.innerHeight - el.offsetTop - 56;
         el.style.maxHeight = `${h}px`;
+      } else {
+        el.style.maxHeight = '';
       }
     },
     onPlayerError() {

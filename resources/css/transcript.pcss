@@ -18,11 +18,13 @@
   background: var(--highlight-primary);
 }
 
-@media (max-width: 52.5em) {
+@media (min-width: 52.5em) {
   .tab--transcript {
     overflow: auto;
   }
+}
 
+@media (max-width: 52.5em) {
   .transcript__download,
   .transcript__paragraph {
     font-size: 14px;
