@@ -37,7 +37,7 @@
             class="button button--search-toggle button--small-devices"
             @click="toggleSearchFilters"
           >
-            {{ !showFilters ? 'Search and filter' : 'Show results' }}
+            {{ 'Search and filter' }}
           </button>
           <VToggle
             transition="slide-down"
@@ -121,7 +121,7 @@
                   class="button button--search-toggle button--small-devices"
                   @click="showFilters = false"
                 >
-                  {{ 'Show results' }}
+                  {{ 'Hide filters' }}
                 </button>
                 <div class="search-page__form">
                   <div class="form__input-wrapper">
@@ -517,6 +517,9 @@ export default {
       this.setSearchTerm(this.clonedTerm);
     },
     submitSearch() {
+      if (window.innerWidth < 960) {
+        this.toggleSearchFilters();
+      }
       let searchParams = {};
       if (this.clonedTerm) {
         searchParams = { term: this.clonedTerm };
