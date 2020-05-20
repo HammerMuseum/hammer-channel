@@ -1,26 +1,28 @@
 <template>
   <div class="container">
     <div class="page-wrapper page--search">
-      <SearchPageHeader :extra-classes="['heading', 'heading--primary', 'heading--search']">
+      <SearchPageHeader
+        :loading="loading"
+        :extra-classes="['heading', 'heading--primary', 'heading--search']"
+      >
         <template #summary>
           <AnimatedNumber
             v-show="total"
             :value="total"
             :duration="400"
             :round="1"
-          /><span v-show="total"> results</span>
+          /><span v-show="total"> {{ total > 1 ? 'results' : 'result' }}</span>
           <div
-            v-if="searchSummary"
+            v-if="searchTerm"
             class="search-page__summary"
           >
             <span class="search-page__summary__span">for&nbsp;</span>
             <a
-              v-if="searchSummary"
               class="search-page__summary__link link link--text link--text-and-button"
               title="Clear term and reset search"
               @click="resetSearch"
             >
-              <strong>{{ searchSummary }}</strong>
+              <strong>{{ searchTerm }}</strong>
               <button
                 class="button button--icon search-facet__item-remove"
                 aria-label="Clear term and reset search"
@@ -104,14 +106,12 @@
         <aside class="search-page__sidebar">
           <transition
             name="slide-in"
-            @after-enter="afterEnter"
-            @after-leave="afterLeave"
+            @enter="$refs.search.focus()"
           >
             <div
               v-show="showFilters && hasFacets"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
-              @click.stop="away($event)"
-              @keyup.escape="away($event)"
+              @click.self="toggleSearchFilters"
             >
               <div
                 ref="searchFilters"
@@ -119,7 +119,7 @@
               >
                 <button
                   class="button button--search-toggle button--small-devices"
-                  @click="showFilters = false"
+                  @click="toggleSearchFilters"
                 >
                   {{ 'Hide filters' }}
                 </button>
@@ -132,12 +132,12 @@
                       name="term"
                       class="form__input form__input--light form__input--search"
                       placeholder="Search"
-                      @keyup.enter="submitSearch($event)"
+                      @keydown.enter="submitSearch"
                     >
                     <div class="form__submit-wrapper">
                       <button
                         :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
-                        @click="submitSearch($event)"
+                        @click="submitSearch"
                       >
                         <svg
                           title="Search"
@@ -210,21 +210,19 @@
             name="slide-out"
             mode="out-in"
             @enter="setElementHeight('.overlay__inner', '.search-page__content')"
-            @before-enter="toggleFacetOverlayActive()"
-            @before-leave="toggleFacetOverlayActive()"
+            @leave="$refs.search.focus()"
           >
             <Overlay
               v-if="openFacetName === 'topics'"
               id="topics"
               key="topics"
-              @close-panel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'topics')"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
 
@@ -232,14 +230,13 @@
               v-if="openFacetName === 'people'"
               id="people"
               key="people"
-              @close-panel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'people')"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
 
@@ -247,13 +244,12 @@
               v-if="openFacetName === 'playlists'"
               id="playlists"
               key="playlists"
-              @close-panel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'playlists')"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
 
@@ -261,13 +257,12 @@
               v-if="openFacetName === 'date'"
               id="date"
               key="date"
-              @close-panel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'date')"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
           </transition>
@@ -328,7 +323,7 @@
 
 <script>
 import axios from 'axios';
-import { debounce, _escape } from 'lodash';
+import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
 import { VToggle } from 'vuetensils';
 import UiCard from './UiCard.vue';
@@ -376,7 +371,6 @@ export default {
       loading: false,
       noResults: false,
       pager: null,
-      searchSummary: '',
       showFilters: false,
       clonedTerm: '',
       title: null,
@@ -435,6 +429,9 @@ export default {
       }
       return 12 * (this.currentPage - 1) + 1;
     },
+    facetOverlayActive() {
+      return store.facetOverlayActive;
+    },
     searchTerm() {
       return store.searchTerm;
     },
@@ -443,20 +440,32 @@ export default {
     $route: {
       immediate: true,
       handler(to) {
-        if (to.query && to.query.term) {
-          this.setSearchTerm(to.query.term);
+        if (to.query) {
+          this.getPageData(stringifyQuery(to.query));
+          if (to.query.term) {
+            this.setSearchTerm(to.query.term);
+          } else {
+            this.setSearchTerm('');
+          }
         }
-        this.getPageData(stringifyQuery(to.query));
       },
+    },
+    showFilters(active) {
+      if (active) {
+        this.$refs.search.focus();
+      }
+      if (window.innerWidth < 960 && active) {
+        document.addEventListener('keyup', this.toggleSearchFilters);
+      } else {
+        document.removeEventListener('keyup', this.toggleSearchFilters);
+      }
     },
     videos(to) {
       this.noResults = to && to.length === 0;
-      this.searchSummary = this.searchTerm;
     },
   },
   mounted() {
-    this.width = window.innerWidth;
-    this.showFilters = this.width >= 960;
+    this.showFilters = window.innerWidth >= 960;
     this.debouncedResize = debounce(this.handleResize, 200);
     window.addEventListener('resize', this.debouncedResize, false);
   },
@@ -474,14 +483,25 @@ export default {
         .then((response) => {
           this.setVars(response);
           this.$Progress.finish();
+          this.loading = false;
         }).catch((err) => {
           console.error(err);
           this.$Progress.fail();
+          this.loading = false;
         });
     },
     handleResize() {
-      if (this.width !== window.innerWidth) {
-        this.showFilters = window.innerWidth >= 960;
+      if (window.innerWidth >= 960) {
+        this.showFilters = true;
+        if (this.facetOverlayActive && !this.openFacetName) {
+          this.toggleFacetOverlayActive();
+        }
+      } else if (this.showFilters && !this.facetOverlayActive) {
+        this.showFilters = false;
+      }
+
+      if (this.openFacetName) {
+        this.setElementHeight('.overlay__inner', '.search-page__content');
       }
     },
     highlight(item) {
@@ -490,31 +510,15 @@ export default {
         div.innerText = this.searchTerm;
         const escapedTerm = div.innerHTML;
         const regex = new RegExp(`(${escapedTerm.replace(/([-/\\^$*+?.()|[\]{}])/i, '\\$&')})`, 'i');
-        return item.title.replace(regex, '<em>$1</em>');
+        return item.title.replace(regex, '<span class="ui-card__highlight">$1</span>');
       }
       return item.title;
-    },
-    afterEnter() {
-      this.filtersAreOpen = true;
-    },
-    afterLeave() {
-      this.filtersAreOpen = false;
-    },
-    away(event) {
-      // const facetList = e.target.parentNode.classList.contains('icon--close');
-      // if (!facetList && window.innerWidth < 960 && this.filtersAreOpen) {
-      //   this.showFilters = false;
-      // }
-      // return false;
-      if (event.target !== event.currentTarget) {
-        return;
-      }
-      this.showFilters = false;
     },
     resetSearch() {
       this.$router.push({ name: 'search' }).catch(() => {});
       this.clonedTerm = '';
-      this.setSearchTerm(this.clonedTerm);
+      this.totals = null;
+      this.setSearchTerm('');
     },
     submitSearch() {
       if (window.innerWidth < 960) {
@@ -524,14 +528,14 @@ export default {
       if (this.clonedTerm) {
         searchParams = { term: this.clonedTerm };
       }
+      this.loading = true;
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
       this.$refs.search.blur();
-      this.setSearchTerm(this.clonedTerm);
       this.clonedTerm = '';
     },
     setElementHeight(selector, parent) {
       const el = document.querySelector(selector);
-      if (window.innerWidth > 960) {
+      if (window.innerWidth >= 960) {
         const parentOffset = document.querySelector(parent).offsetTop;
         const h = window.innerHeight - parentOffset;
         el.style.height = `${h}px`;
@@ -551,18 +555,31 @@ export default {
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
     },
-    toggleFacetOverlay(name) {
-      this.openFacetName = this.openFacetName === name ? null : name;
-    },
-    toggleSearchFilters() {
-      this.showFilters = !this.showFilters;
-      if (this.showFilters) {
-        document.querySelector(`button[data-facet-id="topics"]`).focus();
+    toggleFacetOverlay(name, caller) {
+      if (this.openFacetName === null || name === null) {
+        if (window.innerWidth >= 960) {
+          this.toggleFacetOverlayActive();
+        }
+      }
+
+      if (this.openFacetName === name) {
+        this.openFacetName = null;
+
+        if (window.innerWidth >= 960) {
+          this.toggleFacetOverlayActive();
+        }
+      } else {
+        this.openFacetName = name;
       }
     },
-    closeFacetOverlay() {
-      this.openFacetName = null;
-      this.toggleFacetOverlayActive();
+    toggleSearchFilters(event) {
+      // Prevents escape key from also closing the main filter panel when
+      // a facet list is open on top of it.
+      if (this.openFacetName) return;
+      if (event.type === 'click' || (event.type === 'keyup' && event.which === 27)) {
+        this.showFilters = !this.showFilters;
+        this.toggleFacetOverlayActive();
+      }
     },
   },
 };

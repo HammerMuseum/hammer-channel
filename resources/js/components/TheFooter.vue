@@ -6,14 +6,13 @@
       'footer-container',
       {'footer--open': isFooterActive}
     ]"
-    @click.stop="away($event)"
-    @keyup.escape="away($event)"
+    @click.self="toggleFooterActive"
   >
     <div class="footer-toggle__wrapper">
       <div class="footer-toggle">
         <button
           :class="['button', 'button--icon']"
-          @click="toggleFooterActive"
+          @click.stop="toggleFooterActive"
         >
           <svg
             title="Toggle footer menu visibility"
@@ -27,85 +26,93 @@
         </button>
       </div>
     </div>
-    <transition name="slide-up">
-      <footer
-        v-show="isFooterActive"
-        class="footer"
-      >
-        <button
-          @click="layout = !layout"
-        >
-          Switch layout
-        </button>
-
-        <div
-          class="footer__inner"
+    <FocusTrap
+      :active="isFooterActive"
+      :escape-deactivates="false"
+    >
+      <transition name="slide-up">
+        <footer
+          v-show="isFooterActive"
+          class="footer"
         >
           <button
-            :class="['footer__close-button', 'button', 'button--icon']"
-            @click.stop="toggleFooterActive"
+            @click="layout = !layout"
           >
-            <svg
-              class="icon icon--close-pink"
-            >
-              <use xlink:href="/images/sprite.svg#sprite-close-pink" />
-            </svg>
-            <span class="icon-text visually-hidden">Close the footer menu</span>
+            Switch layout
           </button>
 
-          <h2 class="heading heading--footer">
-            Welcome to Hammer ON
-          </h2>
-          <div class="footer__body">
-            <div :class="['footer__actions', { 'footer__actions--column': layout}]">
-              <a
-                href="https://hammer.ucla.edu/programs-events"
-                target="_blank"
-                class="link"
-              >
-                Sign up to our newsletters
-                <svg class="icon">
-                  <use xlink:href="/images/sprite.svg#sprite-envelope" />
-                </svg>
-              </a>
-              <a
-                href="https://hammer.ucla.edu/programs-events"
-                target="_blank"
-                class="link"
-              >
-                Talks happening soon
-                <svg
-                  class="icon"
+
+          <div class="footer__inner">
+            <h2 class="heading heading--footer">
+              Welcome to Hammer ON
+            </h2>
+            <div class="footer__body">
+              <div :class="['footer__actions', { 'footer__actions--column': layout}]">
+                <a
+                  href="https://hammer.ucla.edu/programs-events"
+                  target="_blank"
+                  class="link"
                 >
-                  <use xlink:href="/images/sprite.svg#sprite-next" />
-                </svg>
-              </a>
+                  Sign up to our newsletters
+                  <svg class="icon">
+                    <use xlink:href="/images/sprite.svg#sprite-envelope" />
+                  </svg>
+                </a>
+                <a
+                  href="https://hammer.ucla.edu/programs-events"
+                  target="_blank"
+                  class="link"
+                >
+                  Talks happening soon
+                  <svg
+                    class="icon"
+                  >
+                    <use xlink:href="/images/sprite.svg#sprite-next" />
+                  </svg>
+                </a>
+              </div>
+              <div class="footer__info">
+                <p>Hammer ON is the video archive of the Hammer Museum. The archive was made possible thanks to a grant from the Mellon Foundation.</p>
+                <p>If you would like to use any of the footage for broadacst, please contact example@example.org</p>
+              </div>
+              <div class="footer__links">
+                <a
+                  class="link link--pink"
+                  href="https://hammer.ucla.edu/privacy-policy"
+                >Privacy Policy</a>
+                <a
+                  class="link link--pink"
+                  href="https://hammer.ucla.edu/terms-of-use"
+                >Terms of Use</a>
+              </div>
             </div>
-            <div class="footer__info">
-              <p>Hammer ON is the video archive of the Hammer Museum. The archive was made possible thanks to a grant from the Mellon Foundation.</p>
-              <p>If you would like to use any of the footage for broadacst, please contact example@example.org</p>
-            </div>
-            <div class="footer__links">
-              <a
-                class="link link--pink"
-                href="https://hammer.ucla.edu/privacy-policy"
-              >Privacy Policy</a>
-              <a
-                class="link link--pink"
-                href="https://hammer.ucla.edu/terms-of-use"
-              >Terms of Use</a>
-            </div>
+            <button
+              :class="['footer__close-button', 'button', 'button--icon']"
+              @click="toggleFooterActive"
+            >
+              <svg
+                class="icon icon--close-pink"
+              >
+                <use xlink:href="/images/sprite.svg#sprite-close-pink" />
+              </svg>
+              <span class="icon-text visually-hidden">Close the footer menu</span>
+            </button>
           </div>
-        </div>
-      </footer>
-    </transition>
+        </footer>
+      </transition>
+    </FocusTrap>
   </div>
 </template>
 
 <script>
+import { FocusTrap } from 'focus-trap-vue';
 import { store, mutations } from '../store';
 
 export default {
+  name: 'TheFooter',
+  components: {
+    FocusTrap,
+  },
   data() {
     return {
       layout: true,
@@ -119,12 +126,20 @@ export default {
       return store.bodyOverflow;
     },
   },
-  methods: {
-    away(event) {
-      if (event.target !== event.currentTarget) {
-        return;
+  watch: {
+    isFooterActive(active) {
+      if (!active) {
+        window.removeEventListener('keyup', this.onEscapeKeyUp);
+      } else {
+        window.addEventListener('keyup', this.onEscapeKeyUp);
       }
-      this.toggleFooterActive();
+    },
+  },
+  methods: {
+    onEscapeKeyUp(event) {
+      if (event.which === 27) {
+        this.toggleFooterActive();
+      }
     },
     toggleFooterActive: mutations.toggleFooterActive,
   },

@@ -1,30 +1,28 @@
 <template>
   <div
     class="overlay"
-    tabindex="0"
+    @click.self="close"
   >
     <div
-      v-click-outside="closeOverlayPanel"
       class="overlay__body"
     >
       <FocusTrap
         :active="true"
-        :escape-deactivates="false"
+        :escape-deactivates="true"
       >
         <div
           class="overlay__inner"
-          @keyup.escape.stop="closeOverlayPanel"
         >
           <button
             class="button button--icon overlay__close-button"
             aria-label="Close"
-            @click.prevent="closeOverlayPanel"
+            @click.stop="close"
           >
             <svg class="icon icon--close">
               <use xlink:href="/images/sprite.svg#sprite-close" />
             </svg>
           </button>
-          <slot />
+          <slot @close-panel="close" />
         </div>
       </FocusTrap>
     </div>
@@ -39,8 +37,20 @@ export default {
   components: {
     FocusTrap,
   },
+  mounted() {
+    document.addEventListener('keyup', this.onEscape);
+  },
+  destroyed() {
+    document.removeEventListener('keyup', this.onEscape);
+  },
   methods: {
-    closeOverlayPanel() {
+    onEscape(event) {
+      event.stopPropagation();
+      if (event.which === 27) {
+        this.close();
+      }
+    },
+    close() {
       this.$emit('close-panel');
     },
   },

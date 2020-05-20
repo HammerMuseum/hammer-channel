@@ -39,7 +39,7 @@
           :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
           class="search-facet__item-link"
           tabindex="0"
-          @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
+          @click.prevent="handleClick($event)"
         >
           <template v-if="!isActive(getValue(item, facet.type))">
             <span
@@ -128,10 +128,10 @@ export default {
     this.$refs.search.$refs.input.focus();
   },
   methods: {
-    handleClick(e, key, value) {
+    handleClick(e) {
       const target = e.currentTarget;
       this.$router.push(`${target.pathname}${target.search}`);
-      this.$emit('change', key, value);
+      this.$emit('close-panel');
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;

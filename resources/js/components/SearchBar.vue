@@ -7,8 +7,7 @@
       <div
         v-if="searchOverlayActive"
         :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchOverlayActive }"
-        @keyup.escape="toggleSearchOverlayActive"
-        @click.stop="away"
+        @click.self="toggleSearchOverlayActive"
       >
         <div
           class="search-bar__body"
@@ -28,12 +27,12 @@
                   name="search"
                   aria-label="Search"
                   placeholder="Search"
-                  @keyup.enter="search"
+                  @keydown.enter="search"
                 >
                 <div class="form__submit-wrapper">
                   <button
                     :class="['form__submit', 'button', 'button--icon']"
-                    @click="search"
+                    @click.stop="search"
                   >
                     <svg
                       class="icon"
@@ -123,9 +122,14 @@ export default {
     },
   },
   watch: {
-    searchOverlayActive() {
+    searchOverlayActive(active) {
+      if (!active) {
+        window.removeEventListener('keyup', this.onEscapeKeyUp);
+      } else {
+        window.addEventListener('keyup', this.onEscapeKeyUp);
+      }
       this.$nextTick(() => {
-        if (this.searchOverlayActive) {
+        if (active) {
           this.$refs.searchInput.focus();
         }
       });
@@ -137,11 +141,10 @@ export default {
   methods: {
     toggleSearchOverlayActive: mutations.toggleSearchOverlayActive,
     setSearchTerm: mutations.setSearchTerm,
-    away(event) {
-      if (event.target !== event.currentTarget) {
-        return;
+    onEscapeKeyUp(event) {
+      if (event.which === 27) {
+        this.toggleSearchOverlayActive();
       }
-      this.toggleSearchOverlayActive();
     },
     search() {
       this.setSearchTerm(this.clonedTerm);

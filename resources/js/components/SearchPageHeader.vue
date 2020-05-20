@@ -4,7 +4,10 @@
       <h1 :class="headingClasses">
         Search results
       </h1>
-      <div class="search-header__summary">
+      <div
+        v-show="!loading"
+        class="search-header__summary"
+      >
         <slot name="summary" />
       </div>
       <div class="search-header__extras">
@@ -26,6 +29,10 @@ export default {
       default() {
         return [];
       },
+    },
+    loading: {
+      type: Boolean,
+      required: true,
     },
   },
   data() {
