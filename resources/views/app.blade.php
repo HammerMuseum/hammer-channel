@@ -22,6 +22,7 @@
   <meta property="og:image:width" content="320" />
   <meta property="og:image:height" content="180" />
 
+  <link rel="stylesheet" href="https://use.typekit.net/vtf7fab.css" crossorigin>
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
   <title>Hammer Museum | Video Archive</title>
   <script type="text/javascript">
