@@ -555,7 +555,7 @@ export default {
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
     },
-    toggleFacetOverlay(name, caller) {
+    toggleFacetOverlay(name) {
       if (this.openFacetName === null || name === null) {
         if (window.innerWidth >= 960) {
           this.toggleFacetOverlayActive();
