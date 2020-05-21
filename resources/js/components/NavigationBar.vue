@@ -112,6 +112,7 @@ export default {
         'change',
         'select',
         'staticClick',
+        'settle',
       ];
 
       const self = this;
@@ -134,6 +135,10 @@ export default {
         if (typeof cellIndex === 'number') {
           self.$refs.flickity.selectCell(cellIndex);
         }
+      });
+
+      this.$refs.flickity.on('settle', () => {
+        this.$refs.flickity.resize();
       });
     },
   },
