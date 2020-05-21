@@ -1,29 +1,55 @@
 <template>
-  <div
-    v-if="items"
-    class="video-meta__transcript transcript"
-  >
-    <h3 class="video-meta__title">
-      Transcript
-    </h3>
-    <button @click="downloadTranscript">
-      Download
-    </button>
-    <p
-      v-for="item in items"
-      :key="item.id"
-      class="transcript__paragraph"
-      :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
-      @click="$emit('updateTimecode', item.start)"
-    >
-      {{ item.message }}
-    </p>
-  </div>
+  <VideoMeta>
+    <template v-slot:highlighted>
+      <div
+        class="video-meta__transcript"
+      >
+        <template v-if="items.length">
+          <div class="transcript__download">
+            <a
+              href="#"
+              class="download__link link link--text link--text-secondary"
+              @click.prevent="initDownload"
+            >
+              <span class="download__title">Download transcript</span>
+            </a>
+          </div>
+          <p
+            v-for="item in items"
+            :key="item.id"
+            class="transcript__paragraph"
+            :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
+            @click="$emit('updateTimecode', item.start)"
+          >
+            {{ item.message }}
+          </p>
+        </template>
+        <template
+          v-else
+        >
+          <div class="loading-icon">
+            <svg
+              viewBox="0 0 60 60"
+            >
+              <path
+                d="M 0 0 H 60 V 60 H 0 Z"
+                fill="transparent"
+                stroke="white"
+                stroke-width="4"
+                class="svg-square-animate"
+              />
+            </svg>
+          </div>
+        </template>
+      </div>
+    </template>
+  </VideoMeta>
 </template>
 
 <script>
 import { saveAs } from 'file-saver';
 import VueScrollTo from 'vue-scrollto';
+import { store, mutations } from '../store';
 
 export default {
   props: {
@@ -46,11 +72,19 @@ export default {
       scrollInProgress: false,
     };
   },
+  computed: {
+    clean() {
+      return store.transcriptInit;
+    },
+    transcriptHasLoaded() {
+      return this.items.length;
+    },
+  },
   watch: {
     currentPara() {
       const self = this;
       const options = {
-        container: '.video-wrapper__item.active',
+        container: '.tab--transcript',
         easing: 'ease-in-out',
         offset: -200,
         force: true,
@@ -67,7 +101,18 @@ export default {
       VueScrollTo.scrollTo(el, 1600, options);
     },
   },
+  mounted() {
+    this.toggleTranscriptInit();
+  },
+  destroyed() {
+    this.toggleTranscriptInit();
+  },
   methods: {
+    initDownload() {
+      const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);
+      const blob = new Blob(output, { type: 'text/plain;charset=utf-8' });
+      saveAs(blob, 'transcript.txt');
+    },
     isActive(start, end, paraId) {
       if (this.currentTimecode >= start && this.currentTimecode <= end) {
         this.currentPara = paraId;
@@ -75,11 +120,7 @@ export default {
       }
       return false;
     },
-    downloadTranscript() {
-      const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);
-      const blob = new Blob(output, { type: 'text/plain;charset=utf-8' });
-      saveAs(blob, 'transcript.txt');
-    },
+    toggleTranscriptInit: mutations.toggleTranscriptInit,
   },
 };
 </script>

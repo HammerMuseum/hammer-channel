@@ -6,8 +6,9 @@
         v-model="searchTerm"
         label="Type to filter list..."
         name="searchTerm"
-        :classes="{ text: 'visually-hidden', input: 'search__input' }"
+        :classes="{ text: 'visually-hidden', input: 'form__input form__input--search' }"
         placeholder="Search to filter list"
+        autocomplete="new-password"
       />
     </div>
     <div
@@ -29,12 +30,16 @@
       <div
         v-for="item in facet.items"
         :key="item.key"
-        :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(item, facet.type))}"
+        :class="{
+          'search-facet__item': true,
+          'search-facet__item--active': isActive(getValue(item, facet.type))
+        }"
       >
         <a
           :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
           class="search-facet__item-link"
-          @click.prevent="handleClick($event, facet.id, getValue(item, facet.type))"
+          tabindex="0"
+          @click.prevent="handleClick($event)"
         >
           <template v-if="!isActive(getValue(item, facet.type))">
             <span
@@ -62,6 +67,7 @@
 
 <script>
 import { VInput } from 'vuetensils';
+import matchSorter from 'match-sorter';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
@@ -91,23 +97,20 @@ export default {
   computed: {
     filteredItems() {
       const filteredOptions = [];
-      const self = this;
-      if (this.searchTerm !== '') {
-        for (let i = 0; i < this.facetList.length; i += 1) {
-          const filteredItemsArray = self.facetList[i].items.filter(function (itemValue) {
-            return itemValue.key.toLowerCase().includes(self.searchTerm.toLowerCase());
+      const list = this.facetList;
+      const query = this.searchTerm.toLowerCase();
+      if (query) {
+        for (let i = 0; i < list.length; i += 1) {
+          const {
+            id, items, label, type,
+          } = list[i];
+          filteredOptions.push({
+            id, label, type, items: matchSorter(items, query, { keys: ['key'] }),
           });
-          const newFacet = {
-            id: self.facetList[i].id,
-            items: filteredItemsArray,
-            label: self.facetList[i].label,
-            type: self.facetList[i].type,
-          };
-          filteredOptions.push(newFacet);
         }
         return filteredOptions;
       }
-      return this.facetList;
+      return list;
     },
   },
   watch: {
@@ -125,10 +128,10 @@ export default {
     this.$refs.search.$refs.input.focus();
   },
   methods: {
-    handleClick(e, key, value) {
+    handleClick(e) {
       const target = e.currentTarget;
       this.$router.push(`${target.pathname}${target.search}`);
-      this.$emit('change', key, value);
+      this.$emit('close-panel');
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;

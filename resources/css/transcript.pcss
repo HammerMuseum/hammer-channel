@@ -1,10 +1,35 @@
-.transcript__paragraph {
-  font-size: 18px;
-  line-height: 1.4;
+.video-meta__transcript {
   text-align: left;
-  transition: all var(--overlay-transition);
+  color: var(--text-secondary);
+}
+
+.transcript__download,
+.transcript__paragraph {
+  margin-bottom: 16px;
+}
+
+.transcript__download {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .transcript__paragraph--active {
   background: var(--highlight-primary);
+}
+
+@media (min-width: 52.5em) {
+  .tab--transcript {
+    overflow: auto;
+  }
+}
+
+@media (max-width: 52.5em) {
+  .transcript__download,
+  .transcript__paragraph {
+    font-size: 14px;
+    margin-bottom: 14px;
+    line-height: 20px;
+    text-align: left;
+  }
 }

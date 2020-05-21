@@ -1,25 +1,28 @@
 <template>
   <div class="container">
-    <div class="search-page">
-      <SearchPageHeader :extra-classes="['page-heading', 'page-heading--search']">
+    <div class="page-wrapper page--search">
+      <SearchPageHeader
+        :loading="loading"
+        :extra-classes="['heading', 'heading--primary', 'heading--search']"
+      >
         <template #summary>
           <AnimatedNumber
+            v-show="total"
             :value="total"
             :duration="400"
             :round="1"
-          /><span v-show="total"> results</span>
+          /><span v-show="total"> {{ total > 1 ? 'results' : 'result' }}</span>
           <div
-            v-if="searchSummary"
-            style="display: inline;"
+            v-if="searchTerm"
+            class="search-page__summary"
           >
-            <span style="border: none; padding-bottom: 2px;">for&nbsp;</span>
-            <RouterLink
-              v-if="searchSummary"
-              :to="{ name: 'search' }"
-              class="link link--text link--text-and-button"
+            <span class="search-page__summary__span">for&nbsp;</span>
+            <a
+              class="search-page__summary__link link link--text link--text-and-button"
               title="Clear term and reset search"
+              @click="resetSearch"
             >
-              <strong>{{ searchSummary }}</strong>
+              <strong>{{ searchTerm }}</strong>
               <button
                 class="button button--icon search-facet__item-remove"
                 aria-label="Clear term and reset search"
@@ -28,7 +31,7 @@
                   <use xlink:href="/images/sprite.svg#sprite-close-pink" />
                 </svg>
               </button>
-            </RouterLink>
+            </a>
           </div>
         </template>
         <template #extras>
@@ -36,7 +39,7 @@
             class="button button--search-toggle button--small-devices"
             @click="toggleSearchFilters"
           >
-            {{ !showFilters ? 'Search and filter' : 'Show results' }}
+            {{ 'Search and filter' }}
           </button>
           <VToggle
             transition="slide-down"
@@ -74,7 +77,7 @@
                       }
                     }"
                   >
-                    Date (asc)
+                    Date (newest-oldest)
                   </RouterLink>
                 </li>
                 <li>
@@ -88,7 +91,7 @@
                       }
                     }"
                   >
-                    Date (desc)
+                    Date (oldest-newest)
                   </RouterLink>
                 </li>
               </ul>
@@ -103,40 +106,38 @@
         <aside class="search-page__sidebar">
           <transition
             name="slide-in"
-            @after-enter="afterEnter"
-            @after-leave="afterLeave"
+            @enter="$refs.search.focus()"
           >
             <div
               v-show="showFilters && hasFacets"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
+              @click.self="toggleSearchFilters"
             >
               <div
                 ref="searchFilters"
-                v-clickout="onClickout"
                 :class="['search__filters']"
-                tabindex="0"
               >
                 <button
                   class="button button--search-toggle button--small-devices"
-                  @click="showFilters = false"
+                  @click="toggleSearchFilters"
                 >
-                  {{ 'Show results' }}
+                  {{ 'Hide filters' }}
                 </button>
                 <div class="search-page__form">
-                  <div class="search__input-wrapper">
-                    <VInput
+                  <div class="form__input-wrapper">
+                    <input
                       ref="search"
-                      v-model="term"
+                      v-model="clonedTerm"
                       label="Search the video archive"
                       name="term"
-                      :classes="{ text: 'visually-hidden', input: 'search__input' }"
+                      class="form__input form__input--light form__input--search"
                       placeholder="Search"
-                      @keyup.enter="search"
-                    />
-                    <div class="search__submit-wrapper">
+                      @keydown.enter="submitSearch"
+                    >
+                    <div class="form__submit-wrapper">
                       <button
-                        :class="['search__submit', 'button', 'button--icon']"
-                        @click="search"
+                        :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
+                        @click="submitSearch"
                       >
                         <svg
                           title="Search"
@@ -150,14 +151,15 @@
                   </div>
                 </div>
 
-                <h2 class="page-heading--secondary">
+                <h2 class="heading heading--secondary">
                   Filter
                 </h2>
                 <div
                   v-if="facets"
-                  class="search-page__facet-buttons"
+                  class="search-page__facet-controls"
                 >
                   <button
+                    data-facet-id="topics"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'topics'}
@@ -168,6 +170,7 @@
                     <span>Topics & Tags</span>
                   </button>
                   <button
+                    data-facet-id="people"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'people'}]"
@@ -177,6 +180,7 @@
                     <span>People</span>
                   </button>
                   <button
+                    data-facet-id="playlists"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'playlists'}]"
@@ -186,6 +190,7 @@
                     <span>Playlists</span>
                   </button>
                   <button
+                    data-facet-id="date"
                     :class="['button',
                              'search-facet__label',
                              {'search-facet__label--active': openFacetName === 'date'}]"
@@ -204,19 +209,20 @@
           <transition
             name="slide-out"
             mode="out-in"
+            @enter="setElementHeight('.overlay__inner', '.search-page__content')"
+            @leave="$refs.search.focus()"
           >
             <Overlay
               v-if="openFacetName === 'topics'"
               id="topics"
               key="topics"
-              @closePanel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'topics')"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
 
@@ -224,14 +230,13 @@
               v-if="openFacetName === 'people'"
               id="people"
               key="people"
-              @closePanel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'people')"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
 
@@ -239,13 +244,12 @@
               v-if="openFacetName === 'playlists'"
               id="playlists"
               key="playlists"
-              @closePanel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'playlists')"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
 
@@ -253,13 +257,12 @@
               v-if="openFacetName === 'date'"
               id="date"
               key="date"
-              @closePanel="closeFacetOverlay"
+              @close-panel="toggleFacetOverlay(null, 'date')"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
-                @change="toggleFacetOverlay"
               />
             </Overlay>
           </transition>
@@ -282,6 +285,7 @@
               >
                 <RouterLink
                   :to="{name: 'video', params: {id: item.asset_id, slug: item.title_slug }}"
+                  tabindex="0"
                 >
                   <div class="ui-card__thumbnail">
                     <span class="ui-card__duration">{{ item.duration }}</span>
@@ -292,11 +296,14 @@
                   </div>
                   <article>
                     <h2 class="ui-card__title">
-                      <span>{{ item.title }}</span>
+                      <span v-html="highlight(item)" />
                     </h2>
                     <div class="ui-card__date">
                       {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
                     </div>
+                    <SearchSnippets
+                      :snippets="item.snippets"
+                    />
                   </article>
                 </RouterLink>
               </UiCard>
@@ -316,10 +323,12 @@
 
 <script>
 import axios from 'axios';
+import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
-import { clickout, VToggle, VInput } from 'vuetensils';
+import { VToggle } from 'vuetensils';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
+import SearchSnippets from './SearchSnippets.vue';
 import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import Pagination from './Pagination.vue';
@@ -328,6 +337,7 @@ import SearchFacet from './SearchFacet.vue';
 import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
 import Overlay from './Overlay.vue';
+import { store, mutations } from '../store';
 
 export default {
   name: 'Search',
@@ -336,16 +346,13 @@ export default {
     CurrentSearch,
     Pagination,
     SearchableFacet,
+    SearchSnippets,
     SearchFacet,
     SearchPageHeader,
     Overlay,
     UiCard,
     UiGrid,
-    VInput,
     VToggle,
-  },
-  directives: {
-    clickout,
   },
   mixins: [getRouteData],
   props: {
@@ -363,14 +370,13 @@ export default {
       facets: null,
       loading: false,
       noResults: false,
-      overlayOpen: false,
       pager: null,
-      searchSummary: '',
-      showFilters: true,
-      term: null,
+      showFilters: false,
+      clonedTerm: '',
       title: null,
       totals: null,
       videos: null,
+      debouncedResize: null,
     };
   },
   computed: {
@@ -406,10 +412,6 @@ export default {
     total() {
       return this.totals ? this.totals.total : 0;
     },
-    searchTerm() {
-      if (this.term) return this.term;
-      return this.$route.query.term ? this.$route.query.term : null;
-    },
     currentPage() {
       return this.totals ? this.totals.currentPage : null;
     },
@@ -427,99 +429,157 @@ export default {
       }
       return 12 * (this.currentPage - 1) + 1;
     },
+    facetOverlayActive() {
+      return store.facetOverlayActive;
+    },
+    searchTerm() {
+      return store.searchTerm;
+    },
   },
   watch: {
     $route: {
       immediate: true,
-      handler(to, from) {
-        const oldQuery = from && from.query && from.query.term ? from.query.term : '';
-        const newQuery = to && to.query && to.query.term ? to.query.term : '';
-        if (oldQuery !== newQuery) {
-          this.term = newQuery;
+      handler(to) {
+        if (to.query) {
+          this.getPageData(stringifyQuery(to.query));
+          if (to.query.term) {
+            this.setSearchTerm(to.query.term);
+          } else {
+            this.setSearchTerm('');
+          }
         }
-        this.getPageData(stringifyQuery(to.query));
       },
     },
-    showFilters(to) {
-      if (to) {
-        document.body.classList.add('search-filters-are-open');
+    showFilters(active) {
+      if (active) {
+        this.$refs.search.focus();
+      }
+      if (window.innerWidth < 960 && active) {
+        document.addEventListener('keyup', this.toggleSearchFilters);
       } else {
-        document.body.classList.remove('search-filters-are-open');
+        document.removeEventListener('keyup', this.toggleSearchFilters);
       }
     },
     videos(to) {
-      this.noResults = to.length === 0;
-      this.searchSummary = this.term;
+      this.noResults = to && to.length === 0;
     },
   },
   mounted() {
-    this.width = window.innerWidth;
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
+    this.showFilters = window.innerWidth >= 960;
+    this.debouncedResize = debounce(this.handleResize, 200);
+    window.addEventListener('resize', this.debouncedResize, false);
+  },
+  beforeDestroy() {
+    window.addEventListener('resize', this.debouncedResize, false);
   },
   methods: {
+    setSearchTerm: mutations.setSearchTerm,
+    toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
       this.$Progress.start();
+      this.videos = null;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
           this.$Progress.finish();
+          this.loading = false;
         }).catch((err) => {
           console.error(err);
           this.$Progress.fail();
+          this.loading = false;
         });
     },
     handleResize() {
-      if (this.width !== window.innerWidth) {
-        this.showFilters = window.innerWidth >= 960;
-      }
-    },
-    afterEnter() {
-      this.filtersAreOpen = true;
-    },
-    afterLeave() {
-      this.filtersAreOpen = false;
-    },
-    onClickout(e) {
-      const facetList = e.target.parentNode.classList.contains('icon--close');
-      if (!facetList && window.innerWidth < 960 && this.filtersAreOpen) {
+      if (window.innerWidth >= 960) {
+        this.showFilters = true;
+        if (this.facetOverlayActive && !this.openFacetName) {
+          this.toggleFacetOverlayActive();
+        }
+      } else if (this.showFilters && !this.facetOverlayActive) {
         this.showFilters = false;
       }
-      return false;
-    },
-    // Perform a search
-    search() {
-      let searchParams = {};
-      if (this.term) {
-        searchParams = { term: this.term };
+
+      if (this.openFacetName) {
+        this.setElementHeight('.overlay__inner', '.search-page__content');
       }
-      this.$router.push({ name: 'search', query: { ...this.$route.query, ...searchParams } });
+    },
+    highlight(item) {
+      if (this.searchTerm) {
+        const div = document.createElement('div');
+        div.innerText = this.searchTerm;
+        const escapedTerm = div.innerHTML;
+        const regex = new RegExp(`(${escapedTerm.replace(/([-/\\^$*+?.()|[\]{}])/i, '\\$&')})`, 'i');
+        return item.title.replace(regex, '<span class="ui-card__highlight">$1</span>');
+      }
+      return item.title;
+    },
+    resetSearch() {
+      this.$router.push({ name: 'search' }).catch(() => {});
+      this.clonedTerm = '';
+      this.totals = null;
+      this.setSearchTerm('');
+    },
+    submitSearch() {
+      if (window.innerWidth < 960) {
+        this.toggleSearchFilters();
+      }
+      let searchParams = {};
+      if (this.clonedTerm) {
+        searchParams = { term: this.clonedTerm };
+      }
+      this.loading = true;
+      this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
+      this.$refs.search.blur();
+      this.clonedTerm = '';
+    },
+    setElementHeight(selector, parent) {
+      const el = document.querySelector(selector);
+      if (window.innerWidth >= 960) {
+        const parentOffset = document.querySelector(parent).offsetTop;
+        const h = window.innerHeight - parentOffset;
+        el.style.height = `${h}px`;
+      } else {
+        el.style.height = '';
+      }
     },
     // Set component data when a response is fetched.
     setVars(response) {
       const data = response.data;
+      this.totals = data.totals;
       this.title = data.title;
       this.pager = data.pager;
       this.videos = data.videos;
       this.facets = data.facets;
-      this.term = data.term;
       this.clearPageQuery = data.clearedPageQuery;
       this.clearedSortQuery = data.clearedSortQuery;
       this.currentQuery = data.currentQuery;
-      this.totals = data.totals;
     },
-    toggleFacetOverlay(name) {
-      this.openFacetName = this.openFacetName === name ? null : name;
-    },
-    toggleSearchFilters() {
-      this.showFilters = !this.showFilters;
-      if (this.showFilters) {
-        this.$refs.searchFilters.focus();
+    toggleFacetOverlay(name, caller) {
+      if (this.openFacetName === null || name === null) {
+        if (window.innerWidth >= 960) {
+          this.toggleFacetOverlayActive();
+        }
+      }
+
+      if (this.openFacetName === name) {
+        this.openFacetName = null;
+
+        if (window.innerWidth >= 960) {
+          this.toggleFacetOverlayActive();
+        }
+      } else {
+        this.openFacetName = name;
       }
     },
-    closeFacetOverlay() {
-      this.openFacetName = null;
+    toggleSearchFilters(event) {
+      // Prevents escape key from also closing the main filter panel when
+      // a facet list is open on top of it.
+      if (this.openFacetName) return;
+      if (event.type === 'click' || (event.type === 'keyup' && event.which === 27)) {
+        this.showFilters = !this.showFilters;
+        this.toggleFacetOverlayActive();
+      }
     },
   },
 };

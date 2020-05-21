@@ -73,8 +73,10 @@ class VideoController extends Controller
     {
         $flatData = [];
         $flatData['path'] = $path;
-        foreach ($data['data'][0] as $k => $v) {
-            $flatData[$k] = $v;
+        if (!empty($data['data'])) {
+            foreach ($data['data'][0] as $k => $v) {
+                $flatData[$k] = $v;
+            }
         }
         return $flatData;
     }

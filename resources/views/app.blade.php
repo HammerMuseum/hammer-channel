@@ -33,7 +33,7 @@
   <div id="app">
     <the-header></the-header>
     <search-bar></search-bar>
-    <transition name="fade" mode="out-in">
+    <transition name="fade">
       <main class="main" role="main">
         <router-view></router-view>
       </main>

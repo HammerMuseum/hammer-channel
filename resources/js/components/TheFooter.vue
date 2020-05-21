@@ -1,160 +1,147 @@
 <template>
   <div
-    v-on-clickaway="away"
     :class="[
-      'container--fixed',
-      'container--fixed--bottom',
+      'container container--fixed',
+      'container--bottom',
       'footer-container',
-      {'footer--open': footerIsActive}
+      {'footer--open': isFooterActive}
     ]"
+    @click.self="toggleFooterActive"
   >
-    <div class="footer-toggle">
-      <button
-        :class="['button', 'button--icon']"
-        @click="toggleFooterIsActive"
-      >
-        <svg
-          title="Toggle footer menu visibility"
-          class="icon"
+    <div class="footer-toggle__wrapper">
+      <div class="footer-toggle">
+        <button
+          :class="['button', 'button--icon']"
+          @click.stop="toggleFooterActive"
         >
-          <use xlink:href="/images/sprite.svg#sprite-footer-menu" />
-        </svg>
-        <span class="icon-text visually-hidden">Toggle footer menu visibility</span>
-      </button>
+          <svg
+            title="Toggle footer menu visibility"
+            class="icon"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-footer-menu" />
+          </svg>
+          <span class="icon-text visually-hidden">
+            {{ isFooterActive ? 'Close' : 'Open' }} the footer menu
+          </span>
+        </button>
+      </div>
     </div>
-    <transition name="slide-up">
-      <footer
-        v-show="footerIsActive"
-        :class="['footer']"
-      >
-        <VTabs class="styled">
-          <template slot="About">
-            <h2>About</h2>
-            <div class="about">
-              <p class="footer__text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            </div>
-          </template>
+    <FocusTrap
+      :active="isFooterActive"
+      :escape-deactivates="false"
+    >
+      <transition name="slide-up">
+        <footer
+          v-show="isFooterActive"
+          class="footer"
+        >
+          <button
+            @click="layout = !layout"
+          >
+            Switch layout
+          </button>
 
-          <template slot="Terms and conditions">
-            <h2>Terms and conditions</h2>
-            <p class="footer__text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure
-              dolor in reprehenderit in voluptate velit esse cillum
-              dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </template>
 
-          <template slot="Privacy policy">
-            <h2>Privacy policy</h2>
-            <p class="footer__text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure
-              dolor in reprehenderit in voluptate velit esse cillum
-              dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </template>
-
-          <template slot="Email sign up">
-            <div class="email-signup">
-              <VInput
-                type="email"
-                name="email"
-                label="Enter your email address:"
-                :class="`email-signup__item`"
-              />
-              <button
-                class="email-signup__button email-signup__item"
-                @click="submitNewsletterForm()"
-              >
-                Submit
-              </button>
-              <span class="email-signup__result email-signup__item" />
-              <div class="email-signup__info">
-                Duis aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in
-                culpa qui officia deserunt mollit anim id est laborum.
+          <div class="footer__inner">
+            <h2 class="heading heading--footer">
+              Welcome to Hammer ON
+            </h2>
+            <div class="footer__body">
+              <div :class="['footer__actions', { 'footer__actions--column': layout}]">
+                <a
+                  href="https://hammer.ucla.edu/programs-events"
+                  target="_blank"
+                  class="link"
+                >
+                  Sign up to our newsletters
+                  <svg class="icon">
+                    <use xlink:href="/images/sprite.svg#sprite-envelope" />
+                  </svg>
+                </a>
+                <a
+                  href="https://hammer.ucla.edu/programs-events"
+                  target="_blank"
+                  class="link"
+                >
+                  Talks happening soon
+                  <svg
+                    class="icon"
+                  >
+                    <use xlink:href="/images/sprite.svg#sprite-next" />
+                  </svg>
+                </a>
+              </div>
+              <div class="footer__info">
+                <p>Hammer ON is the video archive of the Hammer Museum. The archive was made possible thanks to a grant from the Mellon Foundation.</p>
+                <p>If you would like to use any of the footage for broadacst, please contact example@example.org</p>
+              </div>
+              <div class="footer__links">
+                <a
+                  class="link link--pink"
+                  href="https://hammer.ucla.edu/privacy-policy"
+                >Privacy Policy</a>
+                <a
+                  class="link link--pink"
+                  href="https://hammer.ucla.edu/terms-of-use"
+                >Terms of Use</a>
               </div>
             </div>
-          </template>
-
-          <template slot="Visit the main Hammer site">
-            <a href="https://hammer.ucla.edu">https://hammer.ucla.edu</a>
-          </template>
-        </VTabs>
-        <div class="footer-logo">
-          <img
-            class="footer-logo__hammer"
-            src="/images/logo-hammer.png"
-          >
-          <img
-            class="footer-logo__mellon"
-            src="/images/logo-mellon.png"
-          >
-        </div>
-      </footer>
-    </transition>
+            <button
+              :class="['footer__close-button', 'button', 'button--icon']"
+              @click="toggleFooterActive"
+            >
+              <svg
+                class="icon icon--close-pink"
+              >
+                <use xlink:href="/images/sprite.svg#sprite-close-pink" />
+              </svg>
+              <span class="icon-text visually-hidden">Close the footer menu</span>
+            </button>
+          </div>
+        </footer>
+      </transition>
+    </FocusTrap>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import { VTabs, VInput } from 'vuetensils';
-import { directive as onClickaway } from 'vue-clickaway';
+import { FocusTrap } from 'focus-trap-vue';
+import { store, mutations } from '../store';
 
 export default {
-  directives: {
-    onClickaway,
-  },
+  name: 'TheFooter',
   components: {
-    VTabs,
-    VInput,
+    FocusTrap,
   },
   data() {
     return {
-      footerIsActive: false,
+      layout: true,
     };
   },
-  methods: {
-    toggleFooterIsActive() {
-      this.footerIsActive = !this.footerIsActive;
+  computed: {
+    isFooterActive() {
+      return store.footerActive;
     },
-    away() {
-      this.footerIsActive = false;
+    isBodyOverflowActive() {
+      return store.bodyOverflow;
     },
-    submitNewsletterForm() {
-      const emailAddress = document.querySelector('[name=email]');
-      const result = document.querySelector('.email-signup__result');
-      if (emailAddress.value === '') {
-        result.innerHTML = 'Please enter a valid email address.';
-        return false;
+  },
+  watch: {
+    isFooterActive(active) {
+      if (!active) {
+        window.removeEventListener('keyup', this.onEscapeKeyUp);
+      } else {
+        window.addEventListener('keyup', this.onEscapeKeyUp);
       }
-      axios
-        .get(`/submit?email=${emailAddress.value}`)
-        .then((response) => {
-          result.innerHTML = response.data.message;
-          if (response.data.success) {
-            emailAddress.value = '';
-          }
-        }).catch((err) => {
-          console.error(err);
-        });
     },
+  },
+  methods: {
+    onEscapeKeyUp(event) {
+      if (event.which === 27) {
+        this.toggleFooterActive();
+      }
+    },
+    toggleFooterActive: mutations.toggleFooterActive,
   },
 };
 </script>
@@ -162,7 +149,7 @@ export default {
 <style>
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .slide-up-enter,

@@ -1,34 +1,75 @@
 <template>
-  <div class="video-player-container hammer-video-player vjs-hd">
-    <span class="hammer-video-player__duration">{{ duration }}</span>
-    <video
-      ref="videoPlayer"
-      class="video-js video-player vjs-default-skin"
-    >
-      <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a
-        web browser that
-        <a
-          href="https://videojs.com/html5-video-support/"
-          target="_blank"
+  <div class="video-player__wrapper">
+    <div class="video-player__wrapper-inner">
+      <div class="video-player__container vjs-hd">
+        <video
+          ref="videoPlayer"
+          class="video-js video-player vjs-default-skin"
+          :poster="poster"
         >
-          supports HTML5 video
-        </a>
-      </p>
-    </video>
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a
+            web browser that
+            <a
+              href="https://videojs.com/html5-video-support/"
+              target="_blank"
+            >
+              supports HTML5 video
+            </a>
+          </p>
+        </video>
+      </div>
+    </div>
+    <ClipDisplay
+      v-if="isClip"
+    >
+      {{ clipString }}
+      <div
+        v-if="isEndOfClip"
+      >
+        This clip has ended.
+        <button
+          class=""
+          @click="destroyClipMarkers"
+        >
+          Continue playing
+        </button>
+        <button
+          class=""
+          @click="replayClip"
+        >
+          Replay clip
+        </button>
+      </div>
+    </ClipDisplay>
   </div>
 </template>
 
 <script>
+import prettyms from 'pretty-ms';
 import videojs from 'video.js';
-import overlay from 'videojs-overlay';
+import 'videojs-overlay';
+// import markersPlugin from 'videojs-markers-new';
+// Not sure why this isn't happening in the plugin itself.
+// videojs.registerPlugin('markers', markersPlugin);
+import 'videojs-markers';
+import ClipDisplay from './ClipDisplay.vue';
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
 export default {
   name: 'VideoPlayer',
+  components: {
+    ClipDisplay,
+  },
   props: {
     title: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
+    poster: {
       type: String,
       default() {
         return '';
@@ -58,24 +99,62 @@ export default {
         return {};
       },
     },
-    duration: {
-      type: String,
-      default() {
-        return '';
-      },
-    },
   },
   data() {
     return {
       player: null,
-      endtime: 0,
-      starttime: 0,
-      clipSliderSet: false,
+      isClipSet: false,
+      isEndOfClip: false,
     };
   },
   computed: {
+    clipDuration() {
+      if (this.clipStart) {
+        if (this.clipEnd && this.clipEnd > this.clipStart) {
+          return this.clipEnd - this.clipStart;
+        }
+        return this.player.duration() - this.clipStart;
+      }
+      return 0;
+    },
+    clipEnd() {
+      const query = this.$route.query;
+      return Object.prototype.hasOwnProperty.call(query, 'end') ? query.end : false;
+    },
+    clipStart() {
+      const query = this.$route.query;
+      return Object.prototype.hasOwnProperty.call(query, 'start') ? query.start : false;
+    },
+    clipStartTime() {
+      return this.convertSecondsToTimecode(this.clipStart);
+    },
+    clipEndTime() {
+      return this.convertSecondsToTimecode(this.clipEnd);
+    },
+    clipString() {
+      let message = 'Currently viewing ';
+      const duration = prettyms(this.clipDuration * 1000);
+      if (this.clipEnd) {
+        message += `a ${duration} clip from ${this.clipStartTime}`;
+      } else {
+        message += `a clip from ${this.clipStart} until the end of the video.`;
+      }
+      return message;
+    },
     isClip() {
-      return !!((this.$route.query.start || this.$route.query.end));
+      return this.clipStart > 0;
+    },
+    markerDefaults() {
+      return {
+        markerStyle: {
+          'background-color': 'yellow',
+        },
+        markerTip: {
+          display: true,
+          text: (marker) => marker.text,
+          time: (marker) => marker.time,
+        },
+      };
     },
   },
   watch: {
@@ -96,6 +175,9 @@ export default {
     }
   },
   methods: {
+    convertSecondsToTimecode(timeStr) {
+      return (new Date(timeStr * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+    },
     initVideoPlayer() {
       const DEFAULT_EVENTS = [
         'loadeddata',
@@ -135,65 +217,59 @@ export default {
 
         this.on('timeupdate', function () {
           self.$emit('timeupdate', this.currentTime());
-          if (self.endtime > 0 && this.currentTime() >= self.endtime) {
+          if (self.isClip && this.currentTime() >= self.clipEnd) {
+            self.isEndOfClip = true;
             self.player.pause();
           }
         });
 
         self.$emit('ready', this);
       });
-
+      this.initClipMarkers();
+      this.initOverlays();
       this.player.ready(function () {
-        self.player.addRemoteTextTrack(self.track);
+        self.player.addRemoteTextTrack(self.track, true);
       });
-
-      // Setup overlay content. Move up to parent?
-      const overlayContent = `<p>${this.title}</p>`;
+    },
+    destroyClipMarkers() {
+      this.player.markers.removeAll();
+      this.player.play();
+      this.isClipSet = false;
+      this.isEndClip = false;
+      this.$router.push({ path: this.$route.path });
+    },
+    replayClip() {
+      this.player.currentTime(this.clipStart);
+      this.player.play();
+      this.isEndClip = false;
+    },
+    initClipMarkers() {
+      if ((this.clipStart || this.clipEnd) && !this.isClipSet) {
+        const markerOptions = {
+          ...this.markerDefaults,
+          markers: [
+            {
+              time: this.clipStart,
+              duration: this.clipDuration,
+              text: 'Clipped section',
+            },
+          ],
+        };
+        this.player.markers(markerOptions);
+        this.isClipSet = true;
+      }
+    },
+    initOverlays() {
+      // Setup title overlay content.
       this.player.overlay({
         overlays: [{
-          start: 'pause',
+          start: 'fullscreenchange',
+          end: 'fullscreenchange',
           class: 'hammer-video-overlay',
-          content: overlayContent,
-          end() {
-            if (self.player.controlBar.hasClass('vjs-user-inactive')) {
-              document.querySelector('.vjs-overlay').classList.remove("vjs-user-inactive");
-            }
-          },
-          align: 'top',
+          content: `<p>${this.title}</p>`,
+          align: 'top-left',
         }],
       });
-      document.querySelector('.vjs-overlay').classList.add("vjs-control-bar");
-    },
-    setSliderAppearance() {
-      const sliderBar = document.querySelector('.vjs-play-progress');
-      const sliderWidth = sliderBar.style.width;
-
-      const progressHolder = document.querySelector('.vjs-progress-holder');
-      const clipDuration = this.getClipDuration();
-      let clipPercentage = 100;
-      if (clipDuration !== this.player.duration()) {
-        clipPercentage = (clipDuration / this.player.duration()) * 100;
-      }
-
-      // If the custom progress bar already exists, remove it
-      const hammerProgressBar = document.querySelector('.hammer-progress-bar');
-      if (hammerProgressBar != null) {
-        hammerProgressBar.parentNode.removeChild(hammerProgressBar);
-      }
-
-      // Insert the custom progress bar
-      const newProgressBar = document.createElement('div');
-      newProgressBar.classList.add('hammer-progress-bar');
-      newProgressBar.style.width = `${clipPercentage}%`;
-      newProgressBar.style.left = sliderWidth;
-      progressHolder.appendChild(newProgressBar);
-      this.clipSliderSet = true;
-    },
-    getClipDuration() {
-      if (this.endtime === 0) {
-        return this.player.duration() - this.starttime;
-      }
-      return this.endtime - this.starttime;
     },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
@@ -206,19 +282,12 @@ export default {
         src: val,
       });
 
-      this.queryParams = this.$route.query;
       // wait for video metadata to load, then set time.
       this.player.on('loadedmetadata', () => {
         if (this.isClip) {
-          self.setClip(self.queryParams);
+          self.setClip();
         } else {
           self.player.currentTime(time);
-        }
-      });
-
-      this.player.on('seeked', () => {
-        if ((self.queryParams.start || self.queryParams.end) && !self.clipSliderSet) {
-          self.setSliderAppearance();
         }
       });
 
@@ -233,15 +302,42 @@ export default {
         }
       });
     },
-    setClip(queryParams) {
-      if (queryParams.start) {
-        this.starttime = queryParams.start;
-        this.player.currentTime(queryParams.start);
-      }
-      if (queryParams.end) {
-        this.endtime = queryParams.end;
+    setClip() {
+      if (this.clipStart) {
+        this.player.currentTime(this.clipStart);
       }
     },
   },
 };
 </script>
+
+<style>
+.video-player__wrapper {
+  min-width: 100%;
+  margin: 0 -16px;
+}
+
+.video-player__wrapper-inner {
+  position: relative;
+  padding-top: calc((9 / 16) * 100%);
+}
+
+.video-player__container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.video-player {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 52.5em) {
+  .video-player__wrapper {
+    margin: 0;
+  }
+}
+</style>

@@ -1,30 +1,58 @@
 <template>
   <div
     class="overlay"
-    tabindex="0"
+    @click.self="close"
   >
-    <div class="overlay__body">
-      <div
-        class="overlay__inner"
-        @keyup.escape.stop="$emit('closePanel')"
+    <div
+      class="overlay__body"
+    >
+      <FocusTrap
+        :active="true"
+        :escape-deactivates="true"
       >
-        <button
-          class="button button--icon overlay__close-button"
-          aria-label="Close"
-          @click.prevent="$emit('closePanel')"
+        <div
+          class="overlay__inner"
         >
-          <svg class="icon icon--close">
-            <use xlink:href="/images/sprite.svg#sprite-close" />
-          </svg>
-        </button>
-        <slot />
-      </div>
+          <button
+            class="button button--icon overlay__close-button"
+            aria-label="Close"
+            @click.stop="close"
+          >
+            <svg class="icon icon--close">
+              <use xlink:href="/images/sprite.svg#sprite-close" />
+            </svg>
+          </button>
+          <slot @close-panel="close" />
+        </div>
+      </FocusTrap>
     </div>
   </div>
 </template>
 
 <script>
+import { FocusTrap } from 'focus-trap-vue';
+
 export default {
   name: 'Overlay',
+  components: {
+    FocusTrap,
+  },
+  mounted() {
+    document.addEventListener('keyup', this.onEscape);
+  },
+  destroyed() {
+    document.removeEventListener('keyup', this.onEscape);
+  },
+  methods: {
+    onEscape(event) {
+      event.stopPropagation();
+      if (event.which === 27) {
+        this.close();
+      }
+    },
+    close() {
+      this.$emit('close-panel');
+    },
+  },
 };
 </script>

@@ -1,7 +1,6 @@
 <template>
   <div
     :id="id | filterId"
-    class="carousel-wrapper"
   >
     <h2
       :id="headingId |filterId "
@@ -9,57 +8,59 @@
     >
       {{ title }}
     </h2>
-    <div
-      v-if="controls"
-      class="carousel-controls"
-    >
-      <button
-        type="submit"
-        :class="['control', 'control--previous', 'button', 'button--icon', {'button--disabled': currentSlide === 0}]"
-        :disabled="currentSlide === 0"
-        :aria-disabled="currentSlide === 0"
-        @click="$refs.carousel.prev()"
+    <div class="carousel-wrapper">
+      <div
+        v-if="controls"
+        ref="controls"
+        class="carousel-controls"
       >
-        <svg
-          title="Previous"
-          class="icon icon--rotate"
+        <button
+          type="submit"
+          :class="['control', 'control--previous', 'button', 'button--icon', {'button--disabled': isFirstSlide}]"
+          :disabled="isFirstSlide"
+          :aria-disabled="isFirstSlide"
+          @click="$refs.carousel.prev()"
         >
-          <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
-        </svg>
-        <span class="icon-text visually-hidden">Previous</span>
-      </button>
-      <button
-        type="submit"
-        :class="['control', 'control--next', 'button', 'button--icon', {'button--disabled': isFinalSlide}]"
-        :disabled="isFinalSlide"
-        :aria-disabled="isFinalSlide"
-        @click="$refs.carousel.next()"
+          <svg
+            title="Previous"
+            class="icon icon--rotate"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
+          </svg>
+          <span class="icon-text visually-hidden">Previous</span>
+        </button>
+        <button
+          type="submit"
+          :class="['control', 'control--next', 'button', 'button--icon', {'button--disabled': isFinalSlide}]"
+          :disabled="isFinalSlide"
+          :aria-disabled="isFinalSlide"
+          @click="$refs.carousel.next()"
+        >
+          <svg
+            title="Next"
+            class="icon"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
+          </svg>
+          <span class="icon-text visually-hidden">Next</span>
+        </button>
+      </div>
+      <VueSlickCarousel
+        ref="carousel"
+        :class="['carousel', ...classes]"
+        v-bind="settings"
+        :aria-labelledby="headingId"
+        @beforeChange="setCurrentSlide"
+        @reInit="reInit"
       >
-        <svg
-          title="Next"
-          class="icon"
-        >
-          <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
-        </svg>
-        <span class="icon-text visually-hidden">Next</span>
-      </button>
+        <slot />
+      </VueSlickCarousel>
     </div>
-    <VueSlickCarousel
-      ref="carousel"
-      :class="['carousel', ...classes]"
-      v-bind="settings"
-      :aria-labelledby="headingId"
-      :arrows="false"
-      :dots="false"
-      @beforeChange="setCurrentSlide"
-      @reInit="setSlideCount"
-    >
-      <slot />
-    </VueSlickCarousel>
   </div>
 </template>
 
 <script>
+import { debounce } from 'lodash';
 import VueSlickCarousel from 'vue-slick-carousel';
 
 export default {
@@ -87,41 +88,66 @@ export default {
   data() {
     return {
       currentSlide: 0,
+      debouncedSetControlsPosition: null,
       defaultSettings: {
         infinite: false,
         touchThreshold: 5,
+        arrows: false,
+        dots: false,
       },
-      slideCount: null,
+      slideCount: 0,
     };
   },
   computed: {
-    settings() {
-      return { ...this.defaultSettings, ...this.options };
-    },
     headingId() {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      if (this.slideCount) {
+      if (!this.settings.infinite && this.slideCount) {
         const sts = this.$refs.carousel.$refs.innerSlider.slidesToShow;
         return this.currentSlide + sts >= this.slideCount;
       }
-      return null;
+      return false;
+    },
+    isFirstSlide() {
+      return !this.settings.infinite && this.currentSlide === 0;
+    },
+    settings() {
+      return { ...this.defaultSettings, ...this.options };
     },
   },
+  mounted() {
+    this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
+    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    this.setControlsPosition();
+  },
+  beforeDestroy() {
+    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+  },
   methods: {
+    reInit() {
+      this.setSlideCount();
+      this.setControlsPosition();
+    },
     setSlideCount() {
       this.slideCount = this.$refs.carousel.$refs.innerSlider.slideCount;
     },
     setCurrentSlide(prev, next) {
       this.currentSlide = next;
     },
+    setControlsPosition() {
+      if (!this.$refs.carousel) return;
+      const carousel = this.$refs.carousel.$el;
+      const itemHeight = carousel.querySelector('.ui-card__thumbnail-image').height;
+      const top = itemHeight / 1.4;
+      this.$refs.controls.style.top = `${top}px`;
+    },
   },
 };
 </script>
 
 <style>
-@media (max-width: 800px) {
+@media (max-width: 50em) {
   .carousel-controls {
     display: none;
   }
@@ -130,8 +156,7 @@ export default {
 .carousel-controls {
   position: absolute;
   width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 110px;
   z-index: 1;
 }
 
@@ -148,4 +173,5 @@ export default {
   right: 0;
   padding-right: 8px;
 }
+
 </style>

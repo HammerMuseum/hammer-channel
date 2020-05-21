@@ -1,6 +1,7 @@
-const Dotenv = require('dotenv-webpack');
-const webpack = require('webpack');
 const path = require('path');
+const webpack = require('webpack');
+
+const Dotenv = require('dotenv-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -55,7 +56,10 @@ module.exports = (env, argv) => {
     ],
     devtool: mode === 'development' ? 'source-map' : false,
     resolve: {
-      alias: {vue: 'vue/dist/vue.js'}
+      alias: {
+        'vue': 'vue/dist/vue.js',
+        'bootstrap-vue$': 'bootstrap-vue/src/index.js'
+      }
     },
     entry: {
       entry: path.resolve(__dirname, 'entry.js'),
@@ -90,12 +94,15 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.m?js$/,
-          exclude: mode === 'development' ? /(node_modules)/ : /(node_modules|js\/dist)/,
+          exclude: mode === 'development' ? /node_modules\/(?!bootstrap-vue\/src\/)/ : /(node_modules\/(?!bootstrap-vue\/src\/)|js\/dist)/,
           use: [
             {
               loader: 'babel-loader',
               options: {
                 presets: ['@babel/preset-env'],
+                plugins: [
+                  '@babel/plugin-transform-runtime',
+                ],
                 sourceMaps: mode === 'development',
               },
             },

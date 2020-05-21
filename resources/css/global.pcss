@@ -13,6 +13,7 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }
 
 html,
@@ -37,23 +38,28 @@ section {
 }
 
 body {
-  font-family: 'lft-etica', sans-serif;
+  font-family: var(--font-family--body);
   font-style: normal;
   font-weight: 300;
-  color: #4d4b4b;
-  background-color: #f4f4f4;
-  -webkit-font-smoothing: antialiased;
+  color: var(--text-primary);
+  font-size: var(--font-size--base);
+  line-height: var(--line-height--base);
+  background-color: var(--background-light);
 }
 
-:focus {
+[data-interaction-mode="pointer"] :focus {
+  outline: none;
+}
+
+[data-interaction-mode="keyboard"] :focus {
   outline: var(--highlight-primary) auto 4px;
+  outline-offset: -2px;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  -webkit-font-smoothing: antialiased;
   line-height: 1;
 }
 
@@ -75,17 +81,9 @@ li {
 }
 
 p {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-base);
-  margin-bottom: 50px;
-}
-
-.nav-list {
-  display: inline-flex;
-}
-
-.nav-item {
-  padding: 16px 16px 16px 0;
+  font-size: var(--font-size--base);
+  line-height: var(--line-height--base);
+  margin: 0 0 var(--line-height--base) 0;
 }
 
 .visually-hidden {
@@ -100,29 +98,6 @@ p {
 .carousels {
   padding-left: 10px;
   margin-bottom: 50vh;
-}
-
-.container {
-  max-width: 1600px;
-  margin: 0 auto;
-}
-
-.container--fixed {
-  position: fixed;
-  left: 0;
-  width: 100%;
-}
-
-.container--fixed--top {
-  top: 0;
-}
-
-.container--fixed--bottom {
-  bottom: 0;
-}
-
-.main {
-  padding: 54px 0 0 0;
 }
 
 li {
@@ -160,34 +135,38 @@ li {
   color: #fff;
 }
 
-.page-heading {
-  font-size: 48px;
-  font-family: 'lft-etica-display', sans-serif;
+.heading {
+  font-family: var(--font-family--heading);
   font-weight: 200;
 }
 
-.page-heading--secondary {
+.heading--primary {
+  font-size: 48px;
+}
+
+.heading--secondary {
   font-size: 24px;
-  font-family: 'lft-etica-display', sans-serif;
-  font-weight: 200;
 }
 
 @media (min-width: 37.5em) {
-  .main {
-    padding-top: 72px;
-  }
-
   p {
     margin-bottom: 50px;
   }
 }
 
 @media (min-width: 52.5em) {
-  .page-heading {
+  h1,
+  h2,
+  h3,
+  h4 {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .heading {
     font-size: 60px;
   }
 
-  .page-heading--secondary {
+  .heading--secondary {
     font-size: 36px;
   }
 }
@@ -200,14 +179,4 @@ li {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
-}
-
-.see-more__link {
-  display: flex;
-  align-items: center;
-  padding-top: 12px;
-  font-size: 24px;
-  font-weight: 400;
-  text-decoration: none;
-  color: #4d4b4d;
 }

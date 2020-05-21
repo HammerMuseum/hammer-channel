@@ -57,6 +57,9 @@ mix
       new StyleLintPlugin({
         files: '**/*.pcss',
         context: 'resources/css',
+        configFile: '.stylelintrc',
+        formatter: require('stylelint').formatters.verbose,
+        lintDirtyModulesOnly: true,
         quiet: true,
       }),
       // Make sure that the plugin is after any plugins that add images, example `CopyWebpackPlugin`

@@ -1,111 +1,124 @@
 <template>
-  <div>
-    <SocialSharing
-      :url="`${siteUrl}${fullPath}`"
-      :title="title"
-      :description="description"
-      quote="Watch this on the Hammer Video Archive"
-      twitter-user="hammer_museum"
-      inline-template
-    >
-      <!-- These icons come from font awesome and need attribution -->
-
-      <div class="share-buttons">
-        <Network network="email">
-          <span class="fa fa-envelope share-button" />
-          <svg
-            title="Previous"
-            class="icon share-buttons__icon"
-          >
-            <use xlink:href="/images/sprite.svg#sprite-envelope" />
-          </svg>
-          <span class="icon-text visually-hidden">Email</span>
-        </Network>
-        <Network network="facebook">
-          <span class="fa fa-facebook share-button" />
-          <svg
-            title="Previous"
-            class="icon share-buttons__icon"
-          >
-            <use xlink:href="/images/sprite.svg#sprite-facebook" />
-          </svg>
-          <span class="icon-text visually-hidden">Share on Facebook</span>
-        </Network>
-        <Network network="twitter">
-          <span class="fa fa-twitter share-button" />
-          <svg
-            title="Previous"
-            class="icon share-buttons__icon"
-          >
-            <use xlink:href="/images/sprite.svg#sprite-twitter" />
-          </svg>
-          <span class="icon-text visually-hidden">Share on Twitter</span>
-        </Network>
-        <Network network="whatsapp">
-          <span class="fa fa-whatsapp share-button" />
-          <svg
-            title="Previous"
-            class="icon share-buttons__icon"
-          >
-            <use xlink:href="/images/sprite.svg#sprite-whatsapp" />
-          </svg>
-          <span class="icon-text visually-hidden">Share on whatsapp</span>
-        </Network>
-      </div>
-    </SocialSharing>
-    <div class="citation">
-      <label
-        for="citation"
-        class="citation__label"
-      >Cite this</label>
-      <textarea
-        id="citation"
-        name="citation"
-        class="citation__content"
-      >"{{ title }}", Hammer Museum Video Archive, recorded {{ new Date(dateRecorded) | dateFormat('dddd, DD MMMM, YYYY') }}, {{ siteUrl }}{{ fullPath }}
-      </textarea>
-      <button
-        class="citation__copy"
-        @click="copyCitation"
+  <div class="share-buttons__wrapper">
+    <div class="share-buttons">
+      <a
+        class="share-button button button--icon"
+        @click.prevent="share(facebook)"
       >
-        Copy to clipboard
-      </button>
+        <svg
+          title="Facebook"
+          class="icon share-buttons__icon"
+        >
+          <use xlink:href="/images/sprite.svg#sprite-facebook" />
+        </svg>
+        <span class="icon-text visually-hidden">Share on Facebook</span>
+      </a>
+      <a
+        class="share-button button button--icon"
+        @click.prevent="share(twitter)"
+      >
+        <svg
+          title="Twitter"
+          class="icon share-buttons__icon"
+        >
+          <use xlink:href="/images/sprite.svg#sprite-twitter" />
+        </svg>
+        <span class="icon-text visually-hidden">Share on Twitter</span>
+      </a>
+      <a
+        class="share-button button button--icon"
+        aria-label="Show citation"
+        role="button"
+        @click.prevent="showCitation = !showCitation;"
+      >
+        <svg
+          title="Citation"
+          class="icon share-buttons__icon"
+        >
+          <use xlink:href="/images/sprite.svg#sprite-cite" />
+        </svg>
+        <span class="icon-text visually-hidden">Cite this video</span>
+      </a>
     </div>
+    <transition name="fade">
+      <div
+        v-show="showCitation"
+        class="citation"
+      >
+        <p
+          id="citation"
+          name="citation"
+          class="citation__content"
+        >
+          {{ citation }}
+        </p>
+        <button
+          :class="['citation__copy', 'button', 'button--action']"
+          aria-label="Copy citation to clipboard"
+          @click="copyToClipboard(citation)"
+        >
+          Copy to clipboard
+        </button>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div
+        v-if="copied"
+        class="copy-status"
+      >
+        Copied
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import CopyTo from '../../mixins/copyToClipboard';
+
 export default {
-  name: 'Share',
+  mixins: [CopyTo],
   props: {
+    date: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
-      default: '',
-    },
-    description: {
-      type: String,
-      default: '',
-    },
-    titleSlug: {
-      type: String,
-      default: '',
-    },
-    dateRecorded: {
-      type: String,
-      default: '',
+      required: true,
     },
   },
   data() {
     return {
-      fullPath: this.$route.path,
-      siteUrl: process.env.MIX_APP_URL,
+      name: 'Hammer Museum Video Archive',
+      url: window.location.href,
+      providers: {
+        twitter: 'https://twitter.com/intent/tweet/?url=:url&text=:text',
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=:u&title=:title',
+      },
+      showCitation: false,
     };
   },
+  computed: {
+    formattedDate() {
+      return this.$options.filters.dateFormat(new Date(this.date), 'dddd, DD MMMM, YYYY');
+    },
+    text() {
+      return this.title;
+    },
+    citation() {
+      return `"${this.title}", ${this.name}, recorded ${this.date}, ${this.url}`;
+    },
+    facebook() {
+      return this.providers.facebook.replace(':u', this.url).replace(':title', this.text);
+    },
+    twitter() {
+      return this.providers.twitter.replace(':url', this.url).replace(':text', this.text);
+    },
+  },
   methods: {
-    copyCitation() {
-      const citation = document.querySelector('[name=citation]');
-      citation.select();
-      document.execCommand('copy');
+    share(url) {
+      window.open(url, 'sharer', 'toolbar=0,status=0,width=648,height=395');
+      return true;
     },
   },
 };

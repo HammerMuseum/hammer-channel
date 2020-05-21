@@ -13,19 +13,23 @@ class Api
     /**
      * Request data from the API
      *
-     * @param string $type
+     * @param string $url
      * @param string $queryString
      * @return array
      *
      */
-    public function request($type, $queryString = '')
+    public function request($url, $queryString = '')
     {
         $client = new Client([
             'base_uri' => config('app.datastore_url')
         ]);
 
+        if (!empty($queryString)) {
+            $queryString = '?' . $queryString;
+        }
+
         try {
-            $response = $client->request('GET', $type . '?' . $queryString);
+            $response = $client->request('GET', $url . $queryString);
             $status = $response->getStatusCode();
             if ($status == 200) {
                 $data = json_decode($response->getBody(), true);

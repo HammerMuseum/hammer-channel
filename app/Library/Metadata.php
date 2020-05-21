@@ -33,12 +33,21 @@ class Metadata
      */
     public function getMetadata($data = [])
     {
-        $metadata = [];
-        $metadata['site_name'] = $this->siteName;
-        $metadata['url'] = $this->getMetadataUrl();
-        $metadata['title'] = $this->getMetadataTitle($data);
-        $metadata['description'] = $this->getMetadataDescription($data);
-        $metadata['image'] = $this->getMetadataImage($data);
+        $metadata = [
+            'site_name' => $this->siteName,
+            'url' => '',
+            'title' => '',
+            'description' => '',
+            'image' => '',
+        ];
+
+        if (!empty($data)) {
+            $metadata['url'] = $this->getMetadataUrl();
+            $metadata['title'] = $this->getMetadataTitle($data);
+            $metadata['description'] = $this->getMetadataDescription($data);
+            $metadata['image'] = $this->getMetadataImage($data);
+        }
+
         return $metadata;
     }
 
