@@ -73,7 +73,7 @@
                       name: 'search',
                       query: {
                         ...$route.query,
-                        ...{ sort: 'date_recorded', order: 'asc' }
+                        ...{ sort: 'date_recorded', order: 'desc' }
                       }
                     }"
                   >
@@ -87,7 +87,7 @@
                       name: 'search',
                       query: {
                         ...$route.query,
-                        ...{ sort: 'date_recorded', order: 'desc' }
+                        ...{ sort: 'date_recorded', order: 'asc' }
                       }
                     }"
                   >
