@@ -87,6 +87,7 @@ export default {
         prevNextButtons: false,
         pageDots: false,
         cellAlign: 'left',
+        accessibility: false,
       },
     };
   },
