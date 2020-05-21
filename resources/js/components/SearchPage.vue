@@ -509,7 +509,7 @@ export default {
         const div = document.createElement('div');
         div.innerText = this.searchTerm;
         const escapedTerm = div.innerHTML;
-        const regex = new RegExp(`(${escapedTerm.replace(/([-/\\^$*+?.()|[\]{}])/i, '\\$&')})`, 'i');
+        const regex = new RegExp(`\\b(${escapedTerm.replace(/([-/\\^$*+?.()|[\]{}])/i, '\\$&')})\\b`, 'i');
         return item.title.replace(regex, '<span class="ui-card__highlight">$1</span>');
       }
       return item.title;
