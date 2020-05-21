@@ -22,7 +22,7 @@
               <use xlink:href="/images/sprite.svg#sprite-close" />
             </svg>
           </button>
-          <slot @close-panel="close" />
+          <slot />
         </div>
       </FocusTrap>
     </div>

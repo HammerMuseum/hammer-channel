@@ -55,10 +55,10 @@ export default {
     this.$refs.listChildren[0].firstChild.focus();
   },
   methods: {
-    handleClick(e, key, value) {
+    handleClick(e) {
       const target = e.currentTarget;
       this.$router.push(`${target.pathname}${target.search}`);
-      this.$emit('change', key, value);
+      this.$emit('close-panel');
     },
     query(key, value) {
       const param = `${key}=${encodeURIComponent(value)}`;

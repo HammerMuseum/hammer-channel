@@ -223,6 +223,7 @@
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
+                @close-panel="toggleFacetOverlay(null, 'topics')"
               />
             </Overlay>
 
@@ -237,6 +238,7 @@
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
+                @close-panel="toggleFacetOverlay(null, 'people')"
               />
             </Overlay>
 
@@ -250,6 +252,7 @@
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
+                @close-panel="toggleFacetOverlay(null, 'playlists')"
               />
             </Overlay>
 
@@ -263,6 +266,7 @@
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
+                @close-panel="toggleFacetOverlay(null, 'date')"
               />
             </Overlay>
           </transition>
