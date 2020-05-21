@@ -2,6 +2,8 @@
 
 namespace App\Library;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class Pagination
  * @package App\Library
@@ -37,11 +39,6 @@ class Pagination
      */
     public function clearParams($params, $keys = [])
     {
-        foreach ($keys as $key) {
-            if (isset($params[$key])) {
-                unset($params[$key]);
-            }
-        }
-        return http_build_query($params);
+        return http_build_query(Arr::except($params, $keys));
     }
 }

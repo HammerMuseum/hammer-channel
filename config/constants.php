@@ -5,6 +5,7 @@ return [
   'validQueryParams' => [
     'term',
     'sort',
+    'order',
     'page',
     'date_recorded',
     'speakers',

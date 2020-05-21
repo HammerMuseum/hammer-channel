@@ -98,7 +98,7 @@ class ListingController extends Controller
             'title' => '',
             'show_clear' => false,
             'topics' => $topics,
-            'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
+            'clearedPageQuery' => $this->pagination->clearParams($params, ['page']),
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
         ];
     }

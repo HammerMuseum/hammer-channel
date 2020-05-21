@@ -108,7 +108,7 @@ class SearchController extends Controller
             'facets' => $facets,
             'url' => $requestUrl,
             'currentQuery' => $originalQuery,
-            'clearedPageQuery' => $this->pagination->clearParams($params, ['start']),
+            'clearedPageQuery' => $this->pagination->clearParams($params, ['page']),
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
             'show_clear' => true,
             'totals' => isset($data['pages']) ? $data['pages'] : [],
