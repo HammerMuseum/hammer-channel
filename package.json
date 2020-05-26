@@ -78,7 +78,6 @@
     "query-string": "^6.12.1",
     "quick-score": "0.0.8",
     "svgxuse": "^1.2.6",
-    "v-click-outside": "^3.0.1",
     "video.js": "^7.7.6",
     "videojs-markers": "^1.0.1",
     "videojs-overlay": "^2.1.4",
@@ -92,7 +91,6 @@
     "vue-router": "^3.1.6",
     "vue-scrollto": "^2.18.1",
     "vue-slick-carousel": "^1.0.5",
-    "vue-social-sharing": "^2.4.7",
     "vuetensils": "^0.6.3"
   }
 }
