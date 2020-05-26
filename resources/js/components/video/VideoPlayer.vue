@@ -6,6 +6,7 @@
           ref="videoPlayer"
           class="video-js video-player vjs-default-skin"
           :poster="poster"
+          playsinline
         >
           <p class="vjs-no-js">
             To view this video please enable JavaScript, and consider upgrading to a
@@ -49,9 +50,6 @@
 import prettyms from 'pretty-ms';
 import videojs from 'video.js';
 import 'videojs-overlay';
-// import markersPlugin from 'videojs-markers-new';
-// Not sure why this isn't happening in the plugin itself.
-// videojs.registerPlugin('markers', markersPlugin);
 import 'videojs-markers';
 import ClipDisplay from './ClipDisplay.vue';
 
