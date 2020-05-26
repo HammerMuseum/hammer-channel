@@ -39,3 +39,23 @@
 .slide-up-enter-to {
   transform: translate3d(0, 0, 0);
 }
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--overlay-transition);
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+.fade-text-enter-active,
+.fade-text-leave-active {
+  transition: opacity var(--fade-transition);
+}
+
+.fade-text-enter,
+.fade-text-leave-active {
+  opacity: 0;
+}

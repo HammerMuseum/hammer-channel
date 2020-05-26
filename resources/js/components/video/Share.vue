@@ -31,6 +31,7 @@
         <button
           class="share-button button button--icon"
           aria-label="Show the video citation"
+          title="Get citation"
           @click="showCitation = !showCitation"
         >
           <svg
@@ -64,16 +65,14 @@
             aria-label="Copy citation to clipboard"
             @click="copyToClipboard(citation)"
           >
-            Copy citation to clipboard
-          </button>
-          <transition name="fade">
-            <span
-              v-if="copied"
-              class="copy-status"
+            <transition
+              name="fade"
+              mode="out-in"
+              :duration="100"
             >
-              Copied
-            </span>
-          </transition>
+              <span :key="copied">{{ copied ? 'Copied' : 'Copy citation to clipboard' }}</span>
+            </transition>
+          </button>
         </div>
       </div>
     </transition>
@@ -111,7 +110,7 @@ export default {
   },
   computed: {
     dateFormatted() {
-      return this.$options.filters.dateFormat(new Date(this.date), 'dddd, DD MMMM, YYYY');
+      return this.$options.filters.dateFormat(new Date(this.date), 'dddd DD MMMM, YYYY');
     },
     name() {
       return 'Hammer Museum Video Archive';

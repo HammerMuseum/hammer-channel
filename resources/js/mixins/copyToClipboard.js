@@ -6,7 +6,7 @@ export default {
     copied() {
       setTimeout(() => {
         this.copied = false;
-      }, 2000);
+      }, 4000);
     },
   },
   methods: {
@@ -19,7 +19,7 @@ export default {
         await navigator.clipboard.writeText(text);
         this.copied = true;
       } catch (err) {
-        console.error('Failed to copy to clipboard: ', err);
+        console.error('Unable to copy ', err);
       }
     },
     fallbackCopyToClipboard(text) {
@@ -36,11 +36,9 @@ export default {
       textArea.select();
 
       try {
-        const successful = document.execCommand('copy');
-        const msg = successful ? 'successful' : 'unsuccessful';
-        console.log(`Fallback: Copying text command was ${msg}`);
+        document.execCommand('copy');
       } catch (err) {
-        console.error('Fallback: Oops, unable to copy', err);
+        console.error('Unable to copy', err);
       }
 
       document.body.removeChild(textArea);
