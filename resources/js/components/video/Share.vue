@@ -1,50 +1,56 @@
 <template>
-  <div class="share-buttons__wrapper">
-    <div class="share-buttons">
-      <a
-        class="share-button button button--icon"
-        @click.prevent="share(facebook)"
-      >
-        <svg
-          title="Facebook"
-          class="icon share-buttons__icon"
+  <VideoMeta>
+    <template v-slot:highlighted>
+      <div class="share-buttons">
+        <a
+          class="share-button button button--icon"
+          :href="facebook"
+          target="blank"
+          title="Share on Facebook"
         >
-          <use xlink:href="/images/sprite.svg#sprite-facebook" />
-        </svg>
-        <span class="icon-text visually-hidden">Share on Facebook</span>
-      </a>
-      <a
-        class="share-button button button--icon"
-        @click.prevent="share(twitter)"
-      >
-        <svg
-          title="Twitter"
-          class="icon share-buttons__icon"
+          <svg
+            title="Facebook"
+            class="icon share-buttons__icon"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-facebook" />
+          </svg>
+        </a>
+        <a
+          class="share-button button button--icon"
+          :href="twitter"
+          target="blank"
+          title="Share on Twitter"
         >
-          <use xlink:href="/images/sprite.svg#sprite-twitter" />
-        </svg>
-        <span class="icon-text visually-hidden">Share on Twitter</span>
-      </a>
-      <a
-        class="share-button button button--icon"
-        aria-label="Show citation"
-        role="button"
-        @click.prevent="showCitation = !showCitation;"
-      >
-        <svg
-          title="Citation"
-          class="icon share-buttons__icon"
+          <svg
+            title="Twitter"
+            class="icon share-buttons__icon"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-twitter" />
+          </svg>
+        </a>
+        <button
+          class="share-button button button--icon"
+          aria-label="Show the video citation"
+          @click="showCitation = !showCitation"
         >
-          <use xlink:href="/images/sprite.svg#sprite-cite" />
-        </svg>
-        <span class="icon-text visually-hidden">Cite this video</span>
-      </a>
-    </div>
+          <svg
+            title="Citation"
+            class="icon share-buttons__icon"
+          >
+            <use xlink:href="/images/sprite.svg#sprite-cite" />
+          </svg>
+          <span class="icon-text visually-hidden">Cite this video</span>
+        </button>
+      </div>
+    </template>
     <transition name="fade">
       <div
         v-show="showCitation"
         class="citation"
       >
+        <h4 class="video-meta__label">
+          Citation
+        </h4>
         <p
           id="citation"
           name="citation"
@@ -52,30 +58,37 @@
         >
           {{ citation }}
         </p>
-        <button
-          :class="['citation__copy', 'button', 'button--action']"
-          aria-label="Copy citation to clipboard"
-          @click="copyToClipboard(citation)"
-        >
-          Copy to clipboard
-        </button>
+        <div class="citation__copy">
+          <button
+            :class="['button', 'button--action']"
+            aria-label="Copy citation to clipboard"
+            @click="copyToClipboard(citation)"
+          >
+            Copy citation to clipboard
+          </button>
+          <transition name="fade">
+            <span
+              v-if="copied"
+              class="copy-status"
+            >
+              Copied
+            </span>
+          </transition>
+        </div>
       </div>
     </transition>
-    <transition name="fade">
-      <div
-        v-if="copied"
-        class="copy-status"
-      >
-        Copied
-      </div>
-    </transition>
-  </div>
+  </VideoMeta>
 </template>
 
 <script>
+import VideoMeta from '../VideoMeta.vue';
 import CopyTo from '../../mixins/copyToClipboard';
 
 export default {
+  name: 'Share',
+  components: {
+    VideoMeta,
+  },
   mixins: [CopyTo],
   props: {
     date: {
@@ -89,8 +102,6 @@ export default {
   },
   data() {
     return {
-      name: 'Hammer Museum Video Archive',
-      url: window.location.href,
       providers: {
         twitter: 'https://twitter.com/intent/tweet/?url=:url&text=:text',
         facebook: 'https://www.facebook.com/sharer/sharer.php?u=:u&title=:title',
@@ -99,26 +110,26 @@ export default {
     };
   },
   computed: {
-    formattedDate() {
+    dateFormatted() {
       return this.$options.filters.dateFormat(new Date(this.date), 'dddd, DD MMMM, YYYY');
+    },
+    name() {
+      return 'Hammer Museum Video Archive';
     },
     text() {
       return this.title;
     },
+    url() {
+      return window.location.href;
+    },
     citation() {
-      return `"${this.title}", ${this.name}, recorded ${this.date}, ${this.url}`;
+      return `"${this.title}", ${this.name}, recorded ${this.dateFormatted}, ${this.url}`;
     },
     facebook() {
-      return this.providers.facebook.replace(':u', this.url).replace(':title', this.text);
+      return this.providers.facebook.replace(':u', encodeURIComponent(this.url)).replace(':title', encodeURIComponent(this.text));
     },
     twitter() {
-      return this.providers.twitter.replace(':url', this.url).replace(':text', this.text);
-    },
-  },
-  methods: {
-    share(url) {
-      window.open(url, 'sharer', 'toolbar=0,status=0,width=648,height=395');
-      return true;
+      return this.providers.twitter.replace(':url', encodeURIComponent(this.url)).replace(':text', encodeURIComponent(this.text));
     },
   },
 };

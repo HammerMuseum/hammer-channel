@@ -1,12 +1,12 @@
 .citation {
   width: 100%;
-  margin: 22px;
+  padding: 22px;
 }
 
 .citation__content {
-  margin-bottom: 22px;
   background: var(--background--darker);
   color: var(--text-secondary);
+  margin-bottom: 22px;
 }
 
 .citation__label {
@@ -14,5 +14,10 @@
 }
 
 .citation__copy {
-  display: block;
+  display: inline-flex;
+  align-items: baseline;
+
+  .button {
+    margin-right: 16px;
+  }
 }
