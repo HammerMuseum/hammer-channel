@@ -129,3 +129,12 @@
     justify-content: space-between;
   }
 }
+
+@media (max-width: 52.4375em) {
+  .vp__tabs > div:first-child {
+    position: sticky;
+    top: calc((var(--video-player-max-width) * (var(--video-player-aspect-ratio))) - var(--video-tabs-icon-height));
+    z-index: 2;
+    transition: top 0.2s linear;
+  }
+}
