@@ -14,10 +14,23 @@
       >
         <div class="ui-card__thumbnail">
           <span class="ui-card__duration">{{ duration }}</span>
-          <img
-            :src="thumbnailUrl"
-            class="ui-card__thumbnail-image"
-          >
+          <VImg
+            :classes="{ root: 'ui-card__thumbnail-image', placeholder: 'ui-card__thumbnail-image'}"
+            :src="`${thumbnailUrl}/large`"
+            width="320"
+            height="180"
+            :srcset="`
+              ${thumbnailUrl}/smallest 320w,
+              ${thumbnailUrl}/small 480w,
+              ${thumbnailUrl}/medium 800w`"
+            sizes="(max-width: 320px) 280px,
+              (max-width: 480px) 440px,
+              (max-width: 800px) 760px,
+              1080px"
+            :alt="title"
+            background="#ddd"
+            transition-duration="80"
+          />
         </div>
         <article>
           <h2 class="ui-card__title">
@@ -35,12 +48,14 @@
 <script>
 import { truncate } from 'lodash';
 import { ContentLoader } from 'vue-content-loader';
+import { VImg } from 'vuetensils/src/components';
 import UiCard from './UiCard.vue';
 
 export default {
   components: {
     ContentLoader,
     UiCard,
+    VImg,
   },
   props: {
     item: {
@@ -66,7 +81,7 @@ export default {
       return this.item.title_slug;
     },
     thumbnailUrl() {
-      return `/images/${this.item.thumbnailId}/medium`;
+      return `/images/${this.item.thumbnailId}`;
     },
     title() {
       return this.item.title;
