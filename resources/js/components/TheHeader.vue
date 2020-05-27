@@ -30,13 +30,19 @@
       </svg>
       <span class="icon-text visually-hidden">Open search</span>
     </button>
+    <SearchBar />
   </div>
 </template>
 
 <script>
+import SearchBar from './SearchBar.vue';
 import { mutations } from '../store';
 
 export default {
+  name: 'TheHeader',
+  components: {
+    SearchBar,
+  },
   data() {
     return {
       title: 'Hammer Video',

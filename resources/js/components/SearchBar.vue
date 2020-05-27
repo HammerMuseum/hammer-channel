@@ -96,6 +96,7 @@ import axios from 'axios';
 import { store, mutations } from '../store';
 
 export default {
+  name: 'SearchBar',
   components: {
     FocusTrap,
   },

@@ -1,7 +1,7 @@
 .search-bar-container {
   position: absolute;
   top: var(--header-height--small);
-  height: 100%;
+  height: calc(100vh - var(--header-height--small));
   width: 100%;
   transition: all var(--overlay-transition);
   background: var(--overlay-dark);
@@ -111,6 +111,7 @@
 @media screen and (min-width: 37.5em) {
   .search-bar-container {
     top: var(--header-height);
+    height: calc(100vh - var(--header-height));
   }
 
   .form__input--search-bar {
