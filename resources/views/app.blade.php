@@ -23,6 +23,8 @@
   <meta property="og:image:height" content="180" />
 
   <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  <link rel="stylesheet" href="https://use.typekit.net/onc8trv.css">
+
   <title>Hammer Museum | Video Archive</title>
   <script type="text/javascript">
     window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
