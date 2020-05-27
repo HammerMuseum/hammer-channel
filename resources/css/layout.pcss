@@ -42,6 +42,7 @@ body,
 
 .page-wrapper.page-wrapper--full {
   padding: var(--header-height--small) 0;
+  margin: 0;
 }
 
 @media (min-width: 37.5em) {
@@ -50,6 +51,10 @@ body,
     flex-direction: column;
     padding: var(--wrapper-padding--medium);
     margin: 0 48px;
+  }
+
+  .page-wrapper.page-wrapper--full {
+    padding: var(--header-height) 0;
   }
 }
 
@@ -62,9 +67,5 @@ body,
 @media (min-width: 86em) {
   .page-wrapper {
     padding: var(--wrapper-padding--large);
-  }
-
-  .page-wrapper.page-wrapper--full {
-    padding: var(--header-height) 0;
   }
 }
