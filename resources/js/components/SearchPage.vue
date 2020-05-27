@@ -209,8 +209,8 @@
           <transition
             name="slide-out"
             mode="out-in"
-            @enter="setElementHeight('.overlay__inner', '.search-page__content')"
-            @leave="$refs.search.focus()"
+            @before-enter="setScrollPosition(false)"
+            @enter="setElementHeight('.overlay__inner', '.overlay')"
           >
             <Overlay
               v-if="openFacetName === 'topics'"
@@ -470,7 +470,7 @@ export default {
   },
   mounted() {
     this.showFilters = window.innerWidth >= 960;
-    this.debouncedResize = debounce(this.handleResize, 200);
+    this.debouncedResize = debounce(this.handleResize, 200).bind(this);
     window.addEventListener('resize', this.debouncedResize, false);
   },
   beforeDestroy() {
@@ -505,7 +505,7 @@ export default {
       }
 
       if (this.openFacetName) {
-        this.setElementHeight('.overlay__inner', '.search-page__content');
+        this.setElementHeight('.overlay__inner', '.overlay');
       }
     },
     highlight(item) {
@@ -537,12 +537,25 @@ export default {
       this.$refs.search.blur();
       this.clonedTerm = '';
     },
-    setElementHeight(selector, parent) {
+    setScrollPosition(useExisting) {
+      if (useExisting) {
+        document.documentElement.scrollTop = this.scrollTop;
+      }
+      this.scrollTop = document.documentElement.scrollTop;
+    },
+    setElementHeight(selector, wrapper) {
+      document.documentElement.scrollTop = this.scrollTop;
       const el = document.querySelector(selector);
+      const container = document.querySelector(wrapper);
+      const offsetTop = el.getBoundingClientRect().top;
+      const headerHeight = 72;
       if (window.innerWidth >= 960) {
-        const parentOffset = document.querySelector(parent).offsetTop;
-        const h = window.innerHeight - parentOffset;
-        el.style.height = `${h}px`;
+        el.style.height = `${window.innerHeight - offsetTop}px`;
+        if (offsetTop < headerHeight) {
+          el.style.height = `${window.innerHeight - headerHeight}px`;
+          const top = offsetTop > 0 ? headerHeight - Math.abs(offsetTop) : headerHeight - offsetTop;
+          container.style.top = `${top}px`;
+        }
       } else {
         el.style.height = '';
       }
