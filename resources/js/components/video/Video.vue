@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="page-wrapper page-wrapper--frame page--video">
+    <div class="page-wrapper page--video">
       <header class="video-meta video-meta__header">
         <h1 class="heading heading--primary video-meta__title">
           {{ title }}
