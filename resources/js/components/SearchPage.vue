@@ -216,14 +216,14 @@
               v-if="openFacetName === 'topics'"
               id="topics"
               key="topics"
-              @close-panel="toggleFacetOverlay(null, 'topics')"
+              @close-panel="toggleFacetOverlay(null)"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
-                @close-panel="toggleFacetOverlay(null, 'topics')"
+                @close-panel="toggleFacetOverlay(null)"
               />
             </Overlay>
 
@@ -231,14 +231,14 @@
               v-if="openFacetName === 'people'"
               id="people"
               key="people"
-              @close-panel="toggleFacetOverlay(null, 'people')"
+              @close-panel="toggleFacetOverlay(null)"
             >
               <SearchableFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
-                @close-panel="toggleFacetOverlay(null, 'people')"
+                @close-panel="toggleFacetOverlay(null)"
               />
             </Overlay>
 
@@ -246,13 +246,13 @@
               v-if="openFacetName === 'playlists'"
               id="playlists"
               key="playlists"
-              @close-panel="toggleFacetOverlay(null, 'playlists')"
+              @close-panel="toggleFacetOverlay(null)"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
-                @close-panel="toggleFacetOverlay(null, 'playlists')"
+                @close-panel="toggleFacetOverlay(null)"
               />
             </Overlay>
 
@@ -260,13 +260,13 @@
               v-if="openFacetName === 'date'"
               id="date"
               key="date"
-              @close-panel="toggleFacetOverlay(null, 'date')"
+              @close-panel="toggleFacetOverlay(null)"
             >
               <SearchFacet
                 v-if="facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
-                @close-panel="toggleFacetOverlay(null, 'date')"
+                @close-panel="toggleFacetOverlay(null)"
               />
             </Overlay>
           </transition>
