@@ -524,9 +524,9 @@ export default {
       this.totals = null;
       this.setSearchTerm('');
     },
-    submitSearch() {
+    submitSearch(e) {
       if (window.innerWidth < 960) {
-        this.toggleSearchFilters();
+        this.toggleSearchFilters(e);
       }
       let searchParams = {};
       if (this.clonedTerm) {
