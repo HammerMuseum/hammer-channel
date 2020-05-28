@@ -106,7 +106,6 @@
         <aside class="search-page__sidebar">
           <transition
             name="slide-in"
-            @enter="$refs.search.focus()"
           >
             <div
               v-show="showFilters && hasFacets"
@@ -128,8 +127,16 @@
                     <input
                       ref="search"
                       v-model="clonedTerm"
-                      label="Search the video archive"
+                      label="Search"
                       name="term"
+                      maxlength="256"
+                      aria-autocomplete="both"
+                      autocapitalize="off"
+                      autocomplete="off"
+                      autocorrect="off"
+                      spellcheck="false"
+                      title="Search"
+                      aria-label="Search"
                       class="form__input form__input--light form__input--search"
                       placeholder="Search"
                       @keydown.enter="submitSearch"
@@ -381,6 +388,7 @@ export default {
       totals: null,
       videos: null,
       debouncedResize: null,
+      initialWidth: 0,
     };
   },
   computed: {
@@ -455,9 +463,6 @@ export default {
       },
     },
     showFilters(active) {
-      if (active) {
-        this.$refs.search.focus();
-      }
       if (window.innerWidth < 960 && active) {
         document.addEventListener('keyup', this.toggleSearchFilters);
       } else {
@@ -469,7 +474,8 @@ export default {
     },
   },
   mounted() {
-    this.showFilters = window.innerWidth >= 960;
+    this.initialWidth = window.innerWidth;
+    this.showFilters = this.initialWidth >= 960;
     this.debouncedResize = debounce(this.handleResize, 200).bind(this);
     window.addEventListener('resize', this.debouncedResize, false);
   },
@@ -495,7 +501,7 @@ export default {
         });
     },
     handleResize() {
-      if (window.innerWidth >= 960) {
+      if (this.initialWidth !== window.innerWidth && window.innerWidth >= 960) {
         this.showFilters = true;
         if (this.facetOverlayActive && !this.openFacetName) {
           this.toggleFacetOverlayActive();

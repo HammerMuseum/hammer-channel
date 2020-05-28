@@ -29,6 +29,7 @@
       </h4>
       <div
         v-for="item in facet.items"
+        ref="list"
         :key="item.key"
         :class="{
           'search-facet__item': true,
@@ -125,7 +126,7 @@ export default {
     },
   },
   mounted() {
-    this.$refs.search.$refs.input.focus();
+    this.$refs.list[0].querySelector('a').focus();
   },
   methods: {
     handleClick(e) {
