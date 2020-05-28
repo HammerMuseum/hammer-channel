@@ -1,62 +1,31 @@
-.footer-toggle__wrapper {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  height: 40px;
-  width: 100%;
-  background: var(--background-white);
-}
+.overlay-toggle--footer {
+  color: #ee2a7b;
+  font-weight: 600;
 
-.front .footer-toggle__wrapper {
-  height: 24px;
-  width: 24px;
-}
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
 
-.footer-toggle {
-  width: 24px;
-  height: 24px;
-  bottom: 8px;
-  position: absolute;
-}
-
-.footer--open .footer-toggle {
-  z-index: 4;
-}
-
-.footer-toggle .icon {
-  width: 24px;
-  height: 24px;
-}
-
-.footer-container {
-  display: flex;
-  align-items: center;
-  z-index: 10;
-  width: 100%;
-  overflow: hidden;
-  transition: background var(--overlay-transition);
-
-  &.footer--open {
-    height: 100%;
-    background: var(--overlay-dark);
+  .button__text {
+    display: none;
   }
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  max-height: calc(100vh - var(--header-height--small));
+.drawer__container--footer {
+  top: 0;
+  height: 100%;
+}
+
+.drawer__content--footer {
+  top: 0;
   background: var(--background-white);
-  z-index: 3;
-  padding-bottom: 64px;
 }
 
 .footer__inner {
   display: flex;
   flex-direction: column;
-  padding: 0 24px;
+  padding: 0 24px 64px 24px;
   margin: 0 auto;
 }
 
@@ -143,14 +112,26 @@
   .footer__actions {
     max-width: 28em;
   }
+
+  .drawer__container.drawer__container--footer {
+    top: 0;
+    height: 100vh;
+  }
+
+  .overlay-toggle--footer {
+    margin-right: 1rem;
+
+    .icon {
+      display: none;
+    }
+
+    .button__text {
+      display: block;
+    }
+  }
 }
 
 @media screen and (min-width: 48em) {
-  .footer {
-    padding-bottom: 96px;
-    max-height: calc(100vh - var(--header-height));
-  }
-
   .footer__body {
     margin: 0 auto;
     max-width: 56em;
@@ -171,11 +152,6 @@
     padding: 24px 0 40px 0;
     flex-direction: row;
     justify-content: space-evenly;
-  }
-
-  .footer__actions--column {
-    flex-direction: column;
-    max-width: 32em;
   }
 
   .footer__info {

@@ -1,105 +1,73 @@
 <template>
-  <FocusTrap
-    :active="searchOverlayActive"
-    :escape-deactivates="false"
+  <div
+    class="search-bar"
   >
-    <transition name="open-overlay-down">
-      <div
-        v-if="searchOverlayActive"
-        :class="{ 'search-bar-container': true, 'search-bar-container--visible': searchOverlayActive }"
-        @click.self="toggleSearchOverlayActive"
-      >
-        <div
-          class="search-bar__body"
+    <div
+      class="search-bar__action"
+    >
+      <div class="form__input-wrapper form__input-wrapper--search-bar">
+        <input
+          ref="searchInput"
+          v-model="clonedTerm"
+          class="form__input form__input--search form__input--search-bar"
+          type="text"
+          name="search"
+          aria-label="Search"
+          placeholder="Search"
+          @keydown.enter="search"
         >
-          <div
-            class="search-bar"
+        <div class="form__submit-wrapper">
+          <button
+            :class="['form__submit', 'button', 'button--icon']"
+            @click.stop="search"
           >
-            <div
-              class="search-bar__action"
+            <svg
+              class="icon"
             >
-              <div class="form__input-wrapper form__input-wrapper--search-bar">
-                <input
-                  ref="searchInput"
-                  v-model="clonedTerm"
-                  class="form__input form__input--search form__input--search-bar"
-                  type="text"
-                  name="search"
-                  aria-label="Search"
-                  placeholder="Search"
-                  @keydown.enter="search"
-                >
-                <div class="form__submit-wrapper">
-                  <button
-                    :class="['form__submit', 'button', 'button--icon']"
-                    @click.stop="search"
-                  >
-                    <svg
-                      class="icon"
-                    >
-                      <use xlink:href="/images/sprite.svg#sprite-search" />
-                    </svg>
-                    <span class="icon-text visually-hidden">Search</span>
-                  </button>
-                </div>
-              </div>
+              <use xlink:href="/images/sprite.svg#sprite-search" />
+            </svg>
+            <span class="icon-text visually-hidden">Search</span>
+          </button>
+        </div>
+      </div>
 
-              <div class="search-bar__options">
-                <div class="search-bar__option search-bar__option--left">
-                  <span>or</span>
-                  <RouterLink
-                    :class="tagClasses"
-                    :to="{ name: 'search', query: {} }"
-                    @click.native="toggleSearchOverlayActive"
-                  >
-                    show me everything
-                  </RouterLink>
-                </div>
-                <div class="search-bar__option search-bar__option--right">
-                  <span class="search-bar__option-label">or try</span>
-                  <div class="search-bar__option-content">
-                    <RouterLink
-                      v-for="item in cannedTerms"
-                      :key="item.id"
-                      :class="tagClasses"
-                      :to="{ name: 'search', query: item.query }"
-                      @click.native="toggleSearchOverlayActive"
-                    >
-                      {{ item.term }}
-                    </RouterLink>
-                  </div>
-                </div>
-              </div>
-              <button
-                class="button--close-search"
-                @click="toggleSearchOverlayActive"
-              >
-                <span class="visually-hidden">Close search</span>
-                <svg
-                  title="Close search"
-                  class="icon icon--hover-rotate"
-                >
-                  <use xlink:href="/images/sprite.svg#sprite-close" />
-                </svg>
-              </button>
-            </div>
+      <div class="search-bar__options">
+        <div class="search-bar__option search-bar__option--left">
+          <span>or</span>
+          <RouterLink
+            :class="tagClasses"
+            :to="{ name: 'search', query: {} }"
+            @click.native="close"
+          >
+            show me everything
+          </RouterLink>
+        </div>
+        <div class="search-bar__option search-bar__option--right">
+          <span class="search-bar__option-label">or try</span>
+          <div class="search-bar__option-content">
+            <RouterLink
+              v-for="item in cannedTerms"
+              :key="item.id"
+              :class="tagClasses"
+              :to="{ name: 'search', query: item.query }"
+              @click.native="close"
+            >
+              {{ item.term }}
+            </RouterLink>
           </div>
         </div>
       </div>
-    </transition>
-  </FocusTrap>
+    </div>
+  </div>
 </template>
 
 <script>
-import { FocusTrap } from 'focus-trap-vue';
 import axios from 'axios';
 import { store, mutations } from '../store';
 
 export default {
   name: 'SearchBar',
-  components: {
-    FocusTrap,
-  },
+  components: {},
   data() {
     return {
       cannedTerms: null,
@@ -118,38 +86,18 @@ export default {
         this.setSearchTerm(value);
       },
     },
-    searchOverlayActive() {
-      return store.searchOverlayActive;
-    },
-  },
-  watch: {
-    searchOverlayActive(active) {
-      if (!active) {
-        window.removeEventListener('keyup', this.onEscapeKeyUp);
-      } else {
-        window.addEventListener('keyup', this.onEscapeKeyUp);
-      }
-      this.$nextTick(() => {
-        if (active) {
-          this.$refs.searchInput.focus();
-        }
-      });
-    },
   },
   mounted() {
     this.getCannedTerms();
   },
   methods: {
-    toggleSearchOverlayActive: mutations.toggleSearchOverlayActive,
-    setSearchTerm: mutations.setSearchTerm,
-    onEscapeKeyUp(event) {
-      if (event.which === 27) {
-        this.toggleSearchOverlayActive();
-      }
+    close() {
+      this.$emit('close');
     },
+    setSearchTerm: mutations.setSearchTerm,
     search() {
       this.setSearchTerm(this.clonedTerm);
-      this.toggleSearchOverlayActive();
+      this.close();
       this.clonedTerm = '';
       this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
         // @todo Log these to Laravel, not the console
