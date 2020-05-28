@@ -7,7 +7,7 @@
         Welcome to Hammer ON
       </h2>
       <div class="footer__body">
-        <div :class="['footer__actions', { 'footer__actions--column': layout}]">
+        <div :class="footer__actions">
           <a
             href="https://hammer.ucla.edu/programs-events"
             target="_blank"
