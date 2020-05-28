@@ -1,6 +1,13 @@
 <template>
   <div class="container">
     <div class="page-wrapper page--video">
+      <RouterLink
+        v-if="prevRoute"
+        class="breadcrumb"
+        :to="prevRoute"
+      >
+        {{ breadcrumb }}
+      </RouterLink>
       <header class="video-meta video-meta__header">
         <h1 class="heading heading--primary video-meta__title">
           {{ title }}
@@ -155,6 +162,7 @@ export default {
       description: null,
       duration: null,
       in_playlists: [],
+      prevRoute: null,
       speakers: [],
       thumbnailId: null,
       timecode: 0,
@@ -168,6 +176,10 @@ export default {
     };
   },
   computed: {
+    breadcrumb() {
+      const routeName = this.prevRoute.name === null ? 'home' : this.prevRoute.name;
+      return `Return to ${routeName} page`;
+    },
     processedTranscript() {
       if (!this.transcript) {
         return [];
@@ -231,6 +243,11 @@ export default {
       }
       this.setTranscriptHeight();
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
   },
   mounted() {
     document.body.classList.add('vp');
