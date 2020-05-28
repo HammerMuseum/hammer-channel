@@ -1,5 +1,12 @@
 <template>
-  <div class="container container--fixed container--top header-container">
+  <div
+    :class="[
+      'container',
+      'container--fixed',
+      'container--top',
+      'header-container',
+      { 'overlay--active': overlayActive }]"
+  >
     <header class="header">
       <div class="header__content">
         <div class="header__branding">
@@ -102,6 +109,11 @@ export default {
         footer: false,
       },
     };
+  },
+  computed: {
+    overlayActive() {
+      return this.overlay.search || this.overlay.footer;
+    },
   },
 };
 </script>
