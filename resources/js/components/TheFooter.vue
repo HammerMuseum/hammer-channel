@@ -7,7 +7,7 @@
         Welcome to Hammer ON
       </h2>
       <div class="footer__body">
-        <div :class="footer__actions">
+        <div class="footer__actions">
           <a
             href="https://hammer.ucla.edu/programs-events"
             target="_blank"
@@ -27,7 +27,7 @@
             <svg
               class="icon"
             >
-              <use xlink:href="/images/sprite.svg#sprite-next" />
+              <use xlink:href="/images/sprite.svg#sprite-calendar" />
             </svg>
           </a>
         </div>
