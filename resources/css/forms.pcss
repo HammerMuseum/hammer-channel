@@ -2,41 +2,12 @@
   background: var(--background-darker) !important;
 }
 
-.button {
-  background-color: var(--background-light);
-  position: relative;
-  display: -moz-inline-stack;
-  display: inline-block;
-  border: 0;
-  padding: 0;
-  border-radius: 0;
-  font-family: 'lft-etica', sans-serif;
-  text-decoration: none;
-  -webkit-font-smoothing: antialiased;
-  cursor: pointer;
-  box-sizing: border-box;
-  vertical-align: top;
-  -webkit-appearance: none;
-  appearance: none;
-
-  &:hover {
-    color: var(--highlight-primary);
-  }
-}
-
-.button--disabled {
-  opacity: 50%;
-}
-
-.button--icon {
-  background: none;
-}
-
 .form__input-wrapper {
   display: inline-flex;
   width: 100%;
   height: 56px;
   background: var(--background-darker);
+  padding: 0 20px;
 
   .vts-input--text {
     width: 100%;
@@ -104,8 +75,4 @@
 
 .search-page__form .form__submit-wrapper {
   background-color: var(--background-primary);
-}
-
-.form__input-wrapper--search-bar {
-  height: 112px;
 }

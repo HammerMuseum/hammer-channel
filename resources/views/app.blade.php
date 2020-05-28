@@ -34,13 +34,11 @@
 <body>
   <div id="app">
     <the-header></the-header>
-    <search-bar></search-bar>
     <transition name="fade">
       <main class="main" role="main">
         <router-view></router-view>
       </main>
     </transition>
-    <the-footer></the-footer>
   </div>
   <script src="{{ (env('APP_ENV') === 'local') ? mix('js/app.js') : '/js/main.js' }}"></script>
 </body>

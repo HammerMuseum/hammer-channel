@@ -36,7 +36,7 @@
         </template>
         <template #extras>
           <button
-            class="button button--search-toggle button--small-devices"
+            class="button button--action button--search-toggle button--small-devices"
             @click="toggleSearchFilters"
           >
             {{ 'Search and filter' }}
@@ -118,7 +118,7 @@
                 :class="['search__filters']"
               >
                 <button
-                  class="button button--search-toggle button--small-devices"
+                  class="button button--action button--search-toggle button--small-devices"
                   @click="toggleSearchFilters"
                 >
                   {{ 'Hide filters' }}
