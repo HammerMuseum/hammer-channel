@@ -19,7 +19,6 @@
             :key="item.id"
             class="transcript__paragraph"
             :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
-            @click="$emit('updateTimecode', item.start)"
           >
             {{ item.message }}
           </p>
