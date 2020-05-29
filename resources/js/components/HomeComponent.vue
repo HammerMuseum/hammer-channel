@@ -1,5 +1,7 @@
 <template>
   <div class="container">
+    <VSkip to="#featured">Skip To Main Content</VSkip>
+
     <div class="page-wrapper page-wrapper--full">
       <NavigationBar
         :items="topics"
@@ -83,7 +85,7 @@
             :id="topic.id"
             :controls="true"
             :title="name"
-            :options="carouselOptions"
+            :options="{}"
           >
             <template #heading>
               <RouterLink :to="{name: 'search', query: {topics: name}}">
@@ -119,6 +121,7 @@
 <script>
 import axios from 'axios';
 import { ContentLoader } from 'vue-content-loader';
+import { VSkip } from 'vuetensils/src/components';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -131,6 +134,7 @@ export default {
     CarouselSlide,
     ContentLoader,
     FeaturedCarouselSlide,
+    VSkip,
   },
   filters: {
     filterId(value) {
@@ -146,7 +150,6 @@ export default {
       topics: null,
       featured: false,
       currentSectionInView: null,
-      carouselOptions: {},
     };
   },
   mounted() {
@@ -184,7 +187,7 @@ export default {
       return `See all ${count} ${videos} tagged ${name}`;
     },
     viewHandler(e) {
-      if (e.percentInView === 1 && e.percentTop < 0.6) {
+      if (e.percentInView > 0.4 && e.percentTop < 0.6) {
         this.currentSectionInView = e.target.element.dataset.sectionId;
       }
     },
