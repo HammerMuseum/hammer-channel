@@ -25,6 +25,7 @@
           ]"
           :disabled="isFirstSlide"
           :aria-disabled="isFirstSlide"
+          tabindex="0"
           @click="$refs.carousel.previous()"
         >
           <svg
@@ -46,6 +47,7 @@
           ]"
           :disabled="isFinalSlide"
           :aria-disabled="isFinalSlide"
+          tabindex="0"
           @click="$refs.carousel.next()"
         >
           <svg
