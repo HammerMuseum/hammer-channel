@@ -1,16 +1,17 @@
 .topic-menu {
   position: fixed;
-  background: #fff;
+  background: var(--background-darker);
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 2;
   padding-left: 40px;
-  box-shadow: 0 6px 10px 6px #bbb;
+  box-shadow: 0 6px 10px 6px var(--background-darker);
 }
 
 .navigation-bar__inner {
   max-width: var(--container-max-width);
+  margin: 0 auto;
 }
 
 .navigation-bar__item {
@@ -20,14 +21,16 @@
   padding: 22px 0;
   margin: 0 32px;
   font-size: 24px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .navigation-bar .link {
   text-decoration: none;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
+.navigation-bar .link:hover,
 .navigation-bar .link--active {
   color: var(--highlight-primary);
 }
