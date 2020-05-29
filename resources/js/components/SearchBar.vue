@@ -1,6 +1,6 @@
 <template>
   <div
-    class="search-bar"
+    :class="['search-bar', ...classes]"
   >
     <div
       class="search-bar__action"
@@ -68,6 +68,12 @@ import { store, mutations } from '../store';
 export default {
   name: 'SearchBar',
   components: {},
+  props: {
+    classes: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       cannedTerms: null,

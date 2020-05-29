@@ -72,9 +72,11 @@
           bg-transition="fade"
           no-scroll
           :classes="{
-            bg: 'drawer__container', content: ['drawer__content', 'drawer__content--search'] }"
+            bg: 'drawer__container', content: ['drawer__content', 'drawer__content--search', 'background--grate'] }"
         >
-          <SearchBar @close="overlay.search = false" />
+          <SearchBar
+            :classes="['search-bar--overlay']"
+            @close="overlay.search = false" />
         </VDrawer>
         <VDrawer
           v-model="overlay.footer"

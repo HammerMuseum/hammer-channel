@@ -77,44 +77,53 @@
       </Carousel>
 
       <div class="carousels">
-        <div
-          v-for="(topic, name) in topics"
-          :key="topic.id"
-          v-view="viewHandler"
-          :data-section-id="topic.id"
-        >
-          <Carousel
-            :id="topic.id"
-            :controls="true"
-            :title="name"
-            :options="{}"
+        <template v-for="(topic, name, idx) in topics">
+          <div
+            v-if="idx === 3"
+            class="inline-block--search"
           >
-            <template #heading>
-              <RouterLink :to="{name: 'search', query: {topics: name}}">
-                {{ name }}
-              </RouterLink>
-            </template>
-            <CarouselSlide
-              v-for="video in topic.videos"
-              :key="video.id"
-              :item="video._source"
-            />
-            <div class="carousel__slide see-more">
-              <router-link
-                class="ui-card"
-                :to="{name: 'search', query: {topics: name}}"
-              >
-                <div class="ui-card__thumbnail">
-                  <div class="ui-card__thumbnail-image">
-                    <span class="see-more__link">
-                      {{ seeAllLinkText(topic, name) }}
-                    </span>
-                  </div>
-                </div>
-              </router-link>
+            <div class="background--grate">
+              <SearchBar />
             </div>
-          </Carousel>
-        </div>
+          </div>
+          <div
+            :key="topic.id"
+            v-view="viewHandler"
+            :data-section-id="topic.id"
+          >
+            <Carousel
+              :id="topic.id"
+              :controls="true"
+              :title="name"
+              :options="{}"
+            >
+              <template #heading>
+                <RouterLink :to="{name: 'search', query: {topics: name}}">
+                  {{ name }}
+                </RouterLink>
+              </template>
+              <CarouselSlide
+                v-for="video in topic.videos"
+                :key="video.id"
+                :item="video._source"
+              />
+              <div class="carousel__slide see-more">
+                <router-link
+                  class="ui-card"
+                  :to="{name: 'search', query: {topics: name}}"
+                >
+                  <div class="ui-card__thumbnail">
+                    <div class="ui-card__thumbnail-image">
+                      <span class="see-more__link">
+                        {{ seeAllLinkText(topic, name) }}
+                      </span>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
+            </Carousel>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -190,10 +199,22 @@ export default {
       return `See all ${count} ${videos} tagged ${name}`;
     },
     viewHandler(e) {
-      if (e.percentInView > 0.4 && e.percentTop < 0.6) {
-        this.currentSectionInView = e.target.element.dataset.sectionId;
+      if (e.percentInView > 0 && e.percentInView < 0.4) {
+        console.log(e.target.element.dataset.sectionId);
+        // this.currentSectionInView = e.target.element.dataset.sectionId;
       }
     },
   },
 };
 </script>
+
+<style>
+.inline-block--search {
+  background: #fff;
+  margin-left: -8px;
+}
+
+.inline-block--search .search-bar {
+  padding: 48px 0;
+}
+</style>
