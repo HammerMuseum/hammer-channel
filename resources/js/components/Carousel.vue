@@ -124,10 +124,10 @@ export default {
         accessibility: false,
         cellAlign: 'left',
         contain: false,
-        freeScroll: true,
-        friction: 0.2,
-        selectedAttraction: 0.01,
-        groupcells: '80%',
+        freeScroll: false,
+        friction: 0.25,
+        selectedAttraction: 0.02,
+        groupCells: true,
         lazyLoad: true,
         pageDots: false,
         percentPosition: true,
@@ -141,12 +141,10 @@ export default {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      if (this.defaultOptions.wrapAround) return false;
-      return this.currentSlide === this.totalSlides;
+      return !this.mergedOptions.wrapAround && this.currentSlide === this.totalSlides;
     },
     isFirstSlide() {
-      if (this.defaultOptions.wrapAround) return false;
-      return this.currentSlide === 0;
+      return !this.mergedOptions.wrapAround && this.currentSlide === 0;
     },
     mergedOptions() {
       return { ...this.defaultOptions, ...this.options };
@@ -168,7 +166,7 @@ export default {
     },
     initCarousel() {
       const carousel = this.$refs.carousel;
-      this.totalSlides = carousel.cells().length;
+      this.totalSlides = carousel.cells().length - 1;
 
       carousel.on('change', (index) => {
         this.currentSlide = index;
@@ -189,9 +187,11 @@ export default {
       this.setControlsPosition();
     },
     setControlsPosition() {
-      const itemHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
-      const top = itemHeight / 1.4;
-      this.$refs.controls.style.top = `${top}px`;
+      if (this.$refs.carousel) {
+        const itemHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
+        const top = itemHeight / 1.4;
+        this.$refs.controls.style.top = `${top}px`;
+      }
     },
   },
 };
