@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <VSkip to="#featured">Skip To Main Content</VSkip>
+    <VSkip to="#featured">
+      Skip To Main Content
+    </VSkip>
 
     <div class="page-wrapper page-wrapper--full">
       <NavigationBar
@@ -64,7 +66,7 @@
         title="Featured programs"
         :controls="true"
         :classes="['carousel--featured']"
-        :options="{ wrapAround: true, pageDots: true }"
+        :options="featuredCarouselOptions"
         :show-heading="false"
       >
         <FeaturedCarouselSlide
@@ -149,6 +151,7 @@ export default {
       pager: null,
       topics: null,
       featured: false,
+      featuredCarouselOptions: { wrapAround: true, pageDots: true },
       currentSectionInView: null,
     };
   },
