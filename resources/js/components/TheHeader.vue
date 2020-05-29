@@ -12,8 +12,10 @@
         <div class="header__branding">
           <a
             class="link link--with-image"
-            href="#"
-          />
+            href="https://hammer.ucla.edu"
+          >
+            <img src="/images/logo-hammer-vertical.png">
+          </a>
         </div>
         <div class="header__title">
           <h1 class="visually-hidden">
