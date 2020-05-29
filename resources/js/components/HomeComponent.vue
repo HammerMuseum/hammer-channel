@@ -62,7 +62,7 @@
         title="Featured programs"
         :controls="true"
         :classes="['carousel--featured']"
-        :options="featuredSettings"
+        :options="{ wrapAround: true, pageDots: true }"
         :show-heading="false"
       >
         <FeaturedCarouselSlide
@@ -83,7 +83,7 @@
             :id="topic.id"
             :controls="true"
             :title="name"
-            :options="carouselSettings"
+            :options="carouselOptions"
           >
             <CarouselSlide
               v-for="video in topic.videos"
@@ -141,34 +141,7 @@ export default {
       topics: null,
       featured: false,
       currentSectionInView: null,
-      featuredSettings: {
-        edgeFriction: 0.35,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        dots: true,
-      },
-      carouselSettings: {
-        slidesToShow: 3.5,
-        slidesToScroll: 2,
-        responsive: [
-          {
-            breakpoint: 1200,
-            settings: {
-              slidesToShow: 2.5,
-              slidesToScroll: 1,
-            },
-          },
-          {
-            breakpoint: 650,
-            settings: {
-              slidesToShow: 1.5,
-              slidesToScroll: 1,
-            },
-          },
-        ],
-      },
+      carouselOptions: {},
     };
   },
   mounted() {

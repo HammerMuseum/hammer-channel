@@ -8,6 +8,7 @@
       :options="flickityOptions"
       role="navigation"
       aria-label="Video topics"
+      class="navigation-bar__inner"
       @init="initNavigationBar"
     >
       <div
@@ -61,21 +62,15 @@ export default {
   props: {
     items: {
       type: Object,
-      default() {
-        return {};
-      },
+      default: () => ({}),
     },
     activeItem: {
       type: String,
-      default() {
-        return '';
-      },
+      default: () => '',
     },
     classes: {
       type: Array,
-      default() {
-        return [];
-      },
+      default: () => [],
     },
   },
   data() {
@@ -108,28 +103,7 @@ export default {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);
     },
     initNavigationBar() {
-      const FLICKITY_EVENTS = [
-        'change',
-        'select',
-        'staticClick',
-        'settle',
-      ];
-
       const self = this;
-      // events
-      const events = FLICKITY_EVENTS;
-      // watch events
-      const onEdEvents = {};
-      for (let i = 0; i < events.length; i += 1) {
-        if (typeof events[i] === 'string' && onEdEvents[events[i]] === undefined) {
-          ((event) => {
-            onEdEvents[event] = null;
-            this.$refs.flickity.on(event, (...args) => {
-              self.$emit(event, args);
-            });
-          })(events[i]);
-        }
-      }
 
       this.$refs.flickity.on('staticClick', (event, pointer, cellElement, cellIndex) => {
         if (typeof cellIndex === 'number') {
@@ -137,9 +111,9 @@ export default {
         }
       });
 
-      this.$refs.flickity.on('settle', () => {
+      setTimeout(() => {
         this.$refs.flickity.resize();
-      });
+      }, 1000);
     },
   },
 };

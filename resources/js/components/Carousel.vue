@@ -16,10 +16,16 @@
       >
         <button
           type="submit"
-          :class="['control', 'control--previous', 'button', 'button--icon', {'button--disabled': isFirstSlide}]"
+          :class="[
+            'control',
+            'control--previous',
+            'button',
+            'button--icon',
+            {'button--disabled': isFirstSlide}
+          ]"
           :disabled="isFirstSlide"
           :aria-disabled="isFirstSlide"
-          @click="$refs.carousel.prev()"
+          @click="$refs.carousel.previous()"
         >
           <svg
             title="Previous"
@@ -31,7 +37,13 @@
         </button>
         <button
           type="submit"
-          :class="['control', 'control--next', 'button', 'button--icon', {'button--disabled': isFinalSlide}]"
+          :class="[
+            'control',
+            'control--next',
+            'button',
+            'button--icon',
+            {'button--disabled': isFinalSlide}
+          ]"
           :disabled="isFinalSlide"
           :aria-disabled="isFinalSlide"
           @click="$refs.carousel.next()"
@@ -45,57 +57,79 @@
           <span class="icon-text visually-hidden">Next</span>
         </button>
       </div>
-      <VueSlickCarousel
+
+      <Flickity
         ref="carousel"
+        v-images-loaded="imgsLoaded"
         :class="['carousel', ...classes]"
-        v-bind="settings"
         :aria-labelledby="headingId"
-        @beforeChange="setCurrentSlide"
-        @reInit="reInit"
+        :options="mergedOptions"
+        @init="initCarousel"
       >
         <slot />
-      </VueSlickCarousel>
+      </Flickity>
     </div>
   </div>
 </template>
 
 <script>
 import { debounce } from 'lodash';
-import VueSlickCarousel from 'vue-slick-carousel';
+import Flickity from 'vue-flickity';
+import imagesLoaded from 'vue-images-loaded';
 
 export default {
   components: {
-    VueSlickCarousel,
+    Flickity,
   },
+  directives: { imagesLoaded },
   filters: {
     filterId(value) {
       return value.replace(/[\s&]/gi, '').toLowerCase();
     },
   },
   props: {
-    controls: Boolean,
-    classes: Array,
-    id: String,
-    title: String,
-    showHeading: {
-      default() {
-        return true;
-      },
-      type: Boolean,
+    classes: {
+      type: Array,
+      default: () => [],
     },
-    options: Object,
+    controls: {
+      type: Boolean,
+      default: () => true,
+    },
+    id: {
+      type: String,
+      default: '',
+    },
+    options: {
+      type: Object,
+      default: () => ({}),
+    },
+    showHeading: {
+      type: Boolean,
+      default: () => true,
+    },
+    title: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
-      currentSlide: 0,
       debouncedSetControlsPosition: null,
-      defaultSettings: {
-        infinite: false,
-        touchThreshold: 5,
-        arrows: false,
-        dots: false,
+      defaultOptions: {
+        accessibility: false,
+        cellAlign: 'left',
+        contain: false,
+        freeScroll: true,
+        friction: 0.2,
+        selectedAttraction: 0.01,
+        groupcells: '80%',
+        lazyLoad: true,
+        pageDots: false,
+        percentPosition: true,
+        prevNextButtons: false,
+        wrapAround: false,
       },
-      slideCount: 0,
     };
   },
   computed: {
@@ -103,37 +137,53 @@ export default {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      if (!this.settings.infinite && this.slideCount) {
-        const sts = this.$refs.carousel.$refs.innerSlider.slidesToShow;
-        return this.currentSlide + sts >= this.slideCount;
+      if (!this.defaultOptions.wraparound && this.$refs.carousel) {
+        const carousel = this.$refs.carousel;
+        return carousel.selectedIndex() === carousel.cells().length;
       }
       return false;
     },
     isFirstSlide() {
-      return !this.settings.infinite && this.currentSlide === 0;
+      if (this.$refs.carousel) {
+        return !this.defaultOptions.wrapAround && this.$refs.carousel.selectedIndex() === 0;
+      }
+      return false;
     },
-    settings() {
-      return { ...this.defaultSettings, ...this.options };
+    mergedOptions() {
+      return { ...this.defaultOptions, ...this.options };
     },
   },
   mounted() {
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
-    this.setControlsPosition();
   },
   beforeDestroy() {
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
-    reInit() {
-      this.setSlideCount();
+    imgsLoaded() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.reloadCells();
+        this.$refs.carousel.resize();
+      }
+    },
+    initCarousel() {
+      const carousel = this.$refs.carousel;
+
       this.setControlsPosition();
-    },
-    setSlideCount() {
-      this.slideCount = this.$refs.carousel.$refs.innerSlider.slideCount;
-    },
-    setCurrentSlide(prev, next) {
-      this.currentSlide = next;
+
+      carousel.on('dragMove', function () {
+        this.slider.childNodes.forEach((slide) => {
+          slide.style.pointerEvents = 'none';
+        });
+      });
+
+      carousel.on('dragEnd', function () {
+        this.slider.childNodes.forEach((slide) => {
+          slide.style.pointerEvents = 'all';
+        });
+      });
+
     },
     setControlsPosition() {
       if (!this.$refs.carousel) return;
@@ -174,4 +224,7 @@ export default {
   padding-right: 8px;
 }
 
+.nopointer {
+  pointer-events: none;
+}
 </style>
