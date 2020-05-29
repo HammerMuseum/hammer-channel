@@ -6,7 +6,7 @@
       :id="headingId |filterId "
       :class="['carousel__title', {'visually-hidden': !showHeading}]"
     >
-      {{ title }}
+      <slot name="heading" />
     </h2>
     <div class="carousel-wrapper">
       <div
@@ -115,6 +115,8 @@ export default {
   },
   data() {
     return {
+      currentSlide: 0,
+      totalSlides: 0,
       debouncedSetControlsPosition: null,
       defaultOptions: {
         accessibility: false,
@@ -137,17 +139,12 @@ export default {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      if (!this.defaultOptions.wraparound && this.$refs.carousel) {
-        const carousel = this.$refs.carousel;
-        return carousel.selectedIndex() === carousel.cells().length;
-      }
-      return false;
+      if (this.defaultOptions.wrapAround) return false;
+      return this.currentSlide === this.totalSlides;
     },
     isFirstSlide() {
-      if (this.$refs.carousel) {
-        return !this.defaultOptions.wrapAround && this.$refs.carousel.selectedIndex() === 0;
-      }
-      return false;
+      if (this.defaultOptions.wrapAround) return false;
+      return this.currentSlide === 0;
     },
     mergedOptions() {
       return { ...this.defaultOptions, ...this.options };
@@ -169,8 +166,11 @@ export default {
     },
     initCarousel() {
       const carousel = this.$refs.carousel;
+      this.totalSlides = carousel.cells().length;
 
-      this.setControlsPosition();
+      carousel.on('change', (index) => {
+        this.currentSlide = index;
+      });
 
       carousel.on('dragMove', function () {
         this.slider.childNodes.forEach((slide) => {
@@ -184,11 +184,10 @@ export default {
         });
       });
 
+      this.setControlsPosition();
     },
     setControlsPosition() {
-      if (!this.$refs.carousel) return;
-      const carousel = this.$refs.carousel.$el;
-      const itemHeight = carousel.querySelector('.ui-card__thumbnail-image').height;
+      const itemHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
       const top = itemHeight / 1.4;
       this.$refs.controls.style.top = `${top}px`;
     },

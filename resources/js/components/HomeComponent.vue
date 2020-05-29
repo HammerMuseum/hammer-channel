@@ -85,6 +85,11 @@
             :title="name"
             :options="carouselOptions"
           >
+            <template #heading>
+              <RouterLink :to="{name: 'search', query: {topics: name}}">
+                {{ name }}
+              </RouterLink>
+            </template>
             <CarouselSlide
               v-for="video in topic.videos"
               :key="video.id"
