@@ -184,7 +184,7 @@ export default {
   },
   computed: {
     breadcrumb() {
-      const routeName = this.prevRoute.name === null ? 'home' : this.prevRoute.name;
+      const routeName = this.prevRoute.name === null || this.prevRoute.name === 'app' ? 'home' : this.prevRoute.name;
       return `Return to ${routeName} page`;
     },
     processedTranscript() {
