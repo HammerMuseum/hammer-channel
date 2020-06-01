@@ -1,5 +1,6 @@
 // TODO: Is there a way we can use the runtime only build of vue?
 import 'svgxuse';
+import 'intersection-observer';
 import Vue from 'vue';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';

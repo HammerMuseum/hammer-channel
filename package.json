@@ -70,6 +70,7 @@
     "file-saver": "^2.0.2",
     "flickity": "^2.2.1",
     "focus-trap-vue": "0.0.6",
+    "intersection-observer": "^0.10.0",
     "laravel-mix": "^4.1.4",
     "lodash": "^4.17.15",
     "match-sorter": "^4.1.0",
