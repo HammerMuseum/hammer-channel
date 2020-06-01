@@ -22,7 +22,7 @@
       </div>
     </div>
     <ClipDisplay
-      v-if="false"
+      v-if="isClip"
     >
       {{ clipString }}
       <div
@@ -130,12 +130,12 @@ export default {
       return this.convertSecondsToTimecode(this.clipEnd);
     },
     clipString() {
-      let message = 'Currently viewing ';
+      let message = 'Currently viewing: ';
       const duration = prettyms(this.clipDuration * 1000);
       if (this.clipEnd) {
-        message += `a ${duration} clip from ${this.clipStartTime}`;
+        message += `${duration} clip from ${this.clipStartTime}`;
       } else {
-        message += `a clip from ${this.clipStart} until the end of the video.`;
+        message += `clip from ${this.clipStart} until the end of the video.`;
       }
       return message;
     },
