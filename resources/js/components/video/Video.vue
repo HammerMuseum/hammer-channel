@@ -118,7 +118,10 @@
                   Related
                 </h3>
               </template>
-              <RelatedContent :items="relatedItems" />
+              <RelatedContent
+                :items="relatedItems"
+                :tags="tags"
+              />
             </BTab>
           </BTabs>
         </div>
@@ -170,6 +173,7 @@ export default {
       thumbnailId: null,
       timecode: 0,
       title: null,
+      tags: null,
       topics: [],
       track: null,
       transcript: [],
