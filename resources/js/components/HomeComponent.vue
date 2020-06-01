@@ -6,7 +6,7 @@
 
     <div class="page-wrapper page-wrapper--full">
       <NavigationBar
-        :items="topics"
+        :items="videos"
         :active-item="currentSectionInView"
         :classes="['topic-menu']"
       />
@@ -28,7 +28,7 @@
       </Carousel>
 
       <div class="carousels">
-        <template v-for="(topic, name, idx) in topics">
+        <template v-for="({id, label, count, hits}, idx) in videos">
           <div
             v-if="idx === 3"
             class="inline-block--search"
@@ -38,35 +38,35 @@
             </div>
           </div>
           <div
-            :key="topic.id"
+            :key="id"
             v-view="viewHandler"
-            :data-section-id="topic.id"
+            :data-section-id="id"
           >
             <Carousel
-              :id="topic.id"
+              :id="id"
               :controls="true"
-              :title="name"
+              :title="label"
               :options="{}"
             >
               <template #heading>
-                <RouterLink :to="{name: 'search', query: {topics: name}}">
-                  {{ name }}
+                <RouterLink :to="{name: 'search', query: {topics: label}}">
+                  {{ label }}
                 </RouterLink>
               </template>
               <CarouselSlide
-                v-for="video in topic.videos"
+                v-for="video in hits"
                 :key="video.id"
-                :item="video._source"
+                :item="video"
               />
               <div class="carousel__slide see-more">
                 <router-link
                   class="ui-card"
-                  :to="{name: 'search', query: {topics: name}}"
+                  :to="{name: 'search', query: {topics: label}}"
                 >
                   <div class="ui-card__thumbnail">
                     <div class="ui-card__thumbnail-image">
                       <span class="see-more__link">
-                        {{ seeAllLinkText(topic, name) }}
+                        {{ seeAllLinkText(count, label) }}
                       </span>
                     </div>
                   </div>
@@ -106,10 +106,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      title: null,
       videos: null,
-      pager: null,
-      topics: null,
       featured: false,
       featuredCarouselOptions: { wrapAround: true, pageDots: true },
       currentSectionInView: null,
@@ -134,12 +131,9 @@ export default {
     },
     getPageData() {
       axios
-        .get('?term=all')
+        .get('/api')
         .then((response) => {
-          this.title = response.data.title;
-          this.pager = response.data.pager;
-          this.videos = response.data.videos;
-          this.topics = response.data.topics;
+          this.content = response.data.videos;
         }).catch((err) => {
           console.error(err);
         });
@@ -152,7 +146,7 @@ export default {
     viewHandler(e) {
       if (e.percentInView > 0 && e.percentInView < 0.4) {
         console.log(e.target.element.dataset.sectionId);
-        // this.currentSectionInView = e.target.element.dataset.sectionId;
+        this.currentSectionInView = e.target.element.dataset.sectionId;
       }
     },
   },

@@ -12,16 +12,16 @@
       @init="initNavigationBar"
     >
       <div
-        v-for="(item, name) in items"
-        :key="item.id"
-        :data-selector="item.id"
+        v-for="({id, label}) in items"
+        :key="id"
+        :data-selector="id"
         class="navigation-bar__item"
       >
         <a
-          v-scroll-to="{ el: `#${item.id}`, duration: 0, offset: -80 }"
+          v-scroll-to="{ el: `#${id}`, duration: 0, offset: -80 }"
           href="#"
-          :class="['link', {'link--active': activeItem === item.id }]"
-        >{{ name }}</a>
+          :class="['link', {'link--active': activeItem === id }]"
+        >{{ label }}</a>
       </div>
       <div
         class="navigation-bar__item"
@@ -61,8 +61,8 @@ export default {
   },
   props: {
     items: {
-      type: Object,
-      default: () => ({}),
+      type: Array,
+      default: () => [],
     },
     activeItem: {
       type: String,
