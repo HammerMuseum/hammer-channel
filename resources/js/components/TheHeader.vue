@@ -51,7 +51,7 @@
             <svg
               aria-labelledby="search-icon-title"
               role="img"
-              :class="['icon', {'icon--search': !overlay.search}]"
+              :class="['icon', {'icon--search': !overlay.search}, {'icon--close': overlay.search}]"
             >
               <title
                 id="search-icon-title"

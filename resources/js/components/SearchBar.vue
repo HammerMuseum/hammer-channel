@@ -52,7 +52,7 @@
               :to="{ name: 'search', query: item.query }"
               @click.native="close"
             >
-              {{ item.term }}
+              <span class="search-facet__item-text">{{ item.term }}</span>
             </RouterLink>
           </div>
         </div>
@@ -70,8 +70,8 @@ export default {
   components: {},
   props: {
     classes: {
-      type: Object,
-      default: () => ({}),
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -82,7 +82,7 @@ export default {
   },
   computed: {
     tagClasses() {
-      return ['link', 'link--text', 'link--tag'];
+      return ['search-facet__item-link', 'link--text', 'link--tag'];
     },
     searchTerm: {
       get() {
