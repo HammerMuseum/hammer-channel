@@ -257,11 +257,23 @@ export default {
   mounted() {
     document.body.classList.add('vp');
     window.addEventListener('resize', debounce(this.setTranscriptHeight, 200));
+    this.setupObservers();
   },
   destroyed() {
     document.body.classList.remove('vp');
   },
   methods: {
+    setupObservers() {
+      const stickyElm = document.querySelector('.panel--left');
+      const observer = new IntersectionObserver(
+        this.callback,
+        { threshold: [1] },
+      );
+      observer.observe(stickyElm);
+    },
+    callback(e) {
+      document.querySelector('.panels').classList.toggle('is-sticky', e[0].intersectionRatio < 1);
+    },
     setTranscriptHeight() {
       if (!this.$refs.transcript) return;
       const el = this.$refs.transcript.$el;

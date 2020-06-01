@@ -134,8 +134,18 @@
   .vp__tabs > div:first-child {
     position: -webkit-sticky;
     position: sticky;
-    top: calc((var(--video-player-max-width) * (var(--video-player-aspect-ratio))) - var(--video-tabs-icon-height));
+    top: calc(var(--video-player-max-width) * (var(--video-player-aspect-ratio)));
     z-index: 2;
     transition: top 0.2s linear;
+  }
+
+  .is-sticky .nav-link .icon {
+    transition: all 0.2s linear;
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
   }
 }
