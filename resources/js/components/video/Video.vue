@@ -118,7 +118,7 @@
                   Related
                 </h3>
               </template>
-              <div>Related Content</div>
+              <RelatedContent :items="relatedItems" />
             </BTab>
           </BTabs>
         </div>
@@ -135,6 +135,7 @@ import getRouteData from '../../mixins/getRouteData';
 import SvgIcon from '../base/SvgIcon.vue';
 import About from './About.vue';
 import ClippingTool from './ClippingTool.vue';
+import RelatedContent from '../RelatedContent.vue';
 import Transcript from '../Transcript.vue';
 import Share from './Share.vue';
 import VideoPlayer from './VideoPlayer.vue';
@@ -147,6 +148,7 @@ export default {
     BTabs,
     BTab,
     ClippingTool,
+    RelatedContent,
     Share,
     SvgIcon,
     Transcript,
@@ -163,6 +165,7 @@ export default {
       duration: null,
       in_playlists: [],
       prevRoute: null,
+      relatedItems: [],
       speakers: [],
       thumbnailId: null,
       timecode: 0,
@@ -236,6 +239,8 @@ export default {
         label: 'English',
         default: false,
       };
+
+      this.fetchRelatedContent();
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {
@@ -274,6 +279,15 @@ export default {
           this.src = response.data.src;
         }).catch((err) => {
           console.log(err);
+        });
+    },
+    fetchRelatedContent() {
+      axios
+        .get(`${this.datastore}videos/${this.asset_id}/related`)
+        .then((response) => {
+          this.relatedItems = response.data.data;
+        }).catch((err) => {
+          console.error(err);
         });
     },
     fetchTranscript() {
