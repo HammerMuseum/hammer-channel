@@ -76,7 +76,9 @@
         >
           <SearchBar
             :classes="['search-bar--overlay']"
-            @close="overlay.search = false" />
+            focus
+            @close="overlay.search = false"
+          />
         </VDrawer>
         <VDrawer
           v-model="overlay.footer"

@@ -73,6 +73,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    focus: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -95,11 +99,13 @@ export default {
   },
   mounted() {
     this.getCannedTerms();
-    this.$nextTick(() => {
-      if (window.innerWidth > 960) {
-        this.$refs.searchInput.focus();
-      }
-    });
+    if (this.focus) {
+      this.$nextTick(() => {
+        if (window.innerWidth > 960) {
+          this.$refs.searchInput.focus();
+        }
+      });
+    }
   },
   methods: {
     close() {
