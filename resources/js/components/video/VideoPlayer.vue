@@ -22,7 +22,7 @@
       </div>
     </div>
     <ClipDisplay
-      v-if="isClip"
+      v-if="false"
     >
       {{ clipString }}
       <div
@@ -30,13 +30,13 @@
       >
         This clip has ended.
         <button
-          class=""
+          class="button button--action"
           @click="destroyClipMarkers"
         >
           Continue playing
         </button>
         <button
-          class=""
+          class="button button--action"
           @click="replayClip"
         >
           Replay clip
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import prettyms from 'pretty-ms';
+import prettyms from 'humanize-duration';
 import videojs from 'video.js';
 import 'videojs-overlay';
 import 'videojs-markers';
