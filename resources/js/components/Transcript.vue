@@ -14,6 +14,16 @@
               <span class="download__title">Download transcript</span>
             </a>
           </div>
+          <button
+            v-if="false"
+            v-scroll-to="{ el: `video-meta__transcript`, duration: 0, offset: 0 }"
+            class="button transcript__return"
+          >
+            <SvgIcon
+              name="next"
+              title="Back to top"
+            />
+          </button>
           <p
             v-for="item in items"
             :key="item.id"
