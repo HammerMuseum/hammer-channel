@@ -95,7 +95,7 @@
               :id="topic.id"
               :controls="true"
               :title="name"
-              :options="{}"
+              :options="{ groupCells: 2 }"
             >
               <template #heading>
                 <RouterLink :to="{name: 'search', query: {topics: name}}">

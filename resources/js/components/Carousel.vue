@@ -127,8 +127,6 @@ export default {
         freeScroll: false,
         friction: 0.25,
         selectedAttraction: 0.02,
-        groupCells: true,
-        lazyLoad: true,
         pageDots: false,
         percentPosition: true,
         prevNextButtons: false,
@@ -141,7 +139,12 @@ export default {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      return !this.mergedOptions.wrapAround && this.currentSlide === this.totalSlides;
+      let total = this.totalSlides;
+      const group = this.options.groupCells;
+      if (group && group > 1) {
+        total = this.totalSlides / group;
+      }
+      return !this.mergedOptions.wrapAround && this.currentSlide === total;
     },
     isFirstSlide() {
       return !this.mergedOptions.wrapAround && this.currentSlide === 0;
