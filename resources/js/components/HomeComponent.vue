@@ -144,8 +144,7 @@ export default {
       return `See all ${count} ${videos} tagged ${name}`;
     },
     viewHandler(e) {
-      if (e.percentInView > 0 && e.percentInView < 0.4) {
-        console.log(e.target.element.dataset.sectionId);
+      if (e.percentInView === 1 && e.percentTop < 0.6) {
         this.currentSectionInView = e.target.element.dataset.sectionId;
       }
     },
