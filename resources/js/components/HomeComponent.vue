@@ -45,8 +45,8 @@
             <Carousel
               :id="id"
               :controls="true"
-              :title="label"
-              :options="{}"
+              :title="name"
+              :options="{ groupCells: 2 }"
             >
               <template #heading>
                 <RouterLink :to="{name: 'search', query: {topics: label}}">

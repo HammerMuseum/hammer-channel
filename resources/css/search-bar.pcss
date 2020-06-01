@@ -1,7 +1,12 @@
 .overlay-toggle--search {
-  .icon {
+  .icon--search {
     width: 24px;
     height: 24px;
+  }
+
+  .icon--close {
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -37,6 +42,7 @@
 .search-bar__options {
   display: flex;
   flex-wrap: wrap;
+  font-size: 22px;
 }
 
 .search-bar__option {
@@ -44,7 +50,6 @@
   background: var(--background-darker);
   color: var(--text-secondary);
   padding: 20px;
-  font-weight: 200;
 }
 
 .search-bar__option-label {
@@ -90,6 +95,11 @@
 
   .form__input--search-bar {
     font-size: 60px;
+  }
+
+  .search-bar__options {
+    font-size: 18px;
+    line-height: 27px;
   }
 }
 
