@@ -12,8 +12,10 @@
         <div class="header__branding">
           <a
             class="link link--with-image"
-            href="#"
-          />
+            href="https://hammer.ucla.edu"
+          >
+            <img src="/images/logo-hammer-vertical.png">
+          </a>
         </div>
         <div class="header__title">
           <h1 class="visually-hidden">
@@ -49,7 +51,7 @@
             <svg
               aria-labelledby="search-icon-title"
               role="img"
-              :class="['icon', {'icon--search': !overlay.search}]"
+              :class="['icon', {'icon--search': !overlay.search}, {'icon--close': overlay.search}]"
             >
               <title
                 id="search-icon-title"
@@ -70,9 +72,11 @@
           bg-transition="fade"
           no-scroll
           :classes="{
-            bg: 'drawer__container', content: ['drawer__content', 'drawer__content--search'] }"
+            bg: 'drawer__container', content: ['drawer__content', 'drawer__content--search', 'background--grate'] }"
         >
-          <SearchBar @close="overlay.search = false" />
+          <SearchBar
+            :classes="['search-bar--overlay']"
+            @close="overlay.search = false" />
         </VDrawer>
         <VDrawer
           v-model="overlay.footer"

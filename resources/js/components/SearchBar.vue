@@ -1,6 +1,6 @@
 <template>
   <div
-    class="search-bar"
+    :class="['search-bar', ...classes]"
   >
     <div
       class="search-bar__action"
@@ -52,7 +52,7 @@
               :to="{ name: 'search', query: item.query }"
               @click.native="close"
             >
-              {{ item.term }}
+              <span class="search-facet__item-text">{{ item.term }}</span>
             </RouterLink>
           </div>
         </div>
@@ -68,6 +68,12 @@ import { store, mutations } from '../store';
 export default {
   name: 'SearchBar',
   components: {},
+  props: {
+    classes: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       cannedTerms: null,
@@ -76,7 +82,7 @@ export default {
   },
   computed: {
     tagClasses() {
-      return ['link', 'link--text', 'link--tag'];
+      return ['search-facet__item-link', 'link--text', 'link--tag'];
     },
     searchTerm: {
       get() {

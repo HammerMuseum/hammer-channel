@@ -1,0 +1,50 @@
+.carousel-wrapper {
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.carousel__slide {
+  padding-right: 24px;
+  width: 75%;
+}
+
+.carousel__title {
+  margin: 36px 0 24px 0;
+  font-family: var(--font-family--heading);
+  font-size: 36px;
+  font-weight: 900;
+
+  a {
+    color: var(--text-primary);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--highlight-primary);
+    }
+  }
+}
+
+.flickity-page-dots .dot {
+  background: var(--highlight-primary);
+}
+
+@media (min-width: 37.5em) {
+  .carousel__slide {
+    width: 40%;
+  }
+}
+
+@media (min-width: 64em) {
+  .carousel__title {
+    font-size: 48px;
+  }
+
+  .carousel__slide {
+    width: 30%;
+  }
+}
+
+.carousel__slide--featured {
+  padding-right: 0;
+  width: 100%;
+}

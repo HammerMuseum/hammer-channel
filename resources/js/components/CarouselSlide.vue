@@ -1,11 +1,5 @@
 <template>
-  <ContentLoader
-    v-if="!item"
-    :speed="2"
-    :animate="true"
-  />
   <div
-    v-else
     class="carousel__slide"
   >
     <UiCard>
@@ -34,12 +28,10 @@
 
 <script>
 import { truncate } from 'lodash';
-import { ContentLoader } from 'vue-content-loader';
 import UiCard from './UiCard.vue';
 
 export default {
   components: {
-    ContentLoader,
     UiCard,
   },
   props: {

@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <VSkip to="#featured">
+      Skip To Main Content
+    </VSkip>
+
     <div class="page-wrapper page-wrapper--full">
       <NavigationBar
         :items="topics"
@@ -62,7 +66,7 @@
         title="Featured programs"
         :controls="true"
         :classes="['carousel--featured']"
-        :options="featuredSettings"
+        :options="featuredCarouselOptions"
         :show-heading="false"
       >
         <FeaturedCarouselSlide
@@ -73,39 +77,53 @@
       </Carousel>
 
       <div class="carousels">
-        <div
-          v-for="(topic, name) in topics"
-          :key="topic.id"
-          v-view="viewHandler"
-          :data-section-id="topic.id"
-        >
-          <Carousel
-            :id="topic.id"
-            :controls="true"
-            :title="name"
-            :options="carouselSettings"
+        <template v-for="(topic, name, idx) in topics">
+          <div
+            v-if="idx === 3"
+            class="inline-block--search"
           >
-            <CarouselSlide
-              v-for="video in topic.videos"
-              :key="video.id"
-              :item="video._source"
-            />
-            <div class="carousel__slide see-more">
-              <router-link
-                class="ui-card"
-                :to="{name: 'search', query: {topics: name}}"
-              >
-                <div class="ui-card__thumbnail">
-                  <div class="ui-card__thumbnail-image">
-                    <span class="see-more__link">
-                      {{ seeAllLinkText(topic, name) }}
-                    </span>
-                  </div>
-                </div>
-              </router-link>
+            <div class="background--grate">
+              <SearchBar />
             </div>
-          </Carousel>
-        </div>
+          </div>
+          <div
+            :key="topic.id"
+            v-view="viewHandler"
+            :data-section-id="topic.id"
+          >
+            <Carousel
+              :id="topic.id"
+              :controls="true"
+              :title="name"
+              :options="{ groupCells: 2 }"
+            >
+              <template #heading>
+                <RouterLink :to="{name: 'search', query: {topics: name}}">
+                  {{ name }}
+                </RouterLink>
+              </template>
+              <CarouselSlide
+                v-for="video in topic.videos"
+                :key="video.id"
+                :item="video._source"
+              />
+              <div class="carousel__slide see-more">
+                <router-link
+                  class="ui-card"
+                  :to="{name: 'search', query: {topics: name}}"
+                >
+                  <div class="ui-card__thumbnail">
+                    <div class="ui-card__thumbnail-image">
+                      <span class="see-more__link">
+                        {{ seeAllLinkText(topic, name) }}
+                      </span>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
+            </Carousel>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -114,6 +132,7 @@
 <script>
 import axios from 'axios';
 import { ContentLoader } from 'vue-content-loader';
+import { VSkip } from 'vuetensils/src/components';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -126,6 +145,7 @@ export default {
     CarouselSlide,
     ContentLoader,
     FeaturedCarouselSlide,
+    VSkip,
   },
   filters: {
     filterId(value) {
@@ -140,35 +160,8 @@ export default {
       pager: null,
       topics: null,
       featured: false,
+      featuredCarouselOptions: { wrapAround: true, pageDots: true },
       currentSectionInView: null,
-      featuredSettings: {
-        edgeFriction: 0.35,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        dots: true,
-      },
-      carouselSettings: {
-        slidesToShow: 3.5,
-        slidesToScroll: 2,
-        responsive: [
-          {
-            breakpoint: 1200,
-            settings: {
-              slidesToShow: 2.5,
-              slidesToScroll: 1,
-            },
-          },
-          {
-            breakpoint: 650,
-            settings: {
-              slidesToShow: 1.5,
-              slidesToScroll: 1,
-            },
-          },
-        ],
-      },
     };
   },
   mounted() {
@@ -213,3 +206,14 @@ export default {
   },
 };
 </script>
+
+<style>
+.inline-block--search {
+  background: #fff;
+  margin-left: -8px;
+}
+
+.inline-block--search .search-bar {
+  padding: 48px 0;
+}
+</style>

@@ -3,7 +3,7 @@
     <UiCard :extra-classes="['ui-card--featured']">
       <RouterLink
         :to="{name: 'video', params: {id: id, slug: slug}}"
-        class="featured-slide"
+        class="ui-card--inner"
       >
         <div class="ui-card__thumbnail">
           <span class="ui-card__duration">{{ duration }}</span>

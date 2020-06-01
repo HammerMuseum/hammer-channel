@@ -1,16 +1,20 @@
 .overlay-toggle--search {
-  .icon {
+  .icon--search {
     width: 24px;
     height: 24px;
   }
-}
 
-.drawer__content--search {
-  background-image: url(/images/grate.svg);
-  background-repeat: repeat;
+  .icon--close {
+    width: 30px;
+    height: 30px;
+  }
 }
 
 .search-bar {
+  padding: 22px;
+}
+
+.search-bar--overlay {
   width: 100%;
   padding: var(--header-height--small) 22px;
   display: flex;
@@ -38,6 +42,7 @@
 .search-bar__options {
   display: flex;
   flex-wrap: wrap;
+  font-size: 22px;
 }
 
 .search-bar__option {
@@ -45,7 +50,6 @@
   background: var(--background-darker);
   color: var(--text-secondary);
   padding: 20px;
-  font-weight: 200;
 }
 
 .search-bar__option-label {
@@ -92,10 +96,15 @@
   .form__input--search-bar {
     font-size: 60px;
   }
+
+  .search-bar__options {
+    font-size: 18px;
+    line-height: 27px;
+  }
 }
 
 @media screen and (min-width: 64em) {
-  .search-bar {
+  .search-bar--overlay {
     width: 70vw;
     padding: var(--header-height) 22px;
   }

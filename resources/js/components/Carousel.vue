@@ -6,7 +6,7 @@
       :id="headingId |filterId "
       :class="['carousel__title', {'visually-hidden': !showHeading}]"
     >
-      {{ title }}
+      <slot name="heading" />
     </h2>
     <div class="carousel-wrapper">
       <div
@@ -16,10 +16,17 @@
       >
         <button
           type="submit"
-          :class="['control', 'control--previous', 'button', 'button--icon', {'button--disabled': isFirstSlide}]"
+          :class="[
+            'control',
+            'control--previous',
+            'button',
+            'button--icon',
+            {'button--disabled': isFirstSlide}
+          ]"
           :disabled="isFirstSlide"
           :aria-disabled="isFirstSlide"
-          @click="$refs.carousel.prev()"
+          tabindex="0"
+          @click="$refs.carousel.previous()"
         >
           <svg
             title="Previous"
@@ -31,9 +38,16 @@
         </button>
         <button
           type="submit"
-          :class="['control', 'control--next', 'button', 'button--icon', {'button--disabled': isFinalSlide}]"
+          :class="[
+            'control',
+            'control--next',
+            'button',
+            'button--icon',
+            {'button--disabled': isFinalSlide}
+          ]"
           :disabled="isFinalSlide"
           :aria-disabled="isFinalSlide"
+          tabindex="0"
           @click="$refs.carousel.next()"
         >
           <svg
@@ -45,57 +59,79 @@
           <span class="icon-text visually-hidden">Next</span>
         </button>
       </div>
-      <VueSlickCarousel
+
+      <Flickity
         ref="carousel"
+        v-images-loaded="imgsLoaded"
         :class="['carousel', ...classes]"
-        v-bind="settings"
         :aria-labelledby="headingId"
-        @beforeChange="setCurrentSlide"
-        @reInit="reInit"
+        :options="mergedOptions"
+        @init="initCarousel"
       >
         <slot />
-      </VueSlickCarousel>
+      </Flickity>
     </div>
   </div>
 </template>
 
 <script>
 import { debounce } from 'lodash';
-import VueSlickCarousel from 'vue-slick-carousel';
+import Flickity from 'vue-flickity';
+import imagesLoaded from 'vue-images-loaded';
 
 export default {
   components: {
-    VueSlickCarousel,
+    Flickity,
   },
+  directives: { imagesLoaded },
   filters: {
     filterId(value) {
       return value.replace(/[\s&]/gi, '').toLowerCase();
     },
   },
   props: {
-    controls: Boolean,
-    classes: Array,
-    id: String,
-    title: String,
-    showHeading: {
-      default() {
-        return true;
-      },
-      type: Boolean,
+    classes: {
+      type: Array,
+      default: () => [],
     },
-    options: Object,
+    controls: {
+      type: Boolean,
+      default: () => true,
+    },
+    id: {
+      type: String,
+      default: '',
+    },
+    options: {
+      type: Object,
+      default: () => ({}),
+    },
+    showHeading: {
+      type: Boolean,
+      default: () => true,
+    },
+    title: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       currentSlide: 0,
+      totalSlides: 0,
       debouncedSetControlsPosition: null,
-      defaultSettings: {
-        infinite: false,
-        touchThreshold: 5,
-        arrows: false,
-        dots: false,
+      defaultOptions: {
+        accessibility: false,
+        cellAlign: 'left',
+        contain: false,
+        freeScroll: false,
+        friction: 0.25,
+        selectedAttraction: 0.02,
+        pageDots: false,
+        percentPosition: true,
+        prevNextButtons: false,
+        wrapAround: false,
       },
-      slideCount: 0,
     };
   },
   computed: {
@@ -103,44 +139,62 @@ export default {
       return `${this.id}heading`;
     },
     isFinalSlide() {
-      if (!this.settings.infinite && this.slideCount) {
-        const sts = this.$refs.carousel.$refs.innerSlider.slidesToShow;
-        return this.currentSlide + sts >= this.slideCount;
+      let total = this.totalSlides;
+      const group = this.options.groupCells;
+      if (group && group > 1) {
+        total = this.totalSlides / group;
       }
-      return false;
+      return !this.mergedOptions.wrapAround && this.currentSlide === total;
     },
     isFirstSlide() {
-      return !this.settings.infinite && this.currentSlide === 0;
+      return !this.mergedOptions.wrapAround && this.currentSlide === 0;
     },
-    settings() {
-      return { ...this.defaultSettings, ...this.options };
+    mergedOptions() {
+      return { ...this.defaultOptions, ...this.options };
     },
   },
   mounted() {
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
-    this.setControlsPosition();
   },
   beforeDestroy() {
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
-    reInit() {
-      this.setSlideCount();
+    imgsLoaded() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.reloadCells();
+        this.$refs.carousel.resize();
+      }
+    },
+    initCarousel() {
+      const carousel = this.$refs.carousel;
+      this.totalSlides = carousel.cells().length - 1;
+
+      carousel.on('change', (index) => {
+        this.currentSlide = index;
+      });
+
+      carousel.on('dragMove', function () {
+        this.slider.childNodes.forEach((slide) => {
+          slide.style.pointerEvents = 'none';
+        });
+      });
+
+      carousel.on('dragEnd', function () {
+        this.slider.childNodes.forEach((slide) => {
+          slide.style.pointerEvents = 'all';
+        });
+      });
+
       this.setControlsPosition();
     },
-    setSlideCount() {
-      this.slideCount = this.$refs.carousel.$refs.innerSlider.slideCount;
-    },
-    setCurrentSlide(prev, next) {
-      this.currentSlide = next;
-    },
     setControlsPosition() {
-      if (!this.$refs.carousel) return;
-      const carousel = this.$refs.carousel.$el;
-      const itemHeight = carousel.querySelector('.ui-card__thumbnail-image').height;
-      const top = itemHeight / 1.4;
-      this.$refs.controls.style.top = `${top}px`;
+      if (this.$refs.carousel) {
+        const itemHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
+        const top = itemHeight / 1.4;
+        this.$refs.controls.style.top = `${top}px`;
+      }
     },
   },
 };
@@ -174,4 +228,7 @@ export default {
   padding-right: 8px;
 }
 
+.nopointer {
+  pointer-events: none;
+}
 </style>
