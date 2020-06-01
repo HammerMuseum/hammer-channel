@@ -138,8 +138,7 @@ export default {
           console.error(err);
         });
     },
-    seeAllLinkText(topic, name) {
-      const count = topic.count;
+    seeAllLinkText(count, name) {
       const videos = count > 1 ? 'videos' : 'video';
       return `See all ${count} ${videos} tagged ${name}`;
     },
