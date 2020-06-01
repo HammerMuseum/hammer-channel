@@ -260,13 +260,17 @@ export default {
   },
   mounted() {
     document.body.classList.add('vp');
-    window.addEventListener('resize', debounce(this.setTranscriptHeight, 200));
+    window.addEventListener('resize', this.debouncedTranscriptHeight);
     this.setupObservers();
   },
   destroyed() {
     document.body.classList.remove('vp');
+    window.removeEventListener('resize', this.debouncedTranscriptHeight);
   },
   methods: {
+    debouncedTranscriptHeight() {
+      return debounce(this.setTranscriptHeight, 200);
+    },
     setupObservers() {
       const stickyElm = document.querySelector('.panel--left');
       const observer = new IntersectionObserver(
@@ -276,7 +280,10 @@ export default {
       observer.observe(stickyElm);
     },
     callback(e) {
-      document.querySelector('.panels').classList.toggle('is-sticky', e[0].intersectionRatio < 1);
+      const el = document.querySelector('.panels');
+      if (el) {
+        el.classList.toggle('is-sticky', e[0].intersectionRatio < 1);
+      }
     },
     setTranscriptHeight() {
       if (!this.$refs.transcript) return;
