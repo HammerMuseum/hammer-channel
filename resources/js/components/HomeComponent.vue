@@ -45,7 +45,7 @@
             <Carousel
               :id="id"
               :controls="true"
-              :title="name"
+              :title="label"
               :options="{ groupCells: 2 }"
             >
               <template #heading>
