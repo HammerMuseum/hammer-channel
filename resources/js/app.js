@@ -48,6 +48,15 @@ const app = new Vue({ // eslint-disable-line
   created() {
     document.addEventListener('keydown', this.onKeyDown, true);
     document.addEventListener('mousedown', this.onPointerDown, true);
+    // See https://github.com/hilongjw/vue-progressbar for progress bar docs.
+    this.$Progress.start();
+    this.$router.beforeEach((to, from, next) => {
+      this.$Progress.start();
+      next();
+    });
+    this.$router.afterEach((to, from) => {
+      this.$Progress.finish();
+    });
   },
   destroyed() {
     document.removeEventListener('keydown', this.onKeyDown, true);
