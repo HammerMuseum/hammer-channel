@@ -18,9 +18,9 @@
         class="navigation-bar__item"
       >
         <a
-          v-scroll-to="{ el: `#${id}`, duration: 0, offset: -80 }"
           href="#"
           :class="['link', {'link--active': activeItem === id }]"
+          @click.prevent="scrollTo(id)"
         >{{ label }}</a>
       </div>
       <div
@@ -99,6 +99,10 @@ export default {
     },
   },
   methods: {
+    scrollTo(id) {
+      const offset = ((window.innerHeight / 2) * -1);
+      this.$scrollTo(`#${id}`, 0, { offset });
+    },
     selectNavigationItem(item) {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);
     },
