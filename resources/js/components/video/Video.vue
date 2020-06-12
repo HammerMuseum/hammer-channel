@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="page-wrapper page--video">
+    <div
+      v-if="video"
+      class="page-wrapper page--video"
+    >
       <RouterLink
         v-if="prevRoute"
         class="breadcrumb"
@@ -10,31 +13,38 @@
       </RouterLink>
       <header class="video-meta video-meta__header">
         <h1 class="heading heading--primary video-meta__title">
-          {{ title }}
+          {{ video.title }}
         </h1>
         <div
-          v-show="date_recorded"
+          v-show="video.date_recorded"
           class="video-meta__date"
         >
-          {{ new Date(date_recorded) | dateFormat('MMM D, YYYY') }}
+          {{ new Date(video.date_recorded) | dateFormat('MMM D, YYYY') }}
         </div>
       </header>
       <div class="panels">
-        <div class="panel--left">
+        <div
+          ref="videoPlayer"
+          class="panel--left"
+        >
           <VideoPlayer
-            :duration="duration"
-            :options="videoOptions"
+            :duration="video.duration"
+            :options="options"
+            :retry-sources="retrySources"
+            :title="video.title"
             :poster="poster"
-            :title="title"
-            :track="track"
             :timecode="timecode"
-            :video-url="src"
+            :track="track"
             @playbackerror="onPlayerError"
             @timeupdate="onTimeUpdate"
           />
+          <button @click="onPlayerError">
+            Reload source
+          </button>
         </div>
         <div class="panel--right">
           <BTabs
+            v-model="tabIndex"
             class="vp__tabs"
             lazy
           >
@@ -49,11 +59,11 @@
                 </h3>
               </template>
               <About
-                :description="description"
-                :date-recorded="date_recorded"
-                :people="speakers"
-                :playlists="in_playlists"
-                :topics="topics"
+                :description="video.description"
+                :date-recorded="video.date_recorded"
+                :people="video.speakers"
+                :playlists="video.in_playlists"
+                :topics="video.topics"
               />
             </BTab>
 
@@ -103,8 +113,8 @@
                 </h3>
               </template>
               <Share
-                :title="title"
-                :date="date_recorded"
+                :title="video.title"
+                :date="video.date_recorded"
               />
             </BTab>
 
@@ -119,8 +129,8 @@
                 </h3>
               </template>
               <RelatedContent
-                :items="relatedItems"
-                :tags="tags"
+                :items="relatedContent"
+                :tags="video.tags"
               />
             </BTab>
           </BTabs>
@@ -158,28 +168,28 @@ export default {
     VideoPlayer,
   },
   mixins: [getRouteData],
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      asset_id: null,
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
-      date_recorded: null,
-      description: null,
-      duration: null,
-      in_playlists: [],
+      options: {
+        sources: null,
+      },
       prevRoute: null,
-      relatedItems: [],
-      speakers: [],
-      thumbnailId: null,
+      relatedContent: [],
+      retrySources: null,
+      tabIndex: 0,
       timecode: 0,
-      title: null,
-      tags: null,
-      topics: [],
       track: null,
       transcript: [],
       transcriptLoaded: false,
-      videoOptions: null,
-      src: null,
+      video: null,
     };
   },
   computed: {
@@ -204,47 +214,19 @@ export default {
       });
     },
     poster() {
-      if (!this.thumbnailId) {
+      const video = this.video;
+      if (!video.thumbnailId) {
         return '';
       }
-      return `/images/${this.thumbnailId}/large`;
+      return `/images/${video.thumbnailId}/large`;
     },
     transcriptInit() {
       return store.transcriptInit;
     },
   },
   watch: {
-    src() {
-      this.videoOptions = {
-        autoplay: false,
-        controlBar: {
-          muteToggle: false,
-          pictureInPictureToggle: false,
-          progressControl: {
-            keepTooltipsInside: true,
-          },
-        },
-        textTrackSettings: false,
-        controls: true,
-        fill: true,
-        sources: [
-          {
-            src: this.src,
-            type: 'video/mp4',
-          },
-        ],
-      };
-    },
-    asset_id() {
-      this.track = {
-        src: `${this.datastore}videos/${this.asset_id}/transcript?format=vtt`,
-        kind: 'captions',
-        language: 'en',
-        label: 'English',
-        default: false,
-      };
-
-      this.fetchRelatedContent();
+    video() {
+      this.updateVideo();
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {
@@ -258,16 +240,48 @@ export default {
       vm.prevRoute = from;
     });
   },
+  beforeRouteUpdate(to, from, next) {
+    axios.get(`/api${to.path}`).then(({ data }) => {
+      this.setData(data);
+      next();
+    });
+  },
   mounted() {
     document.body.classList.add('vp');
     window.addEventListener('resize', this.debouncedTranscriptHeight);
-    this.setupObservers();
+    // this.setupObservers();
   },
   destroyed() {
     document.body.classList.remove('vp');
     window.removeEventListener('resize', this.debouncedTranscriptHeight);
   },
   methods: {
+    setVideoSource(url) {
+      const sources = [{
+        src: url,
+        type: 'video/mp4',
+      }];
+      this.options = { ...this.options, sources };
+      this.retrySources = null;
+    },
+    updateVideo() {
+      this.setVideoSource(this.video.src);
+      this.track = {
+        src: `${this.datastore}videos/${this.$route.params.id}/transcript?format=vtt`,
+        kind: 'captions',
+        language: 'en',
+        label: 'English',
+        default: false,
+      };
+      this.fetchRelatedContent();
+      this.transcript = null;
+      this.transcriptLoaded = false;
+    },
+    setData(data) {
+      this.tabIndex = 0;
+      this.relatedContent = null;
+      this.video = data.video;
+    },
     debouncedTranscriptHeight() {
       return debounce(this.setTranscriptHeight, 200);
     },
@@ -299,23 +313,23 @@ export default {
       axios
         .get(`/api/video/${this.$route.params.id}/${this.$route.params.slug}`)
         .then((response) => {
-          this.src = response.data.src;
+          this.retrySources = [{ src: response.data.video.src, type: 'video/mp4' }];
         }).catch((err) => {
           console.log(err);
         });
     },
     fetchRelatedContent() {
       axios
-        .get(`${this.datastore}videos/${this.asset_id}/related`)
+        .get(`${this.datastore}videos/${this.$route.params.id}/related`)
         .then((response) => {
-          this.relatedItems = response.data.data;
+          this.relatedContent = response.data.data;
         }).catch((err) => {
           console.error(err);
         });
     },
     fetchTranscript() {
       axios
-        .get(`${this.datastore}videos/${this.asset_id}/transcript?format=json`)
+        .get(`${this.datastore}videos/${this.$route.params.id}/transcript?format=json`)
         .then((response) => {
           const paras = {};
           response.data.data.words.forEach((item) => {

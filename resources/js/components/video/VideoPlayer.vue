@@ -73,16 +73,16 @@ export default {
         return '';
       },
     },
-    videoUrl: {
-      type: String,
-      default() {
-        return '';
-      },
-    },
     options: {
       type: Object,
       default() {
         return {};
+      },
+    },
+    retrySources: {
+      type: Array,
+      default() {
+        return [];
       },
     },
     timecode: {
@@ -103,6 +103,20 @@ export default {
       player: null,
       isClipSet: false,
       isEndOfClip: false,
+      defaultOptions: {
+        autoplay: false,
+        controlBar: {
+          muteToggle: false,
+          pictureInPictureToggle: false,
+          progressControl: {
+            keepTooltipsInside: true,
+          },
+        },
+        textTrackSettings: false,
+        controls: true,
+        fill: true,
+        sources: null,
+      },
     };
   },
   computed: {
@@ -154,23 +168,31 @@ export default {
         },
       };
     },
+    playerOptions() {
+      return { ...this.defaultOptions, ...this.options };
+    },
   },
   watch: {
-    options() {
-      this.initVideoPlayer();
-    },
     timecode(val) {
       this.player.currentTime(val);
       this.player.play();
     },
-    videoUrl(val) {
-      this.updatePlayerSrc(val);
+    retrySources(sources) {
+      if (sources !== null) {
+        this.updatePlayerSrc(sources);
+      }
+    },
+    playerOptions(newOptions) {
+      this.reInit(newOptions.sources);
     },
   },
   beforeDestroy() {
     if (this.player) {
       this.player.dispose();
     }
+  },
+  mounted() {
+    this.initVideoPlayer();
   },
   methods: {
     convertSecondsToTimecode(timeStr) {
@@ -190,8 +212,9 @@ export default {
       ];
 
       const self = this;
-
-      this.player = videojs(this.$refs.videoPlayer, this.options, function () {
+      const options = this.playerOptions;
+      // options.sources = [this.sources];
+      this.player = videojs(this.$refs.videoPlayer, options, function () {
         // events
         const events = DEFAULT_EVENTS;
         // watch events
@@ -269,32 +292,35 @@ export default {
         }],
       });
     },
+    reInit(val) {
+      this.player.poster(this.poster);
+      this.player.src(val);
+      this.player.load();
+    },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
-      const self = this;
       let initdone = false;
 
       this.player.off('ready');
-      this.player.src({
-        type: 'video/mp4',
-        src: val,
-      });
+      this.player.src(val);
 
       // wait for video metadata to load, then set time.
-      this.player.on('loadedmetadata', () => {
+      this.player.one('loadedmetadata', () => {
         if (this.isClip) {
-          self.setClip();
+          this.setClip();
         } else {
-          self.player.currentTime(time);
+          this.player.currentTime(time);
+          this.player.play();
         }
       });
 
       // iPhone/iPad need to play first, then set the time
       // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
-      this.player.on('canplaythrough', () => {
+      this.player.one('canplaythrough', () => {
         if (!initdone) {
           if (!this.isClip) {
-            self.player.currentTime(time);
+            this.player.currentTime(time);
+            this.player.play();
           }
           initdone = true;
         }

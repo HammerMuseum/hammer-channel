@@ -71,14 +71,12 @@ class VideoController extends Controller
      */
     public function getAppState($path, $data)
     {
-        $flatData = [];
-        $flatData['path'] = $path;
+        $state = [];
+        $state['path'] = $path;
         if (!empty($data['data'])) {
-            foreach ($data['data'][0] as $k => $v) {
-                $flatData[$k] = $v;
-            }
+            $state['video'] = $data['data'][0];
         }
-        return $flatData;
+        return $state;
     }
 
     /**
