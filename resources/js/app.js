@@ -54,7 +54,7 @@ const app = new Vue({ // eslint-disable-line
       this.$Progress.start();
       next();
     });
-    this.$router.afterEach((to, from) => {
+    this.$router.afterEach(() => {
       this.$Progress.finish();
     });
   },
