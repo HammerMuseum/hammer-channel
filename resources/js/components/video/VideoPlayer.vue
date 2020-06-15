@@ -112,10 +112,11 @@ export default {
             keepTooltipsInside: true,
           },
         },
-        textTrackSettings: false,
         controls: true,
         fill: true,
         sources: null,
+        textTrackSettings: false,
+        preload: 'auto',
       },
     };
   },
@@ -213,7 +214,6 @@ export default {
 
       const self = this;
       const options = this.playerOptions;
-      // options.sources = [this.sources];
       this.player = videojs(this.$refs.videoPlayer, options, function () {
         // events
         const events = DEFAULT_EVENTS;
