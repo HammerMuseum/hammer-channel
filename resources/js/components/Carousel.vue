@@ -161,6 +161,14 @@ export default {
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
+    handleCarouselCellFocus(carousel) {
+      carousel.cells().forEach(el => {
+        el.element.querySelector('a').setAttribute('tabindex', '-1');
+      });
+      carousel.selectedElements().forEach(el => {
+        el.querySelector('a').setAttribute('tabindex', '0');
+      });
+    },
     imgsLoaded() {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
@@ -170,9 +178,11 @@ export default {
     initCarousel() {
       const carousel = this.$refs.carousel;
       this.totalSlides = carousel.cells().length - 1;
+      this.handleCarouselCellFocus(carousel);
 
       carousel.on('change', (index) => {
         this.currentSlide = index;
+        this.handleCarouselCellFocus(carousel);
       });
 
       carousel.on('dragMove', function () {
