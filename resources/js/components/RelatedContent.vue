@@ -1,7 +1,7 @@
 <template>
   <div class="related-content__wrapper">
     <Carousel
-      v-if="items"
+      v-if="items && items.length"
       id="related"
       :classes="['carousel--related-content']"
       :options="{}"
