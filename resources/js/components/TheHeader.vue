@@ -36,6 +36,8 @@
         <div class="header__actions">
           <button
             class="button button--action button--header overlay-toggle--footer"
+            aria-haspopup="true"
+            :aria-expanded="overlay.footer"
             @click="overlay.footer = !overlay.footer"
           >
             <span class="button__text">About</span>
@@ -44,14 +46,33 @@
               title="Show information about the archive"
             />
           </button>
+          <VDrawer
+            v-model="overlay.footer"
+            transition="slide-down"
+            bg-transition="fade"
+            no-scroll
+            :classes="{
+              bg: 'drawer__container drawer__container--footer',
+              content: ['drawer__content', 'drawer__content--footer'] }"
+          >
+            <template #toggle />
+            <TheFooter @close="overlay.footer = false" />
+          </VDrawer>
+
           <button
             class="button button--header overlay-toggle--search"
+            aria-haspopup="true"
+            :aria-expanded="overlay.search"
             @click="overlay.search = !overlay.search"
           >
             <svg
               aria-labelledby="search-icon-title"
               role="img"
-              :class="['icon', {'icon--search': !overlay.search}, {'icon--close': overlay.search}]"
+              :class="[
+                'icon',
+                {'icon--search': !overlay.search},
+                {'icon--close': overlay.search}
+              ]"
             >
               <title
                 id="search-icon-title"
@@ -65,31 +86,28 @@
               </template>
             </svg>
           </button>
+          <VDrawer
+            v-model="overlay.search"
+            transition="slide-down"
+            bg-transition="fade"
+            no-scroll
+            :classes="{
+              bg: 'drawer__container',
+              content: [
+                'drawer__content',
+                'drawer__content--search',
+                'background--grate'
+              ]
+            }"
+          >
+            <template #toggle />
+            <SearchBar
+              :classes="['search-bar--overlay']"
+              focus
+              @close="overlay.search = false"
+            />
+          </VDrawer>
         </div>
-        <VDrawer
-          v-model="overlay.search"
-          transition="slide-down"
-          bg-transition="fade"
-          no-scroll
-          :classes="{
-            bg: 'drawer__container', content: ['drawer__content', 'drawer__content--search', 'background--grate'] }"
-        >
-          <SearchBar
-            :classes="['search-bar--overlay']"
-            focus
-            @close="overlay.search = false"
-          />
-        </VDrawer>
-        <VDrawer
-          v-model="overlay.footer"
-          transition="slide-down"
-          bg-transition="fade"
-          no-scroll
-          :classes="{
-            bg: 'drawer__container drawer__container--footer', content: ['drawer__content', 'drawer__content--footer'] }"
-        >
-          <TheFooter @close="overlay.footer = false" />
-        </VDrawer>
       </div>
     </header>
   </div>
