@@ -38,9 +38,6 @@
             @playbackerror="onPlayerError"
             @timeupdate="onTimeUpdate"
           />
-          <button @click="onPlayerError">
-            Reload source
-          </button>
         </div>
         <div class="panel--right">
           <BTabs
