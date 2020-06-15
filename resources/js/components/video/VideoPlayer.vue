@@ -294,8 +294,13 @@ export default {
     },
     reInit(val) {
       this.player.poster(this.poster);
+      const textTracks = this.player.textTracks();
+      for (let i = 0; i < textTracks.length; i += 1) {
+        this.player.removeRemoteTextTrack(textTracks[i]);
+      }
+      this.player.addRemoteTextTrack(this.track, true);
+      this.player.off('ready');
       this.player.src(val);
-      this.player.load();
     },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
