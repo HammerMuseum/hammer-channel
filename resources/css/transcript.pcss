@@ -3,31 +3,33 @@
   color: var(--text-secondary);
 }
 
-.transcript__download,
 .transcript__paragraph {
   margin-bottom: 16px;
 }
 
-.transcript__download {
+.transcript__actions {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 16px;
 }
 
 .transcript__paragraph--active {
   background: var(--highlight-primary);
 }
 
-.transcript__return {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transform: rotate(-90deg);
-}
-
 @media (min-width: 52.5em) {
-  .tab--transcript {
+  .tab--transcript .button--to-top {
+    position: absolute;
+  }
+
+  .tab--transcript .video-meta__inner {
     overflow: auto;
+    max-height: calc(100vh - calc(var(--video-player-above-player-max-height) + var(--header-height) + 72px));
+  }
+
+  .tab-content {
+    position: relative;
   }
 }
 

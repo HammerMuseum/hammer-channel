@@ -74,9 +74,11 @@
         </ul>
       </div>
     </template>
-    <div class="video-meta__description">
-      <p>{{ description }}</p>
-    </div>
+    <template v-slot:content>
+      <div class="video-meta__description">
+        <p>{{ description }}</p>
+      </div>
+    </template>
   </VideoMeta>
 </template>
 

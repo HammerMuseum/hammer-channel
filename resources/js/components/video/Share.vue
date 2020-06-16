@@ -44,38 +44,40 @@
         </button>
       </div>
     </template>
-    <transition name="fade">
-      <div
-        v-show="showCitation"
-        class="citation"
-      >
-        <h4 class="video-meta__label">
-          Citation
-        </h4>
-        <p
-          id="citation"
-          name="citation"
-          class="citation__content"
+    <template v-slot:content>
+      <transition name="fade">
+        <div
+          v-show="showCitation"
+          class="citation"
         >
-          {{ citation }}
-        </p>
-        <div class="citation__copy">
-          <button
-            :class="['button', 'button--action']"
-            aria-label="Copy citation to clipboard"
-            @click="copyToClipboard(citation)"
+          <h4 class="video-meta__label">
+            Citation
+          </h4>
+          <p
+            id="citation"
+            name="citation"
+            class="citation__content"
           >
-            <transition
-              name="fade"
-              mode="out-in"
-              :duration="100"
+            {{ citation }}
+          </p>
+          <div class="citation__copy">
+            <button
+              :class="['button', 'button--action']"
+              aria-label="Copy citation to clipboard"
+              @click="copyToClipboard(citation)"
             >
-              <span :key="copied">{{ copied ? 'Copied' : 'Copy citation to clipboard' }}</span>
-            </transition>
-          </button>
+              <transition
+                name="fade"
+                mode="out-in"
+                :duration="100"
+              >
+                <span :key="copied">{{ copied ? 'Copied' : 'Copy citation to clipboard' }}</span>
+              </transition>
+            </button>
+          </div>
         </div>
-      </div>
-    </transition>
+      </transition>
+    </template>
   </VideoMeta>
 </template>
 
