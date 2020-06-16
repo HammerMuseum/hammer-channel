@@ -300,7 +300,7 @@ export default {
       if (!this.$refs.transcript) return;
       const el = this.$refs.transcript.$el;
       if (window.innerWidth > 960) {
-        const h = window.innerHeight - el.offsetTop - 56;
+        const h = document.querySelector('.panels').getBoundingClientRect().height;
         el.style.maxHeight = `${h}px`;
       } else {
         el.style.maxHeight = '';
