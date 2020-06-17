@@ -76,7 +76,7 @@ export default {
     },
     scrollListener() {
       if (this.container === 'body') {
-        this.visible = window.scrollY > 150;
+        this.visible = window.pageYOffset > 150;
       } else {
         this.visible = document.querySelector(this.container).scrollTop > 150;
       }
