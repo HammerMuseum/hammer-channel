@@ -26,8 +26,8 @@
             </button>
           </div>
           <HighlightText
-            :show-controls="highlightControlsActive"
-            @close-highlighter-controls="highlightControlsActive = !highlightControlsActive"
+            :show-highlighter="highlightControlsActive"
+            @close-highlighter="highlightControlsActive = !highlightControlsActive"
           >
             <div
               class="transcript__content"

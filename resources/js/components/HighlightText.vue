@@ -5,47 +5,62 @@
       @enter="handleEnter"
     >
       <div
-        v-show="showControls"
-        class="highlighter__controls"
+        v-show="showHighlighter"
+        class="highlighter__inner"
       >
-        <input
-          ref="input"
-          v-model="query"
-          label="Search the transcript"
-          name="searchTranscript"
-          class="form__input"
+        <div
+          class="highlighter__controls"
         >
-        <button
-          class="button button--action"
-          @click="prevHandler"
-        >
-          Prev
-        </button>
-        <button
-          class="button button--action"
-          @click="nextHandler"
-        >
-          Next
-        </button>
-        <button
-          class="button button--action"
-          @click="clearHandler"
-        >
-          Clear
-        </button>
-        <button
-          class="button button--icon"
-          @click="$emit('close-highlighter-controls')"
-        >
-          <span class="visually-hidden">Close transcript search</span>
-          <SvgIcon
-            name="close"
-            title="Close transcript search"
-          />
-        </button>
+          <input
+            ref="input"
+            v-model="query"
+            label="Search the transcript"
+            name="searchTranscript"
+            class="form__input"
+          >
+          <button
+            class="button button--action"
+            @click="prevHandler"
+          >
+            Prev
+          </button>
+          <button
+            class="button button--action"
+            @click="nextHandler"
+          >
+            Next
+          </button>
+          <button
+            class="button button--action"
+            @click="clearHandler"
+          >
+            Clear
+          </button>
+          <button
+            class="button button--icon"
+            @click="$emit('close-highlighter')"
+          >
+            <span class="visually-hidden">Close transcript search</span>
+            <SvgIcon
+              name="close"
+              title="Close transcript search"
+            />
+          </button>
+        </div>
+        <div class="highlighter__summary">
+          <span v-show="hits.length">
+            {{ searchSummary }}
+          </span>
+        </div>
       </div>
     </transition>
-    <div ref="context">
+    <div
+      ref="context"
+      :class="[
+        'highlighter__context',
+        {'highlighter__context--active': showHighlighter}
+      ]"
+    >
       <slot />
     </div>
   </div>
@@ -63,7 +78,7 @@ export default {
     VInput,
   },
   props: {
-    showControls: {
+    showHighlighter: {
       type: Boolean,
       required: true,
     },
@@ -71,6 +86,7 @@ export default {
   data() {
     return {
       isActive: false,
+      currentIndex: 0,
       hits: [],
       markInstance: null,
       query: '',
@@ -80,13 +96,21 @@ export default {
       },
     };
   },
-  mounted() {
-    this.markInstance = new Mark(this.$refs.context);
+  computed: {
+    searchSummary() {
+      const num = this.hits.length;
+      const current = this.currentIndex + 1;
+      const results = num > 1 ? 'results' : 'result';
+      return `${current} of ${num} ${results}`;
+    },
   },
   watch: {
     query() {
       this.highlight();
     },
+  },
+  mounted() {
+    this.markInstance = new Mark(this.$refs.context);
   },
   methods: {
     handleEnter() {
@@ -94,6 +118,7 @@ export default {
     },
     clearHandler() {
       this.query = '';
+      this.hits = [];
     },
     nextHandler() {
       this.currentIndex += 1;
@@ -119,8 +144,6 @@ export default {
               done() {
                 self.hits = self.$refs.context.querySelectorAll('span.ht');
                 self.currentIndex = 0;
-                const current = self.hits[self.currentIndex];
-                VueScrollTo.scrollTo(current, 400, { container: '.tab--transcript .video-meta__inner', offset: 120 });
               },
             });
           },
