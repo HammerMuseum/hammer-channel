@@ -5,32 +5,45 @@
         class="video-meta__transcript"
       >
         <template v-if="items.length">
-          <div class="transcript__actions">
-            <div class="transcript__download">
-              <a
-                href="#"
-                class="download__link link link--text link--text-secondary"
-                @click.prevent="initDownload"
-              >
-                <span class="download__title">Download transcript</span>
-              </a>
-            </div>
-          </div>
-
-          <div
-            class="transcript__content"
-            tabindex="0"
-          >
-            <span class="visually-hidden">Transcript content</span>
-            <p
-              v-for="item in items"
-              :key="item.id"
-              class="transcript__paragraph"
-              :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
+          <div class="transcript__options">
+            <button
+              class="button button--action highlighter-toggle"
+              aria-haspopup="true"
+              :aria-expanded="highlightControlsActive ? 'true' : 'false'"
+              @click="highlightControlsActive = !highlightControlsActive"
             >
-              {{ item.message }}
-            </p>
+              <span class="visually-hidden">Search within the transcript</span>
+              <SvgIcon
+                name="search"
+                title="Search within the transcript"
+              />
+            </button>
+            <button
+              class="button button--action"
+              @click="initDownload"
+            >
+              <span class="download__title">Download transcript</span>
+            </button>
           </div>
+          <HighlightText
+            :show-controls="highlightControlsActive"
+            @close-highlighter-controls="highlightControlsActive = !highlightControlsActive"
+          >
+            <div
+              class="transcript__content"
+              tabindex="0"
+            >
+              <span class="visually-hidden">Transcript content</span>
+              <p
+                v-for="item in items"
+                :key="item.id"
+                class="transcript__paragraph"
+                :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
+              >
+                {{ item.message }}
+              </p>
+            </div>
+          </HighlightText>
         </template>
         <template
           v-else
@@ -70,12 +83,14 @@
 import { saveAs } from 'file-saver';
 import { vueWindowSizeMixin } from 'vue-window-size';
 import VueScrollTo from 'vue-scrollto';
+import HighlightText from './HighlightText.vue';
 import ScrollToTop from './ScrollToTop.vue';
 import { store, mutations } from '../store';
 
 export default {
   name: 'Transcript',
   components: {
+    HighlightText,
     ScrollToTop,
   },
   mixins: [vueWindowSizeMixin],
@@ -97,6 +112,7 @@ export default {
     return {
       currentPara: null,
       scrollInProgress: false,
+      highlightControlsActive: false,
     };
   },
   computed: {
@@ -114,7 +130,7 @@ export default {
     currentPara() {
       const self = this;
       const options = {
-        container: '.tab--transcript',
+        container: '.tab--transcript .video-meta__inner',
         easing: 'ease-in',
         offset: -200,
         force: true,

@@ -7,25 +7,70 @@
   margin-bottom: 16px;
 }
 
-.transcript__actions {
+.transcript__options {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 16px;
+}
+
+.button--to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
 }
 
 .transcript__paragraph--active {
   background: var(--highlight-primary);
 }
 
+.highlighter-toggle {
+  border-bottom: 0;
+
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.highlighter__controls {
+  position: fixed;
+  top: calc(56.25vw);
+  left: 0;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  background: var(--background-darker);
+  padding: 1rem;
+  align-items: center;
+}
+
+.ht {
+  background: var(--highlight-secondary);
+}
+
+.ht.current {
+  background: var(--highlight-primary);
+}
+
 @media (min-width: 52.5em) {
-  .tab--transcript .button--to-top {
+  .highlighter__controls {
     position: absolute;
+    top: 0;
+  }
+
+  .tab--transcript {
+    position: relative;
+
+    .button--to-top {
+      position: absolute;
+    }
   }
 
   .tab--transcript .video-meta__inner {
     overflow: auto;
-    max-height: calc(100vh - calc(var(--video-player-above-player-max-height) + var(--header-height) + 72px));
+    max-height: calc(100vh - calc(var(--video-player-above-player-max-height) + 72px));
   }
 
   .tab-content {

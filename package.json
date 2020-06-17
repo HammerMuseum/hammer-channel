@@ -74,6 +74,7 @@
     "intersection-observer": "^0.10.0",
     "laravel-mix": "^4.1.4",
     "lodash": "^4.17.15",
+    "mark.js": "^8.11.1",
     "match-sorter": "^4.1.0",
     "popper.js": "^1.16.1",
     "pretty-ms": "^7.0.0",
