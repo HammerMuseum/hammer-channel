@@ -22,7 +22,10 @@
           {{ new Date(video.date_recorded) | dateFormat('MMM D, YYYY') }}
         </div>
       </header>
-      <div class="panels">
+      <div
+        ref="panels"
+        class="panels"
+      >
         <div
           ref="videoPlayer"
           class="panel--left"
@@ -173,6 +176,7 @@ export default {
     return {
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
+      isObserverSetup: false,
       options: {
         sources: null,
       },
@@ -222,6 +226,7 @@ export default {
   watch: {
     video() {
       this.updateVideo();
+      this.$nextTick(() => { this.setupObservers(); });
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {
@@ -242,7 +247,6 @@ export default {
   },
   mounted() {
     document.body.classList.add('vp');
-    // this.setupObservers();
   },
   destroyed() {
     document.body.classList.remove('vp');
@@ -275,15 +279,17 @@ export default {
       this.video = data.video;
     },
     setupObservers() {
-      const stickyElm = document.querySelector('.panel--left');
-      const observer = new IntersectionObserver(
-        this.callback,
-        { threshold: [1] },
-      );
-      observer.observe(stickyElm);
+      if (!this.isObserverSetup) {
+        const stickyElm = this.$refs.videoPlayer;
+        const observer = new IntersectionObserver(
+          this.callback,
+          { threshold: [1] },
+        );
+        observer.observe(stickyElm);
+      }
     },
     callback(e) {
-      const el = document.querySelector('.panels');
+      const el = this.$refs.panels;
       if (el) {
         el.classList.toggle('is-sticky', e[0].intersectionRatio < 1);
       }
