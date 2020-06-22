@@ -184,6 +184,7 @@ export default {
       }
     },
     playerOptions(newOptions) {
+      this.player.pause();
       this.reInit(newOptions.sources);
     },
   },
