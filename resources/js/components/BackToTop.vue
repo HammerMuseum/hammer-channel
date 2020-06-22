@@ -16,7 +16,7 @@ import VueScrollTo from 'vue-scrollto';
 import { throttle } from 'lodash';
 
 export default {
-  name: 'ScrollToTop',
+  name: 'BackToTop',
   props: {
     classes: {
       type: Array,

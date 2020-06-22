@@ -63,7 +63,7 @@
           </div>
         </template>
 
-        <ScrollToTop
+        <BackToTop
           label="Go to top of transcript"
           :element="transcriptScrollContainer"
           :container="transcriptScrollContainer"
@@ -73,7 +73,7 @@
             name="next"
             title="Go to top of transcript"
           />
-        </ScrollToTop>
+        </BackToTop>
       </div>
     </template>
   </VideoMeta>
@@ -84,14 +84,14 @@ import { saveAs } from 'file-saver';
 import { vueWindowSizeMixin } from 'vue-window-size';
 import VueScrollTo from 'vue-scrollto';
 import HighlightText from './HighlightText.vue';
-import ScrollToTop from './ScrollToTop.vue';
+import BackToTop from './BackToTop.vue';
 import { store, mutations } from '../store';
 
 export default {
   name: 'Transcript',
   components: {
     HighlightText,
-    ScrollToTop,
+    BackToTop,
   },
   mixins: [vueWindowSizeMixin],
   props: {
