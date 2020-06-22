@@ -65,7 +65,6 @@
             </BTab>
 
             <BTab
-              ref="transcript"
               class="tab--transcript"
             >
               <template v-slot:title>
@@ -139,7 +138,6 @@
 
 <script>
 import axios from 'axios';
-import { debounce } from 'lodash';
 import { BTabs, BTab } from 'bootstrap-vue';
 import getRouteData from '../../mixins/getRouteData';
 import SvgIcon from '../base/SvgIcon.vue';
@@ -229,7 +227,6 @@ export default {
       if (init && !this.transcriptLoaded) {
         this.fetchTranscript();
       }
-      this.setTranscriptHeight();
     },
   },
   beforeRouteEnter(to, from, next) {
@@ -245,12 +242,10 @@ export default {
   },
   mounted() {
     document.body.classList.add('vp');
-    window.addEventListener('resize', this.debouncedTranscriptHeight);
     // this.setupObservers();
   },
   destroyed() {
     document.body.classList.remove('vp');
-    window.removeEventListener('resize', this.debouncedTranscriptHeight);
   },
   methods: {
     setVideoSource(url) {
@@ -279,9 +274,6 @@ export default {
       this.relatedContent = null;
       this.video = data.video;
     },
-    debouncedTranscriptHeight() {
-      return debounce(this.setTranscriptHeight, 200);
-    },
     setupObservers() {
       const stickyElm = document.querySelector('.panel--left');
       const observer = new IntersectionObserver(
@@ -294,16 +286,6 @@ export default {
       const el = document.querySelector('.panels');
       if (el) {
         el.classList.toggle('is-sticky', e[0].intersectionRatio < 1);
-      }
-    },
-    setTranscriptHeight() {
-      if (!this.$refs.transcript) return;
-      const el = this.$refs.transcript.$el;
-      if (window.innerWidth > 960) {
-        const h = document.querySelector('.panels').getBoundingClientRect().height;
-        el.style.maxHeight = `${h}px`;
-      } else {
-        el.style.maxHeight = '';
       }
     },
     onPlayerError() {

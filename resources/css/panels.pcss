@@ -22,6 +22,7 @@
 @media screen and (min-width: 52.5em) {
   .panels {
     flex-direction: row;
+    min-height: calc(100vh - calc(var(--video-player-header-max-height) + var(--header-height) + 72px));
   }
 
   .panel--left {
@@ -33,18 +34,14 @@
 
   .panel--right {
     flex: 1;
-    min-height: auto;
+    min-height: 100%;
     margin-top: -43px;
+    padding-bottom: 0;
   }
 }
 
 @media screen and (min-width: 60em) {
-  .panels {
-    min-height: 100vh;
-  }
-
   .panel--right {
     margin-top: -45px;
-    min-height: 100%;
   }
 }

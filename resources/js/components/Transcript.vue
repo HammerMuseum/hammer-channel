@@ -5,33 +5,32 @@
         class="video-meta__transcript"
       >
         <template v-if="items.length">
-          <div class="transcript__download">
-            <a
-              href="#"
-              class="download__link link link--text link--text-secondary"
-              @click.prevent="initDownload"
-            >
-              <span class="download__title">Download transcript</span>
-            </a>
+          <div class="transcript__actions">
+            <div class="transcript__download">
+              <a
+                href="#"
+                class="download__link link link--text link--text-secondary"
+                @click.prevent="initDownload"
+              >
+                <span class="download__title">Download transcript</span>
+              </a>
+            </div>
           </div>
-          <button
-            v-if="false"
-            v-scroll-to="{ el: `video-meta__transcript`, duration: 0, offset: 0 }"
-            class="button transcript__return"
+
+          <div
+            class="transcript__content"
+            tabindex="0"
           >
-            <SvgIcon
-              name="next"
-              title="Back to top"
-            />
-          </button>
-          <p
-            v-for="item in items"
-            :key="item.id"
-            class="transcript__paragraph"
-            :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
-          >
-            {{ item.message }}
-          </p>
+            <span class="visually-hidden">Transcript content</span>
+            <p
+              v-for="item in items"
+              :key="item.id"
+              class="transcript__paragraph"
+              :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
+            >
+              {{ item.message }}
+            </p>
+          </div>
         </template>
         <template
           v-else
@@ -50,6 +49,18 @@
             </svg>
           </div>
         </template>
+
+        <ScrollToTop
+          label="Go to top of transcript"
+          :element="transcriptScrollContainer"
+          :container="transcriptScrollContainer"
+        >
+          <span class="visually-hidden">Go to top of transcript</span>
+          <SvgIcon
+            name="next"
+            title="Go to top of transcript"
+          />
+        </ScrollToTop>
       </div>
     </template>
   </VideoMeta>
@@ -57,10 +68,17 @@
 
 <script>
 import { saveAs } from 'file-saver';
+import { vueWindowSizeMixin } from 'vue-window-size';
 import VueScrollTo from 'vue-scrollto';
+import ScrollToTop from './ScrollToTop.vue';
 import { store, mutations } from '../store';
 
 export default {
+  name: 'Transcript',
+  components: {
+    ScrollToTop,
+  },
+  mixins: [vueWindowSizeMixin],
   props: {
     currentTimecode: {
       type: Number,
@@ -88,13 +106,16 @@ export default {
     transcriptHasLoaded() {
       return this.items.length;
     },
+    transcriptScrollContainer() {
+      return this.windowWidth > 960 ? '.tab--transcript .video-meta__inner' : undefined;
+    },
   },
   watch: {
     currentPara() {
       const self = this;
       const options = {
         container: '.tab--transcript',
-        easing: 'ease-in-out',
+        easing: 'ease-in',
         offset: -200,
         force: true,
         onStart() {
@@ -107,7 +128,7 @@ export default {
         y: true,
       };
       const el = this.$el.getElementsByClassName('transcript__paragraph--active')[0];
-      VueScrollTo.scrollTo(el, 1600, options);
+      VueScrollTo.scrollTo(el, 1200, options);
     },
   },
   mounted() {
