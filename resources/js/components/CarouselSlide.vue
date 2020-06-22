@@ -17,6 +17,9 @@
           <h2 class="ui-card__title">
             <span>{{ title }}</span>
           </h2>
+          <span class="ui-card__date" v-if="showDate">
+            {{ new Date(item.date_recorded) | dateFormat('MMM D, YYYY') }}
+          </span>
           <p class="ui-card__description">
             {{ description }}
           </p>
@@ -40,6 +43,10 @@ export default {
       default() {
         return {};
       },
+    },
+    showDate: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

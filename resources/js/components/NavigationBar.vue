@@ -12,16 +12,16 @@
       @init="initNavigationBar"
     >
       <div
-        v-for="(item, name) in items"
-        :key="item.id"
-        :data-selector="item.id"
+        v-for="({id, label}) in items"
+        :key="id"
+        :data-selector="id"
         class="navigation-bar__item"
       >
         <a
-          v-scroll-to="{ el: `#${item.id}`, duration: 0, offset: -80 }"
           href="#"
-          :class="['link', {'link--active': activeItem === item.id }]"
-        >{{ name }}</a>
+          :class="['link', {'link--active': activeItem === id }]"
+          @click.prevent="scrollTo(id)"
+        >{{ label }}</a>
       </div>
       <div
         class="navigation-bar__item"
@@ -61,8 +61,8 @@ export default {
   },
   props: {
     items: {
-      type: Object,
-      default: () => ({}),
+      type: Array,
+      default: () => [],
     },
     activeItem: {
       type: String,
@@ -99,6 +99,10 @@ export default {
     },
   },
   methods: {
+    scrollTo(id) {
+      const offset = ((window.innerHeight / 2) * -1);
+      this.$scrollTo(`#${id}`, 0, { offset });
+    },
     selectNavigationItem(item) {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);
     },

@@ -1,5 +1,6 @@
 // TODO: Is there a way we can use the runtime only build of vue?
 import 'svgxuse';
+import 'intersection-observer';
 import Vue from 'vue';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
@@ -47,6 +48,15 @@ const app = new Vue({ // eslint-disable-line
   created() {
     document.addEventListener('keydown', this.onKeyDown, true);
     document.addEventListener('mousedown', this.onPointerDown, true);
+    // See https://github.com/hilongjw/vue-progressbar for progress bar docs.
+    this.$Progress.start();
+    this.$router.beforeEach((to, from, next) => {
+      this.$Progress.start();
+      next();
+    });
+    this.$router.afterEach(() => {
+      this.$Progress.finish();
+    });
   },
   destroyed() {
     document.removeEventListener('keydown', this.onKeyDown, true);

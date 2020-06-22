@@ -16,6 +16,10 @@
 .ui-card__description {
   margin: 0;
   color: var(--text-primary);
+
+  .ui-card--dark-mode & {
+    color: var(--text-secondary);
+  }
 }
 
 .ui-card__duration {
@@ -47,6 +51,10 @@
   font-size: 18px;
   line-height: 20px;
   color: var(--text-primary);
+
+  .ui-card--dark-mode & {
+    color: var(--text-secondary);
+  }
 }
 
 .ui-card__date {
@@ -55,6 +63,10 @@
   font-weight: 600;
   text-transform: uppercase;
   color: var(--text-primary);
+
+  .ui-card--dark-mode & {
+    color: var(--text-secondary);
+  }
 }
 
 .ui-card__thumbnail {
@@ -87,12 +99,21 @@
 .ui-card__snippet {
   margin-bottom: 8px;
   color: var(--text-primary);
+
+  .ui-card--dark-mode & {
+    color: var(--text-secondary);
+  }
 }
 
 .ui-card__highlight {
   padding: 0 2px;
   background: var(--background-dark);
   color: var(--text-secondary);
+
+  .ui-card--dark-mode & {
+    background: var(--background-primary);
+    color: var(--text-primary);
+  }
 }
 
 @media (min-width: 52.5em) {

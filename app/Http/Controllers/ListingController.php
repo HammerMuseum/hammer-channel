@@ -39,7 +39,7 @@ class ListingController extends Controller
     }
 
     /**
-     * Fetches all videos from API and returns the template listing.blade.php
+     * Fetches our custom front page listing.
      *
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -47,7 +47,7 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        $videos = $this->api->request('term', 'term=all');
+        $videos = $this->api->request('search/aggregate/topics');
         return view('app', [
             'state' => $this->getAppState($videos, $params),
             'metadata' => $this->getMetadata($videos)
@@ -63,7 +63,7 @@ class ListingController extends Controller
     public function indexJson(Request $request)
     {
         $params = $request->all();
-        $videos = $this->api->request('term', 'term=all');
+        $videos = $this->api->request('search/aggregate/topics');
         $state = $this->getAppState($videos, $params);
         return response()->json($state);
     }
@@ -82,22 +82,12 @@ class ListingController extends Controller
             $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager']);
         }
 
-        $topics = [];
-        if (isset($data['aggregations']) && isset($data['aggregations']['topics'])) {
-            foreach ($data['aggregations']['topics']['buckets'] as $topic) {
-                $topics[$topic['key']]['id'] =  strtolower(str_replace([' ', '&'], '', $topic['key']));
-                $topics[$topic['key']]['videos'] = $topic['by_topic']['hits']['hits'];
-                $topics[$topic['key']]['count'] = $topic['doc_count'];
-            }
-        }
         return [
             'path' => '/',
             'videos' => isset($data['data']) ? $data['data'] : [],
             'pager' => $pagerLinks,
             'message' => isset($data['message']) ? $data['message'] : false,
             'title' => '',
-            'show_clear' => false,
-            'topics' => $topics,
             'clearedPageQuery' => $this->pagination->clearParams($params, ['page']),
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
         ];
@@ -110,40 +100,6 @@ class ListingController extends Controller
     public function getMetadata($data)
     {
         return $this->metadata->getMetadata($data);
-    }
-
-    /**
-     * List videos by topic
-     *
-     * @param Request $request
-     * @param $keyword
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function topic(Request $request, $keyword)
-    {
-        $queryString = http_build_query(['tags' => $keyword]);
-        $result = $this->api->request('search', $queryString);
-        if (isset($result['success']) && $result['success']) {
-            $requestUrl = $request->url();
-            $pagerLinks = [];
-            if (!empty($videos['pages'])) {
-                $pagerLinks = $this->pagination->pagerLinks($requestUrl, $videos['pages']['pager']);
-            }
-            return view('listing', [
-                'videos' => $result['data'],
-                'message' => false,
-                'title' => ucfirst($keyword),
-                'pagerLinks' => $pagerLinks,
-                'show_clear' => false
-            ]);
-        }
-        return view('listing', [
-            'videos' => false,
-            'message' => 'No videos available.',
-            'title' => '',
-            'pagerLinks' => [],
-            'show_clear' => false,
-        ]);
     }
 
     /**

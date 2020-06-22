@@ -102,7 +102,6 @@
       </SearchPageHeader>
 
       <div class="search-page__content">
-        <vue-progress-bar class="search-page__progress-bar" />
         <aside class="search-page__sidebar">
           <transition
             name="slide-in"
@@ -486,17 +485,17 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
-      this.$Progress.start();
+      // this.$Progress.start();
       this.videos = null;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
-          this.$Progress.finish();
+          // this.$Progress.finish();
           this.loading = false;
         }).catch((err) => {
           console.error(err);
-          this.$Progress.fail();
+          // this.$Progress.fail();
           this.loading = false;
         });
     },

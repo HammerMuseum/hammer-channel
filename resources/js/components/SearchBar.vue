@@ -14,7 +14,7 @@
           name="search"
           aria-label="Search"
           placeholder="Search"
-          @keydown.enter="search"
+          @keypress.enter="search"
         >
         <div class="form__submit-wrapper">
           <button
@@ -73,6 +73,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    focus: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -95,6 +99,13 @@ export default {
   },
   mounted() {
     this.getCannedTerms();
+    if (this.focus) {
+      this.$nextTick(() => {
+        if (window.innerWidth > 960) {
+          this.$refs.searchInput.focus();
+        }
+      });
+    }
   },
   methods: {
     close() {
@@ -103,12 +114,11 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     search() {
       this.setSearchTerm(this.clonedTerm);
-      this.close();
       this.clonedTerm = '';
       this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
-        // @todo Log these to Laravel, not the console
-        console.error(err);
+        // @todo Log these rather than swallow?
       });
+      this.close();
     },
     getCannedTerms() {
       axios
@@ -116,8 +126,7 @@ export default {
         .then((response) => {
           this.cannedTerms = response.data;
         }).catch((err) => {
-          // @todo Log these to Laravel, not the console
-          console.error(err);
+          // @todo Log these rather than swallow?
         });
     },
   },

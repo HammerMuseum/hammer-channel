@@ -9,7 +9,7 @@
       <div class="footer__body">
         <div class="footer__actions">
           <a
-            href="https://hammer.ucla.edu/programs-events"
+            href="https://hammer.ucla.edu/sign-up-for-email-from-the-hammer"
             target="_blank"
             class="link"
           >

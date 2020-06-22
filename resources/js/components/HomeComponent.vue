@@ -6,60 +6,11 @@
 
     <div class="page-wrapper page-wrapper--full">
       <NavigationBar
-        :items="topics"
+        :items="videos"
         :active-item="currentSectionInView"
         :classes="['topic-menu']"
       />
-      <ContentLoader
-        v-if="!featured"
-        :width="800"
-        :height="250"
-        :animate="false"
-        primary-color="#c6c6c6"
-        secondary-color="#c6c6c6"
-      >
-        <rect
-          x="425"
-          y="3"
-          rx="2"
-          ry="2"
-          width="361"
-          height="26"
-        />
-        <rect
-          x="425"
-          y="44"
-          rx="2"
-          ry="2"
-          width="361"
-          height="26"
-        />
-        <rect
-          x="6"
-          y="2"
-          rx="2"
-          ry="2"
-          width="400"
-          height="192"
-        />
-        <rect
-          x="425"
-          y="83"
-          rx="2"
-          ry="2"
-          width="361"
-          height="26"
-        />
-        <rect
-          x="425"
-          y="124"
-          rx="2"
-          ry="2"
-          width="361"
-          height="26"
-        />
-      </ContentLoader>
-
+      <Loader v-if="!featured" />
       <Carousel
         v-else
         id="featured"
@@ -77,7 +28,7 @@
       </Carousel>
 
       <div class="carousels">
-        <template v-for="(topic, name, idx) in topics">
+        <template v-for="({id, label, count, hits}, idx) in videos">
           <div
             v-if="idx === 3"
             class="inline-block--search"
@@ -87,35 +38,35 @@
             </div>
           </div>
           <div
-            :key="topic.id"
+            :key="id"
             v-view="viewHandler"
-            :data-section-id="topic.id"
+            :data-section-id="id"
           >
             <Carousel
-              :id="topic.id"
+              :id="id"
               :controls="true"
-              :title="name"
+              :title="label"
               :options="{ groupCells: 2 }"
             >
               <template #heading>
-                <RouterLink :to="{name: 'search', query: {topics: name}}">
-                  {{ name }}
+                <RouterLink :to="{name: 'search', query: {topics: label}}">
+                  {{ label }}
                 </RouterLink>
               </template>
               <CarouselSlide
-                v-for="video in topic.videos"
+                v-for="video in hits"
                 :key="video.id"
-                :item="video._source"
+                :item="video"
               />
               <div class="carousel__slide see-more">
                 <router-link
                   class="ui-card"
-                  :to="{name: 'search', query: {topics: name}}"
+                  :to="{name: 'search', query: {topics: label}}"
                 >
                   <div class="ui-card__thumbnail">
                     <div class="ui-card__thumbnail-image">
                       <span class="see-more__link">
-                        {{ seeAllLinkText(topic, name) }}
+                        {{ seeAllLinkText(count, label) }}
                       </span>
                     </div>
                   </div>
@@ -131,11 +82,11 @@
 
 <script>
 import axios from 'axios';
-import { ContentLoader } from 'vue-content-loader';
 import { VSkip } from 'vuetensils/src/components';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
+import Loader from './Loader.vue';
 import mixin from '../mixins/getRouteData';
 
 export default {
@@ -143,8 +94,8 @@ export default {
   components: {
     Carousel,
     CarouselSlide,
-    ContentLoader,
     FeaturedCarouselSlide,
+    Loader,
     VSkip,
   },
   filters: {
@@ -155,10 +106,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      title: null,
       videos: null,
-      pager: null,
-      topics: null,
       featured: false,
       featuredCarouselOptions: { wrapAround: true, pageDots: true },
       currentSectionInView: null,
@@ -183,23 +131,19 @@ export default {
     },
     getPageData() {
       axios
-        .get('?term=all')
+        .get('/api')
         .then((response) => {
-          this.title = response.data.title;
-          this.pager = response.data.pager;
-          this.videos = response.data.videos;
-          this.topics = response.data.topics;
+          this.content = response.data.videos;
         }).catch((err) => {
           console.error(err);
         });
     },
-    seeAllLinkText(topic, name) {
-      const count = topic.count;
+    seeAllLinkText(count, name) {
       const videos = count > 1 ? 'videos' : 'video';
       return `See all ${count} ${videos} tagged ${name}`;
     },
     viewHandler(e) {
-      if (e.percentInView === 1 && e.percentTop < 0.6) {
+      if (e.percentInView === 1 && e.percentTop < 0.9) {
         this.currentSectionInView = e.target.element.dataset.sectionId;
       }
     },
