@@ -485,17 +485,14 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
-      // this.$Progress.start();
       this.videos = null;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
-          // this.$Progress.finish();
           this.loading = false;
         }).catch((err) => {
           console.error(err);
-          // this.$Progress.fail();
           this.loading = false;
         });
     },
