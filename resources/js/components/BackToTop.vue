@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import VueScrollTo from 'vue-scrollto';
 import { throttle } from 'lodash';
 
 export default {
@@ -72,7 +71,7 @@ export default {
   methods: {
     scrollTop() {
       const el = this.element;
-      VueScrollTo.scrollTo(el, 600, this.options);
+      this.$emit('scroll-to', el);
     },
     scrollListener() {
       if (this.container === 'body') {

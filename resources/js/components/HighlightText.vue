@@ -17,6 +17,7 @@
             label="Search the transcript"
             name="searchTranscript"
             class="form__input"
+            placeholder="Search transcript..."
           >
           <button
             class="button button--action"
@@ -68,14 +69,11 @@
 
 <script>
 import Mark from 'mark.js';
-import VueScrollTo from 'vue-scrollto';
-import { VInput } from 'vuetensils/src/components';
 import SvgIcon from './SvgIcon.vue';
 
 export default {
   components: {
     SvgIcon,
-    VInput,
   },
   props: {
     showHighlighter: {
@@ -118,6 +116,9 @@ export default {
     },
     clearHandler() {
       this.query = '';
+      this.hits.forEach((el) => {
+        el.classList.remove('current');
+      });
       this.hits = [];
     },
     nextHandler() {
@@ -144,6 +145,8 @@ export default {
               done() {
                 self.hits = self.$refs.context.querySelectorAll('span.ht');
                 self.currentIndex = 0;
+                self.hits[0].classList.add('current');
+                self.$emit('scroll-to', self.hits[0]);
               },
             });
           },
@@ -160,7 +163,7 @@ export default {
         });
         if (current) {
           current.classList.add('current');
-          VueScrollTo.scrollTo(current, 400, { container: '.tab--transcript .video-meta__inner', offset: -120 });
+          this.$emit('scroll-to', current);
         }
       }
     },

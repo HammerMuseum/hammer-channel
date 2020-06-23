@@ -28,6 +28,7 @@
           <HighlightText
             :show-highlighter="highlightControlsActive"
             @close-highlighter="highlightControlsActive = !highlightControlsActive"
+            @scroll-to="handleHighlighterScroll"
           >
             <div
               class="transcript__content"
@@ -67,6 +68,7 @@
           label="Go to top of transcript"
           :element="transcriptScrollContainer"
           :container="transcriptScrollContainer"
+          @scroll-to="handleScrollTo"
         >
           <span class="visually-hidden">Go to top of transcript</span>
           <SvgIcon
@@ -119,6 +121,9 @@ export default {
     clean() {
       return store.transcriptInit;
     },
+    highlighterOffset() {
+      return this.windowWidth > 960 ? -120 : ((window.innerHeight / 2) + 40) * -1;
+    },
     transcriptHasLoaded() {
       return this.items.length;
     },
@@ -154,6 +159,18 @@ export default {
     this.toggleTranscriptInit();
   },
   methods: {
+    handleHighlighterScroll(el) {
+      this.handleScrollTo(el, { offset: this.highlighterOffset });
+    },
+    handleScrollTo(el, options) {
+      const scrollOptions = {
+        container: this.transcriptScrollContainer,
+        easing: 'ease-in',
+        force: true,
+        ...options,
+      };
+      VueScrollTo.scrollTo(el, 600, scrollOptions);
+    },
     initDownload() {
       const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);
       const blob = new Blob(output, { type: 'text/plain;charset=utf-8' });
