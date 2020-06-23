@@ -40,7 +40,7 @@
         <div class="header__actions">
           <button
             class="button button--action button--light overlay-toggle--footer"
-            aria-haspopup="true"
+            :aria-pressed="overlay.footer"
             :aria-expanded="overlay.footer"
             @click="overlay.footer = !overlay.footer"
           >
@@ -77,7 +77,7 @@
 
           <button
             class="button button--light overlay-toggle--search"
-            aria-haspopup="true"
+            :aria-pressed="overlay.search"
             :aria-expanded="overlay.search"
             @click="overlay.search = !overlay.search"
           >
