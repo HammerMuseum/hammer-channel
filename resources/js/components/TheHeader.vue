@@ -137,7 +137,7 @@
 
 <script>
 import axios from 'axios';
-import { VDrawer } from 'vuetensils/src/components';
+import { VDrawer, VSkip } from 'vuetensils/src/components';
 import SearchBar from './SearchBar.vue';
 import TheFooter from './TheFooter.vue';
 
@@ -147,6 +147,7 @@ export default {
     SearchBar,
     TheFooter,
     VDrawer,
+    VSkip,
   },
   data() {
     return {
