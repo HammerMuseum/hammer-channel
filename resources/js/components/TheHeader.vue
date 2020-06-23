@@ -13,8 +13,9 @@
           <a
             class="link link--with-image"
             href="https://hammer.ucla.edu"
+            aria-label="Go to the Hammer Museum website"
           >
-            <img src="/images/logo-hammer-vertical.png">
+            <img src="/images/logo-hammer-vertical.png" alt="Hammer Museum Logo">
           </a>
         </div>
         <div class="header__title">
