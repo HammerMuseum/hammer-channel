@@ -7,6 +7,9 @@
       'header-container',
       { 'overlay--active': overlayActive }]"
   >
+    <VSkip to="#featured">
+      Skip To Main Content
+    </VSkip>
     <header class="header">
       <div class="header__content">
         <div class="header__branding">

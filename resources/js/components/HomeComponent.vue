@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-    <VSkip to="#featured">
-      Skip To Main Content
-    </VSkip>
-
     <div class="page-wrapper page-wrapper--full">
       <NavigationBar
         :items="videos"
@@ -82,8 +78,6 @@
 
 <script>
 import axios from 'axios';
-import { VSkip } from 'vuetensils/src/components';
-import { vueWindowSizeMixin } from 'vue-window-size';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -97,7 +91,6 @@ export default {
     CarouselSlide,
     FeaturedCarouselSlide,
     Loader,
-    VSkip,
   },
   filters: {
     filterId(value) {
