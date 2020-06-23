@@ -24,6 +24,7 @@
         <div class="header__title">
           <RouterLink
             class="link link--with-image"
+            aria-label="Go to the homepage"
             :to="{name: 'app'}"
           >
             <h1 class="visually-hidden">
@@ -37,11 +38,13 @@
             </svg>
           </RouterLink>
         </div>
-        <div class="header__actions">
+        <nav role="navigation" class="header__actions">
           <button
             class="button button--action button--light overlay-toggle--footer"
             :aria-pressed="overlay.footer"
             :aria-expanded="overlay.footer"
+            aria-label="Show information about the archive"
+            aria-controls="about-overlay"
             @click="overlay.footer = !overlay.footer"
           >
             <span class="button__text">About</span>
@@ -51,6 +54,7 @@
             />
           </button>
           <VDrawer
+            id="about"
             v-model="overlay.footer"
             transition="slide-down"
             bg-transition="fade"
@@ -79,6 +83,8 @@
             class="button button--light overlay-toggle--search"
             :aria-pressed="overlay.search"
             :aria-expanded="overlay.search"
+            aria-label="Search"
+            aria-controls="search-overlay"
             @click="overlay.search = !overlay.search"
           >
             <svg
@@ -98,6 +104,7 @@
             </svg>
           </button>
           <VDrawer
+            id="search-overlay"
             v-model="overlay.search"
             transition="slide-down"
             bg-transition="fade"
@@ -129,7 +136,7 @@
               @close="overlay.search = false"
             />
           </VDrawer>
-        </div>
+        </nav>
       </div>
     </header>
   </div>
