@@ -19,13 +19,13 @@
           </a>
         </div>
         <div class="header__title">
-          <h1 class="visually-hidden">
-            Hammer Video
-          </h1>
           <RouterLink
             class="link link--with-image"
             :to="{name: 'app'}"
           >
+            <h1 class="visually-hidden">
+              Hammer Video
+            </h1>
             <svg
               title="Hammer video logo"
               class="icon"
