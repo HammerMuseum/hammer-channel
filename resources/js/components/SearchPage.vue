@@ -102,7 +102,7 @@
       </SearchPageHeader>
 
       <div class="search-page__content">
-        <aside class="search-page__sidebar">
+        <nav class="search-page__sidebar">
           <transition
             name="slide-in"
           >
@@ -207,7 +207,7 @@
               </div>
             </div>
           </transition>
-        </aside>
+        </nav>
 
         <div class="search-page__main">
           <transition
