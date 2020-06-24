@@ -35,7 +35,7 @@
 <body>
   @yield('state')
 
-  <div id="app">
+  <div id="app" tabindex="-1">
     @yield('content')
   </div>
 

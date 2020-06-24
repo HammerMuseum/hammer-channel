@@ -7,38 +7,48 @@
       'header-container',
       { 'overlay--active': overlayActive }]"
   >
-    <VSkip to="#featured">
-      Skip To Main Content
-    </VSkip>
     <header class="header">
       <div class="header__content">
         <div class="header__branding">
           <a
             class="link link--with-image"
             href="https://hammer.ucla.edu"
-            aria-label="Go to the Hammer Museum website"
+            aria-label="Go to the main Hammer Museum website"
           >
-            <img src="/images/logo-hammer-vertical.png" alt="Hammer Museum Logo">
+            <img
+              src="/images/logo-hammer-vertical.png"
+              alt="Hammer Museum Logo"
+            >
           </a>
         </div>
         <div class="header__title">
           <RouterLink
+            v-slot="{ href, isExactActive, navigate }"
             class="link link--with-image"
-            aria-label="Go to the homepage"
+            aria-label="Homepage"
             :to="{name: 'app'}"
           >
-            <h1 class="visually-hidden">
-              Hammer Video
-            </h1>
-            <svg
-              title="Hammer video logo"
-              class="icon"
+            <a
+              :href="href"
+              :aria-current="isExactActive ? 'page' : false"
+              @click="navigate"
             >
-              <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
-            </svg>
+              <h1 class="visually-hidden">
+                Hammer Video
+              </h1>
+              <svg
+                title="Hammer video logo"
+                class="icon"
+              >
+                <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
+              </svg>
+            </a>
           </RouterLink>
         </div>
-        <nav role="navigation" class="header__actions">
+        <nav
+          aria-label="Main navigation"
+          class="header__actions"
+        >
           <button
             class="button button--action button--light overlay-toggle--footer"
             :aria-pressed="overlay.footer"
@@ -83,7 +93,7 @@
             class="button button--light overlay-toggle--search"
             :aria-pressed="overlay.search"
             :aria-expanded="overlay.search"
-            aria-label="Search"
+            aria-label="Open search form"
             aria-controls="search-overlay"
             @click="overlay.search = !overlay.search"
           >
@@ -144,7 +154,7 @@
 
 <script>
 import axios from 'axios';
-import { VDrawer, VSkip } from 'vuetensils/src/components';
+import { VDrawer } from 'vuetensils/src/components';
 import SearchBar from './SearchBar.vue';
 import TheFooter from './TheFooter.vue';
 
@@ -154,7 +164,6 @@ export default {
     SearchBar,
     TheFooter,
     VDrawer,
-    VSkip,
   },
   data() {
     return {
@@ -182,6 +191,7 @@ export default {
           this.tags = response.data;
         }).catch((err) => {
           this.tags = [];
+          console.error(err);
         });
     },
     handleSearchClose() {

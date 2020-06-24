@@ -7,11 +7,15 @@
 @endsection
 
 @section('content')
+  <v-skip ref="skip" to="#main">
+    Skip To Main Content
+  </v-skip>
+  <vue-progress-bar></vue-progress-bar>
+  <vue-announcer></vue-announcer>
   <the-header></the-header>
   <transition name="fade">
     <main class="main" role="main">
-      <router-view></router-view>
-      <vue-progress-bar></vue-progress-bar>
+      <router-view ref="routerView"></router-view>
     </main>
   </transition>
 @endsection

@@ -1,11 +1,14 @@
 <template>
   <div class="container">
-    <div class="page-wrapper page-wrapper--full">
-      <NavigationBar
-        :items="videos"
-        :active-item="currentSectionInView"
-        :classes="['topic-menu']"
-      />
+    <NavigationBar
+      :items="videos"
+      :active-item="currentSectionInView"
+      :classes="['topic-menu']"
+    />
+    <div
+      id="main"
+      class="page-wrapper page-wrapper--full"
+    >
       <Loader v-if="!featured" />
       <Carousel
         v-else
@@ -27,6 +30,7 @@
         <template v-for="({id, label, count, hits}, idx) in videos">
           <div
             v-if="idx === 3"
+            :key="`${id}-search`"
             class="inline-block--search"
           >
             <div class="background--grate">
@@ -78,6 +82,7 @@
 
 <script>
 import axios from 'axios';
+import vueWindowSizeMixin from 'vue-window-size';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -111,6 +116,7 @@ export default {
     this.getFeatured();
     document.body.classList.add('front');
     this.groupCells = this.windowWidth < 840 ? 1 : 2;
+    document.title = 'Hammer Museum Video Archive';
   },
   destroyed() {
     document.body.classList.remove('front');
@@ -141,6 +147,7 @@ export default {
     viewHandler(e) {
       if (e.percentInView === 1 && e.percentTop < 0.9) {
         this.currentSectionInView = e.target.element.dataset.sectionId;
+        this.$emit('update-current-section', this.currentSectionInView);
       }
     },
   },

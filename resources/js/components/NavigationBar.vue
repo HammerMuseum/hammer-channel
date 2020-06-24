@@ -7,7 +7,7 @@
       ref="flickity"
       :options="flickityOptions"
       role="navigation"
-      aria-label="Video topics"
+      aria-label="List of video topics"
       class="navigation-bar__inner"
       @init="initNavigationBar"
     >
@@ -19,6 +19,7 @@
       >
         <a
           href="#"
+          :aria-label="`Topic ${label}`"
           :class="['link', {'link--active': activeItem === id }]"
           @click.prevent="scrollTo(id)"
         >{{ label }}</a>
@@ -32,7 +33,6 @@
           :class="['link']"
         >Back to top
           <svg
-            title="Back to top"
             class="icon icon--nav-bar-link"
           >
             <use xlink:href="/images/sprite.svg#sprite-next" />

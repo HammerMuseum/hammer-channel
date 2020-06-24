@@ -29,12 +29,11 @@
           @click="$refs.carousel.previous()"
         >
           <svg
-            title="Previous"
             class="icon icon--rotate"
           >
             <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
           </svg>
-          <span class="icon-text visually-hidden">Previous</span>
+          <span class="icon-text visually-hidden">Previous video</span>
         </button>
         <button
           type="submit"
@@ -51,12 +50,11 @@
           @click="$refs.carousel.next()"
         >
           <svg
-            title="Next"
             class="icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
           </svg>
-          <span class="icon-text visually-hidden">Next</span>
+          <span class="icon-text visually-hidden">Next items</span>
         </button>
       </div>
 

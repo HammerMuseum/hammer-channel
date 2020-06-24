@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="page-wrapper page--search">
+    <div
+      id="main"
+      class="page-wrapper page--search"
+    >
       <SearchPageHeader
         :loading="loading"
         :extra-classes="['heading', 'heading--primary', 'heading--search']"
@@ -163,6 +166,7 @@
                   class="search-page__facet-controls"
                 >
                   <button
+                    aria-owns="topics"
                     data-facet-id="topics"
                     :class="['button',
                              'search-facet__label',
@@ -174,6 +178,7 @@
                     <span>Topics & Tags</span>
                   </button>
                   <button
+                    aria-owns="people"
                     data-facet-id="people"
                     :class="['button',
                              'search-facet__label',
@@ -184,6 +189,7 @@
                     <span>People</span>
                   </button>
                   <button
+                    aria-owns="playlists"
                     data-facet-id="playlists"
                     :class="['button',
                              'search-facet__label',
@@ -194,6 +200,7 @@
                     <span>Playlists</span>
                   </button>
                   <button
+                    aria-owns="date"
                     data-facet-id="date"
                     :class="['button',
                              'search-facet__label',
@@ -440,8 +447,10 @@ export default {
           this.getPageData(stringifyQuery(to.query));
           if (to.query.term) {
             this.setSearchTerm(to.query.term);
+            document.title = `Search results for ${to.query} - Hammer Museum Video Archive`;
           } else {
             this.setSearchTerm('');
+            document.title = `Search results - Hammer Museum Video Archive`;
           }
         }
       },
