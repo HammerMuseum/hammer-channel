@@ -6,6 +6,7 @@
   width: 100%;
   transition: all var(--overlay-transition);
   z-index: 2;
+  background: var(--overlay-dark);
 }
 
 @media (max-width: 60em) {
@@ -13,6 +14,7 @@
     height: 100%;
     position: fixed;
     z-index: 4;
+    background: none;
   }
 }
 
@@ -58,16 +60,18 @@
   .slide-out-enter,
   .slide-out-leave-to {
     transform: none;
+    background: rgba(0, 0, 0, 0);
   }
 
   .slide-out-enter-to,
   .slide-out-leave {
     transform: none;
+    background: var(--overlay-dark);
   }
 
   .slide-out-leave-active,
   .slide-out-enter-active {
-    transition: transform var(--overlay-transition);
+    transition: all var(--overlay-transition);
   }
 
   .slide-out-enter .overlay__body,
