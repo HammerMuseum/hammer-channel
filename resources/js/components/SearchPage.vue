@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div
-      id="main"
+      id="start-of-content"
       class="page-wrapper page--search"
     >
       <SearchPageHeader

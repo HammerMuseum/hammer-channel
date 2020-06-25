@@ -2,7 +2,7 @@
   <div class="container">
     <div
       v-if="video"
-      id="main"
+      id="start-of-content"
       class="page-wrapper page--video"
     >
       <div class="video-meta__breadcrumb">

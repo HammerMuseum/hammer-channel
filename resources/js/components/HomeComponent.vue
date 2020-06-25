@@ -6,7 +6,7 @@
       :classes="['topic-menu']"
     />
     <div
-      id="main"
+      id="start-of-content"
       class="page-wrapper page-wrapper--full"
     >
       <Loader v-if="!featured" />
