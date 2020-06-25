@@ -36,26 +36,19 @@
         <div class="search-bar__option search-bar__option--left">
           <span>or</span>
           <RouterLink
-            :class="tagClasses"
+            :class="['link--text', 'link--text-secondary', 'link--tag']"
             :to="{ name: 'search', query: {} }"
             @click.native="close"
           >
-            show me everything
+            <span class="link--tag__text">show me everything</span>
           </RouterLink>
         </div>
         <div class="search-bar__option search-bar__option--right">
           <span class="search-bar__option-label">or try</span>
-          <div class="search-bar__option-content">
-            <RouterLink
-              v-for="item in cannedTerms"
-              :key="item.id"
-              :class="tagClasses"
-              :to="{ name: 'search', query: item.query }"
-              @click.native="close"
-            >
-              <span class="search-facet__item-text">{{ item.term }}</span>
-            </RouterLink>
-          </div>
+          <TagGroup
+            :items="tagItems"
+            @tag-selected="close"
+          />
         </div>
       </div>
     </div>
@@ -64,11 +57,14 @@
 
 <script>
 import axios from 'axios';
+import TagGroup from './TagGroup.vue';
 import { store, mutations } from '../store';
 
 export default {
   name: 'SearchBar',
-  components: {},
+  components: {
+    TagGroup,
+  },
   props: {
     classes: {
       type: Array,
@@ -81,7 +77,7 @@ export default {
   },
   data() {
     return {
-      cannedTerms: null,
+      tagItems: null,
       clonedTerm: '',
     };
   },
@@ -102,7 +98,7 @@ export default {
     },
   },
   mounted() {
-    this.getCannedTerms();
+    this.getTagItems();
     if (this.focus) {
       this.$nextTick(() => {
         if (window.innerWidth > 960) {
@@ -124,11 +120,11 @@ export default {
       });
       this.close();
     },
-    getCannedTerms() {
+    getTagItems() {
       axios
         .get('/suggestions')
         .then((response) => {
-          this.cannedTerms = response.data;
+          this.tagItems = response.data;
         }).catch((err) => {
           // @todo Log these rather than swallow?
         });

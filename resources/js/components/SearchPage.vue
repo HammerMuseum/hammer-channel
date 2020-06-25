@@ -283,8 +283,7 @@
             v-if="noResults"
             class="no-results"
           >
-            <span class="label">
-              There are no results that match your criteria.</span>
+            <NoResults />
           </div>
           <div
             v-else
@@ -338,6 +337,7 @@ import axios from 'axios';
 import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
 import { VToggle } from 'vuetensils';
+import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import SearchSnippets from './SearchSnippets.vue';
@@ -356,6 +356,7 @@ export default {
   components: {
     AnimatedNumber,
     CurrentSearch,
+    NoResults,
     Pagination,
     SearchableFacet,
     SearchSnippets,

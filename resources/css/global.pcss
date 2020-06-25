@@ -122,11 +122,16 @@ li {
 }
 
 .link--text-secondary {
-  color: #fff;
+  color: var(--text-secondary);
+
+  &:visited {
+    color: var(--text-secondary);
+  }
 }
 
 .link--tag {
-  display: inline-block;
+  display: inline-flex;
+  text-decoration: none;
   margin: 0 5px;
 }
 
