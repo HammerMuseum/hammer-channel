@@ -9,18 +9,17 @@
     >
       <a
         :href="`/search?${query(item.key, item.value)}`"
-        class="link link--text link--text-and-button"
+        class="link link--text link--text-and-button link--text-and-button-underline"
+        :aria-label="`Remove ${item.value} filter from selection`"
         @click.prevent="handleClick($event)"
       >
-        <span><strong>{{ item.value }}</strong>
-          <button
-            class="button button--icon search-facet__item-remove"
-            :aria-label="`Remove ${item.value} filter from selection`"
-          >
-            <svg class="icon icon--close-pink">
-              <use xlink:href="/images/sprite.svg#sprite-close-pink" />
-            </svg>
-          </button>
+        <strong>{{ item.value }}</strong>
+        <span
+          class="search-facet__item-remove"
+        >
+          <svg class="icon icon--close-pink">
+            <use xlink:href="/images/sprite.svg#sprite-close-pink" />
+          </svg>
         </span>
       </a>
     </div>
