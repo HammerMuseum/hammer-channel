@@ -108,6 +108,7 @@
         <nav class="search-page__sidebar">
           <transition
             name="slide-in"
+            @enter="afterFiltersEnter"
           >
             <div
               v-show="showFilters && hasFacets"
@@ -121,6 +122,7 @@
                 :class="['search__filters']"
               >
                 <button
+                  ref="searchFiltersToggle"
                   class="button button--action button--search-toggle button--small-devices"
                   @click="toggleSearchFilters"
                 >
@@ -586,6 +588,9 @@ export default {
       } else {
         this.openFacetName = name;
       }
+    },
+    afterFiltersEnter() {
+      this.$refs.searchFiltersToggle.focus();
     },
     toggleSearchFilters(event) {
       // Prevents escape key from also closing the main filter panel when
