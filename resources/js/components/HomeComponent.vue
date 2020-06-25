@@ -20,12 +20,7 @@
         :show-heading="false"
       >
         <template #heading>
-          <RouterLink
-            aria-label="A selection of featured videos"
-            :to="{name: 'search', query: {in_playlists: 'Featured'}}"
-          >
-            Featured
-          </RouterLink>
+          <span tabindex="0" role="heading" aria-level="2">Featured videos</span>
         </template>
         <FeaturedCarouselSlide
           v-for="video in featured"
