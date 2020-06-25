@@ -33,7 +33,7 @@
           >
             <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
           </svg>
-          <span class="icon-text visually-hidden">Previous video</span>
+          <span class="icon-text visually-hidden">Go to previous item</span>
         </button>
         <button
           type="submit"
@@ -54,10 +54,9 @@
           >
             <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
           </svg>
-          <span class="icon-text visually-hidden">Next items</span>
+          <span class="icon-text visually-hidden">Go to next item</span>
         </button>
       </div>
-
       <Flickity
         ref="carousel"
         v-images-loaded="imgsLoaded"
