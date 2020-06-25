@@ -68,6 +68,7 @@ const app = new Vue({ // eslint-disable-line
     // See https://github.com/hilongjw/vue-progressbar for progress bar docs.
     this.$Progress.start();
     this.$router.beforeEach((to, from, next) => {
+      if (from.hash !== to.hash) return;
       this.$Progress.start();
       next();
     });
