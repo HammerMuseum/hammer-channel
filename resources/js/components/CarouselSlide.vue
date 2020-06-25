@@ -7,10 +7,10 @@
         :to="{name: 'video', params: {id: id, slug: slug }}"
       >
         <div class="ui-card__thumbnail">
-          <span class="ui-card__duration">{{ duration }}</span>
           <img
             :src="thumbnailUrl"
             class="ui-card__thumbnail-image"
+            alt=""
           >
         </div>
         <article>
@@ -29,6 +29,7 @@
             :truncate="100"
           />
         </article>
+        <Duration :duration="duration" />
       </RouterLink>
     </UiCard>
   </div>

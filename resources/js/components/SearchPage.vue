@@ -304,10 +304,10 @@
                   tabindex="0"
                 >
                   <div class="ui-card__thumbnail">
-                    <span class="ui-card__duration">{{ item.duration }}</span>
                     <img
                       :src="`/images/${item.thumbnailId}/medium`"
                       class="ui-card__thumbnail-image"
+                      alt=""
                     >
                   </div>
                   <article>
@@ -320,6 +320,7 @@
                     <SearchSnippets
                       :snippets="item.snippets"
                     />
+                    <Duration :duration="item.duration" />
                   </article>
                 </RouterLink>
               </UiCard>

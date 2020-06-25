@@ -6,10 +6,10 @@
         class="ui-card--inner"
       >
         <div class="ui-card__thumbnail">
-          <span class="ui-card__duration">{{ duration }}</span>
           <img
             class="ui-card__thumbnail-image"
             :src="thumbnailUrl"
+            alt=""
           >
         </div>
         <article class="ui-card__info">
@@ -35,6 +35,7 @@
             </div>
           </template>
         </article>
+        <Duration :duration="duration" />
       </RouterLink>
     </UiCard>
   </div>
