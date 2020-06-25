@@ -9,8 +9,9 @@
           <img
             class="ui-card__thumbnail-image"
             :src="thumbnailUrl"
-            alt=""
+            :alt="title"
           >
+          <Duration :duration="duration" />
         </div>
         <article class="ui-card__info">
           <template v-if="quote">
@@ -35,7 +36,6 @@
             </div>
           </template>
         </article>
-        <Duration :duration="duration" />
       </RouterLink>
     </UiCard>
   </div>
