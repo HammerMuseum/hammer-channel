@@ -33,6 +33,7 @@
     "eslint-loader": "^3.0.4",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vuejs-accessibility": "^0.1.3",
     "file-loader": "^6.0.0",
     "imagemin-gifsicle": "^7.0.0",
     "imagemin-jpegtran": "^6.0.0",

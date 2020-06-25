@@ -2,6 +2,7 @@ module.exports = {
   "extends": [
     "airbnb-base",
     "plugin:vue/recommended",
+    "plugin:vuejs-accessibility/recommended",
   ],
   "globals": {
     "Vue": true,
