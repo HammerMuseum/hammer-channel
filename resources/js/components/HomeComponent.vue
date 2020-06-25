@@ -19,6 +19,14 @@
         :options="featuredCarouselOptions"
         :show-heading="false"
       >
+        <template #heading>
+          <RouterLink
+            aria-label="A selection of featured videos"
+            :to="{name: 'search', query: {in_playlists: 'Featured'}}"
+          >
+            Featured
+          </RouterLink>
+        </template>
         <FeaturedCarouselSlide
           v-for="video in featured"
           :key="video.id"
@@ -49,7 +57,10 @@
               :options="{ groupCells, contain: true }"
             >
               <template #heading>
-                <RouterLink :to="{name: 'search', query: {topics: label}}">
+                <RouterLink
+                  :aria-label="`A selection of videos from on topic: ${label}`"
+                  :to="{name: 'search', query: {topics: label}}"
+                >
                   {{ label }}
                 </RouterLink>
               </template>
