@@ -54,7 +54,6 @@
             <template #label>
               <span
                 class="search-page__sorting-control-label"
-                aria-hidden
               >
                 <span>Sort by</span>
                 <svg
@@ -310,18 +309,16 @@
                       alt=""
                     >
                   </div>
-                  <article>
-                    <h2 class="ui-card__title">
-                      <span v-html="highlight(item)" />
-                    </h2>
-                    <div class="ui-card__date">
-                      {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
-                    </div>
-                    <SearchSnippets
-                      :snippets="item.snippets"
-                    />
-                    <Duration :duration="item.duration" />
-                  </article>
+                  <h2 class="ui-card__title">
+                    <span v-html="highlight(item)" />
+                  </h2>
+                  <div class="ui-card__date">
+                    {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
+                  </div>
+                  <SearchSnippets
+                    :snippets="item.snippets"
+                  />
+                  <Duration :duration="item.duration" />
                 </RouterLink>
               </UiCard>
             </UiGrid>
@@ -450,7 +447,7 @@ export default {
           this.getPageData(stringifyQuery(to.query));
           if (to.query.term) {
             this.setSearchTerm(to.query.term);
-            this.$announcer.set(`Search results for ${to.query.term}. Page loaded`);
+            this.$announcer.set(`Search results for ${to.query.term}. Page loaded with ${this.total} results.`);
             document.title = `Search results for ${to.query.term} - Hammer Museum Video Archive`;
           } else {
             this.setSearchTerm('');
