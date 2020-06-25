@@ -22,13 +22,12 @@
             <span class="search-page__summary__span">for&nbsp;</span>
             <a
               class="search-page__summary__link link link--text link--text-and-button"
-              title="Clear term and reset search"
               @click="resetSearch"
             >
               <strong>{{ searchTerm }}</strong>
               <button
                 class="button button--icon search-facet__item-remove"
-                aria-label="Clear term and reset search"
+                :aria-label="`Clear your query and reset results`"
               >
                 <svg class="icon icon--close-pink">
                   <use xlink:href="/images/sprite.svg#sprite-close-pink" />
@@ -59,7 +58,6 @@
               >
                 <span>Sort by</span>
                 <svg
-                  title="Sorting options"
                   class="icon icon--small"
                 >
                   <use xlink:href="/images/sprite.svg#sprite-dropdown" />
@@ -71,6 +69,7 @@
               <ul>
                 <li>
                   <RouterLink
+                    aria-label="Sort by date from newest to oldest"
                     class="link link--text"
                     :to="{
                       name: 'search',
@@ -85,6 +84,7 @@
                 </li>
                 <li>
                   <RouterLink
+                    aria-label="Sort by date from oldest to newest"
                     class="link link--text"
                     :to="{
                       name: 'search',
@@ -138,6 +138,7 @@
                       type="text"
                       :name="inputId"
                       label="Search"
+                      aria-label="Enter search query"
                       placeholder="Search"
                       @keydown.enter.prevent="submitSearch"
                     />
@@ -147,12 +148,11 @@
                         @click="submitSearch"
                       >
                         <svg
-                          title="Search"
                           class="icon"
                         >
                           <use xlink:href="/images/sprite.svg#sprite-search" />
                         </svg>
-                        <span class="icon-text visually-hidden">Search</span>
+                        <span class="icon-text visually-hidden">Submit search query</span>
                       </button>
                     </div>
                   </div>
@@ -447,9 +447,11 @@ export default {
           this.getPageData(stringifyQuery(to.query));
           if (to.query.term) {
             this.setSearchTerm(to.query.term);
-            document.title = `Search results for ${to.query} - Hammer Museum Video Archive`;
+            this.$announcer.set(`Search results for ${to.query.term}. Page loaded`);
+            document.title = `Search results for ${to.query.term} - Hammer Museum Video Archive`;
           } else {
             this.setSearchTerm('');
+            this.$announcer.set(`Search results page loaded`);
             document.title = `Search results - Hammer Museum Video Archive`;
           }
         }

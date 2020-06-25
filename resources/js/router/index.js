@@ -25,7 +25,7 @@ const routes = [
     props: (route) => ({ facetQuery: route.query.facets }),
     meta: {
       announcer: {
-        message: 'Search results page',
+        skip: true,
       },
     },
   },
