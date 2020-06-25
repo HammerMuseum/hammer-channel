@@ -26,6 +26,7 @@
               src="/images/logo-hammer-vertical.png"
               alt="Hammer Museum Logo"
             >
+            <span class="visually-hidden">Go to the main Hammer Museum website</span>
           </a>
         </div>
         <div class="header__title">
