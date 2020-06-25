@@ -88,7 +88,7 @@ const app = new Vue({ // eslint-disable-line
       document.body.dataset.interactionMode = 'pointer';
     },
     setFocus() {
-      this.$refs.skip.focus();
+      this.$el.focus();
     },
   },
 });

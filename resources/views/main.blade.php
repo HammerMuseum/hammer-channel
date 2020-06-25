@@ -7,9 +7,6 @@
 @endsection
 
 @section('content')
-  <v-skip ref="skip" to="#main">
-    Skip To Main Content
-  </v-skip>
   <vue-progress-bar></vue-progress-bar>
   <vue-announcer></vue-announcer>
   <the-header></the-header>
