@@ -128,9 +128,6 @@ export default {
       }
     },
   },
-  mounted() {
-    this.$refs.list[0].querySelector('a').focus();
-  },
   methods: {
     handleClick(e) {
       const target = e.currentTarget;
