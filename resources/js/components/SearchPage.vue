@@ -491,15 +491,15 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
-      this.videos = null;
+      this.loading = true;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
           this.loading = false;
         }).catch((err) => {
-          console.error(err);
           this.loading = false;
+          console.error(err);
         });
     },
     handleResize() {
@@ -540,7 +540,6 @@ export default {
       if (this.clonedTerm) {
         searchParams = { term: this.clonedTerm };
       }
-      this.loading = true;
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
       this.$refs.search.blur();
       this.clonedTerm = '';
