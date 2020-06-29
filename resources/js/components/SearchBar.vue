@@ -7,12 +7,11 @@
     >
       <div class="form__input-wrapper form__input-wrapper--search-bar">
         <input
-          :id="searchId"
           ref="searchInput"
           v-model="clonedTerm"
           class="form__input form__input--search form__input--search-bar"
           type="text"
-          :name="searchId"
+          :name="inputId"
           aria-label="Search"
           placeholder="Search"
           @keypress.enter="search"
@@ -86,7 +85,7 @@ export default {
     };
   },
   computed: {
-    searchId() {
+    inputId() {
       return `search-${Math.random().toString(12).substring(4, 8)}`;
     },
     tagClasses() {

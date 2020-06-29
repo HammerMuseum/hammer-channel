@@ -127,7 +127,7 @@
                       ref="search"
                       v-model="clonedTerm"
                       label="Search"
-                      name="term"
+                      :name="inputId"
                       maxlength="256"
                       aria-autocomplete="both"
                       autocapitalize="off"
@@ -400,6 +400,9 @@ export default {
         active.push(query[key]);
       }
       return [].concat(...active);
+    },
+    inputId() {
+      return `input-${Math.random().toString(12).substring(4, 8)}`;
     },
     paginationLinks() {
       if (this.pager) {
