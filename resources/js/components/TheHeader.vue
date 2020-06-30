@@ -56,9 +56,7 @@
               content: ['drawer__content', 'drawer__content--footer'] }"
           >
             <template #toggle />
-            <TheFooter
-              @close="overlay.footer = false"
-            />
+            <TheFooter @close="overlay.footer = false" />
           </VDrawer>
 
           <button
@@ -80,7 +78,12 @@
                 id="search-icon-title"
                 lang="en"
               >{{ overlay.search ? 'Close the search panel' : 'Open the search panel' }}</title>
-
+              <template v-if="overlay.search">
+                <use xlink:href="/images/sprite.svg#sprite-close-pink" />
+              </template>
+              <template v-else>
+                <use xlink:href="/images/sprite.svg#sprite-search" />
+              </template>
             </svg>
           </button>
           <VDrawer
