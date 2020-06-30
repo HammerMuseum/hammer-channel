@@ -108,11 +108,13 @@
           >
             <div
               v-show="showFilters && hasFacets"
+              v-hammer:swipe.left="toggleSearchFilters"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
               @click.self="toggleSearchFilters"
             >
               <div
                 ref="searchFilters"
+                v-hammer:swipe.left="toggleSearchFilters"
                 :class="['search__filters']"
               >
                 <button
@@ -601,6 +603,10 @@ export default {
       if (event.type === 'click' || (event.type === 'keyup' && event.which === 27)) {
         this.showFilters = !this.showFilters;
         this.toggleFacetOverlayActive();
+      }
+
+      if (event.type === 'swipeleft') {
+        this.showFilters = false;
       }
     },
   },

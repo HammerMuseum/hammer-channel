@@ -1,5 +1,6 @@
 <template>
   <div
+    v-hammer:swipe.up="close"
     :class="['search-bar', ...classes]"
   >
     <div

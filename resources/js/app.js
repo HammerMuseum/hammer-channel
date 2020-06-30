@@ -6,6 +6,7 @@ import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
+import { VueHammer } from 'vue2-hammer';
 import router from './router';
 import { store } from './store';
 
@@ -19,6 +20,7 @@ import { store } from './store';
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
+Vue.use(VueHammer);
 Vue.use(VueFilterDateFormat);
 Vue.use(VueCheckView);
 Vue.use(VueScrollTo);
