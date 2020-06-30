@@ -126,7 +126,7 @@ export default {
     },
     getCannedTerms() {
       axios
-        .get('/suggestions')
+        .get('/api/suggestions')
         .then((response) => {
           this.cannedTerms = response.data;
         }).catch((err) => {
