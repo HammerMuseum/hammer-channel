@@ -7,16 +7,20 @@
       class="search-bar__action"
     >
       <div class="form__input-wrapper form__input-wrapper--search-bar">
-        <input
+        <VInput
           ref="searchInput"
           v-model="clonedTerm"
-          class="form__input form__input--search form__input--search-bar"
+          :classes="{
+            input: ['form__input', 'form__input--search', 'form__input--search-bar'],
+            text: 'visually-hidden'
+          }"
           type="text"
           :name="inputId"
-          aria-label="Search"
+          label="Search"
           placeholder="Search"
-          @keypress.enter="search"
-        >
+          @keydown.enter.prevent="search"
+        />
+
         <div class="form__submit-wrapper">
           <button
             :class="['form__submit', 'button', 'button--icon']"
@@ -57,6 +61,7 @@
 
 <script>
 import axios from 'axios';
+import { VInput } from 'vuetensils/src/components';
 import TagGroup from './TagGroup.vue';
 import { store, mutations } from '../store';
 
@@ -64,6 +69,7 @@ export default {
   name: 'SearchBar',
   components: {
     TagGroup,
+    VInput,
   },
   props: {
     classes: {
@@ -114,10 +120,10 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     search() {
       this.setSearchTerm(this.clonedTerm);
-      this.clonedTerm = '';
-      this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
+      this.$router.push({ name: 'search', query: { term: this.clonedTerm } }).catch((err) => {
         // @todo Log these rather than swallow?
       });
+      this.clonedTerm = '';
       this.close();
     },
     getTagItems() {
