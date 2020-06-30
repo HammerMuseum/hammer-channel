@@ -14,10 +14,6 @@
   vertical-align: top;
   -webkit-appearance: none;
   appearance: none;
-
-  &:hover {
-    color: var(--highlight-primary);
-  }
 }
 
 .button--disabled {
@@ -45,11 +41,6 @@
   border-bottom: none;
 }
 
-.button--search-toggle:hover {
-  text-decoration: underline;
-  box-shadow: 1px 1px 1px 1px var(--highlight-primary);
-}
-
 .button--to-top {
   position: fixed;
   bottom: 24px;
@@ -60,5 +51,16 @@
 @media screen and (min-width: 60em) {
   .button--small-devices {
     display: none;
+  }
+}
+
+@media (hover: hover), (-ms-high-contrast: none) {
+  button:hover {
+    color: var(--highlight-primary);
+  }
+
+  .button--search-toggle:hover {
+    text-decoration: underline;
+    box-shadow: 1px 1px 1px 1px var(--highlight-primary);
   }
 }

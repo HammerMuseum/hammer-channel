@@ -17,10 +17,12 @@
   a {
     color: var(--text-primary);
     text-decoration: none;
+  }
+}
 
-    &:hover {
-      color: var(--highlight-primary);
-    }
+@media (hover: hover), (-ms-high-contrast: none) {
+  .carousel__title a:hover {
+    color: var(--highlight-primary);
   }
 }
 

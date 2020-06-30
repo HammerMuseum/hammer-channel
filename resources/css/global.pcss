@@ -111,10 +111,6 @@ li {
   border-bottom: var(--primary-border-highlight);
 }
 
-.link--text:hover {
-  color: var(--highlight-primary);
-}
-
 .link--text-and-button {
   display: inline-flex;
   align-items: center;
@@ -132,6 +128,12 @@ li {
 .link--tag {
   display: inline-block;
   margin: 0 5px;
+}
+
+@media (hover: hover), (-ms-high-contrast: none) {
+  .link--text:hover {
+    color: var(--highlight-primary);
+  }
 }
 
 .heading {
