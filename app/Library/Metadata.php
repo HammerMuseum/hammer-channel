@@ -46,8 +46,21 @@ class Metadata
             $metadata['title'] = $this->getMetadataTitle($data);
             $metadata['description'] = $this->getMetadataDescription($data);
             $metadata['image'] = $this->getMetadataImage($data);
+            $metadata['card'] = 'summary_large_image';
         }
 
+        return $metadata;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function getVideoMetadata($data = [])
+    {
+        $metadata = $this->getMetadata($data);
+        $metadata['card'] = 'player';
+        $metadata['player'] = $this->getMetadataPlayerUrl($data['asset_id']);
         return $metadata;
     }
 
@@ -81,6 +94,14 @@ class Metadata
     public function getMetadataUrl()
     {
         return $this->request->url();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetadataPlayerUrl($id)
+    {
+        return route('video.container', $id);
     }
 
     /**

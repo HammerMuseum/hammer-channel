@@ -31,7 +31,26 @@ class VideoController extends Controller
     }
 
     /**
-     * View an individual video by calling the API by ID
+     * Returns an iframe response for video embed.
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function container(Request $request, $id)
+    {
+        $data = $this->api->request('videos/' . $id);
+        if (empty($data['data'])) {
+            abort(404);
+        }
+
+        return view('video_container', [
+            'url' => $data['data'][0]['src'],
+        ]);
+    }
+
+    /**
+     * View for a single video.
      *
      * @param Request $request
      * @param $id
@@ -43,10 +62,10 @@ class VideoController extends Controller
         $data = $this->api->request('videos/' . $id);
 
         if (empty($data['data'])) {
-            abort(503);
+            abort(404);
         }
 
-        return view('app', [
+        return view('video', [
             'state' => $this->getAppState($path, $data),
             'metadata' => $this->getMetadata($data)
         ]);
@@ -85,6 +104,6 @@ class VideoController extends Controller
      */
     public function getMetadata($data)
     {
-        return $this->metadata->getMetadata($data['data'][0]);
+        return $this->metadata->getVideoMetadata($data['data'][0]);
     }
 }
