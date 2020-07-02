@@ -14,6 +14,4 @@
 Route::get('/', 'ListingController@index');
 Route::get('/video/{id}/{slug}', 'VideoController@view');
 Route::get('/search', 'SearchController@search');
-Route::get('/suggestions', 'ListingController@getSuggestions');
-Route::post('/submit', 'NewsletterController@submit');
 Route::get('/images/{id}/{size}', 'GenerateImageController');

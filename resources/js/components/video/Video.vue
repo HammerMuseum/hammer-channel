@@ -48,11 +48,11 @@
             <BTab active>
               <template v-slot:title>
                 <SvgIcon
-                  name="description"
-                  title="Description"
+                  name="info"
+                  title="Information"
                 />
                 <h3 class="vp__tabs__label">
-                  Description
+                  Info
                 </h3>
               </template>
               <About
