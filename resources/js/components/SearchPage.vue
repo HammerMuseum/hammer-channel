@@ -125,23 +125,19 @@
                 </button>
                 <div class="search-page__form">
                   <div class="form__input-wrapper">
-                    <input
-                      ref="search"
+                    <VInput
+                      ref="searchInput"
                       v-model="clonedTerm"
-                      label="Search"
+                      :classes="{
+                        input: ['form__input', 'form__input--search', 'form__input--light'],
+                        text: 'visually-hidden'
+                      }"
+                      type="text"
                       :name="inputId"
-                      maxlength="256"
-                      aria-autocomplete="both"
-                      autocapitalize="off"
-                      autocomplete="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      title="Search"
-                      aria-label="Search"
-                      class="form__input form__input--light form__input--search"
+                      label="Search"
                       placeholder="Search"
-                      @keydown.enter="submitSearch"
-                    >
+                      @keydown.enter.prevent="submitSearch"
+                    />
                     <div class="form__submit-wrapper">
                       <button
                         :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
@@ -336,7 +332,7 @@
 import axios from 'axios';
 import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
-import { VToggle } from 'vuetensils';
+import { VToggle, VInput } from 'vuetensils/src/components';
 import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
@@ -365,6 +361,7 @@ export default {
     Overlay,
     UiCard,
     UiGrid,
+    VInput,
     VToggle,
   },
   mixins: [getRouteData],
