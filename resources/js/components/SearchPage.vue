@@ -316,11 +316,11 @@
               </UiCard>
             </UiGrid>
 
-            <template v-if="paginationLinks">
-              <Pagination
-                :pagination-links="paginationLinks"
-              />
-            </template>
+            <Pagination
+              v-if="!loading"
+              :total-pages="totalPages"
+              :current-page="currentPage"
+            />
           </div>
         </div>
       </div>
@@ -401,16 +401,6 @@ export default {
       }
       return [].concat(...active);
     },
-    inputId() {
-      return `input-${Math.random().toString(12).substring(4, 8)}`;
-    },
-    paginationLinks() {
-      if (this.pager) {
-        // Filter out empty properties in the pager.
-        return Object.entries(this.pager).reduce((a, [k, v]) => (v ? { ...a, [k]: v } : a), {});
-      }
-      return false;
-    },
     hasFacets() {
       return !!this.facets;
     },
@@ -419,6 +409,9 @@ export default {
     },
     hitInfo() {
       return this.total;
+    },
+    inputId() {
+      return `input-${Math.random().toString(12).substring(4, 8)}`;
     },
     topicsAndTags() {
       return [this.facets.topics, this.facets.tags];
@@ -429,19 +422,8 @@ export default {
     currentPage() {
       return this.totals ? this.totals.currentPage : null;
     },
-    currentResultEnd() {
-      if (!this.totals || !this.currentPage) return null;
-      if (this.totals.totalPages === this.currentPage || this.totals.totalPages === 0) {
-        return this.total;
-      }
-      return this.currentPage * 12;
-    },
-    currentResultStart() {
-      if (!this.currentPage) return null;
-      if (this.currentPage === 0) {
-        return 1;
-      }
-      return 12 * (this.currentPage - 1) + 1;
+    totalPages() {
+      return this.totals ? this.totals.totalPages : null;
     },
     facetOverlayActive() {
       return store.facetOverlayActive;
@@ -488,6 +470,7 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
+      this.videos = null;
       this.loading = true;
       axios
         .get(`/api/search${params}`)
@@ -569,7 +552,7 @@ export default {
       const data = response.data;
       this.totals = data.totals;
       this.title = data.title;
-      this.pager = data.pager;
+      this.pager = data.totals.pager;
       this.videos = data.videos;
       this.facets = data.facets;
       this.clearPageQuery = data.clearedPageQuery;
