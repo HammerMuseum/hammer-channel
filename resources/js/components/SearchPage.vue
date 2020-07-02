@@ -125,23 +125,19 @@
                 </button>
                 <div class="search-page__form">
                   <div class="form__input-wrapper">
-                    <input
-                      ref="search"
+                    <VInput
+                      ref="searchInput"
                       v-model="clonedTerm"
-                      label="Search"
+                      :classes="{
+                        input: ['form__input', 'form__input--search', 'form__input--light'],
+                        text: 'visually-hidden'
+                      }"
+                      type="text"
                       :name="inputId"
-                      maxlength="256"
-                      aria-autocomplete="both"
-                      autocapitalize="off"
-                      autocomplete="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      title="Search"
-                      aria-label="Search"
-                      class="form__input form__input--light form__input--search"
+                      label="Search"
                       placeholder="Search"
-                      @keydown.enter="submitSearch"
-                    >
+                      @keydown.enter.prevent="submitSearch"
+                    />
                     <div class="form__submit-wrapper">
                       <button
                         :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
@@ -283,8 +279,7 @@
             v-if="noResults"
             class="no-results"
           >
-            <span class="label">
-              There are no results that match your criteria.</span>
+            <NoResults />
           </div>
           <div
             v-else
@@ -337,7 +332,8 @@
 import axios from 'axios';
 import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
-import { VToggle } from 'vuetensils';
+import { VToggle, VInput } from 'vuetensils/src/components';
+import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import SearchSnippets from './SearchSnippets.vue';
@@ -356,6 +352,7 @@ export default {
   components: {
     AnimatedNumber,
     CurrentSearch,
+    NoResults,
     Pagination,
     SearchableFacet,
     SearchSnippets,
@@ -364,6 +361,7 @@ export default {
     Overlay,
     UiCard,
     UiGrid,
+    VInput,
     VToggle,
   },
   mixins: [getRouteData],
@@ -468,9 +466,9 @@ export default {
     },
     showFilters(active) {
       if (window.innerWidth < 960 && active) {
-        document.addEventListener('keyup', this.toggleSearchFilters);
+        document.addEventListener('keydown', this.toggleSearchFilters);
       } else {
-        document.removeEventListener('keyup', this.toggleSearchFilters);
+        document.removeEventListener('keydown', this.toggleSearchFilters);
       }
     },
     videos(to) {
@@ -490,15 +488,15 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
-      this.videos = null;
+      this.loading = true;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
           this.loading = false;
         }).catch((err) => {
-          console.error(err);
           this.loading = false;
+          console.error(err);
         });
     },
     handleResize() {
@@ -515,7 +513,7 @@ export default {
         this.setElementHeight('.overlay__inner', '.overlay');
       }
     },
-    highlight(item) {
+    highlight(item) { 1
       if (this.searchTerm) {
         const div = document.createElement('div');
         div.innerText = this.searchTerm;
@@ -539,9 +537,8 @@ export default {
       if (this.clonedTerm) {
         searchParams = { term: this.clonedTerm };
       }
-      this.loading = true;
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
-      this.$refs.search.blur();
+      this.$refs.searchInput.blur();
       this.clonedTerm = '';
     },
     setScrollPosition(useExisting) {
@@ -600,7 +597,10 @@ export default {
       // Prevents escape key from also closing the main filter panel when
       // a facet list is open on top of it.
       if (this.openFacetName) return;
-      if (event.type === 'click' || (event.type === 'keyup' && event.which === 27)) {
+
+      if (event.type === 'click' ||
+        (event.type === 'keydown' && (event.which === 13 || event.which === 27))
+      ) {
         this.showFilters = !this.showFilters;
         this.toggleFacetOverlayActive();
       }
