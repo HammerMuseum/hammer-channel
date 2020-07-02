@@ -466,9 +466,9 @@ export default {
     },
     showFilters(active) {
       if (window.innerWidth < 960 && active) {
-        document.addEventListener('keyup', this.toggleSearchFilters);
+        document.addEventListener('keydown', this.toggleSearchFilters);
       } else {
-        document.removeEventListener('keyup', this.toggleSearchFilters);
+        document.removeEventListener('keydown', this.toggleSearchFilters);
       }
     },
     videos(to) {
@@ -513,7 +513,7 @@ export default {
         this.setElementHeight('.overlay__inner', '.overlay');
       }
     },
-    highlight(item) {
+    highlight(item) { 1
       if (this.searchTerm) {
         const div = document.createElement('div');
         div.innerText = this.searchTerm;
@@ -538,7 +538,7 @@ export default {
         searchParams = { term: this.clonedTerm };
       }
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
-      this.$refs.search.blur();
+      this.$refs.searchInput.blur();
       this.clonedTerm = '';
     },
     setScrollPosition(useExisting) {
@@ -597,7 +597,10 @@ export default {
       // Prevents escape key from also closing the main filter panel when
       // a facet list is open on top of it.
       if (this.openFacetName) return;
-      if (event.type === 'click' || (event.type === 'keyup' && event.which === 27)) {
+
+      if (event.type === 'click' ||
+        (event.type === 'keydown' && (event.which === 13 || event.which === 27))
+      ) {
         this.showFilters = !this.showFilters;
         this.toggleFacetOverlayActive();
       }
