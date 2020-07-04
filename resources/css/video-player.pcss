@@ -75,25 +75,6 @@
     height: calc((var(--video-player-control-bar-height) / 2) - 4px);
   }
 
-  .vjs-overlay-background {
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 4px;
-    text-align: left;
-    background: #262626;
-    background: var(--video-player-overlay-background);
-    border-radius: 0;
-  }
-
-  .vjs-overlay p {
-    margin: 0;
-    font-family: var(--font-family--body);
-    font-weight: 200;
-    font-size: 24px;
-    line-height: 30px;
-  }
-
   .vjs-time-tooltip,
   .vjs-mouse-display .vjs-time-tooltip {
     font-family: var(--font-family--body);
@@ -168,4 +149,36 @@
 .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
   background-color: var(--background-darker);
   color: var(--text-secondary);
+}
+
+.vjs-title-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 4px;
+  text-align: left;
+  background: #000;
+  border-radius: 0;
+  visibility: visible;
+  opacity: 0;
+  margin: 0;
+  font-family: var(--font-family--body);
+  font-weight: 200;
+  font-size: 24px;
+  line-height: 30px;
+}
+
+.vjs-fullscreen .vjs-title-overlay,
+.vjs-fullscreen.vjs-has-started.vjs-user-active.vjs-playing .vjs-title-overlay {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0.1s, opacity 0.1s;
+}
+
+.vjs-fullscreen.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-title-overlay {
+  visibility: visible;
+  opacity: 0;
+  transition: visibility 1s, opacity 1s;
 }

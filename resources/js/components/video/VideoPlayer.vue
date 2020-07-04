@@ -1,7 +1,10 @@
 <template>
   <div class="video-player__wrapper">
     <div class="video-player__wrapper-inner">
-      <div class="video-player__container vjs-hd">
+      <div
+        ref="videoPlayerContainer"
+        class="video-player__container vjs-hd"
+      >
         <video
           ref="videoPlayer"
           class="video-js video-player vjs-default-skin"
@@ -49,7 +52,6 @@
 <script>
 import prettyms from 'humanize-duration';
 import videojs from 'video.js';
-import 'videojs-overlay';
 import 'videojs-markers';
 import ClipDisplay from './ClipDisplay.vue';
 
@@ -202,15 +204,32 @@ export default {
     },
     initVideoPlayer() {
       const DEFAULT_EVENTS = [
-        'loadeddata',
         'canplay',
         'canplaythrough',
-        'play',
-        'pause',
-        'waiting',
-        'playing',
+        'dispose',
+        'durationchange',
         'ended',
+        'enterFullWindow',
+        'enterpictureinpicture',
         'error',
+        'exitFullWindow',
+        'fullscreenchange',
+        'leavepictureinpicture',
+        'loadeddata',
+        'loadedmetadata',
+        'loadstart',
+        'pause',
+        'play',
+        'playerresize',
+        'playing',
+        'ready',
+        'seeked',
+        'seeking',
+        'texttrackchange',
+        'useractive',
+        'userinactive',
+        'volumechange',
+        'waiting',
       ];
 
       const self = this;
@@ -244,6 +263,7 @@ export default {
             self.player.pause();
           }
         });
+
 
         self.$emit('ready', this);
       });
@@ -282,16 +302,13 @@ export default {
       }
     },
     initOverlays() {
-      // Setup title overlay content.
-      this.player.overlay({
-        overlays: [{
-          start: 'fullscreenchange',
-          end: 'fullscreenchange',
-          class: 'hammer-video-overlay',
-          content: `<p>${this.title}</p>`,
-          align: 'top-left',
-        }],
+      // @todo this could be abstracted out into a child component
+      // if multiple overlays were ever needed.
+      const el = videojs.dom.createEl('div', {
+        className: 'vjs-title-overlay',
       });
+      el.innerHTML = `<span>${this.title}</span>`;
+      this.player.el().appendChild(el);
     },
     reInit(val) {
       this.player.poster(this.poster);
