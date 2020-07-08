@@ -135,8 +135,19 @@ li {
   margin: 0 5px;
 }
 
+.link--disabled {
+  color: var(--element-disabled);
+  border-bottom: none;
+  opacity: 0.6;
+
+  a:hover {
+    color: var(--element-disabled);
+    border-bottom: none;
+  }
+}
+
 @media (hover: hover), (-ms-high-contrast: none) {
-  .link--text:hover {
+  .link--text:not(.link--disabled):hover {
     color: var(--highlight-primary);
   }
 }

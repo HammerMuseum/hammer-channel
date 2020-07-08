@@ -27,7 +27,7 @@
           <span
             aria-hidden="true"
             class="link link--text link--disabled"
-          >Prev</span>
+          >Previous</span>
         </template>
       </li>
 
