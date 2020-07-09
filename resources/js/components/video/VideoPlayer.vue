@@ -53,7 +53,6 @@
 import prettyms from 'humanize-duration';
 import videojs from 'video.js';
 import 'videojs-markers';
-import 'videojs-landscape-fullscreen';
 import ClipDisplay from './ClipDisplay.vue';
 
 window.VIDEOJS_NO_BASE_THEME = true;
@@ -265,21 +264,29 @@ export default {
           }
         });
 
+        this.on('fullscreenchange', function () {
+          if (videojs.browser.IS_ANDROID || videojs.browser.IS_IOS) {
+            self.onFullscreenChange();
+          }
+        });
 
         self.$emit('ready', this);
       });
       this.initClipMarkers();
       this.initOverlays();
-      this.player.landscapeFullscreen({
-        fullscreen: {
-          enterOnRotate: true,
-          alwaysInLandscapeMode: true,
-        },
-      });
 
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
       });
+    },
+    onFullscreenChange() {
+      const { type } = window.screen.orientation;
+      const newOrientation = type.startsWith('portrait') ? 'landscape' : 'portrait';
+      if (this.player.isFullscreen()) {
+        window.screen.orientation.lock(newOrientation);
+      } else {
+        window.screen.orientation.unlock();
+      }
     },
     destroyClipMarkers() {
       this.player.markers.removeAll();

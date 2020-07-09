@@ -15,8 +15,10 @@
 
 - Go to dev.video.hammer.cogapp.com/videos/236/van-goghs-life-in-provence
 
-- Rotate the device into landscape mode
+- Enter fullscreen mode in portrait orientation
 
-- Check that fullscreen mode is enabled
+- Check that landscape orientation is activated
 
 - Exit fullscreen by using the on-screen controls
+
+- Check that portrait orientation is activated
