@@ -33,7 +33,6 @@
           class="panel--left"
         >
           <VideoPlayer
-            :duration="video.duration"
             :options="options"
             :retry-sources="retrySources"
             :title="video.title"
@@ -143,6 +142,7 @@
 
 <script>
 import axios from 'axios';
+import debounce from 'lodash/debounce';
 import { BTabs, BTab } from 'bootstrap-vue';
 import getRouteData from '../../mixins/getRouteData';
 import SvgIcon from '../base/SvgIcon.vue';
@@ -178,7 +178,7 @@ export default {
     return {
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
-      isObserverSetup: false,
+      debouncedResizeObserver: null,
       options: {
         sources: null,
       },
@@ -249,11 +249,28 @@ export default {
   },
   mounted() {
     document.body.classList.add('vp');
+    this.debouncedResizeListener = debounce(this.onResize, 100);
+    window.addEventListener('resize', this.debouncedResizeListener);
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.onResize();
+      this.setupObservers();
+    });
   },
   destroyed() {
     document.body.classList.remove('vp');
+    window.removeEventListener('resize', this.debouncedResizeListener);
   },
   methods: {
+    onResize() {
+      const playerHeight = window.innerWidth * (9 / 16);
+      if (window.innerHeight > (playerHeight * 2)) {
+        document.querySelector('.panels').classList.add('is-sticky');
+      } else {
+        document.querySelector('.panels').classList.remove('is-sticky');
+      }
+    },
     setVideoSource(url) {
       const sources = [{
         src: url,
@@ -281,20 +298,16 @@ export default {
       this.video = data.video;
     },
     setupObservers() {
-      if (!this.isObserverSetup) {
-        const stickyElm = this.$refs.videoPlayer;
-        const observer = new IntersectionObserver(
-          this.callback,
-          { threshold: [1] },
-        );
-        observer.observe(stickyElm);
-      }
+      const stickyElm = document.querySelector('.panel--left');
+      const observer = new IntersectionObserver(
+        this.observerCallback,
+        { threshold: [1] },
+      );
+      observer.observe(stickyElm);
     },
-    callback(e) {
-      const el = this.$refs.panels;
-      if (el) {
-        el.classList.toggle('is-sticky', e[0].intersectionRatio < 1);
-      }
+    observerCallback(e) {
+      const el = document.querySelector('.panels');
+      el.classList.toggle('has-reached-sticky', e[0].intersectionRatio < 1);
     },
     onPlayerError() {
       axios
