@@ -52,6 +52,7 @@
 <script>
 import prettyms from 'humanize-duration';
 import videojs from 'video.js';
+import getOrientation from '../../mixins/getOrientation';
 import 'videojs-markers';
 import ClipDisplay from './ClipDisplay.vue';
 
