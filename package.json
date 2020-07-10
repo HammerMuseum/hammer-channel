@@ -12,7 +12,7 @@
     "watch": "NODE_ENV=production npx webpack --mode production --env prod --watch",
     "watch-dev": "NODE_ENV=development npx webpack --mode development --env dev --watch",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --mode development --env dev --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "away": "npm run watch-dev"
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -41,6 +41,7 @@
     "imagemin-webpack": "^5.1.1",
     "laravel-mix-postcss-config": "^1.0.4",
     "mini-css-extract-plugin": "^0.9.0",
+    "patch-package": "^6.2.2",
     "postcss-cli": "^7.1.1",
     "postcss-color-function": "^4.1.0",
     "postcss-custom-properties": "^9.1.1",
