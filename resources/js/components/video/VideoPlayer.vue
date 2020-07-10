@@ -266,7 +266,7 @@ export default {
         });
 
         this.on('fullscreenchange', function () {
-          if (videojs.browser.IS_ANDROID || videojs.browser.IS_IOS) {
+          if (videojs.browser.IS_ANDROID) {
             self.onFullscreenChange();
           }
         });
@@ -280,11 +280,15 @@ export default {
         self.player.addRemoteTextTrack(self.track, true);
       });
     },
-    onFullscreenChange() {
-      const { type } = window.screen.orientation;
-      const newOrientation = type.startsWith('portrait') ? 'landscape' : 'portrait';
+    async onFullscreenChange() {
+      const orientation = getOrientation();
+      const newOrientation = orientation.startsWith('portrait') ? 'landscape' : 'portrait';
       if (this.player.isFullscreen()) {
-        window.screen.orientation.lock(newOrientation);
+        try {
+          await window.screen.orientation.lock(newOrientation);
+        } catch (err) {
+          console.error(err);
+        }
       } else {
         window.screen.orientation.unlock();
       }
