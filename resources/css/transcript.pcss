@@ -91,11 +91,21 @@
     .button--to-top {
       position: absolute;
     }
-  }
 
-  .tab--transcript .video-meta__inner {
-    overflow: auto;
-    max-height: calc(100vh - calc(var(--video-player-header-max-height)));
+    .video-meta__inner {
+      overflow: auto;
+      max-height: calc(100vh - calc(var(--video-player-header-max-height) + var(--header-height) + 72px));
+    }
+
+    .video-meta__inner::after {
+      content: "";
+      width: calc(100% - 16px);
+      height: 80px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(0deg, rgba(38, 38, 38, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    }
   }
 
   .tab-content {

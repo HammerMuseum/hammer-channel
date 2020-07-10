@@ -6,10 +6,9 @@
           class="share-button button button--icon"
           :href="facebook"
           target="blank"
-          title="Share on Facebook"
+          aria-label="Share on Facebook"
         >
           <svg
-            title="Facebook"
             class="icon share-buttons__icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-facebook" />
@@ -19,10 +18,9 @@
           class="share-button button button--icon"
           :href="twitter"
           target="blank"
-          title="Share on Twitter"
+          aria-label="Share on Twitter"
         >
           <svg
-            title="Twitter"
             class="icon share-buttons__icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-twitter" />
@@ -30,17 +28,15 @@
         </a>
         <button
           class="share-button button button--icon"
-          aria-label="Show the video citation"
-          title="Get citation"
+          aria-label="Get the video citation"
           @click="showCitation = !showCitation"
         >
           <svg
-            title="Citation"
             class="icon share-buttons__icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-cite" />
           </svg>
-          <span class="icon-text visually-hidden">Cite this video</span>
+          <span class="icon-text">Cite</span>
         </button>
       </div>
     </template>

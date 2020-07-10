@@ -101,7 +101,6 @@ class SearchController extends Controller
         return [
             'path' => '/search',
             'videos' => isset($data['data']) ? $data['data'] : [],
-            'pager' => $pagerLinks,
             'term' => $term,
             'message' => false,
             'title' => !is_null($term) ? 'Results for "' . ucfirst($term) . '"' : '""',

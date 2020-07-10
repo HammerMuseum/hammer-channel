@@ -4,8 +4,8 @@
       <VInput
         ref="search"
         v-model="searchTerm"
+        :name="inputId"
         label="Type to filter list..."
-        name="searchTerm"
         :classes="{ text: 'visually-hidden', input: 'form__input form__input--search' }"
         placeholder="Search to filter list"
         autocomplete="new-password"
@@ -112,6 +112,9 @@ export default {
         return filteredOptions;
       }
       return list;
+    },
+    inputId() {
+      return `input-${Math.random().toString(12).substring(4, 8)}`;
     },
   },
   watch: {

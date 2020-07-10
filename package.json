@@ -83,7 +83,6 @@
     "svgxuse": "^1.2.6",
     "video.js": "^7.7.6",
     "videojs-markers": "^1.0.1",
-    "videojs-overlay": "^2.1.4",
     "vtt.js": "^0.13.0",
     "vue": "^2.6.11",
     "vue-check-view": "^0.3.0",
@@ -95,6 +94,7 @@
     "vue-router": "^3.1.6",
     "vue-scrollto": "^2.18.1",
     "vue-window-size": "^0.2.5",
+    "vue2-hammer": "^2.1.2",
     "vuetensils": "^0.6.5"
   }
 }

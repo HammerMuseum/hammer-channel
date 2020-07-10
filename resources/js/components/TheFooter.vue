@@ -1,5 +1,6 @@
 <template>
   <footer
+    v-hammer:swipe.up="close"
     class="footer"
   >
     <div class="footer__inner">
@@ -66,6 +67,11 @@ export default {
   name: 'TheFooter',
   components: {
     SvgIcon,
+  },
+  methods: {
+    close() {
+      this.$emit('close');
+    },
   },
 };
 </script>

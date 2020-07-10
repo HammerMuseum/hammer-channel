@@ -108,11 +108,13 @@
           >
             <div
               v-show="showFilters && hasFacets"
+              v-hammer:swipe.left="toggleSearchFilters"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
               @click.self="toggleSearchFilters"
             >
               <div
                 ref="searchFilters"
+                v-hammer:swipe.left="toggleSearchFilters"
                 :class="['search__filters']"
               >
                 <button
@@ -123,23 +125,19 @@
                 </button>
                 <div class="search-page__form">
                   <div class="form__input-wrapper">
-                    <input
-                      ref="search"
+                    <VInput
+                      ref="searchInput"
                       v-model="clonedTerm"
+                      :classes="{
+                        input: ['form__input', 'form__input--search', 'form__input--light'],
+                        text: 'visually-hidden'
+                      }"
+                      type="text"
+                      :name="inputId"
                       label="Search"
-                      name="term"
-                      maxlength="256"
-                      aria-autocomplete="both"
-                      autocapitalize="off"
-                      autocomplete="off"
-                      autocorrect="off"
-                      spellcheck="false"
-                      title="Search"
-                      aria-label="Search"
-                      class="form__input form__input--light form__input--search"
                       placeholder="Search"
-                      @keydown.enter="submitSearch"
-                    >
+                      @keydown.enter.prevent="submitSearch"
+                    />
                     <div class="form__submit-wrapper">
                       <button
                         :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
@@ -281,8 +279,7 @@
             v-if="noResults"
             class="no-results"
           >
-            <span class="label">
-              There are no results that match your criteria.</span>
+            <NoResults />
           </div>
           <div
             v-else
@@ -319,11 +316,11 @@
               </UiCard>
             </UiGrid>
 
-            <template v-if="paginationLinks">
-              <Pagination
-                :pagination-links="paginationLinks"
-              />
-            </template>
+            <Pagination
+              v-if="!loading"
+              :total-pages="totalPages"
+              :current-page="currentPage"
+            />
           </div>
         </div>
       </div>
@@ -335,7 +332,8 @@
 import axios from 'axios';
 import { debounce } from 'lodash';
 import AnimatedNumber from 'animated-number-vue';
-import { VToggle } from 'vuetensils';
+import { VToggle, VInput } from 'vuetensils/src/components';
+import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import SearchSnippets from './SearchSnippets.vue';
@@ -354,6 +352,7 @@ export default {
   components: {
     AnimatedNumber,
     CurrentSearch,
+    NoResults,
     Pagination,
     SearchableFacet,
     SearchSnippets,
@@ -362,6 +361,7 @@ export default {
     Overlay,
     UiCard,
     UiGrid,
+    VInput,
     VToggle,
   },
   mixins: [getRouteData],
@@ -401,13 +401,6 @@ export default {
       }
       return [].concat(...active);
     },
-    paginationLinks() {
-      if (this.pager) {
-        // Filter out empty properties in the pager.
-        return Object.entries(this.pager).reduce((a, [k, v]) => (v ? { ...a, [k]: v } : a), {});
-      }
-      return false;
-    },
     hasFacets() {
       return !!this.facets;
     },
@@ -416,6 +409,9 @@ export default {
     },
     hitInfo() {
       return this.total;
+    },
+    inputId() {
+      return `input-${Math.random().toString(12).substring(4, 8)}`;
     },
     topicsAndTags() {
       return [this.facets.topics, this.facets.tags];
@@ -426,19 +422,8 @@ export default {
     currentPage() {
       return this.totals ? this.totals.currentPage : null;
     },
-    currentResultEnd() {
-      if (!this.totals || !this.currentPage) return null;
-      if (this.totals.totalPages === this.currentPage || this.totals.totalPages === 0) {
-        return this.total;
-      }
-      return this.currentPage * 12;
-    },
-    currentResultStart() {
-      if (!this.currentPage) return null;
-      if (this.currentPage === 0) {
-        return 1;
-      }
-      return 12 * (this.currentPage - 1) + 1;
+    totalPages() {
+      return this.totals ? this.totals.totalPages : null;
     },
     facetOverlayActive() {
       return store.facetOverlayActive;
@@ -463,9 +448,9 @@ export default {
     },
     showFilters(active) {
       if (window.innerWidth < 960 && active) {
-        document.addEventListener('keyup', this.toggleSearchFilters);
+        document.addEventListener('keydown', this.toggleSearchFilters);
       } else {
-        document.removeEventListener('keyup', this.toggleSearchFilters);
+        document.removeEventListener('keydown', this.toggleSearchFilters);
       }
     },
     videos(to) {
@@ -486,14 +471,15 @@ export default {
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {
       this.videos = null;
+      this.loading = true;
       axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
           this.loading = false;
         }).catch((err) => {
-          console.error(err);
           this.loading = false;
+          console.error(err);
         });
     },
     handleResize() {
@@ -510,7 +496,7 @@ export default {
         this.setElementHeight('.overlay__inner', '.overlay');
       }
     },
-    highlight(item) {
+    highlight(item) { 1
       if (this.searchTerm) {
         const div = document.createElement('div');
         div.innerText = this.searchTerm;
@@ -534,9 +520,8 @@ export default {
       if (this.clonedTerm) {
         searchParams = { term: this.clonedTerm };
       }
-      this.loading = true;
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
-      this.$refs.search.blur();
+      this.$refs.searchInput.blur();
       this.clonedTerm = '';
     },
     setScrollPosition(useExisting) {
@@ -567,7 +552,7 @@ export default {
       const data = response.data;
       this.totals = data.totals;
       this.title = data.title;
-      this.pager = data.pager;
+      this.pager = data.totals.pager;
       this.videos = data.videos;
       this.facets = data.facets;
       this.clearPageQuery = data.clearedPageQuery;
@@ -595,9 +580,16 @@ export default {
       // Prevents escape key from also closing the main filter panel when
       // a facet list is open on top of it.
       if (this.openFacetName) return;
-      if (event.type === 'click' || (event.type === 'keyup' && event.which === 27)) {
+
+      if (event.type === 'click' ||
+        (event.type === 'keydown' && (event.which === 13 || event.which === 27))
+      ) {
         this.showFilters = !this.showFilters;
         this.toggleFacetOverlayActive();
+      }
+
+      if (event.type === 'swipeleft') {
+        this.showFilters = false;
       }
     },
   },

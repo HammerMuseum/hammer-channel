@@ -1,21 +1,26 @@
 <template>
   <div
+    v-hammer:swipe.up="close"
     :class="['search-bar', ...classes]"
   >
     <div
       class="search-bar__action"
     >
       <div class="form__input-wrapper form__input-wrapper--search-bar">
-        <input
+        <VInput
           ref="searchInput"
           v-model="clonedTerm"
-          class="form__input form__input--search form__input--search-bar"
+          :classes="{
+            input: ['form__input', 'form__input--search', 'form__input--search-bar'],
+            text: 'visually-hidden'
+          }"
           type="text"
-          name="search"
-          aria-label="Search"
+          :name="inputId"
+          label="Search"
           placeholder="Search"
-          @keypress.enter="search"
-        >
+          @keydown.enter.prevent="search"
+        />
+
         <div class="form__submit-wrapper">
           <button
             :class="['form__submit', 'button', 'button--icon']"
@@ -35,26 +40,19 @@
         <div class="search-bar__option search-bar__option--left">
           <span>or</span>
           <RouterLink
-            :class="tagClasses"
+            :class="['link--text', 'link--text-secondary', 'link--tag']"
             :to="{ name: 'search', query: {} }"
             @click.native="close"
           >
-            show me everything
+            <span class="link--tag__text">show me everything</span>
           </RouterLink>
         </div>
         <div class="search-bar__option search-bar__option--right">
           <span class="search-bar__option-label">or try</span>
-          <div class="search-bar__option-content">
-            <RouterLink
-              v-for="item in cannedTerms"
-              :key="item.id"
-              :class="tagClasses"
-              :to="{ name: 'search', query: item.query }"
-              @click.native="close"
-            >
-              <span class="search-facet__item-text">{{ item.term }}</span>
-            </RouterLink>
-          </div>
+          <TagGroup
+            :items="tagItems"
+            @tag-selected="close"
+          />
         </div>
       </div>
     </div>
@@ -63,11 +61,16 @@
 
 <script>
 import axios from 'axios';
+import { VInput } from 'vuetensils/src/components';
+import TagGroup from './TagGroup.vue';
 import { store, mutations } from '../store';
 
 export default {
   name: 'SearchBar',
-  components: {},
+  components: {
+    TagGroup,
+    VInput,
+  },
   props: {
     classes: {
       type: Array,
@@ -80,11 +83,14 @@ export default {
   },
   data() {
     return {
-      cannedTerms: null,
+      tagItems: null,
       clonedTerm: '',
     };
   },
   computed: {
+    inputId() {
+      return `search-${Math.random().toString(12).substring(4, 8)}`;
+    },
     tagClasses() {
       return ['search-facet__item-link', 'link--text', 'link--tag'];
     },
@@ -98,7 +104,7 @@ export default {
     },
   },
   mounted() {
-    this.getCannedTerms();
+    this.getTagItems();
     if (this.focus) {
       this.$nextTick(() => {
         if (window.innerWidth > 960) {
@@ -114,17 +120,17 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     search() {
       this.setSearchTerm(this.clonedTerm);
-      this.clonedTerm = '';
-      this.$router.push({ name: 'search', query: { term: this.searchTerm } }).catch((err) => {
+      this.$router.push({ name: 'search', query: { term: this.clonedTerm } }).catch((err) => {
         // @todo Log these rather than swallow?
       });
+      this.clonedTerm = '';
       this.close();
     },
-    getCannedTerms() {
+    getTagItems() {
       axios
-        .get('/suggestions')
+        .get('/api/suggestions')
         .then((response) => {
-          this.cannedTerms = response.data;
+          this.tagItems = response.data;
         }).catch((err) => {
           // @todo Log these rather than swallow?
         });

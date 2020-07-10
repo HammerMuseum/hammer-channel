@@ -4,13 +4,15 @@
       v-if="video"
       class="page-wrapper page--video"
     >
-      <RouterLink
-        v-if="prevRoute"
-        class="breadcrumb"
-        :to="prevRoute"
-      >
-        {{ breadcrumb }}
-      </RouterLink>
+      <div class="video-meta__breadcrumb">
+        <RouterLink
+          v-if="prevRoute"
+          class="link--text link--text-secondary"
+          :to="prevRoute"
+        >
+          {{ breadcrumb }}
+        </RouterLink>
+      </div>
       <header class="video-meta video-meta__header">
         <h1 class="heading heading--primary video-meta__title">
           {{ video.title }}
@@ -51,11 +53,11 @@
             <BTab active>
               <template v-slot:title>
                 <SvgIcon
-                  name="description"
-                  title="Description"
+                  name="info"
+                  title="Information"
                 />
                 <h3 class="vp__tabs__label">
-                  Description
+                  Info
                 </h3>
               </template>
               <About

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', 'ListingController@indexJson');
+Route::get('/suggestions', 'ListingController@getSuggestions');
 Route::get('/video/{id}/{slug}', 'VideoController@viewJson');
 Route::get('/search', 'SearchController@searchJson');
 

@@ -17,15 +17,26 @@
   a {
     color: var(--text-primary);
     text-decoration: none;
+  }
+}
 
-    &:hover {
-      color: var(--highlight-primary);
-    }
+@media (hover: hover), (-ms-high-contrast: none) {
+  .carousel__title a:hover {
+    color: var(--highlight-primary);
   }
 }
 
 .flickity-page-dots .dot {
   background: var(--highlight-primary);
+}
+
+.carousel-controls .icon {
+  box-shadow: 0 1px 1px 0 var(--carousel-control-drop-shadow);
+  border-radius: 36px;
+}
+
+.carousel-controls .icon--rotate {
+  box-shadow: 0 -1px 1px 0 var(--carousel-control-drop-shadow);
 }
 
 @media (min-width: 37.5em) {
