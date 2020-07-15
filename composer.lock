@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f6ee16a2b51f745dc5fd6347c1f0a9f",
+    "content-hash": "a9b7618dcb193484d83ebf56f1c872dd",
     "packages": [
         {
             "name": "composer/xdebug-handler",
@@ -663,6 +663,74 @@
             ],
             "description": "Fork of guzzle/RingPHP (abandoned) to be used with elasticsearch-php",
             "time": "2020-02-14T23:51:21+00:00"
+        },
+        {
+            "name": "f9webltd/laravel-meta",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/f9webltd/laravel-meta.git",
+                "reference": "06e1e2d4365205b3a6185c786322f30f4c419e57"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/f9webltd/laravel-meta/zipball/06e1e2d4365205b3a6185c786322f30f4c419e57",
+                "reference": "06e1e2d4365205b3a6185c786322f30f4c419e57",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "5.8.* || ^6.0 || ^7.0",
+                "illuminate/support": "5.8.* || ^6.0 || ^7.0",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": ">=3.8",
+                "phpunit/phpunit": "^7.0|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "F9Web\\Meta\\MetaServiceProvider"
+                    ],
+                    "aliases": {
+                        "Meta": "F9Web\\Meta\\MetaFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "F9Web\\Meta\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Allport",
+                    "email": "rob@f9web.co.uk",
+                    "homepage": "https://www.f9web.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Render meta tags in your Laravel application",
+            "homepage": "https://github.com/f9webltd/laravel-meta",
+            "keywords": [
+                "laravel",
+                "laravel header meta tags",
+                "laravel meta",
+                "laravel meta tags",
+                "laravel open graph tags",
+                "laravel seo",
+                "meta",
+                "meta tags"
+            ],
+            "time": "2020-06-06T12:22:38+00:00"
         },
         {
             "name": "fideloper/proxy",
@@ -6851,5 +6919,6 @@
     "platform": {
         "php": "^7.2"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
