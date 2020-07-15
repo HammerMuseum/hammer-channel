@@ -52,7 +52,7 @@ class SearchController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function search(Request $request)
+    public function view(Request $request)
     {
         $validParams = config('constants.validQueryParams');
         $params = $request->only($validParams);
