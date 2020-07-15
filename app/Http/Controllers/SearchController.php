@@ -128,7 +128,8 @@ class SearchController extends Controller
         $imageUrl = $this->metatagHelper->getImageUrl();
         $description = config('app.description');
         $term = $data['term'];
-        $title = !is_null($term) ? 'Searched for ' . $term . ' - ' . config('app.name') : 'Search - ' .  config('app.name');
+        $name = config('app.name');
+        $title = !is_null($term) ? 'Searched for ' . $term . ' - ' . $name : 'Search - ' .  $name;
         $pageUrl = $this->metatagHelper->getCurrentUrl();
 
         meta()
