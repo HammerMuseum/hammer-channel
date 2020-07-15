@@ -14,9 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', 'ListingController@indexJson');
-Route::get('/suggestions', 'ListingController@getSuggestions');
+Route::get('/suggestions', 'ListingController@suggestionsJson');
 Route::get('/video/{id}/{slug}', 'VideoController@viewJson');
-Route::get('/search', 'SearchController@searchJson');
+Route::get('/search', 'SearchController@viewJson');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

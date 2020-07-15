@@ -69,7 +69,7 @@ class SearchController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function searchJson(Request $request)
+    public function viewJson(Request $request)
     {
         $validParams = config('constants.validQueryParams');
         $params = $request->only($validParams);

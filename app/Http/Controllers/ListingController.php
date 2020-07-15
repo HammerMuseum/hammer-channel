@@ -105,7 +105,7 @@ class ListingController extends Controller
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSuggestions()
+    public function suggestionsJson()
     {
         $cannedTerms = [];
         $featuredPlaylist = $this->api->request('playlists/Featured');
