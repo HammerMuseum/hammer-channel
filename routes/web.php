@@ -15,4 +15,4 @@ Route::get('/', 'ListingController@index');
 Route::get('/video/{id}/{slug}', 'VideoController@view');
 Route::get('/container/{id}', 'VideoController@container')->name('video.container');
 Route::get('/search', 'SearchController@view');
-Route::get('/images/{id}/{size}', 'GenerateImageController');
+Route::get('/images/{id}/{size}', 'GenerateImageController')->name('images');
