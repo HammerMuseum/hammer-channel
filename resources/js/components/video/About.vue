@@ -76,7 +76,7 @@
     </template>
     <template v-slot:content>
       <div class="video-meta__description">
-        <p>{{ description }}</p>
+        <p v-html="description" />
       </div>
     </template>
   </VideoMeta>
