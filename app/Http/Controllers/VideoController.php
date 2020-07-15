@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api;
-use App\Library\Metadata;
+use App\Library\MetatagHelper;
 
 /**
  * Class VideoController
@@ -15,19 +15,20 @@ class VideoController extends Controller
     /** @var Api */
     protected $api;
 
-    protected $metadata;
+    /** @var MetatagHelper */
+    protected $metatagHelper;
 
     /**
      * VideoController constructor.
      * @param Api $api
-     * @param Metadata $metadata
+     * @param MetatagHelper $metatagHelper
      */
     public function __construct(
         Api $api,
-        Metadata $metadata
+        MetatagHelper $metatagHelper
     ) {
         $this->api = $api;
-        $this->metadata = $metadata;
+        $this->metatagHelper = $metatagHelper;
     }
 
     /**
@@ -40,12 +41,13 @@ class VideoController extends Controller
     public function container(Request $request, $id)
     {
         $data = $this->api->request('videos/' . $id);
+
         if (empty($data['data'])) {
             abort(404);
         }
 
-        return view('video_container', [
-            'url' => $data['data'][0]['src'],
+        return view('embed', [
+            'video' => $data['data'][0],
         ]);
     }
 
@@ -65,9 +67,10 @@ class VideoController extends Controller
             abort(404);
         }
 
-        return view('video', [
+        $this->setMeta($data['data'][0]);
+
+        return view('main', [
             'state' => $this->getAppState($path, $data),
-            'metadata' => $this->getMetadata($data)
         ]);
     }
 
@@ -102,8 +105,43 @@ class VideoController extends Controller
      * @param $data
      * @return array
      */
-    public function getMetadata($data)
+    public function setMeta($data)
     {
-        return $this->metadata->getVideoMetadata($data['data'][0]);
+        $pageUrl = $this->metatagHelper->getCurrentUrl();
+        meta()
+            ->set('title', $data['title'])
+            ->set('canonical', $pageUrl)
+            ->set('description', $data['description'])
+            ->set('og:description', $data['description'])
+            ->set('twitter:url', $pageUrl)
+            ->set('twitter:title', $data['title'])
+            ->set('twitter:description', $data['description'])
+            ->set('og:url', $pageUrl)
+            ->set('og:title', $data['title'])
+            ->set('og:description', $data['description']);
+
+        if (isset($data['thumbnailId'])) {
+            $imageUrl = $this->metatagHelper->getImageUrl($data['thumbnailId']);
+            meta()
+                ->set('twitter:image', $imageUrl)
+                ->set('og:image', $imageUrl)
+                ->set('og:image:type', 'image/jpg')
+                ->set('og:image:width', 320)
+                ->set('og:image:height', 180);
+        }
+
+        if (isset($data['asset_id'])) {
+            $playerUrl = $this->metatagHelper->getPlayerUrl($data['asset_id']);
+            meta()
+                ->set('twitter:player', $playerUrl)
+                ->set('twitter:card', 'player')
+                ->set('twitter:player:width', 480)
+                ->set('twitter:player:height', 480)
+                ->set('og:video', $playerUrl)
+                ->set('og:video:secure_url', $playerUrl)
+                ->set('og:video:type', 'video/mp4')
+                ->set('og:video:width', 480)
+                ->set('og:video:height', 480);
+        }
     }
 }

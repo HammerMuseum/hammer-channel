@@ -25,7 +25,7 @@
       </div>
     </div>
     <ClipDisplay
-      v-if="isClip"
+      v-if="!embed && isClip"
     >
       {{ clipString }}
       <div
@@ -54,9 +54,11 @@ import prettyms from 'humanize-duration';
 import videojs from 'video.js';
 import getOrientation from '../../mixins/getOrientation';
 import 'videojs-markers';
+import offset from 'videojs-offset';
 import ClipDisplay from './ClipDisplay.vue';
 
 window.VIDEOJS_NO_BASE_THEME = true;
+videojs.registerPlugin('offset', offset);
 
 export default {
   name: 'VideoPlayer',
@@ -64,6 +66,10 @@ export default {
     ClipDisplay,
   },
   props: {
+    embed: {
+      type: Boolean,
+      default: false,
+    },
     title: {
       type: String,
       default() {
@@ -276,8 +282,20 @@ export default {
 
         self.$emit('ready', this);
       });
-      this.initClipMarkers();
+
       this.initOverlays();
+
+      if (!this.embed && this.isClip) {
+        this.initClipMarkers();
+      }
+
+      if (this.embed) {
+        this.player.offset({
+          start: this.clipStart,
+          end: this.clipEnd,
+          restart_beginning: false,
+        });
+      }
 
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
