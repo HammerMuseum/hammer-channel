@@ -108,18 +108,19 @@ class VideoController extends Controller
     public function setMeta($data)
     {
         $pageUrl = $this->metatagHelper->getCurrentUrl();
-        $description = htmlentities(strip_tags($data['description']));
+        $description = htmlentities(strip_tags($data['description'])) || false;
+        $title = $data['title']  || false;
 
         meta()
-            ->set('title', $data['title'])
+            ->set('title', $title)
             ->set('canonical', $pageUrl)
             ->set('description', $description)
             ->set('og:description', $description)
             ->set('twitter:url', $pageUrl)
-            ->set('twitter:title', $data['title'])
+            ->set('twitter:title', $title)
             ->set('twitter:description', $description)
             ->set('og:url', $pageUrl)
-            ->set('og:title', $data['title'])
+            ->set('og:title', $title)
             ->set('og:description', $description);
 
         if (isset($data['thumbnailId'])) {
