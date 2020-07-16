@@ -15,8 +15,8 @@ return [
     */
 
     'defaults' => [
-        'twitter:site' => env('TWITTER'),
-        'og:site_name' => env('APP_NAME'),
+        'twitter:site' => env('TWITTER', '@hammer_museum'),
+        'og:site_name' => env('APP_NAME', 'Hammer Video Archive'),
         'og:locale' =>  'en_US',
     ],
 

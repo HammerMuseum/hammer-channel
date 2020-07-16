@@ -108,8 +108,8 @@ class VideoController extends Controller
     public function setMeta($data)
     {
         $pageUrl = $this->metatagHelper->getCurrentUrl();
-        $description = htmlentities(strip_tags($data['description'])) || false;
-        $title = $data['title']  || false;
+        $description = $data['description'] ? htmlentities(strip_tags($data['description'])) : false;
+        $title = $data['title'] ? $data['title'] : false;
 
         meta()
             ->set('title', $title)
