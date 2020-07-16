@@ -136,6 +136,7 @@ class SearchController extends Controller
             ->set('title', config('app.name'))
             ->set('description', $description)
             ->set('og:description', $description)
+            ->set('og:type', 'website')
             ->set('twitter:url', $pageUrl)
             ->set('twitter:title', $title)
             ->set('twitter:description', $description)

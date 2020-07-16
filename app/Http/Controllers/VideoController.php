@@ -121,7 +121,8 @@ class VideoController extends Controller
             ->set('twitter:description', $description)
             ->set('og:url', $pageUrl)
             ->set('og:title', $title)
-            ->set('og:description', $description);
+            ->set('og:description', $description)
+            ->set('og:type', 'video.other');
 
         if (isset($data['thumbnailId'])) {
             $imageUrl = $this->metatagHelper->getImageUrl($data['thumbnailId']);

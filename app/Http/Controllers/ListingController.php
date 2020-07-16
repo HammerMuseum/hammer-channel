@@ -119,6 +119,7 @@ class ListingController extends Controller
             ->set('og:url', $pageUrl)
             ->set('og:title', $title)
             ->set('og:description', $description)
+            ->set('og:type', 'website')
             ->set('og:image', $imageUrl)
             ->set('og:image:type', 'image/jpg')
             ->set('og:image:width', 320)
