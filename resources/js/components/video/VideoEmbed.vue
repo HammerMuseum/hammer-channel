@@ -1,9 +1,9 @@
 <template>
   <div
     ref="videoPlayer"
+    class="video-embed"
   >
     <VideoPlayer
-      :duration="video.duration"
       :options="options"
       :retry-sources="retrySources"
       :title="video.title"
