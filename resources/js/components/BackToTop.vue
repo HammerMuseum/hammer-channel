@@ -4,7 +4,8 @@
       v-show="visible"
       :class="classNames"
       :aria-label="label"
-      @click="scrollTop"
+      :tabindex="visible ? 0 : -1"
+      @click="handleClick"
     >
       <slot />
     </button>
@@ -23,11 +24,7 @@ export default {
     },
     container: {
       type: String,
-      default: 'body',
-    },
-    element: {
-      type: String,
-      default: 'body',
+      default: '',
     },
     label: {
       type: String,
@@ -36,7 +33,7 @@ export default {
   },
   data() {
     return {
-      initialEl: null,
+      scrollContainer: null,
       throttledScrollListener: null,
       visible: false,
     };
@@ -45,39 +42,37 @@ export default {
     classNames() {
       return ['button', 'button--to-top', ...this.classes];
     },
-    options() {
-      return {
-        container: this.container,
-        easing: 'ease-in',
-      };
-    },
   },
   watch: {
     container() {
-      this.eventEl.removeEventListener('scroll', this.throttledScrollListener);
-      this.eventEl = this.container === 'body' ? window : document.querySelector(this.container);
-      this.eventEl.addEventListener('scroll', this.throttledScrollListener);
+      this.scrollContainer.removeEventListener('scroll', this.throttledScrollListener);
+      this.init();
     },
   },
   mounted() {
-    this.throttledScrollListener = throttle(this.scrollListener, 1000);
-    // If no container element specified then add listener to window.
-    this.eventEl = this.container === 'body' ? window : document.querySelector(this.container);
-    this.eventEl.addEventListener('scroll', this.throttledScrollListener);
+    this.throttledScrollListener = throttle(this.scrollListener, 600);
+    this.init();
   },
   beforeDestroy() {
-    this.eventEl.removeEventListener('scroll', this.throttledScrollListener);
+    this.scrollContainer.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
-    scrollTop() {
-      const el = this.element;
-      this.$emit('scroll-to', el);
+    handleClick() {
+      this.$emit('scroll-top');
+    },
+    init() {
+      if (this.container !== null) {
+        this.scrollContainer = document.querySelector(this.container);
+      } else {
+        this.scrollContainer = window;
+      }
+      this.scrollContainer.addEventListener('scroll', this.throttledScrollListener);
     },
     scrollListener() {
-      if (this.container === 'body') {
-        this.visible = window.pageYOffset > 150;
+      if (this.container !== null) {
+        this.visible = this.scrollContainer.scrollTop > 150;
       } else {
-        this.visible = document.querySelector(this.container).scrollTop > 150;
+        this.visible = window.pageYOffset > 150;
       }
     },
   },

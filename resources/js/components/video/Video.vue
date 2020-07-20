@@ -41,6 +41,7 @@
             :track="track"
             @playbackerror="onPlayerError"
             @timeupdate="onTimeUpdate"
+            @timecode-reset="onTimecodeReset"
           />
         </div>
         <div class="panel--right">
@@ -83,7 +84,7 @@
               <Transcript
                 :items="processedTranscript"
                 :current-timecode="currentTimecode"
-                @updateTimecode="updateTimecode"
+                @update-timecode="updateTimecode"
               />
             </BTab>
 
@@ -142,8 +143,9 @@
 
 <script>
 import axios from 'axios';
-import debounce from 'lodash/debounce';
 import { BTabs, BTab } from 'bootstrap-vue';
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 import getRouteData from '../../mixins/getRouteData';
 import SvgIcon from '../base/SvgIcon.vue';
 import About from './About.vue';
@@ -203,14 +205,30 @@ export default {
         return [];
       }
       const keys = Object.keys(this.transcript);
-      return keys.map((key) => {
-        const para = this.transcript[key];
-        const str = para.map((item) => item.value);
+      return keys.map((id, index) => {
+        const para = this.transcript[id];
+        const paraStart = para[0].time;
+        const paraEnd = para[para.length - 1].time;
+        const duration = (paraEnd - paraStart);
+
+        // VideoJS compatible timecode values.
+        const start = paraStart / 1000;
+        const end = paraEnd / 1000;
+
+        // Formatted timecode for display.
+        const timecode = new Date(paraStart).toISOString().slice(11, -5);
+
+        // Text content.
+        const message = para.map((item) => item.value).join(' ');
+
         return {
-          id: key,
-          message: str.join(' '),
-          start: para[0].time / 1000,
-          end: para[para.length - 1].time / 1000,
+          index,
+          id,
+          message,
+          start,
+          end,
+          duration,
+          timecode,
         };
       });
     },
@@ -228,7 +246,6 @@ export default {
   watch: {
     video() {
       this.updateVideo();
-      this.$nextTick(() => { this.setupObservers(); });
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {
@@ -250,17 +267,19 @@ export default {
   mounted() {
     document.body.classList.add('vp');
     this.debouncedResizeListener = debounce(this.onResize, 100);
+    this.throttledScrollListener = throttle(this.onScroll, 100);
     window.addEventListener('resize', this.debouncedResizeListener);
+    window.addEventListener('scroll', this.throttledScrollListener);
   },
   updated() {
     this.$nextTick(() => {
       this.onResize();
-      this.setupObservers();
     });
   },
   destroyed() {
     document.body.classList.remove('vp');
     window.removeEventListener('resize', this.debouncedResizeListener);
+    window.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
     onResize() {
@@ -270,6 +289,11 @@ export default {
       } else {
         document.querySelector('.panels').classList.remove('is-sticky');
       }
+    },
+    onScroll() {
+      const el = document.querySelector('.panels');
+      const { top } = el.getBoundingClientRect();
+      document.querySelector('html').classList.toggle('has-reached-sticky', top <= 18);
     },
     setVideoSource(url) {
       const sources = [{
@@ -346,6 +370,12 @@ export default {
     },
     onTimeUpdate(value) {
       this.currentTimecode = value;
+    },
+    onTimecodeReset() {
+      // If trying to replay a section whilst still within the
+      // section, the timecode needs to be reset once set to
+      // maintain reactivity.
+      this.timecode = 0;
     },
     updateTimecode(value) {
       this.timecode = value;

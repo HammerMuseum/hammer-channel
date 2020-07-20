@@ -80,6 +80,7 @@
     "pretty-ms": "^7.0.0",
     "query-string": "^6.12.1",
     "quick-score": "0.0.8",
+    "scroll-into-view": "^1.14.2",
     "svgxuse": "^1.2.6",
     "video.js": "^7.7.6",
     "videojs-markers": "^1.0.1",
@@ -94,6 +95,6 @@
     "vue-scrollto": "^2.18.1",
     "vue-window-size": "^0.2.5",
     "vue2-hammer": "^2.1.2",
-    "vuetensils": "^0.6.5"
+    "vuetensils": "^0.7.0"
   }
 }

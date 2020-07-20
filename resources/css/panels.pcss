@@ -14,11 +14,16 @@
   padding-bottom: 40px;
 }
 
+.has-reached-sticky .panel-right {
+  /* Used to provide new context for
+  position fixed within the panel. */
+  transform: translateZ(0);
+}
+
 .is-sticky .panel--left {
   position: -webkit-sticky;
   position: sticky;
-  top: -1px;
-  padding-top: 1px;
+  top: 0;
   z-index: 5;
 }
 

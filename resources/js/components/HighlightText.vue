@@ -11,45 +11,53 @@
         <div
           class="highlighter__controls"
         >
-          <input
-            ref="input"
-            v-model="query"
-            label="Search the transcript"
-            name="searchTranscript"
-            class="form__input"
-            placeholder="Search transcript..."
-          >
-          <button
-            class="button button--action"
-            @click="prevHandler"
-          >
-            Prev
-          </button>
-          <button
-            class="button button--action"
-            @click="nextHandler"
-          >
-            Next
-          </button>
-          <button
-            class="button button--action"
-            @click="clearHandler"
-          >
-            Clear
-          </button>
-          <button
-            class="button button--icon"
-            @click="$emit('close-highlighter')"
-          >
-            <span class="visually-hidden">Close transcript search</span>
-            <SvgIcon
-              name="close"
-              title="Close transcript search"
+          <div class="input__wrapper">
+            <VInput
+              ref="input"
+              v-model="query"
+              :classes="{
+                input: ['form__input', 'form__input--search'],
+                text: 'visually-hidden'
+              }"
+              type="text"
+              label="Search the transcript"
+              name="searchTranscript"
+              placeholder="Search"
             />
-          </button>
+          </div>
+          <div class="highlighter__actions">
+            <button
+              class="button button--action"
+              @click="prevHandler"
+            >
+              Prev
+            </button>
+            <button
+              class="button button--action"
+              @click="nextHandler"
+            >
+              Next
+            </button>
+            <button
+              class="button button--action"
+              @click="clearHandler"
+            >
+              Clear
+            </button>
+            <button
+              class="button button--icon"
+              @click="clearHandler(); $emit('close-highlighter')"
+            >
+              <span class="visually-hidden">Close transcript search</span>
+              <SvgIcon
+                name="close"
+                title="Close transcript search"
+              />
+            </button>
+          </div>
         </div>
         <div class="highlighter__summary">
-          <span v-show="hits.length">
+          <span v-show="query.length >= 3">
             {{ searchSummary }}
           </span>
         </div>
@@ -68,12 +76,14 @@
 </template>
 
 <script>
+import { VInput } from 'vuetensils/src/components';
 import Mark from 'mark.js';
 import SvgIcon from './SvgIcon.vue';
 
 export default {
   components: {
     SvgIcon,
+    VInput,
   },
   props: {
     showHighlighter: {
@@ -96,6 +106,7 @@ export default {
   },
   computed: {
     searchSummary() {
+      if (!this.hits.length) return 'No results';
       const num = this.hits.length;
       const current = this.currentIndex + 1;
       const results = num > 1 ? 'results' : 'result';
@@ -112,7 +123,9 @@ export default {
   },
   methods: {
     handleEnter() {
-      this.$refs.input.focus();
+      this.$nextTick(() => {
+        this.$refs.input.$refs.input.focus();
+      });
     },
     clearHandler() {
       this.query = '';
@@ -145,8 +158,12 @@ export default {
               done() {
                 self.hits = self.$refs.context.querySelectorAll('span.ht');
                 self.currentIndex = 0;
-                self.hits[0].classList.add('current');
-                self.$emit('scroll-to', self.hits[0]);
+                if (self.hits.length) {
+                  self.hits[0].classList.add('current');
+                  self.$emit('scroll-to', self.hits[0]);
+                } else {
+                  self.hits = [];
+                }
               },
             });
           },

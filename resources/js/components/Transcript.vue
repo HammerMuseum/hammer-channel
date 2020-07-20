@@ -10,7 +10,7 @@
               class="button button--action highlighter-toggle"
               aria-haspopup="true"
               :aria-expanded="highlightControlsActive ? 'true' : 'false'"
-              @click="highlightControlsActive = !highlightControlsActive"
+              @click="handleHighlighterOpen"
             >
               <span class="visually-hidden">Search within the transcript</span>
               <SvgIcon
@@ -34,14 +34,33 @@
               class="transcript__content"
               tabindex="0"
             >
-              <span class="visually-hidden">Transcript content</span>
+              <span
+                id="transcript-anchor"
+                class="visually-hidden"
+              >Transcript content</span>
               <p
                 v-for="item in items"
                 :key="item.id"
                 class="transcript__paragraph"
-                :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
+                :class="{
+                  'transcript__paragraph--active': isActive(item.start, item.end, item.id)
+                }"
               >
-                {{ item.message }}
+                <VTooltip
+                  tag="div"
+                  :classes="{ toggle: 'tooltip--transcript', content: 'tooltip__content' }"
+                >
+                  <template #tooltip>
+                    <button
+                      :aria-label="`Go to ${item.timecode}`"
+                      class="button button--action"
+                      @click="handleTranscriptClick(item.start)"
+                    >
+                      <time>{{ item.timecode }}</time>
+                    </button>
+                  </template>
+                  {{ item.message }}
+                </VTooltip>
               </p>
             </div>
           </HighlightText>
@@ -66,9 +85,8 @@
 
         <BackToTop
           label="Go to top of transcript"
-          :element="transcriptScrollContainer"
           :container="transcriptScrollContainer"
-          @scroll-to="handleScrollTo"
+          @scroll-top="handleBackToTopScroll"
         >
           <span class="visually-hidden">Go to top of transcript</span>
           <SvgIcon
@@ -83,8 +101,9 @@
 
 <script>
 import { saveAs } from 'file-saver';
+import scrollIntoView from 'scroll-into-view';
 import { vueWindowSizeMixin } from 'vue-window-size';
-import VueScrollTo from 'vue-scrollto';
+import { VTooltip } from 'vuetensils/src/components';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
 import { store, mutations } from '../store';
@@ -94,6 +113,7 @@ export default {
   components: {
     HighlightText,
     BackToTop,
+    VTooltip,
   },
   mixins: [vueWindowSizeMixin],
   props: {
@@ -128,28 +148,10 @@ export default {
       return this.items.length;
     },
     transcriptScrollContainer() {
-      return this.windowWidth > 960 ? '.tab--transcript .video-meta__inner' : undefined;
-    },
-  },
-  watch: {
-    currentPara() {
-      const self = this;
-      const options = {
-        container: '.tab--transcript .video-meta__inner',
-        easing: 'ease-in',
-        offset: -200,
-        force: true,
-        onStart() {
-          self.scrollInProgress = true;
-        },
-        onDone() {
-          self.scrollInProgress = false;
-        },
-        x: false,
-        y: true,
-      };
-      const el = this.$el.getElementsByClassName('transcript__paragraph--active')[0];
-      VueScrollTo.scrollTo(el, 1200, options);
+      if (this.windowWidth > 960) {
+        return '.tab--transcript .video-meta__inner';
+      }
+      return null;
     },
   },
   mounted() {
@@ -159,17 +161,30 @@ export default {
     this.toggleTranscriptInit();
   },
   methods: {
-    handleHighlighterScroll(el) {
-      this.handleScrollTo(el, { offset: this.highlighterOffset });
+    handleHighlighterOpen() {
+      this.highlightControlsActive = !this.highlightControlsActive;
     },
-    handleScrollTo(el, options) {
-      const scrollOptions = {
-        container: this.transcriptScrollContainer,
-        easing: 'ease-in',
-        force: true,
-        ...options,
-      };
-      VueScrollTo.scrollTo(el, 600, scrollOptions);
+    handleHighlighterScroll(el) {
+      this.handleScrollTo(el);
+    },
+    handleScrollTo(el) {
+      const width = this.windowWidth;
+      scrollIntoView(el, {
+        time: 0,
+        align: {
+          top: 0.5,
+          topOffset: 0,
+        },
+        validTarget(target) {
+          return width > 960 ? target !== window : true;
+        },
+      });
+    },
+    handleBackToTopScroll() {
+      this.handleScrollTo(document.querySelector('#transcript-anchor'));
+    },
+    handleTranscriptClick(timecode) {
+      this.$emit('update-timecode', timecode);
     },
     initDownload() {
       const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);

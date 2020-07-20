@@ -4,7 +4,11 @@
 }
 
 .transcript__paragraph {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  padding-left: 8px;
+  margin-left: -8px;
+  border-left: 1px solid transparent;
+  transition: border-left 0.4s ease-in-out;
 }
 
 .transcript__options {
@@ -21,7 +25,19 @@
 }
 
 .transcript__paragraph--active {
-  background: var(--highlight-primary);
+  border-left: 1px solid var(--highlight-primary);
+}
+
+.tooltip--transcript .tooltip__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0, -20px);
+
+  .button {
+    padding: 0;
+    font-size: 14px;
+  }
 }
 
 .highlighter-toggle {
@@ -35,18 +51,24 @@
 
 .highlighter__inner {
   position: fixed;
-  top: calc(56.25vw + var(--video-tabs-no-icon-height));
+  top: 0;
   left: 0;
   width: 100%;
-  z-index: 2;
+  z-index: 10;
   background: var(--background-darker);
   padding: 16px;
+  box-shadow: 0 6px 10px 0 var(--drop-shadow--hard);
+  transition: top 0.4s ease-in-out;
+}
+
+.has-reached-sticky .is-sticky .highlighter__inner {
+  top: calc((var(--video-player-max-width) * (var(--video-player-aspect-ratio))) - 8px);
 }
 
 .highlighter__controls {
   display: flex;
   width: 100%;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
 
   .form__input {
@@ -55,6 +77,12 @@
     font-size: 16px;
     padding: 2px;
   }
+}
+
+.highlighter__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 
   .button--action {
     padding: 2px;
@@ -64,11 +92,11 @@
 
 .highlighter__context {
   margin-top: 0;
-  transition: all var(--default-transition);
+  transition: margin-top var(--default-transition);
+}
 
-  &.highlighter__context--active {
-    margin-top: 50px;
-  }
+.highlighter__context--active {
+  margin-top: 40px;
 }
 
 .ht {
@@ -80,11 +108,6 @@
 }
 
 @media (min-width: 52.5em) {
-  .highlighter__inner {
-    position: absolute;
-    top: 0;
-  }
-
   .tab--transcript {
     position: relative;
 
@@ -94,6 +117,8 @@
 
     .video-meta__inner {
       overflow: auto;
+      margin-bottom: 72px;
+      min-height: 480px;
       max-height: calc(100vh - calc(var(--video-player-header-max-height) + var(--header-height) + 72px));
     }
 
@@ -110,6 +135,14 @@
 
   .tab-content {
     position: relative;
+  }
+}
+
+@media (min-width: 52.5em) {
+  .highlighter__inner {
+    position: absolute;
+    top: 0;
+    box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.8);
   }
 }
 
