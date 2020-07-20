@@ -34,7 +34,7 @@ export default {
   methods: {
     getSuggestions() {
       axios
-        .get('/suggestions')
+        .get('/api/suggestions')
         .then((response) => {
           this.tagItems = response.data;
         }).catch((err) => {

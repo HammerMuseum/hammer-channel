@@ -52,6 +52,7 @@
 <script>
 import prettyms from 'humanize-duration';
 import videojs from 'video.js';
+import getOrientation from '../../mixins/getOrientation';
 import 'videojs-markers';
 import ClipDisplay from './ClipDisplay.vue';
 
@@ -267,14 +268,33 @@ export default {
           }
         });
 
+        this.on('fullscreenchange', function () {
+          if (videojs.browser.IS_ANDROID) {
+            self.onFullscreenChange();
+          }
+        });
 
         self.$emit('ready', this);
       });
       this.initClipMarkers();
       this.initOverlays();
+
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
       });
+    },
+    async onFullscreenChange() {
+      const orientation = getOrientation();
+      const newOrientation = orientation.startsWith('portrait') ? 'landscape' : 'portrait';
+      if (this.player.isFullscreen()) {
+        try {
+          await window.screen.orientation.lock(newOrientation);
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        window.screen.orientation.unlock();
+      }
     },
     destroyClipMarkers() {
       this.player.markers.removeAll();
