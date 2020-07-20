@@ -35,7 +35,7 @@
         </div>
         <div class="header__actions">
           <button
-            class="button button--action button--header overlay-toggle--footer"
+            class="button button--action button--light overlay-toggle--footer"
             aria-haspopup="true"
             :aria-expanded="overlay.footer"
             @click="overlay.footer = !overlay.footer"
@@ -60,7 +60,7 @@
           </VDrawer>
 
           <button
-            class="button button--header overlay-toggle--search"
+            class="button button--light overlay-toggle--search"
             aria-haspopup="true"
             :aria-expanded="overlay.search"
             @click="overlay.search = !overlay.search"

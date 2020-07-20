@@ -47,15 +47,20 @@
                 }"
               >
                 <VTooltip
+                  focus
                   tag="div"
                   :classes="{ toggle: 'tooltip--transcript', content: 'tooltip__content' }"
                 >
                   <template #tooltip>
                     <button
                       :aria-label="`Go to ${item.timecode}`"
-                      class="button button--action"
-                      @click="handleTranscriptClick(item.start)"
+                      class="button button--light"
+                      @mousedown="handleTranscriptClick(item.start)"
                     >
+                      <SvgIcon
+                        name="play"
+                        :title="`Play from ${item.timecode}`"
+                      />
                       <time>{{ item.timecode }}</time>
                     </button>
                   </template>
@@ -104,6 +109,7 @@ import { saveAs } from 'file-saver';
 import scrollIntoView from 'scroll-into-view';
 import { vueWindowSizeMixin } from 'vue-window-size';
 import { VTooltip } from 'vuetensils/src/components';
+import SvgIcon from './SvgIcon.vue';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
 import { store, mutations } from '../store';
@@ -111,8 +117,9 @@ import { store, mutations } from '../store';
 export default {
   name: 'Transcript',
   components: {
-    HighlightText,
     BackToTop,
+    HighlightText,
+    SvgIcon,
     VTooltip,
   },
   mixins: [vueWindowSizeMixin],
@@ -172,7 +179,7 @@ export default {
       scrollIntoView(el, {
         time: 0,
         align: {
-          top: 0.5,
+          top: 0.75,
           topOffset: 0,
         },
         validTarget(target) {

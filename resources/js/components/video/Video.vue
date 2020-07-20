@@ -179,7 +179,7 @@ export default {
   data() {
     return {
       currentTimecode: 0,
-      datastore: `http://localhost:2223/api/`, // process.env.MIX_DATASTORE_URL,
+      datastore: process.env.MIX_DATASTORE_URL,
       debouncedResizeObserver: null,
       options: {
         sources: null,
