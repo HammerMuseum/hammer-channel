@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="highlighter__summary">
-          <span v-show="query.length >= 3">
+          <span v-show="query && query.length >= 3">
             {{ searchSummary }}
           </span>
         </div>
@@ -97,10 +97,12 @@ export default {
       currentIndex: 0,
       hits: [],
       markInstance: null,
-      query: '',
+      query: null,
       options: {
         className: 'ht',
         element: 'span',
+        separateWordSearch: false,
+        ignorePunctuation: ":;.,-–—‒_(){}[]!'\"+=".split(''),
       },
     };
   },
@@ -128,7 +130,7 @@ export default {
       });
     },
     clearHandler() {
-      this.query = '';
+      this.query = null;
       this.hits.forEach((el) => {
         el.classList.remove('current');
       });
@@ -149,7 +151,7 @@ export default {
       this.jumpTo();
     },
     highlight() {
-      if (this.query.length >= 3) {
+      if (this.query && this.query.length >= 3) {
         const self = this;
         this.markInstance.unmark({
           done() {
