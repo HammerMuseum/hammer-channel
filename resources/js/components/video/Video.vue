@@ -82,6 +82,7 @@
                 </h3>
               </template>
               <Transcript
+                :error="transcriptError"
                 :items="processedTranscript"
                 :current-timecode="currentTimecode"
                 @update-timecode="updateTimecode"
@@ -192,6 +193,7 @@ export default {
       track: null,
       transcript: [],
       transcriptLoaded: false,
+      transcriptError: false,
       video: null,
     };
   },
@@ -365,7 +367,7 @@ export default {
           this.transcript = paras;
           this.transcriptLoaded = true;
         }).catch((err) => {
-          console.log(err);
+          this.transcriptError = true;
         });
     },
     onTimeUpdate(value) {

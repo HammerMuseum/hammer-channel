@@ -71,6 +71,11 @@
           </HighlightText>
         </template>
         <template
+          v-else-if="error"
+        >
+          Sorry, the transcript for this video failed to load correctly.
+        </template>
+        <template
           v-else
         >
           <div class="loading-icon">
@@ -129,6 +134,10 @@ export default {
       default() {
         return 0;
       },
+    },
+    error: {
+      type: Boolean,
+      default: false,
     },
     items: {
       type: Array,
