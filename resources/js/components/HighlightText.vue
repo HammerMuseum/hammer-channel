@@ -46,7 +46,7 @@
             </button>
             <button
               class="button button--icon"
-              @click="clearHandler(); $emit('close-highlighter')"
+              @click="clearHandler(); $emit('toggle-highlighter')"
             >
               <span class="visually-hidden">Close transcript search</span>
               <SvgIcon
@@ -57,6 +57,16 @@
           </div>
         </div>
         <div class="highlighter__summary">
+          <div v-if="previousSearch">
+            <transition name="fade">
+              <button
+                class="button button--action"
+                @click="handleUsePreviousSearch"
+              >
+                {{ `Use your search query: "${previousSearch}"?` }}
+              </button>
+            </transition>
+          </div>
           <span v-show="query && query.length >= 3">
             {{ searchSummary }}
           </span>
@@ -79,6 +89,7 @@
 import { VInput } from 'vuetensils/src/components';
 import Mark from 'mark.js';
 import SvgIcon from './SvgIcon.vue';
+import { store } from '../store';
 
 export default {
   components: {
@@ -93,17 +104,18 @@ export default {
   },
   data() {
     return {
-      isActive: false,
       currentIndex: 0,
       hits: [],
+      isActive: false,
       markInstance: null,
-      query: null,
       options: {
         className: 'ht',
         element: 'span',
-        separateWordSearch: false,
+        separateWordSearch: true,
         ignorePunctuation: ":;.,-–—‒_(){}[]!'\"+=".split(''),
       },
+      previousSearch: null,
+      query: null,
     };
   },
   computed: {
@@ -114,6 +126,9 @@ export default {
       const results = num > 1 ? 'results' : 'result';
       return `${current} of ${num} ${results}`;
     },
+    searchTerm() {
+      return store.searchTerm;
+    },
   },
   watch: {
     query() {
@@ -122,8 +137,15 @@ export default {
   },
   mounted() {
     this.markInstance = new Mark(this.$refs.context);
+    this.previousSearch = this.searchTerm;
   },
   methods: {
+    handleUsePreviousSearch() {
+      if (this.previousSearch) {
+        this.query = this.previousSearch;
+        this.previousSearch = null;
+      }
+    },
     handleEnter() {
       this.$nextTick(() => {
         this.$refs.input.$refs.input.focus();

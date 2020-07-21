@@ -27,7 +27,7 @@
           </div>
           <HighlightText
             :show-highlighter="highlightControlsActive"
-            @close-highlighter="highlightControlsActive = !highlightControlsActive"
+            @toggle-highlighter="highlightControlsActive = !highlightControlsActive"
             @scroll-to="handleHighlighterScroll"
           >
             <div
