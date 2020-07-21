@@ -206,12 +206,13 @@ export default {
       if (!this.transcript) {
         return [];
       }
-      const keys = Object.keys(this.transcript);
-      return keys.map((id, index) => {
-        const para = this.transcript[id];
+      const { paragraphs, speakers } = this.transcript;
+      return Object.keys(paragraphs).map((id) => {
+        const para = paragraphs[id];
         const paraStart = para[0].time;
         const paraEnd = para[para.length - 1].time;
         const duration = (paraEnd - paraStart);
+        const speaker = speakers[para[0].speaker].name;
 
         // VideoJS compatible timecode values.
         const start = paraStart / 1000;
@@ -224,9 +225,9 @@ export default {
         const message = para.map((item) => item.value).join(' ');
 
         return {
-          index,
           id,
           message,
+          speaker,
           start,
           end,
           duration,
@@ -357,17 +358,17 @@ export default {
       axios
         .get(`${this.datastore}videos/${this.$route.params.id}/transcript?format=json`)
         .then((response) => {
-          const paras = {};
-          response.data.data.words.forEach((item) => {
-            if (paras[item.paragraphId] === undefined) {
-              paras[item.paragraphId] = [];
-            }
-            paras[item.paragraphId].push(item);
-          });
-          this.transcript = paras;
+          // Group word level data into paragraph level data.
+          const { words, speakers } = response.data.data;
+          const map = new Map(Array.from(words, (obj) => [obj.paragraphId, []]));
+          words.forEach((obj) => map.get(obj.paragraphId).push(obj));
+          const paragraphs = Array.from(map.values());
+
+          this.transcript = { paragraphs, speakers };
           this.transcriptLoaded = true;
         }).catch((err) => {
           this.transcriptError = true;
+          console.error(err);
         });
     },
     onTimeUpdate(value) {
