@@ -34,7 +34,7 @@
       <li
         v-for="i in totalPages"
         :key="i"
-        :class="['pagination__list-item', {'pagination__list-item--current': i === currentPage}]"
+        :class="['pagination__list-item', {['pagination__list-item--current link--disabled']: i === currentPage}]"
       >
         <RouterLink
           class="link link--text"
