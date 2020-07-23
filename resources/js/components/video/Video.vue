@@ -212,7 +212,12 @@ export default {
         const paraStart = para[0].time;
         const paraEnd = para[para.length - 1].time;
         const duration = (paraEnd - paraStart);
-        const speaker = speakers[para[0].speaker].name;
+
+        let speaker = '';
+        const speakerId = para[0].speaker;
+        if (speakerId !== null && Object.hasOwnProperty.call(speakers, speakerId)) {
+          speaker = speakers[speakerId].name;
+        }
 
         // VideoJS compatible timecode values.
         const start = paraStart / 1000;
