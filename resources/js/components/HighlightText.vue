@@ -23,6 +23,7 @@
               label="Search the transcript"
               name="searchTranscript"
               placeholder="Search"
+              @keydown.enter="nextHandler"
             />
           </div>
           <div class="highlighter__actions">
