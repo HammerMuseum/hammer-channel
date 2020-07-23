@@ -8,7 +8,7 @@
         v-show="tagItems"
         class="search__onward"
       >
-        <span class="search-bar__option-label">try:</span>
+        <span class="search-bar__option-label">Try:</span>
         <TagGroup :items="tagItems" />
       </div>
     </transition>
