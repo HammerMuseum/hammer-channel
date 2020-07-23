@@ -67,7 +67,7 @@
               </button>
             </transition>
           </div>
-          <span v-show="query && query.length >= 3">
+          <span v-show="query.length >= 3">
             {{ searchSummary }}
           </span>
         </div>
@@ -115,7 +115,7 @@ export default {
         ignorePunctuation: ":;.,-–—‒_(){}[]!'\"+=".split(''),
       },
       previousSearch: null,
-      query: null,
+      query: '',
     };
   },
   computed: {
@@ -152,7 +152,7 @@ export default {
       });
     },
     clearHandler() {
-      this.query = null;
+      this.query = '';
       this.hits.forEach((el) => {
         el.classList.remove('current');
       });
@@ -173,7 +173,7 @@ export default {
       this.jumpTo();
     },
     highlight() {
-      if (this.query && this.query.length >= 3) {
+      if (this.query.length >= 3) {
         const self = this;
         this.markInstance.unmark({
           done() {
