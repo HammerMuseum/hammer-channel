@@ -10,7 +10,7 @@
               class="button button--action highlighter-toggle"
               aria-haspopup="true"
               :aria-expanded="highlightControlsActive ? 'true' : 'false'"
-              @click="handleHighlighterOpen"
+              @click="handleHighlighterToggle"
             >
               <span class="visually-hidden">Search within the transcript</span>
               <SvgIcon
@@ -27,10 +27,11 @@
           </div>
           <HighlightText
             :show-highlighter="highlightControlsActive"
-            @toggle-highlighter="highlightControlsActive = !highlightControlsActive"
+            @toggle-highlighter="handleHighlighterToggle"
             @scroll-to="handleHighlighterScroll"
           >
             <div
+              ref="transcriptContent"
               class="transcript__content"
               tabindex="0"
             >
@@ -117,6 +118,7 @@ import { VTooltip } from 'vuetensils/src/components';
 import SvgIcon from './SvgIcon.vue';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
+import isIos from '../mixins/isIos';
 import { store, mutations } from '../store';
 
 export default {
@@ -149,6 +151,7 @@ export default {
   data() {
     return {
       currentPara: null,
+      currentHighlight: null,
       scrollInProgress: false,
       highlightControlsActive: false,
     };
@@ -177,19 +180,35 @@ export default {
     this.toggleTranscriptInit();
   },
   methods: {
-    handleHighlighterOpen() {
+    handleHighlighterToggle() {
       this.highlightControlsActive = !this.highlightControlsActive;
+      const closing = this.windowWidth < 960 && !this.highlightControlsActive;
+      document.querySelector('html').classList.toggle('is-sticky', closing);
+      // Having to workaround iOS fixed positioning oddities
+      // Might be better to revisit and use an off-canvas
+      // technique to pin the highlighter to the top of the
+      // screen on small screens.
+      if (isIos()) {
+        this.$root.$el.classList.toggle('highlighter--top');
+        if (closing) {
+          const offsetHeight = window.innerHeight / 2.667;
+          const offset = this.currentHighlight ? this.currentHighlight.offsetParent.offsetTop - offsetHeight : 0;
+          window.scrollTo(0, offset);
+        }
+      }
     },
-    handleHighlighterScroll(el) {
-      this.handleScrollTo(el);
+    handleHighlighterScroll({ el, keyboardBlurred }) {
+      const offset = keyboardBlurred ? 100 : 0;
+      this.currentHighlight = el;
+      this.handleScrollTo(el, offset);
     },
-    handleScrollTo(el) {
+    handleScrollTo(el, offset) {
       const width = this.windowWidth;
       scrollIntoView(el, {
         time: 0,
         align: {
-          top: 0.75,
-          topOffset: 0,
+          top: 0.5,
+          topOffset: offset,
         },
         validTarget(target) {
           return width > 960 ? target !== window : true;
@@ -197,7 +216,7 @@ export default {
       });
     },
     handleBackToTopScroll() {
-      this.handleScrollTo(document.querySelector('#transcript-anchor'));
+      this.handleScrollTo(document.querySelector('#transcript-anchor'), 0);
     },
     handleTranscriptClick(timecode) {
       this.$emit('update-timecode', timecode);

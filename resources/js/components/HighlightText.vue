@@ -16,14 +16,16 @@
               ref="input"
               v-model="query"
               :classes="{
-                input: ['form__input', 'form__input--search'],
-                text: 'visually-hidden'
+                input: ['form__input', 'form__input--search', { 'has-focus': !blurred }],
+                text: 'visually-hidden',
               }"
               type="text"
               label="Search the transcript"
               name="searchTranscript"
               placeholder="Search"
               @keydown.enter="nextHandler"
+              @focus="handleFocus"
+              @blur="handleBlur"
             />
           </div>
           <div class="highlighter__actions">
@@ -105,6 +107,7 @@ export default {
   },
   data() {
     return {
+      blurred: false,
       currentIndex: 0,
       hits: [],
       isActive: false,
@@ -152,6 +155,12 @@ export default {
         this.$refs.input.$refs.input.focus();
       });
     },
+    handleBlur() {
+      this.blurred = true;
+    },
+    handleFocus() {
+      this.blurred = false;
+    },
     clearHandler() {
       this.query = '';
       this.hits.forEach((el) => {
@@ -184,8 +193,9 @@ export default {
                 self.hits = self.$refs.context.querySelectorAll('span.ht');
                 self.currentIndex = 0;
                 if (self.hits.length) {
-                  self.hits[0].classList.add('current');
-                  self.$emit('scroll-to', self.hits[0]);
+                  const current = self.hits[0];
+                  current.classList.add('current');
+                  self.$emit('scroll-to', { el: current, keyboardBlurred: self.blurred });
                 } else {
                   self.hits = [];
                 }
@@ -205,7 +215,8 @@ export default {
         });
         if (current) {
           current.classList.add('current');
-          this.$emit('scroll-to', current);
+          this.$emit('scroll-to', { el: current, keyboardBlurred: this.blurred });
+          this.blurred = false;
         }
       }
     },

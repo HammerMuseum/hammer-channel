@@ -292,11 +292,7 @@ export default {
   methods: {
     onResize() {
       const playerHeight = window.innerWidth * (9 / 16);
-      if (window.innerHeight > (playerHeight * 2)) {
-        document.querySelector('.panels').classList.add('is-sticky');
-      } else {
-        document.querySelector('.panels').classList.remove('is-sticky');
-      }
+      document.querySelector('html').classList.toggle('is-sticky', window.innerHeight > (playerHeight * 2));
     },
     onScroll() {
       const el = document.querySelector('.panels');
