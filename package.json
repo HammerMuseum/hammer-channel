@@ -96,6 +96,6 @@
     "vue-scrollto": "^2.18.1",
     "vue-window-size": "^0.2.5",
     "vue2-hammer": "^2.1.2",
-    "vuetensils": "^0.7.0"
+    "vuetensils": "^0.7.2"
   }
 }
