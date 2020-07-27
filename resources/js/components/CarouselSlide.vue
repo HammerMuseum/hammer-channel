@@ -17,12 +17,17 @@
           <h2 class="ui-card__title">
             <span>{{ title }}</span>
           </h2>
-          <span class="ui-card__date" v-if="showDate">
+          <span
+            v-if="showDate"
+            class="ui-card__date"
+          >
             {{ new Date(item.date_recorded) | dateFormat('MMM D, YYYY') }}
           </span>
-          <p class="ui-card__description">
-            {{ description }}
-          </p>
+          <RichText
+            :classes="['ui-card__description']"
+            :text="item.description"
+            :truncate="100"
+          />
         </article>
       </RouterLink>
     </UiCard>
@@ -31,10 +36,12 @@
 
 <script>
 import { truncate } from 'lodash';
+import RichText from './RichText.vue';
 import UiCard from './UiCard.vue';
 
 export default {
   components: {
+    RichText,
     UiCard,
   },
   props: {

@@ -75,16 +75,23 @@
       </div>
     </template>
     <template v-slot:content>
-      <div class="video-meta__description">
-        <p v-html="description" />
-      </div>
+      <RichText
+        :classes="['video-meta__description']"
+        :text="description"
+        trusted
+      />
     </template>
   </VideoMeta>
 </template>
 
 <script>
+import RichText from '../RichText.vue';
+
 export default {
   name: 'About',
+  components: {
+    RichText,
+  },
   props: {
     dateRecorded: {
       type: String,

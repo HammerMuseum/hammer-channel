@@ -27,9 +27,11 @@
               <h2 class="ui-card__subtitle">
                 {{ subtitle }}
               </h2>
-              <p class="ui-card__description">
-                {{ description }}
-              </p>
+              <RichText
+                :classes="['ui-card__description']"
+                :text="item.description"
+                :truncate="100"
+              />
             </div>
           </template>
         </article>
@@ -39,11 +41,12 @@
 </template>
 
 <script>
-import { truncate } from 'lodash';
+import RichText from './RichText.vue';
 import UiCard from './UiCard.vue';
 
 export default {
   components: {
+    RichText,
     UiCard,
   },
   props: {
