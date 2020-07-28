@@ -46,7 +46,7 @@
               :id="id"
               :controls="true"
               :title="label"
-              :options="{ groupCells: 2 }"
+              :options="{ groupCells, contain: true }"
             >
               <template #heading>
                 <RouterLink :to="{name: 'search', query: {topics: label}}">
@@ -83,6 +83,7 @@
 <script>
 import axios from 'axios';
 import { VSkip } from 'vuetensils/src/components';
+import { vueWindowSizeMixin } from 'vue-window-size';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -103,18 +104,20 @@ export default {
       return value.replace(/[\s&]/gi, '').toLowerCase();
     },
   },
-  mixins: [mixin],
+  mixins: [mixin, vueWindowSizeMixin],
   data() {
     return {
-      videos: null,
+      currentSectionInView: null,
       featured: false,
       featuredCarouselOptions: { wrapAround: true, pageDots: true },
-      currentSectionInView: null,
+      groupCells: null,
+      videos: null,
     };
   },
   mounted() {
     this.getFeatured();
     document.body.classList.add('front');
+    this.groupCells = this.windowWidth < 840 ? 1 : 2;
   },
   destroyed() {
     document.body.classList.remove('front');
@@ -158,6 +161,6 @@ export default {
 }
 
 .inline-block--search .search-bar {
-  padding: 48px 0;
+  margin: 48px 0;
 }
 </style>
