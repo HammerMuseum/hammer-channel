@@ -152,7 +152,9 @@ export default {
     },
     handleEnter() {
       this.$nextTick(() => {
-        this.$refs.input.$refs.input.focus();
+        setTimeout(() => {
+          this.$refs.input.$refs.input.focus();
+        }, 1000);
       });
     },
     handleBlur() {

@@ -1,12 +1,19 @@
 export default function isIos() {
-  let ua = '';
+  let iOS = null;
+  let isSafari = null;
   if (window.navigator && window.navigator.userAgent) {
-    ua = window.navigator.userAgent;
+    const ua = window.navigator.userAgent;
+    const nav = window.navigator;
+    iOS = (ua.match(/(iP(ad|od|hone))/)
+      || (nav.platform === 'MacIntel' && nav.maxTouchPoints > 1));
+    isSafari = nav.vendor && nav.vendor.indexOf('Apple') > -1
+      && ua.indexOf('CriOS') === -1
+      && ua.indexOf('FxiOS') === -1;
   }
 
-  const match = ua.match(/OS (\d+)_/i);
-  if (match && match[1]) {
+  if (iOS && isSafari) {
     return true;
   }
+
   return false;
 }

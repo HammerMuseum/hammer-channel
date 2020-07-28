@@ -152,6 +152,7 @@ export default {
     return {
       currentPara: null,
       currentHighlight: null,
+      ios: false,
       scrollInProgress: false,
       highlightControlsActive: false,
     };
@@ -161,13 +162,13 @@ export default {
       return store.transcriptInit;
     },
     highlighterOffset() {
-      return this.windowWidth > 960 ? -120 : ((window.innerHeight / 2) + 40) * -1;
+      return this.windowWidth < 840 ? ((window.innerHeight / 2) + 40) * -1 : -120;
     },
     transcriptHasLoaded() {
       return this.items.length;
     },
     transcriptScrollContainer() {
-      if (this.windowWidth > 960) {
+      if (!this.windowWidth < 840) {
         return '.tab--transcript .video-meta__inner';
       }
       return null;
@@ -175,6 +176,7 @@ export default {
   },
   mounted() {
     this.toggleTranscriptInit();
+    this.ios = isIos();
   },
   destroyed() {
     this.toggleTranscriptInit();
@@ -182,19 +184,17 @@ export default {
   methods: {
     handleHighlighterToggle() {
       this.highlightControlsActive = !this.highlightControlsActive;
-      const closing = this.windowWidth < 960 && !this.highlightControlsActive;
-      document.querySelector('html').classList.toggle('is-sticky', closing);
+      const condition = (this.windowWidth < 840 || this.ios) && !this.highlightControlsActive;
+      document.querySelector('html').classList.toggle('is-sticky', condition);
       // Having to workaround iOS fixed positioning oddities
-      // Might be better to revisit and use an off-canvas
-      // technique to pin the highlighter to the top of the
-      // screen on small screens.
-      if (isIos()) {
+      // Only when closing the highlighter input.
+      if (this.ios) {
         this.$root.$el.classList.toggle('highlighter--top');
-        if (closing) {
-          const offsetHeight = window.innerHeight / 2.667;
-          const offset = this.currentHighlight ? this.currentHighlight.offsetParent.offsetTop - offsetHeight : 0;
-          window.scrollTo(0, offset);
-        }
+        const offsetHeight = window.innerHeight / 2.667;
+        const current = this.currentHighlight;
+        const offsetParent = current.offsetParent ? current.offsetParent : null;
+        const offset = offsetParent ? offsetParent.offsetTop - offsetHeight : 0;
+        window.scrollTo(0, offset);
       }
     },
     handleHighlighterScroll({ el, keyboardBlurred }) {
@@ -211,7 +211,7 @@ export default {
           topOffset: offset,
         },
         validTarget(target) {
-          return width > 960 ? target !== window : true;
+          return width < 840 ? true : target !== window;
         },
       });
     },

@@ -274,7 +274,7 @@ export default {
   },
   mounted() {
     document.body.classList.add('vp');
-    this.debouncedResizeListener = debounce(this.onResize, 100);
+    this.debouncedResizeListener = debounce(this.onResize, 1000);
     this.throttledScrollListener = throttle(this.onScroll, 100);
     window.addEventListener('resize', this.debouncedResizeListener);
     window.addEventListener('scroll', this.throttledScrollListener);
