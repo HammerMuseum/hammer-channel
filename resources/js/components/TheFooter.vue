@@ -1,6 +1,5 @@
 <template>
   <footer
-    v-hammer:swipe.up="close"
     class="footer"
   >
     <div class="footer__inner">
@@ -47,15 +46,6 @@
           >Terms of Use</a>
         </div>
       </div>
-      <button
-        :class="['footer__close-button', 'button', 'button--icon']"
-        @click="$emit('close')"
-      >
-        <SvgIcon
-          name="close-pink"
-          title="Close the description overlay"
-        />
-      </button>
     </div>
   </footer>
 </template>
