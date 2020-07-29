@@ -6,9 +6,6 @@
   <meta charset="utf-8" />
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-  <meta http-equiv='pragma' content='no-cache'>
-  <meta http-equiv='cache-control' content='no-cache'>
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta name="twitter:card" content="summary_large_image" />
