@@ -162,10 +162,10 @@ export default {
   },
   methods: {
     handleCarouselCellFocus(carousel) {
-      carousel.cells().forEach(el => {
+      carousel.cells().forEach((el) => {
         el.element.querySelector('a').setAttribute('tabindex', '-1');
       });
-      carousel.selectedElements().forEach(el => {
+      carousel.selectedElements().forEach((el) => {
         el.querySelector('a').setAttribute('tabindex', '0');
       });
     },

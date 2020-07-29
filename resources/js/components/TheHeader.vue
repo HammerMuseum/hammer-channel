@@ -35,7 +35,7 @@
         </div>
         <div class="header__actions">
           <button
-            class="button button--action button--header overlay-toggle--footer"
+            class="button button--action button--light overlay-toggle--footer"
             aria-haspopup="true"
             :aria-expanded="overlay.footer"
             @click="overlay.footer = !overlay.footer"
@@ -56,11 +56,23 @@
               content: ['drawer__content', 'drawer__content--footer'] }"
           >
             <template #toggle />
-            <TheFooter @close="overlay.footer = false" />
+            <button
+              :class="['footer__close-button', 'button', 'button--icon']"
+              @click="handleFooterClose"
+            >
+              <SvgIcon
+                name="close-pink"
+                title="Close the description overlay"
+              />
+            </button>
+            <TheFooter
+              v-hammer:swipe.up="handleFooterClose"
+              @close="overlay.footer = false"
+            />
           </VDrawer>
 
           <button
-            class="button button--header overlay-toggle--search"
+            class="button button--light overlay-toggle--search"
             aria-haspopup="true"
             :aria-expanded="overlay.search"
             @click="overlay.search = !overlay.search"
@@ -78,12 +90,7 @@
                 id="search-icon-title"
                 lang="en"
               >{{ overlay.search ? 'Close the search panel' : 'Open the search panel' }}</title>
-              <template v-if="overlay.search">
-                <use xlink:href="/images/sprite.svg#sprite-close-pink" />
-              </template>
-              <template v-else>
-                <use xlink:href="/images/sprite.svg#sprite-search" />
-              </template>
+              <use xlink:href="/images/sprite.svg#sprite-search" />
             </svg>
           </button>
           <VDrawer
@@ -101,9 +108,20 @@
             }"
           >
             <template #toggle />
+            <button
+              :class="['footer__close-button', 'button', 'button--icon']"
+              @click="handleSearchClose"
+            >
+              <SvgIcon
+                name="close-pink"
+                title="Close the description overlay"
+              />
+            </button>
             <SearchBar
+              v-hammer:swipe.up="handleSearchClose"
               :classes="['search-bar--overlay']"
               focus
+              :tags="tags"
               @close="overlay.search = false"
             />
           </VDrawer>
@@ -114,6 +132,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { VDrawer } from 'vuetensils/src/components';
 import SearchBar from './SearchBar.vue';
 import TheFooter from './TheFooter.vue';
@@ -127,6 +146,7 @@ export default {
   },
   data() {
     return {
+      tags: [],
       title: 'Hammer Video',
       overlay: {
         search: false,
@@ -137,6 +157,26 @@ export default {
   computed: {
     overlayActive() {
       return this.overlay.search || this.overlay.footer;
+    },
+  },
+  mounted() {
+    this.getTags();
+  },
+  methods: {
+    getTags() {
+      axios
+        .get('/api/suggestions')
+        .then((response) => {
+          this.tags = response.data;
+        }).catch((err) => {
+          this.tags = [];
+        });
+    },
+    handleSearchClose() {
+      this.overlay.search = false;
+    },
+    handleFooterClose() {
+      this.overlay.footer = false;
     },
   },
 };

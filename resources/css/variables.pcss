@@ -12,7 +12,8 @@
   --background-darker: #262626;
 
   /* Drop shadow */
-  --carousel-control-drop-shadow: rgba(38, 38, 38, 0.4);
+  --drop-shadow--standard: rgba(38, 38, 38, 0.4);
+  --drop-shadow--hard: rgba(0, 0, 0, 0.8);
 
   /* Font colors */
   --text-primary: #4d4b4b;
@@ -35,18 +36,19 @@
   --wrapper-padding--small: var(--header-height--small) 16px 0 16px;
   --wrapper-padding--medium: var(--header-height) 0 0 0;
   --wrapper-padding--large: var(--header-height) 0;
+  --default-transition: 0.4s cubic-bezier(0.4, 0, 1, 1);
 
   /* Overlays */
   --overlay-dark: rgba(77, 75, 75, 0.7);
   --fade-transition: 0.2s cubic-bezier(0.4, 0, 1, 1);
-  --overlay-transition: 0.4s cubic-bezier(0.4, 0, 1, 1);
+  --overlay-transition: 0.4s ease-out;
   --rotation-transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 
   /* Video player */
   --video-player-header-max-height: 234px;
   --video-player-max-width: 100vw;
   --video-player-aspect-ratio: 9 / 16;
-  --video-tabs-icon-height: 48px;
+  --video-tabs-no-icon-height: 43px;
   --video-player-control-bar-height: 88px;
   --video-player-progress-bar-height: 10px;
   --video-player-control-bar-background: linear-gradient(rgba(60, 60, 60, 0) 0%, rgba(0, 0, 0, 0.75) 61.08%, #000 100%);

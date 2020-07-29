@@ -5,32 +5,76 @@
         class="video-meta__transcript"
       >
         <template v-if="items.length">
-          <div class="transcript__actions">
-            <div class="transcript__download">
-              <a
-                href="#"
-                class="download__link link link--text link--text-secondary"
-                @click.prevent="initDownload"
-              >
-                <span class="download__title">Download transcript</span>
-              </a>
-            </div>
-          </div>
-
-          <div
-            class="transcript__content"
-            tabindex="0"
-          >
-            <span class="visually-hidden">Transcript content</span>
-            <p
-              v-for="item in items"
-              :key="item.id"
-              class="transcript__paragraph"
-              :class="{ 'transcript__paragraph--active': isActive(item.start, item.end, item.id)}"
+          <div class="transcript__options">
+            <button
+              class="button button--action highlighter-toggle"
+              aria-haspopup="true"
+              :aria-expanded="highlightControlsActive ? 'true' : 'false'"
+              @click="handleHighlighterToggle"
             >
-              {{ item.message }}
-            </p>
+              <span class="visually-hidden">Search within the transcript</span>
+              <SvgIcon
+                name="search"
+                title="Search within the transcript"
+              />
+            </button>
+            <button
+              class="button button--action"
+              @click="initDownload"
+            >
+              <span class="download__title">Download transcript</span>
+            </button>
           </div>
+          <HighlightText
+            :show-highlighter="highlightControlsActive"
+            @toggle-highlighter="handleHighlighterToggle"
+            @scroll-to="handleHighlighterScroll"
+          >
+            <div
+              ref="transcriptContent"
+              class="transcript__content"
+              tabindex="0"
+            >
+              <span
+                id="transcript-anchor"
+                class="visually-hidden"
+              >Transcript content</span>
+              <p
+                v-for="item in items"
+                :key="item.id"
+                class="transcript__paragraph"
+                :class="{
+                  'transcript__paragraph--active': isActive(item.start, item.end, item.id)
+                }"
+              >
+                <VTooltip
+                  focus
+                  tag="div"
+                  :classes="{ toggle: 'tooltip--transcript', content: 'tooltip__content' }"
+                >
+                  <template #tooltip>
+                    <button
+                      :aria-label="`Go to ${item.timecode}`"
+                      class="button button--light"
+                      @mousedown="handleTranscriptClick(item.start)"
+                    >
+                      <SvgIcon
+                        name="play"
+                        :title="`Play from ${item.timecode}`"
+                      />
+                      <time>{{ item.timecode }}</time>
+                    </button>
+                  </template>
+                  {{ item.message }}
+                </VTooltip>
+              </p>
+            </div>
+          </HighlightText>
+        </template>
+        <template
+          v-else-if="error"
+        >
+          Sorry, the transcript for this video failed to load correctly.
         </template>
         <template
           v-else
@@ -50,17 +94,17 @@
           </div>
         </template>
 
-        <ScrollToTop
+        <BackToTop
           label="Go to top of transcript"
-          :element="transcriptScrollContainer"
           :container="transcriptScrollContainer"
+          @scroll-top="handleBackToTopScroll"
         >
           <span class="visually-hidden">Go to top of transcript</span>
           <SvgIcon
             name="next"
             title="Go to top of transcript"
           />
-        </ScrollToTop>
+        </BackToTop>
       </div>
     </template>
   </VideoMeta>
@@ -68,15 +112,22 @@
 
 <script>
 import { saveAs } from 'file-saver';
+import scrollIntoView from 'scroll-into-view';
 import { vueWindowSizeMixin } from 'vue-window-size';
-import VueScrollTo from 'vue-scrollto';
-import ScrollToTop from './ScrollToTop.vue';
+import { VTooltip } from 'vuetensils/src/components';
+import SvgIcon from './SvgIcon.vue';
+import HighlightText from './HighlightText.vue';
+import BackToTop from './BackToTop.vue';
+import isIos from '../mixins/isIos';
 import { store, mutations } from '../store';
 
 export default {
   name: 'Transcript',
   components: {
-    ScrollToTop,
+    BackToTop,
+    HighlightText,
+    SvgIcon,
+    VTooltip,
   },
   mixins: [vueWindowSizeMixin],
   props: {
@@ -85,6 +136,10 @@ export default {
       default() {
         return 0;
       },
+    },
+    error: {
+      type: Boolean,
+      default: false,
     },
     items: {
       type: Array,
@@ -96,48 +151,76 @@ export default {
   data() {
     return {
       currentPara: null,
+      currentHighlight: null,
+      ios: false,
       scrollInProgress: false,
+      highlightControlsActive: false,
     };
   },
   computed: {
     clean() {
       return store.transcriptInit;
     },
+    highlighterOffset() {
+      return this.windowWidth < 840 ? ((window.innerHeight / 2) + 40) * -1 : -120;
+    },
     transcriptHasLoaded() {
       return this.items.length;
     },
     transcriptScrollContainer() {
-      return this.windowWidth > 960 ? '.tab--transcript .video-meta__inner' : undefined;
-    },
-  },
-  watch: {
-    currentPara() {
-      const self = this;
-      const options = {
-        container: '.tab--transcript',
-        easing: 'ease-in',
-        offset: -200,
-        force: true,
-        onStart() {
-          self.scrollInProgress = true;
-        },
-        onDone() {
-          self.scrollInProgress = false;
-        },
-        x: false,
-        y: true,
-      };
-      const el = this.$el.getElementsByClassName('transcript__paragraph--active')[0];
-      VueScrollTo.scrollTo(el, 1200, options);
+      if (!this.windowWidth < 840) {
+        return '.tab--transcript .video-meta__inner';
+      }
+      return null;
     },
   },
   mounted() {
     this.toggleTranscriptInit();
+    this.ios = isIos();
   },
   destroyed() {
     this.toggleTranscriptInit();
   },
   methods: {
+    handleHighlighterToggle() {
+      this.highlightControlsActive = !this.highlightControlsActive;
+      const condition = (this.windowWidth < 840 || this.ios) && !this.highlightControlsActive;
+      document.querySelector('html').classList.toggle('is-sticky', condition);
+      // Having to workaround iOS fixed positioning oddities
+      // Only when closing the highlighter input.
+      if (this.ios) {
+        this.$root.$el.classList.toggle('highlighter--top');
+        const offsetHeight = window.innerHeight / 2.667;
+        const current = this.currentHighlight;
+        const offsetParent = current.offsetParent ? current.offsetParent : null;
+        const offset = offsetParent ? offsetParent.offsetTop - offsetHeight : 0;
+        window.scrollTo(0, offset);
+      }
+    },
+    handleHighlighterScroll({ el, keyboardBlurred }) {
+      const offset = keyboardBlurred ? 100 : 0;
+      this.currentHighlight = el;
+      this.handleScrollTo(el, offset);
+    },
+    handleScrollTo(el, offset) {
+      const width = this.windowWidth;
+      scrollIntoView(el, {
+        time: 0,
+        align: {
+          top: 0.5,
+          topOffset: offset,
+        },
+        validTarget(target) {
+          return width < 840 ? true : target !== window;
+        },
+      });
+    },
+    handleBackToTopScroll() {
+      this.handleScrollTo(document.querySelector('#transcript-anchor'), 0);
+    },
+    handleTranscriptClick(timecode) {
+      this.$emit('update-timecode', timecode);
+    },
     initDownload() {
       const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);
       const blob = new Blob(output, { type: 'text/plain;charset=utf-8' });

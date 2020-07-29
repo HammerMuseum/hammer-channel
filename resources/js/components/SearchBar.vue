@@ -1,6 +1,5 @@
 <template>
   <div
-    v-hammer:swipe.up="close"
     :class="['search-bar', ...classes]"
   >
     <div
@@ -8,7 +7,7 @@
     >
       <div class="form__input-wrapper form__input-wrapper--search-bar">
         <VInput
-          ref="searchInput"
+          ref="input"
           v-model="clonedTerm"
           :classes="{
             input: ['form__input', 'form__input--search', 'form__input--search-bar'],
@@ -50,7 +49,7 @@
         <div class="search-bar__option search-bar__option--right">
           <span class="search-bar__option-label">or try</span>
           <TagGroup
-            :items="tagItems"
+            :items="tags"
             @tag-selected="close"
           />
         </div>
@@ -60,7 +59,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { VInput } from 'vuetensils/src/components';
 import TagGroup from './TagGroup.vue';
 import { store, mutations } from '../store';
@@ -80,10 +78,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    tags: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
-      tagItems: null,
       clonedTerm: '',
     };
   },
@@ -104,11 +105,10 @@ export default {
     },
   },
   mounted() {
-    this.getTagItems();
     if (this.focus) {
       this.$nextTick(() => {
-        if (window.innerWidth > 960) {
-          this.$refs.searchInput.focus();
+        if (window.innerWidth > 840) {
+          this.$refs.input.$refs.input.focus();
         }
       });
     }
@@ -125,15 +125,6 @@ export default {
       });
       this.clonedTerm = '';
       this.close();
-    },
-    getTagItems() {
-      axios
-        .get('/api/suggestions')
-        .then((response) => {
-          this.tagItems = response.data;
-        }).catch((err) => {
-          // @todo Log these rather than swallow?
-        });
     },
   },
 };

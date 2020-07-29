@@ -178,8 +178,11 @@ export default {
   },
   watch: {
     timecode(val) {
-      this.player.currentTime(val);
-      this.player.play();
+      if (val > 0) {
+        this.player.currentTime(val);
+        this.player.play();
+        this.$emit('timecode-reset');
+      }
     },
     retrySources(sources) {
       if (sources !== null) {

@@ -17,15 +17,14 @@
 .is-sticky .panel--left {
   position: -webkit-sticky;
   position: sticky;
-  top: -1px;
-  padding-top: 1px;
+  top: 0;
   z-index: 5;
 }
 
 @media screen and (min-width: 52.5em) {
   .panels {
     flex-direction: row;
-    min-height: calc(100vh - calc(var(--video-player-header-max-height) + var(--header-height) + 72px));
+    min-height: calc(100vh - var(--video-player-header-max-height));
   }
 
   .panel--left {

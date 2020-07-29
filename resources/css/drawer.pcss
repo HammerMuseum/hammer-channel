@@ -1,6 +1,6 @@
 .drawer__container {
-  top: var(--header-height--small);
-  height: calc(100vh - var(--header-height--small));
+  top: 0;
+  height: calc(100vh);
   transition: all var(--overlay-transition);
   background: var(--overlay-dark);
 }
@@ -15,11 +15,4 @@
   z-index: 4;
   transition: transform var(--overlay-transition);
   background-color: #fff;
-}
-
-@media screen and (min-width: 37.5em) {
-  .drawer__container {
-    top: var(--header-height);
-    height: calc(100vh - var(--header-height));
-  }
 }
