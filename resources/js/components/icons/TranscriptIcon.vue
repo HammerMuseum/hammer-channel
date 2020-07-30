@@ -1,0 +1,29 @@
+<template>
+  <g>
+    <g>
+      <path
+        d="M14,17H0V0H14ZM2,15H12V2H2Z"
+      /><rect
+        x="4"
+        y="5"
+        width="6"
+        height="1"
+      /><rect
+        x="4"
+        y="7"
+        width="6"
+        height="1"
+      /><rect
+        x="4"
+        y="9"
+        width="6"
+        height="1"
+      /><rect
+        x="4"
+        y="11"
+        width="3"
+        height="1"
+      />
+    </g>
+  </g>
+</template>

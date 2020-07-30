@@ -26,12 +26,15 @@
             :class="['form__submit', 'button', 'button--icon']"
             @click.stop="search"
           >
-            <svg
-              class="icon"
+            <BaseIcon
+              width="48"
+              height="48"
+              view-box="0 0 24 24"
+              icon-name="search-bar"
+              title="Submit search"
             >
-              <use xlink:href="/images/sprite.svg#sprite-search" />
-            </svg>
-            <span class="icon-text visually-hidden">Submit search</span>
+              <SearchIcon />
+            </BaseIcon>
           </button>
         </div>
       </div>

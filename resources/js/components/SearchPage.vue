@@ -29,9 +29,14 @@
                 class="button button--icon search-facet__item-remove"
                 :aria-label="`Clear your query and reset results`"
               >
-                <svg class="icon icon--close-pink">
-                  <use xlink:href="/images/sprite.svg#sprite-close-pink" />
-                </svg>
+                <BaseIcon
+                  width="36"
+                  height="36"
+                  view-box="0 0 36 36"
+                  icon-name="clear-term"
+                >
+                  <ClosePinkIcon />
+                </BaseIcon>
               </button>
             </a>
           </div>
@@ -56,11 +61,15 @@
                 class="search-page__sorting-control-label"
               >
                 <span>Sort by</span>
-                <svg
-                  class="icon icon--small"
+                <BaseIcon
+                  width="18"
+                  height="18"
+                  view-box="0 0 36 36"
+                  icon-name="sorting-options"
+                  title="Sorting options"
                 >
-                  <use xlink:href="/images/sprite.svg#sprite-dropdown" />
-                </svg>
+                  <DropdownIcon />
+                </BaseIcon>
               </span>
             </template>
 
@@ -148,12 +157,15 @@
                         :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
                         @click="submitSearch"
                       >
-                        <svg
-                          class="icon"
+                        <BaseIcon
+                          width="18"
+                          height="18"
+                          view-box="0 0 18 18"
+                          icon-name="search-form"
+                          title="Submit search"
                         >
-                          <use xlink:href="/images/sprite.svg#sprite-search" />
-                        </svg>
-                        <span class="icon-text visually-hidden">Submit search query</span>
+                          <SearchIcon />
+                        </BaseIcon>
                       </button>
                     </div>
                   </div>

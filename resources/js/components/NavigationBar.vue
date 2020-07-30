@@ -35,11 +35,16 @@
           tabindex="-1"
           :class="['link']"
         >Back to top
-          <svg
-            class="icon icon--nav-bar-link"
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 36 36"
+            icon-name="back-to-top"
+            title="Back to top"
+            :classes="['icon--nav-bar-link']"
           >
-            <use xlink:href="/images/sprite.svg#sprite-next" />
-          </svg>
+            <NextIcon />
+          </BaseIcon>
         </a>
       </div>
     </Flickity>

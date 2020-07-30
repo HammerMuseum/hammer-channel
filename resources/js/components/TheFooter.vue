@@ -15,9 +15,15 @@
             class="link"
           >
             Sign up to our newsletters
-            <svg class="icon">
-              <use xlink:href="/images/sprite.svg#sprite-envelope" />
-            </svg>
+            <BaseIcon
+              width="36"
+              height="36"
+              view-box="0 0 48 36"
+              icon-name="footer-signup"
+              title="Sign up to our newsletters"
+            >
+              <EnvelopeIcon />
+            </BaseIcon>
           </a>
           <a
             href="https://hammer.ucla.edu/programs-events"
@@ -25,11 +31,15 @@
             class="link"
           >
             Talks happening soon
-            <svg
-              class="icon"
+            <BaseIcon
+              width="39"
+              height="32"
+              view-box="0 0 39 32"
+              icon-name="events-calendar"
+              title="Find talks happening soon"
             >
-              <use xlink:href="/images/sprite.svg#sprite-calendar" />
-            </svg>
+              <CalendarIcon />
+            </BaseIcon>
           </a>
         </div>
         <div class="footer__info">
@@ -52,13 +62,8 @@
 </template>
 
 <script>
-import SvgIcon from './SvgIcon.vue';
-
 export default {
   name: 'TheFooter',
-  components: {
-    SvgIcon,
-  },
   methods: {
     close() {
       this.$emit('close');

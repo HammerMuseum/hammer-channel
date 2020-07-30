@@ -52,10 +52,14 @@
               @click="clearHandler(); $emit('toggle-highlighter')"
             >
               <span class="visually-hidden">Close transcript search</span>
-              <SvgIcon
-                name="close"
-                title="Close transcript search"
-              />
+              <BaseIcon
+                width="36"
+                height="36"
+                view-box="0 0 36 36"
+                icon-name="close-transcript-search"
+              >
+                <CloseIcon />
+              </BaseIcon>
             </button>
           </div>
         </div>
@@ -91,12 +95,10 @@
 <script>
 import { VInput } from 'vuetensils/src/components';
 import Mark from 'mark.js';
-import SvgIcon from './SvgIcon.vue';
 import { store } from '../store';
 
 export default {
   components: {
-    SvgIcon,
     VInput,
   },
   props: {

@@ -53,10 +53,15 @@
           >
             <BTab active>
               <template v-slot:title>
-                <SvgIcon
-                  name="info"
-                  title="Information"
-                />
+                <BaseIcon
+                  width="18"
+                  height="18"
+                  view-box="0 0 192 512"
+                  icon-name="info"
+                  title="Information about the video"
+                >
+                  <InfoIcon />
+                </BaseIcon>
                 <h3 class="vp__tabs__label">
                   Info
                 </h3>
@@ -74,10 +79,15 @@
               class="tab--transcript"
             >
               <template v-slot:title>
-                <SvgIcon
-                  name="transcript"
-                  title="Transcript"
-                />
+                <BaseIcon
+                  width="18"
+                  height="18"
+                  view-box="0 0 18 18"
+                  icon-name="transcript"
+                  title="View transcript"
+                >
+                  <TranscriptIcon />
+                </BaseIcon>
                 <h3 class="vp__tabs__label">
                   Transcript
                 </h3>
@@ -92,10 +102,15 @@
 
             <BTab>
               <template v-slot:title>
-                <SvgIcon
-                  name="clip"
-                  title="Clip"
-                />
+                <BaseIcon
+                  width="18"
+                  height="18"
+                  view-box="0 0 24 17"
+                  icon-name="clip"
+                  title="Clip this video"
+                >
+                  <ClipIcon />
+                </BaseIcon>
                 <h3 class="vp__tabs__label">
                   Clip
                 </h3>
@@ -107,10 +122,15 @@
 
             <BTab>
               <template v-slot:title>
-                <SvgIcon
-                  name="share"
-                  title="Share"
-                />
+                <BaseIcon
+                  width="18"
+                  height="18"
+                  view-box="0 0 18 18"
+                  icon-name="share"
+                  title="Share the video"
+                >
+                  <ShareIcon />
+                </BaseIcon>
                 <h3 class="vp__tabs__label">
                   Share
                 </h3>
@@ -123,10 +143,15 @@
 
             <BTab>
               <template v-slot:title>
-                <SvgIcon
-                  name="related"
-                  title="Related"
-                />
+                <BaseIcon
+                  width="18"
+                  height="18"
+                  view-box="0 0 18 18"
+                  icon-name="related"
+                  title="Related videos"
+                >
+                  <RelatedIcon />
+                </BaseIcon>
                 <h3 class="vp__tabs__label">
                   Related
                 </h3>
@@ -149,7 +174,6 @@ import { BTabs, BTab } from 'bootstrap-vue';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
 import getRouteData from '../../mixins/getRouteData';
-import SvgIcon from '../base/SvgIcon.vue';
 import About from './About.vue';
 import ClippingTool from './ClippingTool.vue';
 import RelatedContent from '../RelatedContent.vue';
@@ -167,7 +191,6 @@ export default {
     ClippingTool,
     RelatedContent,
     Share,
-    SvgIcon,
     Transcript,
     VideoPlayer,
   },

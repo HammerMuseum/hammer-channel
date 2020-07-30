@@ -17,9 +17,14 @@
         <span
           class="search-facet__item-remove"
         >
-          <svg class="icon icon--close-pink">
-            <use xlink:href="/images/sprite.svg#sprite-close-pink" />
-          </svg>
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 36 36"
+            icon-name="remove-item"
+          >
+            <ClosePinkIcon />
+          </BaseIcon>
         </span>
       </a>
     </div>
