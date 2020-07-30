@@ -154,13 +154,13 @@
                     />
                     <div class="form__submit-wrapper">
                       <button
-                        :class="['form__submit', 'form__submit--small', 'button', 'button--icon']"
+                        :class="['form__submit', 'button', 'button--icon']"
                         @click="submitSearch"
                       >
                         <BaseIcon
-                          width="18"
-                          height="18"
-                          view-box="0 0 18 18"
+                          width="24"
+                          height="24"
+                          view-box="0 0 24 24"
                           icon-name="search-form"
                           title="Submit search"
                         >
