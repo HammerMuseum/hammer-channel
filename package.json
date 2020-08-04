@@ -86,7 +86,6 @@
     "video.js": "^7.8.4",
     "videojs-markers": "^1.0.1",
     "videojs-offset": "^2.1.2",
-    "videojs-overlay": "^2.1.4",
     "vtt.js": "^0.13.0",
     "vue": "^2.6.11",
     "vue-check-view": "^0.3.0",
