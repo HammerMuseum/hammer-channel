@@ -343,7 +343,7 @@ export default {
         .then((response) => {
           this.retrySources = [{ src: response.data.video.src, type: 'video/mp4' }];
         }).catch((err) => {
-          console.log(err);
+          console.error(err);
         });
     },
     fetchRelatedContent() {
