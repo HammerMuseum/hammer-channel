@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Api;
-use App\Library\Pagination;
 use App\Library\MetatagHelper;
 use Illuminate\Http\Request;
 
@@ -16,25 +15,19 @@ class ListingController extends Controller
     /** @var Api */
     protected $api;
 
-    /** @var Pagination */
-    protected $pagination;
-
     /** @var MetatagHelper */
     protected $metatagHelper;
 
     /**
      * ListingController constructor.
      * @param Api $api
-     * @param Pagination $pagination
      * @param MetatagHelper $metatagHelper
      */
     public function __construct(
         Api $api,
-        Pagination $pagination,
         MetatagHelper $metatagHelper
     ) {
         $this->api = $api;
-        $this->pagination = $pagination;
         $this->metatagHelper = $metatagHelper;
     }
 
@@ -71,7 +64,8 @@ class ListingController extends Controller
     }
 
     /**
-     * Get JSON of the app state to inject into the head and populate the frontend
+     * Get JSON of the app state to inject into
+     * the head of the page to hydrate initial request.
      *
      * @param $data
      * @param $params
@@ -79,19 +73,9 @@ class ListingController extends Controller
      */
     public function getAppState($data, $params)
     {
-        $pagerLinks = [];
-        if (!empty($data['pages'])) {
-            $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager']);
-        }
-
         return [
             'path' => '/',
             'videos' => isset($data['data']) ? $data['data'] : [],
-            'pager' => $pagerLinks,
-            'message' => isset($data['message']) ? $data['message'] : false,
-            'title' => '',
-            'clearedPageQuery' => $this->pagination->clearParams($params, ['page']),
-            'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
         ];
     }
 
