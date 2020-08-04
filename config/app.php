@@ -13,7 +13,20 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Hammer Video Archive'),
+    'name' => env('APP_NAME', 'Video Archive'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Description
+    |--------------------------------------------------------------------------
+    |
+    | This value is the description of your application. This value is used when the
+    | framework needs to describe the application in a metatag or
+    | any other location as required by the application or its packages.
+    |
+    */
+
+    'description'  => env('DESCRIPTION', ''),
 
     /*
     |--------------------------------------------------------------------------

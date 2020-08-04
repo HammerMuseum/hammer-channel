@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Api;
 use App\Library\Pagination;
-use App\Library\Metadata;
+use App\Library\MetatagHelper;
 use Illuminate\Http\Request;
 
 /**
@@ -19,23 +19,23 @@ class ListingController extends Controller
     /** @var Pagination */
     protected $pagination;
 
-    /** @var Metadata */
-    protected $metadata;
+    /** @var MetatagHelper */
+    protected $metatagHelper;
 
     /**
      * ListingController constructor.
      * @param Api $api
      * @param Pagination $pagination
-     * @param Metadata $metadata
+     * @param MetatagHelper $metatagHelper
      */
     public function __construct(
         Api $api,
         Pagination $pagination,
-        Metadata $metadata
+        MetatagHelper $metatagHelper
     ) {
         $this->api = $api;
         $this->pagination = $pagination;
-        $this->metadata = $metadata;
+        $this->metatagHelper = $metatagHelper;
     }
 
     /**
@@ -47,10 +47,12 @@ class ListingController extends Controller
     public function index(Request $request)
     {
         $params = $request->all();
-        $videos = $this->api->request('search/aggregate/topics');
-        return view('app', [
-            'state' => $this->getAppState($videos, $params),
-            'metadata' => $this->getMetadata($videos)
+        $data = $this->api->request('search/aggregate/topics');
+
+        $this->setMeta($data);
+
+        return view('main', [
+            'state' => $this->getAppState($data, $params),
         ]);
     }
 
@@ -97,15 +99,37 @@ class ListingController extends Controller
      * @param $data
      * @return array
      */
-    public function getMetadata($data)
+    public function setMeta()
     {
-        return $this->metadata->getMetadata($data);
+        $imageUrl = $this->metatagHelper->getImageUrl();
+        $description = config('app.description');
+        $title = config('app.name');
+        $pageUrl = $this->metatagHelper->getCurrentUrl();
+
+        meta()
+            ->set('title', config('app.name'))
+            ->set('canonical', $pageUrl)
+            ->set('description', $description)
+            ->set('og:description', $description)
+            ->set('twitter:url', $pageUrl)
+            ->set('twitter:title', $title)
+            ->set('twitter:description', $description)
+            ->set('twitter:image', $imageUrl)
+            ->set('twitter:card', 'summary')
+            ->set('og:url', $pageUrl)
+            ->set('og:title', $title)
+            ->set('og:description', $description)
+            ->set('og:type', 'website')
+            ->set('og:image', $imageUrl)
+            ->set('og:image:type', 'image/jpg')
+            ->set('og:image:width', 320)
+            ->set('og:image:height', 180);
     }
 
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSuggestions()
+    public function suggestionsJson()
     {
         $cannedTerms = [];
         $featuredPlaylist = $this->api->request('playlists/Featured');

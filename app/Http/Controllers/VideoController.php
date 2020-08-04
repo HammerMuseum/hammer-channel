@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Api;
-use App\Library\Metadata;
+use App\Library\MetatagHelper;
 
 /**
  * Class VideoController
@@ -15,23 +15,44 @@ class VideoController extends Controller
     /** @var Api */
     protected $api;
 
-    protected $metadata;
+    /** @var MetatagHelper */
+    protected $metatagHelper;
 
     /**
      * VideoController constructor.
      * @param Api $api
-     * @param Metadata $metadata
+     * @param MetatagHelper $metatagHelper
      */
     public function __construct(
         Api $api,
-        Metadata $metadata
+        MetatagHelper $metatagHelper
     ) {
         $this->api = $api;
-        $this->metadata = $metadata;
+        $this->metatagHelper = $metatagHelper;
     }
 
     /**
-     * View an individual video by calling the API by ID
+     * Returns an iframe response for video embed.
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function container(Request $request, $id)
+    {
+        $data = $this->api->request('videos/' . $id);
+
+        if (empty($data['data'])) {
+            abort(404);
+        }
+
+        return view('embed', [
+            'video' => $data['data'][0],
+        ]);
+    }
+
+    /**
+     * View for a single video.
      *
      * @param Request $request
      * @param $id
@@ -43,12 +64,13 @@ class VideoController extends Controller
         $data = $this->api->request('videos/' . $id);
 
         if (empty($data['data'])) {
-            abort(503);
+            abort(404);
         }
 
-        return view('app', [
+        $this->setMeta($data['data'][0]);
+
+        return view('main', [
             'state' => $this->getAppState($path, $data),
-            'metadata' => $this->getMetadata($data)
         ]);
     }
 
@@ -83,8 +105,47 @@ class VideoController extends Controller
      * @param $data
      * @return array
      */
-    public function getMetadata($data)
+    public function setMeta($data)
     {
-        return $this->metadata->getMetadata($data['data'][0]);
+        $pageUrl = $this->metatagHelper->getCurrentUrl();
+        $description = $data['description'] ? htmlentities(strip_tags($data['description'])) : false;
+        $title = $data['title'] ? $data['title'] : false;
+
+        meta()
+            ->set('title', $title)
+            ->set('canonical', $pageUrl)
+            ->set('description', $description)
+            ->set('og:description', $description)
+            ->set('twitter:url', $pageUrl)
+            ->set('twitter:title', $title)
+            ->set('twitter:description', $description)
+            ->set('og:url', $pageUrl)
+            ->set('og:title', $title)
+            ->set('og:description', $description)
+            ->set('og:type', 'video.other');
+
+        if (isset($data['thumbnailId'])) {
+            $imageUrl = $this->metatagHelper->getImageUrl($data['thumbnailId']);
+            meta()
+                ->set('twitter:image', $imageUrl)
+                ->set('og:image', $imageUrl)
+                ->set('og:image:type', 'image/jpg')
+                ->set('og:image:width', 320)
+                ->set('og:image:height', 180);
+        }
+
+        if (isset($data['asset_id'])) {
+            $playerUrl = $this->metatagHelper->getPlayerUrl($data['asset_id']);
+            meta()
+                ->set('twitter:player', $playerUrl)
+                ->set('twitter:card', 'player')
+                ->set('twitter:player:width', 480)
+                ->set('twitter:player:height', 480)
+                ->set('og:video', $playerUrl)
+                ->set('og:video:secure_url', $playerUrl)
+                ->set('og:video:type', 'video/mp4')
+                ->set('og:video:width', 480)
+                ->set('og:video:height', 480);
+        }
     }
 }

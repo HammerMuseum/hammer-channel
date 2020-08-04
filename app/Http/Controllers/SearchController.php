@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Api;
 use App\Library\Facets;
 use App\Library\Pagination;
-use App\Library\Metadata;
+use App\Library\MetatagHelper;
 use Illuminate\Support\Str;
 
 /**
@@ -24,26 +24,26 @@ class SearchController extends Controller
     /** @var Pagination */
     protected $pagination;
 
-    /** @var Metadata */
-    protected $metadata;
+    /** @var MetatagHelper */
+    protected $metatagHelper;
 
     /**
      * SearchController constructor.
      * @param Api $api
      * @param Facets $facetHandler
      * @param Pagination $pagination
-     * @param Metadata $metadata
+     * @param MetatagHelper $metatagHelper
      */
     public function __construct(
         Api $api,
         Facets $facetHandler,
         Pagination $pagination,
-        Metadata $metadata
+        MetatagHelper $metatagHelper
     ) {
         $this->api = $api;
         $this->facetHandler = $facetHandler;
         $this->pagination = $pagination;
-        $this->metadata = $metadata;
+        $this->metatagHelper = $metatagHelper;
     }
 
     /**
@@ -52,16 +52,18 @@ class SearchController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function search(Request $request)
+    public function view(Request $request)
     {
         $validParams = config('constants.validQueryParams');
         $params = $request->only($validParams);
         $queryString = $this->facetHandler->getFacetQueryString();
         $results = $this->api->request('search', $queryString);
         $state = $this->getAppState($results, $request, $params, $queryString);
-        return view('app', [
+
+        $this->setMeta($state);
+
+        return view('main', [
             'state' => $state,
-            'metadata' => $this->getMetadata()
         ]);
     }
 
@@ -69,7 +71,7 @@ class SearchController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function searchJson(Request $request)
+    public function viewJson(Request $request)
     {
         $validParams = config('constants.validQueryParams');
         $params = $request->only($validParams);
@@ -89,14 +91,17 @@ class SearchController extends Controller
     public function getAppState($data, $request, $params, $originalQuery)
     {
         $requestUrl = $request->url();
+
         $pagerLinks = [];
         if (!empty($data['pages'])) {
             $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager'], $params);
         }
+
         $facets = [];
         if (isset($data['aggregations'])) {
             $facets = $this->facetHandler->getFacetOptions($data['aggregations']);
         }
+
         $term = $request->get('term');
         return [
             'path' => '/search',
@@ -118,8 +123,31 @@ class SearchController extends Controller
      * @param $data
      * @return array
      */
-    public function getMetadata()
+    public function setMeta($data)
     {
-        return $this->metadata->getMetadata([]);
+        $imageUrl = $this->metatagHelper->getImageUrl();
+        $description = config('app.description');
+        $term = $data['term'];
+        $name = config('app.name');
+        $title = !is_null($term) ? 'Searched for ' . $term . ' - ' . $name : 'Search - ' .  $name;
+        $pageUrl = $this->metatagHelper->getCurrentUrl();
+
+        meta()
+            ->set('title', config('app.name'))
+            ->set('description', $description)
+            ->set('og:description', $description)
+            ->set('og:type', 'website')
+            ->set('twitter:url', $pageUrl)
+            ->set('twitter:title', $title)
+            ->set('twitter:description', $description)
+            ->set('twitter:image', $imageUrl)
+            ->set('twitter:card', 'summary')
+            ->set('og:url', $pageUrl)
+            ->set('og:title', $title)
+            ->set('og:description', $description)
+            ->set('og:image', $imageUrl)
+            ->set('og:image:type', 'image/jpg')
+            ->set('og:image:width', 320)
+            ->set('og:image:height', 180);
     }
 }
