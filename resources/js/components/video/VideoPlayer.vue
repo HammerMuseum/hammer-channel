@@ -52,10 +52,10 @@
 <script>
 import prettyms from 'humanize-duration';
 import videojs from 'video.js';
-import getOrientation from '../../mixins/getOrientation';
 import 'videojs-markers';
 import offset from 'videojs-offset';
 import ClipDisplay from './ClipDisplay.vue';
+import getOrientation from '../../mixins/getOrientation';
 
 window.VIDEOJS_NO_BASE_THEME = true;
 videojs.registerPlugin('offset', offset);
