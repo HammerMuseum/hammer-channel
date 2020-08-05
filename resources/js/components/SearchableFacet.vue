@@ -40,6 +40,7 @@
           :href="`/search?${query(facet.id, getValue(item, facet.type))}`"
           class="search-facet__item-link"
           tabindex="0"
+          :aria-label="`Add ${getValue(item, facet.type)} to selection`"
           @click.prevent="handleClick($event)"
         >
           <template v-if="!isActive(getValue(item, facet.type))">
@@ -53,7 +54,7 @@
             >{{ getValue(item, facet.type) }}</span>
             <button
               class="button button--icon search-facet__item-remove"
-              :aria-label="`Remove ${getValue(item, facet.type)} filter from selection`"
+              :aria-label="`Remove ${getValue(item, facet.type)} from selection`"
             >
               <svg class="icon icon--close">
                 <use xlink:href="/images/sprite.svg#sprite-close" />

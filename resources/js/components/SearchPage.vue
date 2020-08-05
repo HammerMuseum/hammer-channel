@@ -176,7 +176,7 @@
                     :disabled="!topicsAndTags.length"
                     @click="toggleFacetOverlay('topics')"
                   >
-                    <span>Topics & Tags</span>
+                    <span aria-label="Search filter: Topics & Tags">Topics & Tags</span>
                   </button>
                   <button
                     aria-owns="people"
@@ -187,7 +187,7 @@
                     :disabled="!facets.speakers.items.length"
                     @click="toggleFacetOverlay('people')"
                   >
-                    <span>People</span>
+                    <span aria-label="Search filter: People">People</span>
                   </button>
                   <button
                     aria-owns="playlists"
@@ -198,7 +198,7 @@
                     :disabled="!facets.in_playlists.items.length"
                     @click="toggleFacetOverlay('playlists')"
                   >
-                    <span>Playlists</span>
+                    <span aria-label="Search filter: Playlists">Playlists</span>
                   </button>
                   <button
                     aria-owns="date"
@@ -209,7 +209,7 @@
                     :disabled="!facets.date_recorded.items.length"
                     @click="toggleFacetOverlay('date')"
                   >
-                    <span>Date</span>
+                    <span aria-label="Search filter: Date">Date</span>
                   </button>
                 </div>
               </div>
@@ -288,8 +288,7 @@
             class="visually-hidden"
             tabindex="0"
           >
-            <span v-if="total">{{ total > 1 ? 'results' : 'result' }}</span>
-            <span v-else>No results</span>
+            Search results
           </span>
 
           <div
