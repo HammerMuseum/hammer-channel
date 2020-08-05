@@ -12,6 +12,7 @@
         :href="`/search?${query(facet.id, getValue(option, facet.type))}`"
         class="search-facet__item-link"
         tabindex="0"
+        :aria-label="`Add ${getValue(option, facet.type)} to selection`"
         @click.prevent="handleClick($event, facet.id, getValue(option, facet.type))"
       >
         <span
@@ -24,7 +25,7 @@
         >{{ getValue(option, facet.type) }}
           <button
             class="button button--icon search-facet__item-remove"
-            :aria-label="`Remove ${getValue(option, facet.type)} filter from selection`"
+            :aria-label="`Remove ${getValue(option, facet.type)} from selection`"
           >
             <svg class="icon icon--close">
               <use xlink:href="/images/sprite.svg#sprite-close" />

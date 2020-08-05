@@ -1,13 +1,14 @@
 <template>
   <div
     :class="navigationClasses"
+    aria-hidden="true"
   >
     <Flickity
       v-if="items && Object.keys(items).length > 0"
       ref="flickity"
       :options="flickityOptions"
       role="navigation"
-      aria-label="Video topics"
+      aria-label="List of video topics"
       class="navigation-bar__inner"
       @init="initNavigationBar"
     >
@@ -19,7 +20,9 @@
       >
         <a
           href="#"
+          :aria-label="`Topic ${label}`"
           :class="['link', {'link--active': activeItem === id }]"
+          tabindex="-1"
           @click.prevent="scrollTo(id)"
         >{{ label }}</a>
       </div>
@@ -29,10 +32,10 @@
         <a
           v-scroll-to="{ el: `body`, duration: 0, offset: -80 }"
           href="#"
+          tabindex="-1"
           :class="['link']"
         >Back to top
           <svg
-            title="Back to top"
             class="icon icon--nav-bar-link"
           >
             <use xlink:href="/images/sprite.svg#sprite-next" />

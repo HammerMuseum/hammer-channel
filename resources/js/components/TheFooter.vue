@@ -3,6 +3,7 @@
     class="footer"
   >
     <div class="footer__inner">
+      <span class="visually-hidden">Information about the archive</span>
       <h2 class="heading heading--footer">
         Welcome to Hammer ON
       </h2>
@@ -33,7 +34,7 @@
         </div>
         <div class="footer__info">
           <p>Hammer ON is the video archive of the Hammer Museum. The archive was made possible thanks to a grant from the Mellon Foundation.</p>
-          <p>If you would like to use any of the footage for broadacst, please contact example@example.org</p>
+          <p>If you would like to use any of the footage for broadcast, please contact example@example.org</p>
         </div>
         <div class="footer__links">
           <a

@@ -23,18 +23,16 @@
             'button--icon',
             {'button--disabled': isFirstSlide}
           ]"
-          :disabled="isFirstSlide"
           :aria-disabled="isFirstSlide"
           tabindex="0"
           @click="$refs.carousel.previous()"
         >
           <svg
-            title="Previous"
             class="icon icon--rotate"
           >
             <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
           </svg>
-          <span class="icon-text visually-hidden">Previous</span>
+          <span class="icon-text visually-hidden">Go to previous item</span>
         </button>
         <button
           type="submit"
@@ -45,21 +43,18 @@
             'button--icon',
             {'button--disabled': isFinalSlide}
           ]"
-          :disabled="isFinalSlide"
           :aria-disabled="isFinalSlide"
           tabindex="0"
           @click="$refs.carousel.next()"
         >
           <svg
-            title="Next"
             class="icon"
           >
             <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
           </svg>
-          <span class="icon-text visually-hidden">Next</span>
+          <span class="icon-text visually-hidden">Go to next item</span>
         </button>
       </div>
-
       <Flickity
         ref="carousel"
         v-images-loaded="imgsLoaded"
@@ -162,7 +157,7 @@ export default {
   },
   methods: {
     handleCarouselCellFocus(carousel) {
-      carousel.cells().forEach((el) => {
+      carousel.cells().slice(0, carousel.cells().length - 1).forEach((el) => {
         el.element.querySelector('a').setAttribute('tabindex', '-1');
       });
       carousel.selectedElements().forEach((el) => {

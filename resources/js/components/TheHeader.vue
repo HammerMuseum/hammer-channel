@@ -7,37 +7,62 @@
       'header-container',
       { 'overlay--active': overlayActive }]"
   >
+    <VSkip
+      ref="skip"
+      to="#start-of-content"
+      class="link link--text link--skip-to-content"
+    >
+      Skip to content
+    </VSkip>
     <header class="header">
       <div class="header__content">
         <div class="header__branding">
           <a
             class="link link--with-image"
             href="https://hammer.ucla.edu"
+            aria-label="Go to the main Hammer Museum website"
           >
-            <img src="/images/logo-hammer-vertical.png">
+            <img
+              src="/images/logo-hammer-vertical.png"
+              alt="Hammer Museum Logo"
+            >
+            <span class="visually-hidden">Go to the main Hammer Museum website</span>
           </a>
         </div>
         <div class="header__title">
-          <h1 class="visually-hidden">
-            Hammer Video
-          </h1>
           <RouterLink
+            v-slot="{ href, isExactActive, navigate }"
             class="link link--with-image"
+            aria-label="Homepage"
             :to="{name: 'app'}"
           >
-            <svg
-              title="Hammer video logo"
-              class="icon"
+            <a
+              :href="href"
+              :aria-current="isExactActive ? 'page' : false"
+              @click="navigate"
             >
-              <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
-            </svg>
+              <h1 class="visually-hidden">
+                Hammer Video
+              </h1>
+              <svg
+                title="Hammer video logo"
+                class="icon"
+              >
+                <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
+              </svg>
+            </a>
           </RouterLink>
         </div>
-        <div class="header__actions">
+        <nav
+          aria-label="Main navigation"
+          class="header__actions"
+        >
           <button
             class="button button--action button--light overlay-toggle--footer"
-            aria-haspopup="true"
+            :aria-pressed="overlay.footer"
             :aria-expanded="overlay.footer"
+            aria-label="Show information about the archive"
+            aria-controls="about-overlay"
             @click="overlay.footer = !overlay.footer"
           >
             <span class="button__text">About</span>
@@ -47,6 +72,7 @@
             />
           </button>
           <VDrawer
+            id="about"
             v-model="overlay.footer"
             transition="slide-down"
             bg-transition="fade"
@@ -73,8 +99,10 @@
 
           <button
             class="button button--light overlay-toggle--search"
-            aria-haspopup="true"
+            :aria-pressed="overlay.search"
             :aria-expanded="overlay.search"
+            aria-label="Open search form"
+            aria-controls="search-overlay"
             @click="overlay.search = !overlay.search"
           >
             <svg
@@ -94,6 +122,7 @@
             </svg>
           </button>
           <VDrawer
+            id="search-overlay"
             v-model="overlay.search"
             transition="slide-down"
             bg-transition="fade"
@@ -125,7 +154,7 @@
               @close="overlay.search = false"
             />
           </VDrawer>
-        </div>
+        </nav>
       </div>
     </header>
   </div>
@@ -170,6 +199,7 @@ export default {
           this.tags = response.data;
         }).catch((err) => {
           this.tags = [];
+          console.error(err);
         });
     },
     handleSearchClose() {
@@ -177,6 +207,9 @@ export default {
     },
     handleFooterClose() {
       this.overlay.footer = false;
+    },
+    scrollFix(hashbang) {
+      window.location.hash = hashbang;
     },
   },
 };

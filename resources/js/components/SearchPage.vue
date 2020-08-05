@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="page-wrapper page--search">
+    <div
+      id="start-of-content"
+      class="page-wrapper page--search"
+    >
       <SearchPageHeader
         :loading="loading"
         :extra-classes="['heading', 'heading--primary', 'heading--search']"
@@ -19,13 +22,12 @@
             <span class="search-page__summary__span">for&nbsp;</span>
             <a
               class="search-page__summary__link link link--text link--text-and-button"
-              title="Clear term and reset search"
               @click="resetSearch"
             >
               <strong>{{ searchTerm }}</strong>
               <button
                 class="button button--icon search-facet__item-remove"
-                aria-label="Clear term and reset search"
+                :aria-label="`Clear your query and reset results`"
               >
                 <svg class="icon icon--close-pink">
                   <use xlink:href="/images/sprite.svg#sprite-close-pink" />
@@ -52,11 +54,9 @@
             <template #label>
               <span
                 class="search-page__sorting-control-label"
-                aria-hidden
               >
                 <span>Sort by</span>
                 <svg
-                  title="Sorting options"
                   class="icon icon--small"
                 >
                   <use xlink:href="/images/sprite.svg#sprite-dropdown" />
@@ -68,6 +68,7 @@
               <ul>
                 <li>
                   <RouterLink
+                    aria-label="Sort by date from newest to oldest"
                     class="link link--text"
                     :to="{
                       name: 'search',
@@ -82,6 +83,7 @@
                 </li>
                 <li>
                   <RouterLink
+                    aria-label="Sort by date from oldest to newest"
                     class="link link--text"
                     :to="{
                       name: 'search',
@@ -102,9 +104,10 @@
       </SearchPageHeader>
 
       <div class="search-page__content">
-        <aside class="search-page__sidebar">
+        <nav class="search-page__sidebar">
           <transition
             name="slide-in"
+            @enter="afterFiltersEnter"
           >
             <div
               v-show="showFilters && hasFacets"
@@ -118,8 +121,9 @@
                 :class="['search__filters']"
               >
                 <button
+                  ref="searchFiltersToggle"
                   class="button button--action button--search-toggle button--small-devices"
-                  @click="toggleSearchFilters"
+                  @click.stop="toggleSearchFilters"
                 >
                   {{ 'Hide filters' }}
                 </button>
@@ -135,6 +139,7 @@
                       type="text"
                       :name="inputId"
                       label="Search"
+                      aria-label="Enter search query"
                       placeholder="Search"
                       @keydown.enter.prevent="submitSearch"
                     />
@@ -144,12 +149,11 @@
                         @click="submitSearch"
                       >
                         <svg
-                          title="Search"
                           class="icon"
                         >
                           <use xlink:href="/images/sprite.svg#sprite-search" />
                         </svg>
-                        <span class="icon-text visually-hidden">Search</span>
+                        <span class="icon-text visually-hidden">Submit search query</span>
                       </button>
                     </div>
                   </div>
@@ -163,6 +167,7 @@
                   class="search-page__facet-controls"
                 >
                   <button
+                    aria-owns="topics"
                     data-facet-id="topics"
                     :class="['button',
                              'search-facet__label',
@@ -171,9 +176,10 @@
                     :disabled="!topicsAndTags.length"
                     @click="toggleFacetOverlay('topics')"
                   >
-                    <span>Topics & Tags</span>
+                    <span aria-label="Search filter: Topics & Tags">Topics & Tags</span>
                   </button>
                   <button
+                    aria-owns="people"
                     data-facet-id="people"
                     :class="['button',
                              'search-facet__label',
@@ -181,9 +187,10 @@
                     :disabled="!facets.speakers.items.length"
                     @click="toggleFacetOverlay('people')"
                   >
-                    <span>People</span>
+                    <span aria-label="Search filter: People">People</span>
                   </button>
                   <button
+                    aria-owns="playlists"
                     data-facet-id="playlists"
                     :class="['button',
                              'search-facet__label',
@@ -191,9 +198,10 @@
                     :disabled="!facets.in_playlists.items.length"
                     @click="toggleFacetOverlay('playlists')"
                   >
-                    <span>Playlists</span>
+                    <span aria-label="Search filter: Playlists">Playlists</span>
                   </button>
                   <button
+                    aria-owns="date"
                     data-facet-id="date"
                     :class="['button',
                              'search-facet__label',
@@ -201,13 +209,13 @@
                     :disabled="!facets.date_recorded.items.length"
                     @click="toggleFacetOverlay('date')"
                   >
-                    <span>Date</span>
+                    <span aria-label="Search filter: Date">Date</span>
                   </button>
                 </div>
               </div>
             </div>
           </transition>
-        </aside>
+        </nav>
 
         <div class="search-page__main">
           <transition
@@ -275,6 +283,14 @@
             </Overlay>
           </transition>
 
+          <span
+            ref="results"
+            class="visually-hidden"
+            tabindex="0"
+          >
+            Search results
+          </span>
+
           <div
             v-if="noResults"
             class="no-results"
@@ -295,23 +311,22 @@
                   tabindex="0"
                 >
                   <div class="ui-card__thumbnail">
-                    <span class="ui-card__duration">{{ item.duration }}</span>
                     <img
                       :src="`/images/${item.thumbnailId}/medium`"
                       class="ui-card__thumbnail-image"
+                      alt=""
                     >
                   </div>
-                  <article>
-                    <h2 class="ui-card__title">
-                      <span v-html="highlight(item)" />
-                    </h2>
-                    <div class="ui-card__date">
-                      {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
-                    </div>
-                    <SearchSnippets
-                      :snippets="item.snippets"
-                    />
-                  </article>
+                  <h2 class="ui-card__title">
+                    <span v-html="highlight(item)" />
+                  </h2>
+                  <div class="ui-card__date">
+                    {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
+                  </div>
+                  <SearchSnippets
+                    :snippets="item.snippets"
+                  />
+                  <Duration :duration="item.duration" />
                 </RouterLink>
               </UiCard>
             </UiGrid>
@@ -440,8 +455,12 @@ export default {
           this.getPageData(stringifyQuery(to.query));
           if (to.query.term) {
             this.setSearchTerm(to.query.term);
+            this.$announcer.set(`Search results for ${to.query.term}. Page loaded with ${this.total} results.`);
+            document.title = `Search results for ${to.query.term} - Hammer Museum Video Archive`;
           } else {
             this.setSearchTerm('');
+            this.$announcer.set(`Search results page loaded`);
+            document.title = `Search results - Hammer Museum Video Archive`;
           }
         }
       },
@@ -496,7 +515,7 @@ export default {
         this.setElementHeight('.overlay__inner', '.overlay');
       }
     },
-    highlight(item) { 1
+    highlight(item) {
       if (this.searchTerm) {
         const div = document.createElement('div');
         div.innerText = this.searchTerm;
@@ -521,7 +540,8 @@ export default {
         searchParams = { term: this.clonedTerm };
       }
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
-      this.$refs.searchInput.blur();
+      this.$refs.searchInput.$refs.input.blur();
+      this.$refs.results.focus();
       this.clonedTerm = '';
     },
     setScrollPosition(useExisting) {
@@ -576,13 +596,16 @@ export default {
         this.openFacetName = name;
       }
     },
+    afterFiltersEnter() {
+      this.$refs.searchFiltersToggle.focus();
+    },
     toggleSearchFilters(event) {
       // Prevents escape key from also closing the main filter panel when
       // a facet list is open on top of it.
       if (this.openFacetName) return;
 
-      if (event.type === 'click' ||
-        (event.type === 'keydown' && (event.which === 13 || event.which === 27))
+      if (event.type === 'click'
+        || (event.type === 'keydown' && (event.which === 27))
       ) {
         this.showFilters = !this.showFilters;
         this.toggleFacetOverlayActive();

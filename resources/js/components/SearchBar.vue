@@ -16,6 +16,7 @@
           type="text"
           :name="inputId"
           label="Search"
+          aria-label="Search"
           placeholder="Search"
           @keydown.enter.prevent="search"
         />
@@ -30,7 +31,7 @@
             >
               <use xlink:href="/images/sprite.svg#sprite-search" />
             </svg>
-            <span class="icon-text visually-hidden">Search</span>
+            <span class="icon-text visually-hidden">Submit search</span>
           </button>
         </div>
       </div>
@@ -120,7 +121,7 @@ export default {
     setSearchTerm: mutations.setSearchTerm,
     search() {
       this.setSearchTerm(this.clonedTerm);
-      this.$router.push({ name: 'search', query: { term: this.clonedTerm } }).catch((err) => {
+      this.$router.push({ name: 'search', query: { term: this.clonedTerm } }).catch(() => {
         // @todo Log these rather than swallow?
       });
       this.clonedTerm = '';

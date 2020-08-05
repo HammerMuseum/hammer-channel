@@ -2,6 +2,7 @@
   <div class="container">
     <div
       v-if="video"
+      id="start-of-content"
       class="page-wrapper page--video"
     >
       <div class="video-meta__breadcrumb">
@@ -254,6 +255,8 @@ export default {
   watch: {
     video() {
       this.updateVideo();
+      this.$announcer.set(`The page for video titled: ${this.video.title}, has loaded`);
+      document.title = this.video.title;
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {

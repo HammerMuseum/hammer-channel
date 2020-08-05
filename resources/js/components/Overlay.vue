@@ -14,8 +14,9 @@
           class="overlay__inner"
         >
           <button
+            ref="close"
             class="button button--icon overlay__close-button"
-            aria-label="Close"
+            aria-label="Close filter options"
             @click.stop="close"
           >
             <svg class="icon icon--close">
@@ -39,6 +40,7 @@ export default {
   },
   mounted() {
     document.addEventListener('keyup', this.onEscape);
+    this.$refs.close.focus();
   },
   destroyed() {
     document.removeEventListener('keyup', this.onEscape);

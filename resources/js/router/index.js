@@ -9,16 +9,45 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/', name: 'app', component: Home,
+    path: '/',
+    name: 'app',
+    component: Home,
+    meta: {
+      announcer: {
+        message: 'Home page',
+      },
+    },
   },
   {
-    path: '/search/:params?', name: 'search', component: Search, props: (route) => ({ facetQuery: route.query.facets }),
+    path: '/search/:params?',
+    name: 'search',
+    component: Search,
+    props: (route) => ({ facetQuery: route.query.facets }),
+    meta: {
+      announcer: {
+        skip: true,
+      },
+    },
   },
   {
-    path: '/video/:id/:slug', name: 'video', component: Video, props: (route) => ({ id: String(route.params.id) }),
+    path: '/video/:id/:slug',
+    name: 'video',
+    component: Video,
+    props: (route) => ({ id: String(route.params.id) }),
+    meta: {
+      announcer: {
+        skip: true,
+      },
+    },
   },
   {
-    path: '*', component: NotFound,
+    path: '*',
+    component: NotFound,
+    meta: {
+      announcer: {
+        message: '404 Page not found',
+      },
+    },
   },
 ];
 

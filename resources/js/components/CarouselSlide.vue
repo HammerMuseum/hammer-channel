@@ -7,28 +7,27 @@
         :to="{name: 'video', params: {id: id, slug: slug }}"
       >
         <div class="ui-card__thumbnail">
-          <span class="ui-card__duration">{{ duration }}</span>
           <img
             :src="thumbnailUrl"
             class="ui-card__thumbnail-image"
+            alt=""
           >
         </div>
-        <article>
-          <h2 class="ui-card__title">
-            <span>{{ title }}</span>
-          </h2>
-          <span
-            v-if="showDate"
-            class="ui-card__date"
-          >
-            {{ new Date(item.date_recorded) | dateFormat('MMM D, YYYY') }}
-          </span>
-          <RichText
-            :classes="['ui-card__description']"
-            :text="item.description"
-            :truncate="100"
-          />
-        </article>
+        <h2 class="ui-card__title">
+          <span>{{ title }}</span>
+        </h2>
+        <span
+          v-if="showDate"
+          class="ui-card__date"
+        >
+          {{ new Date(item.date_recorded) | dateFormat('MMM D, YYYY') }}
+        </span>
+        <RichText
+          :classes="['ui-card__description']"
+          :text="item.description"
+          :truncate="100"
+        />
+        <Duration :duration="duration" />
       </RouterLink>
     </UiCard>
   </div>

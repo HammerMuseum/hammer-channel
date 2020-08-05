@@ -1,15 +1,14 @@
 <template>
   <div class="container">
-    <VSkip to="#featured">
-      Skip To Main Content
-    </VSkip>
-
-    <div class="page-wrapper page-wrapper--full">
-      <NavigationBar
-        :items="videos"
-        :active-item="currentSectionInView"
-        :classes="['topic-menu']"
-      />
+    <NavigationBar
+      :items="videos"
+      :active-item="currentSectionInView"
+      :classes="['topic-menu']"
+    />
+    <div
+      id="start-of-content"
+      class="page-wrapper page-wrapper--full"
+    >
       <Loader v-if="!featured" />
       <Carousel
         v-else
@@ -20,6 +19,9 @@
         :options="featuredCarouselOptions"
         :show-heading="false"
       >
+        <template #heading>
+          <span tabindex="0" role="heading" aria-level="2">Featured videos</span>
+        </template>
         <FeaturedCarouselSlide
           v-for="video in featured"
           :key="video.id"
@@ -31,6 +33,7 @@
         <template v-for="({id, label, count, hits}, idx) in videos">
           <div
             v-if="idx === 3"
+            :key="`${id}-search`"
             class="inline-block--search"
           >
             <div class="background--grate">
@@ -49,7 +52,10 @@
               :options="{ groupCells, contain: true }"
             >
               <template #heading>
-                <RouterLink :to="{name: 'search', query: {topics: label}}">
+                <RouterLink
+                  :aria-label="`A selection of videos from on topic: ${label}`"
+                  :to="{name: 'search', query: {topics: label}}"
+                >
                   {{ label }}
                 </RouterLink>
               </template>
@@ -82,8 +88,7 @@
 
 <script>
 import axios from 'axios';
-import { VSkip } from 'vuetensils/src/components';
-import { vueWindowSizeMixin } from 'vue-window-size';
+import vueWindowSizeMixin from 'vue-window-size';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -97,7 +102,6 @@ export default {
     CarouselSlide,
     FeaturedCarouselSlide,
     Loader,
-    VSkip,
   },
   filters: {
     filterId(value) {
@@ -118,6 +122,7 @@ export default {
     this.getFeatured();
     document.body.classList.add('front');
     this.groupCells = this.windowWidth < 840 ? 1 : 2;
+    document.title = 'Hammer Museum Video Archive';
   },
   destroyed() {
     document.body.classList.remove('front');
@@ -148,6 +153,7 @@ export default {
     viewHandler(e) {
       if (e.percentInView === 1 && e.percentTop < 0.9) {
         this.currentSectionInView = e.target.element.dataset.sectionId;
+        this.$emit('update-current-section', this.currentSectionInView);
       }
     },
   },

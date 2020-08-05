@@ -2,11 +2,13 @@
 import 'svgxuse';
 import 'intersection-observer';
 import Vue from 'vue';
+import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import { VueHammer } from 'vue2-hammer';
+import { VSkip } from 'vuetensils/src/components';
 import router from './router';
 import { store } from './store';
 
@@ -22,13 +24,17 @@ files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], file
 
 Vue.use(VueHammer);
 Vue.use(VueFilterDateFormat);
+Vue.use(VueAnnouncer, {}, router);
 Vue.use(VueCheckView);
-Vue.use(VueScrollTo);
+Vue.use(VueFilterDateFormat);
 Vue.use(VueProgressBar, {
   color: '#ee2a7b',
   failedColor: 'red',
   height: '2px',
 });
+Vue.use(VueScrollTo);
+
+Vue.component('VSkip', VSkip);
 
 const app = new Vue({ // eslint-disable-line
   el: '#app',
@@ -39,6 +45,15 @@ const app = new Vue({ // eslint-disable-line
     },
   },
   watch: {
+    $route(to, from) {
+      if (to.path !== from.path) {
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.setFocus();
+          }, 0);
+        });
+      }
+    },
     overlayOpen() {
       if (this.overlayOpen) {
         document.body.style.overflow = 'hidden';
@@ -53,6 +68,7 @@ const app = new Vue({ // eslint-disable-line
     // See https://github.com/hilongjw/vue-progressbar for progress bar docs.
     this.$Progress.start();
     this.$router.beforeEach((to, from, next) => {
+      if (from.hash !== to.hash) return;
       this.$Progress.start();
       next();
     });
@@ -71,6 +87,9 @@ const app = new Vue({ // eslint-disable-line
     },
     onPointerDown() {
       document.body.dataset.interactionMode = 'pointer';
+    },
+    setFocus() {
+      this.$el.focus();
     },
   },
 });
