@@ -28,7 +28,7 @@
         </a>
         <button
           class="share-button button button--icon"
-          aria-label="Get the video citation"
+          aria-label="Get citation for video"
           @click="showCitation = !showCitation"
         >
           <svg

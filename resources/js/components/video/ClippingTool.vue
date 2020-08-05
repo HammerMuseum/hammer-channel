@@ -10,7 +10,14 @@
             >
               Set start time
             </button>
+            <input
+              v-model="clipStart"
+              class="clip__control__input"
+              name="start_time"
+              placeholder="00:00:00"
+            >
           </div>
+
           <div class="clip__control">
             <button
               class="clip__control__button clip__control__button--right"
@@ -18,23 +25,13 @@
             >
               Set end time
             </button>
+            <input
+              v-model="clipEnd"
+              class="clip__control__input"
+              name="end_time"
+              placeholder="00:00:00"
+            >
           </div>
-        </div>
-        <div class="clip__controls clip__inputs">
-          <input
-            v-model="clipStart"
-            class="clip__control__input clip__control"
-            name="start_time"
-            value="00:00:00"
-            placeholder="00:00:00"
-          >
-          <input
-            v-model="clipEnd"
-            class="clip__control__input clip__control"
-            name="end_time"
-            value="00:00:00"
-            placeholder="00:00:00"
-          >
         </div>
         <div class="share-link">
           <input
