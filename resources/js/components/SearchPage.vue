@@ -123,7 +123,7 @@
                 <button
                   ref="searchFiltersToggle"
                   class="button button--action button--search-toggle button--small-devices"
-                  @click="toggleSearchFilters"
+                  @click.stop="toggleSearchFilters"
                 >
                   {{ 'Hide filters' }}
                 </button>
@@ -282,6 +282,15 @@
               />
             </Overlay>
           </transition>
+
+          <span
+            ref="results"
+            class="visually-hidden"
+            tabindex="0"
+          >
+            <span v-if="total">{{ total > 1 ? 'results' : 'result' }}</span>
+            <span v-else>No results</span>
+          </span>
 
           <div
             v-if="noResults"
@@ -507,7 +516,7 @@ export default {
         this.setElementHeight('.overlay__inner', '.overlay');
       }
     },
-    highlight(item) { 1
+    highlight(item) {
       if (this.searchTerm) {
         const div = document.createElement('div');
         div.innerText = this.searchTerm;
@@ -532,7 +541,8 @@ export default {
         searchParams = { term: this.clonedTerm };
       }
       this.$router.push({ name: 'search', query: searchParams }).catch(() => {});
-      this.$refs.searchInput.blur();
+      this.$refs.searchInput.$refs.input.blur();
+      this.$refs.results.focus();
       this.clonedTerm = '';
     },
     setScrollPosition(useExisting) {
@@ -595,8 +605,8 @@ export default {
       // a facet list is open on top of it.
       if (this.openFacetName) return;
 
-      if (event.type === 'click' ||
-        (event.type === 'keydown' && (event.which === 13 || event.which === 27))
+      if (event.type === 'click'
+        || (event.type === 'keydown' && (event.which === 27))
       ) {
         this.showFilters = !this.showFilters;
         this.toggleFacetOverlayActive();
