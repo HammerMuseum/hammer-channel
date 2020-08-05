@@ -6,7 +6,7 @@
 ## Defines images and working directory.
 defaults: &defaults
   docker:
-    - image: circleci/php:7.2-buster-node-browsers-legacy
+    - image: circleci/php:7.4-buster-node-browsers-legacy
       environment:
         HOST_URL: video.hammer.cogapp.com
         STAGE_HOST_URL: stage.video.hammer.cogapp.com
@@ -16,13 +16,13 @@ defaults: &defaults
 restore_cache: &restore_cache
   # We use the composer.lock as a way to determine if we can cache our build.
   keys:
-  - composer-v1-{{ checksum "composer.lock" }}
+  - composer-v2-{{ checksum "composer.lock" }}
   # fallback to using the latest cache if no exact match is found
-  - composer-v1
+  - composer-v2
 
 # Defines the cache saving mechanism for composer dependencies.
 save_cache: &save_cache
-  key: composer-v1-{{ checksum "composer.lock" }}
+  key: composer-v2-{{ checksum "composer.lock" }}
   paths:
     - vendor
 
@@ -133,7 +133,7 @@ deploy: &deploy
     - run:
         name: Deploy to $HOST_URL
         command: php artisan deploy $HOST_URL
-    - run: ssh deploy@$HOST_URL sudo systemctl reload php7.2-fpm.service
+    - run: ssh deploy@$HOST_URL sudo systemctl reload php7.4-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
@@ -167,7 +167,7 @@ deploy_stage: &deploy_stage
     - run:
         name: Deploy to $STAGE_HOST_URL
         command: php artisan deploy $STAGE_HOST_URL
-    - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php7.2-fpm.service
+    - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php7.4-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
@@ -193,7 +193,7 @@ deploy_dev: &deploy_dev
         tag-value: bastion
     - run: ssh-keyscan -H $(echo "$DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run: php artisan deploy $DEV_HOST_URL
-    - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php7.2-fpm.service
+    - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php7.4-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
