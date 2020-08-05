@@ -23,7 +23,6 @@
             'button--icon',
             {'button--disabled': isFirstSlide}
           ]"
-          :disabled="isFirstSlide"
           :aria-disabled="isFirstSlide"
           tabindex="0"
           @click="$refs.carousel.previous()"
@@ -44,7 +43,6 @@
             'button--icon',
             {'button--disabled': isFinalSlide}
           ]"
-          :disabled="isFinalSlide"
           :aria-disabled="isFinalSlide"
           tabindex="0"
           @click="$refs.carousel.next()"
@@ -159,7 +157,7 @@ export default {
   },
   methods: {
     handleCarouselCellFocus(carousel) {
-      carousel.cells().forEach((el) => {
+      carousel.cells().slice(0, carousel.cells().length - 1).forEach((el) => {
         el.element.querySelector('a').setAttribute('tabindex', '-1');
       });
       carousel.selectedElements().forEach((el) => {
