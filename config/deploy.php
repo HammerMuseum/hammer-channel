@@ -36,7 +36,6 @@ return [
             'deploy:release',
             'upload',
             'deploy:shared',
-            'deploy:vendors',
             'deploy:writable',
             'hook:ready',
             'deploy:symlink',
