@@ -321,10 +321,14 @@ export default {
     });
   },
   beforeRouteUpdate(to, from, next) {
-    axios.get(`/api${to.path}`).then(({ data }) => {
-      this.setData(data);
+    if (to.path !== from.path) {
+      axios.get(`/api${to.path}`).then(({ data }) => {
+        this.setData(data);
+        next();
+      });
+    } else {
       next();
-    });
+    }
   },
   mounted() {
     document.body.classList.add('vp');
