@@ -181,12 +181,15 @@ export default {
     markerDefaults() {
       return {
         markerStyle: {
-          'background-color': 'yellow',
+          'background-color': '#3b2aee',
+          'border-radius': '0%',
+          'z-index': '0',
+          height: '8px',
+          border: '1px solid white',
+          top: '-2px',
         },
         markerTip: {
-          display: true,
-          text: (marker) => marker.text,
-          time: (marker) => marker.time,
+          display: false,
         },
       };
     },
