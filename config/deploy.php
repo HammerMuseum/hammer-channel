@@ -61,12 +61,12 @@ return [
         'start' => [
             //
         ],
-        
+
         // Code and composer vendors are ready but nothing is built.
         'build' => [
             //
         ],
-        
+
         // Deployment is done but not live yet (before symlink)
         'ready' => [
             'artisan:storage:link',
@@ -74,17 +74,17 @@ return [
             'artisan:cache:clear',
             'artisan:config:cache',
         ],
-        
+
         // Deployment is done and live
         'done' => [
             //
         ],
-        
+
         // Deployment succeeded.
         'success' => [
             //
         ],
-        
+
         // Deployment failed.
         'fail' => [
             //
@@ -108,9 +108,40 @@ return [
         'upload_vendors' => true,
         'upload_options' => [
             'options' => [
-                '--exclude=.git',
-                '--exclude=/vendor', // unless `upload_vendors` is set to `true`
-                '--exclude=node_modules',
+                '--exclude=.babelrc',
+                '--exclude=.circleci/',
+                '--exclude=.editorconfig',
+                '--exclude=.env.dusk.local.example',
+                '--exclude=.env.dusk.testing',
+                '--exclude=.env.example.docker',
+                '--exclude=.env.example',
+                '--exclude=.env.testing',
+                '--exclude=.eslintrc.js',
+                '--exclude=.git/',
+                '--exclude=.gitattributes',
+                '--exclude=.gitignore',
+                '--exclude=.styleci.yml',
+                '--exclude=.stylelintrc',
+                '--exclude=composer.json',
+                '--exclude=composer.lock',
+                '--exclude=docker-compose.yml',
+                '--exclude=docker-sync.yml',
+                '--exclude=docs',
+                '--exclude=LaravelREADME.md',
+                '--exclude=Makefile',
+                '--exclude=node_modules/',
+                '--exclude=package-lock.json',
+                '--exclude=package.json',
+                '--exclude=patches',
+                '--exclude=phpcs.xml',
+                '--exclude=phpunit.xml',
+                '--exclude=postcss.config.js',
+                '--exclude=README.md',
+                '--exclude=server.php',
+                '--exclude=storage/',
+                '--exclude=tests/',
+                '--exclude=traefik.yml',
+                '--exclude=webpack.mix.js',
             ],
         ],
         'upload_path' => __DIR__ . '/..',
@@ -169,7 +200,7 @@ return [
     */
 
     'include' => [
-        //
+        // 'recipe/custom_task.php',
     ],
 
     /*
