@@ -104,6 +104,8 @@ build_and_test: &build_and_test
           - public/js/
           - public/fonts/
           - public/images/
+          - public/icons/
+          - public/mix-manifest.json
 
 deploy: &deploy
   <<: *defaults
