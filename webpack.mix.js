@@ -31,6 +31,7 @@ mix.webpackConfig({
   ],
 });
 
+
 mix.js('resources/js/app.js', 'public/js');
 mix.postCss('resources/css/app.pcss', 'public/css', [
   require('autoprefixer'),
@@ -38,9 +39,7 @@ mix.postCss('resources/css/app.pcss', 'public/css', [
   require('postcss-nested'),
   require('postcss-color-function'),
   require('postcss-hexrgba'),
-  require('postcss-custom-properties')({
-    preserve: false,
-  }),
+  require('postcss-custom-properties'),
   require('postcss-pxtorem')({
     rootValue: 16,
   }),

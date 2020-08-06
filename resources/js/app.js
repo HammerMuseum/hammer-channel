@@ -53,6 +53,7 @@ const app = new Vue({ // eslint-disable-line
       }
     },
     overlayOpen() {
+      document.body.classList.toggle('overlay--open', this.overlayOpen);
       if (this.overlayOpen) {
         document.body.style.overflow = 'hidden';
       } else {
