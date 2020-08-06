@@ -16,6 +16,7 @@ const dev = !mix.inProduction();
  */
 
 mix.copy('resources/images/static', 'public/images', false);
+mix.copy('resources/images/favicons', 'public/icons', false);
 
 mix.webpackConfig({
   plugins: [
