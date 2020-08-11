@@ -25,26 +25,46 @@
       </div>
     </div>
     <ClipDisplay
-      v-if="!embed && isClip"
+      v-if="!isEmbed && hasActiveClip"
     >
-      {{ clipString }}
-      <div
-        v-if="isEndOfClip"
+      <template #description>
+        {{ clipString }}
+        <button
+          class="button button--icon search-facet__item-remove"
+          aria-label="Remove clip"
+          @click="handleRemoveClip"
+        >
+          <BaseIcon
+            width="12"
+            height="12"
+            view-box="0 0 36 36"
+            icon-name="remove-clip"
+            title="Remove clip"
+            :classes="['icon--close']"
+          >
+            <CloseIcon />
+          </BaseIcon>
+        </button>
+      </template>
+      <template
+        #controls
       >
-        This clip has ended.
-        <button
-          class="button button--action"
-          @click="destroyClipMarkers"
-        >
-          Continue playing
-        </button>
-        <button
-          class="button button--action"
-          @click="replayClip"
-        >
-          Replay clip
-        </button>
-      </div>
+        <template v-if="isClipEndState">
+          This clip has ended.
+          <button
+            class="button button--action"
+            @click="handleRemoveClip"
+          >
+            Continue playing
+          </button>
+          <button
+            class="button button--action"
+            @click="replayClip"
+          >
+            Replay clip
+          </button>
+        </template>
+      </template>
     </ClipDisplay>
   </div>
 </template>
@@ -53,12 +73,12 @@
 import prettyms from 'humanize-duration';
 import videojs from 'video.js';
 import 'videojs-markers';
-import offset from 'videojs-offset';
+import 'videojs-offset';
 import ClipDisplay from './ClipDisplay.vue';
+import { convertSecondsToTime } from '../../utils';
 import getOrientation from '../../mixins/getOrientation';
 
 window.VIDEOJS_NO_BASE_THEME = true;
-videojs.registerPlugin('offset', offset);
 
 export default {
   name: 'VideoPlayer',
@@ -66,7 +86,23 @@ export default {
     ClipDisplay,
   },
   props: {
-    embed: {
+    clipStart: {
+      type: Number,
+      default() {
+        return 0;
+      },
+    },
+    clipEnd: {
+      type: Number,
+      default() {
+        return 0;
+      },
+    },
+    hasActiveClip: {
+      type: Boolean,
+      default: false,
+    },
+    isEmbed: {
       type: Boolean,
       default: false,
     },
@@ -109,9 +145,8 @@ export default {
   },
   data() {
     return {
+      currentTime: null,
       player: null,
-      isClipSet: false,
-      isEndOfClip: false,
       defaultOptions: {
         autoplay: false,
         controlBar: {
@@ -125,46 +160,23 @@ export default {
         fill: true,
         sources: null,
         textTrackSettings: false,
-        preload: 'auto',
+        preload: 'metadata',
       },
     };
   },
   computed: {
-    clipDuration() {
-      if (this.clipStart) {
-        if (this.clipEnd && this.clipEnd > this.clipStart) {
-          return this.clipEnd - this.clipStart;
-        }
-        return this.player.duration() - this.clipStart;
+    clipString() {
+      if (this.hasActiveClip) {
+        const duration = prettyms((this.clipEnd - this.clipStart) * 1000);
+        return `Currently selected clip: ${duration} from ${this.clipStartTime}`;
       }
-      return 0;
-    },
-    clipEnd() {
-      const query = this.$route.query;
-      return Object.prototype.hasOwnProperty.call(query, 'end') ? query.end : false;
-    },
-    clipStart() {
-      const query = this.$route.query;
-      return Object.prototype.hasOwnProperty.call(query, 'start') ? query.start : false;
+      return null;
     },
     clipStartTime() {
-      return this.convertSecondsToTimecode(this.clipStart);
+      return convertSecondsToTime(this.clipStart);
     },
-    clipEndTime() {
-      return this.convertSecondsToTimecode(this.clipEnd);
-    },
-    clipString() {
-      let message = 'Currently viewing: ';
-      const duration = prettyms(this.clipDuration * 1000);
-      if (this.clipEnd) {
-        message += `${duration} clip from ${this.clipStartTime}`;
-      } else {
-        message += `clip from ${this.clipStart} until the end of the video.`;
-      }
-      return message;
-    },
-    isClip() {
-      return this.clipStart > 0;
+    isClipEndState() {
+      return (this.hasActiveClip && (this.currentTime > this.clipEnd));
     },
     markerDefaults() {
       return {
@@ -183,6 +195,34 @@ export default {
     },
   },
   watch: {
+    clipStart(start) {
+      if (!this.isEmbed) {
+        this.destroyClipMarkers();
+        this.initClipMarkers(start, this.clipEnd);
+        this.initClipPosition();
+      }
+    },
+    clipEnd(end) {
+      if (!this.isEmbed) {
+        this.destroyClipMarkers();
+        this.initClipMarkers(this.clipStart, end);
+      }
+    },
+    hasActiveClip(valid) {
+      if (!this.isEmbed) {
+        if (valid) {
+          this.initClipMarkers(this.clipStart, this.clipEnd);
+          this.initClipPosition();
+        } else {
+          this.destroyClipMarkers();
+        }
+      }
+    },
+    isClipEndState(ended) {
+      if (ended) {
+        this.player.pause();
+      }
+    },
     timecode(val) {
       if (val > 0) {
         this.player.currentTime(val);
@@ -209,9 +249,6 @@ export default {
     this.initVideoPlayer();
   },
   methods: {
-    convertSecondsToTimecode(timeStr) {
-      return (new Date(timeStr * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
-    },
     initVideoPlayer() {
       const DEFAULT_EVENTS = [
         'canplay',
@@ -267,11 +304,8 @@ export default {
         });
 
         this.on('timeupdate', function () {
-          self.$emit('timeupdate', this.currentTime());
-          if (self.isClip && this.currentTime() >= self.clipEnd) {
-            self.isEndOfClip = true;
-            self.player.pause();
-          }
+          self.currentTime = this.currentTime();
+          self.$emit('timeupdate', self.currentTime);
         });
 
         this.on('fullscreenchange', function () {
@@ -280,22 +314,23 @@ export default {
           }
         });
 
+        this.one('loadedmetadata', function () {
+          if (self.hasActiveClip) {
+            self.initClipMarkers(self.clipStart, self.clipEnd);
+            self.initClipPosition();
+          }
+        });
+
         self.$emit('ready', this);
       });
 
+      if (!this.isEmbed) {
+        this.player.markers(this.markerDefaults);
+      } else {
+        this.initOffset();
+      }
+
       this.initOverlays();
-
-      if (!this.embed && this.isClip) {
-        this.initClipMarkers();
-      }
-
-      if (this.embed) {
-        this.player.offset({
-          start: this.clipStart,
-          end: this.clipEnd,
-          restart_beginning: false,
-        });
-      }
 
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
@@ -314,33 +349,56 @@ export default {
         window.screen.orientation.unlock();
       }
     },
-    destroyClipMarkers() {
-      this.player.markers.removeAll();
-      this.player.play();
-      this.isClipSet = false;
-      this.isEndClip = false;
-      this.$router.push({ path: this.$route.path });
-    },
     replayClip() {
       this.player.currentTime(this.clipStart);
       this.player.play();
-      this.isEndClip = false;
     },
-    initClipMarkers() {
-      if ((this.clipStart || this.clipEnd) && !this.isClipSet) {
-        const markerOptions = {
-          ...this.markerDefaults,
-          markers: [
-            {
-              time: this.clipStart,
-              duration: this.clipDuration,
-              text: 'Clipped section',
-            },
-          ],
-        };
-        this.player.markers(markerOptions);
-        this.isClipSet = true;
+    destroyClipMarkers() {
+      this.player.markers.removeAll();
+    },
+    handleContinuePlaying() {
+      this.handleRemoveClip();
+      this.player.play();
+    },
+    handleRemoveClip() {
+      this.destroyClipMarkers();
+      this.$emit('remove-clip');
+    },
+    initClipPosition() {
+      this.player.currentTime(this.clipStart);
+      this.player.posterImage.hide();
+    },
+    initClipMarkers(start, end) {
+      const marker = { time: start, duration: end ? end - start : 0 };
+      if (marker.duration && end < this.player.duration()) {
+        this.drawClipMarkers(marker);
       }
+    },
+    drawClipMarkers(markerObject) {
+      const markers = [markerObject];
+      this.player.markers.add(markers);
+    },
+    initOffset() {
+      // If an embed is clipped then it is shown
+      // using the offset plugin. We're accessing
+      // the route directly here rather than wait
+      // for clip validation from the parent. This
+      // is to try to prevent uncessary buffering of the
+      // video in the wrong time location.
+      const offsetOptions = {
+        start: 0,
+        end: 0,
+        restart_beginning: false,
+      };
+      const query = this.$route.query;
+      if (Object.prototype.hasOwnProperty.call(query, 'start')) {
+        offsetOptions.start = parseInt(query.start, 10);
+        if (Object.prototype.hasOwnProperty.call(query, 'end')) {
+          const end = parseInt(query.end, 10);
+          offsetOptions.end = end > offsetOptions.start ? end : 0;
+        }
+      }
+      this.player.offset(offsetOptions);
     },
     initOverlays() {
       // @todo this could be abstracted out into a child component
@@ -370,8 +428,8 @@ export default {
 
       // wait for video metadata to load, then set time.
       this.player.one('loadedmetadata', () => {
-        if (this.isClip) {
-          this.setClip();
+        if (this.hasActiveClip) {
+          this.initClipPosition();
         } else {
           this.player.currentTime(time);
           this.player.play();
@@ -379,21 +437,16 @@ export default {
       });
 
       // iPhone/iPad need to play first, then set the time
-      // events: https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
+      // events: https://www.w3.org/TR/html5/isEmbedded-content-0.html#mediaevents
       this.player.one('canplaythrough', () => {
         if (!initdone) {
-          if (!this.isClip) {
+          if (!this.hasActiveClip) {
             this.player.currentTime(time);
             this.player.play();
           }
           initdone = true;
         }
       });
-    },
-    setClip() {
-      if (this.clipStart) {
-        this.player.currentTime(this.clipStart);
-      }
     },
   },
 };

@@ -66,6 +66,22 @@
   line-height: 20px;
 }
 
+.vp__tabs__label--notify {
+  position: relative;
+}
+
+.vp__tabs__label--notify::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  display: block;
+  background: #ee2a7b;
+  position: absolute;
+  border-radius: 50%;
+  top: -28px;
+  left: 20px;
+}
+
 @media (min-width: 37.5em) {
   .nav {
     justify-content: space-around;
@@ -103,6 +119,10 @@
   }
 
   .nav-link .icon {
+    display: none;
+  }
+
+  .vp__tabs__label--notify::after {
     display: none;
   }
 }

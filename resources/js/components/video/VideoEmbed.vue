@@ -10,9 +10,10 @@
       :poster="poster"
       :timecode="timecode"
       :track="track"
-      embed
+      is-embed
       @playbackerror="onPlayerError"
       @timeupdate="onTimeUpdate"
+      @loadedmetadata="onLoadedMetadata"
     />
   </div>
 </template>
@@ -34,6 +35,7 @@ export default {
   },
   data() {
     return {
+      duration: null,
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
       options: {
@@ -60,6 +62,9 @@ export default {
     this.setVideo();
   },
   methods: {
+    onLoadedMetadata(player) {
+      this.duration = Math.ceil(parseInt(player.duration(), 10));
+    },
     setVideoSource(url) {
       const sources = [{
         src: url,

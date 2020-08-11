@@ -13,6 +13,7 @@
 .clip__control {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .clip__sharing {
@@ -75,9 +76,13 @@
   background: var(--backround-darker);
 }
 
-@media (min-width: 60em) {
+@media (min-width: 52.5em) {
   .clip-display {
     display: block;
+  }
+
+  .cliptool--remove {
+    display: none;
   }
 }
 
