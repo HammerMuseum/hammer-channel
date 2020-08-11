@@ -6,7 +6,7 @@ export default {
     copied() {
       setTimeout(() => {
         this.copied = false;
-      }, 4000);
+      }, 2000);
     },
   },
   methods: {

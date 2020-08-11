@@ -19,6 +19,7 @@ mix.copy('resources/images/static', 'public/images', false);
 mix.copy('resources/images/favicons', 'public/icons', false);
 
 mix.webpackConfig({
+  node: { fs: 'empty' },
   plugins: [
     new StyleLintPlugin({
       files: '**/*.pcss',
@@ -62,7 +63,9 @@ if (!dev) {
   // mix.version();
 }
 
-mix.extract();
+if (process.env.NODE_ENV !== 'test') {
+  mix.extract();
+}
 
 // Full API
 // mix.react(src, output); <-- Identical to mix.js(), but registers React Babel compilation.

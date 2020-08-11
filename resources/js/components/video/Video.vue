@@ -40,9 +40,14 @@
             :poster="poster"
             :timecode="timecode"
             :track="track"
+            :clip-start="clipStart"
+            :clip-end="clipEnd"
+            :has-active-clip="isClip && isValidClip"
+            @loadedmetadata="onLoadedMetadata"
             @playbackerror="onPlayerError"
             @timeupdate="onTimeUpdate"
             @timecode-reset="onTimecodeReset"
+            @remove-clip="onRemoveClip"
           />
         </div>
         <div class="panel--right">
@@ -111,12 +116,17 @@
                 >
                   <ClipIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3 :class="['vp__tabs__label', {'vp__tabs__label--notify': isClip}] ">
                   Clip
                 </h3>
               </template>
               <ClippingTool
+                :clip-start="clipStart"
+                :clip-end="clipEnd"
+                :has-active-clip="isClip && isValidClip"
                 :current-timecode="currentTimecode"
+                @update-clip="onUpdateClip"
+                @remove-clip="onRemoveClip"
               />
             </BTab>
 
@@ -203,9 +213,13 @@ export default {
   },
   data() {
     return {
+      clipStart: null,
+      clipEnd: null,
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
       debouncedResizeObserver: null,
+      duration: null,
+      isClip: false,
       options: {
         sources: null,
       },
@@ -225,6 +239,14 @@ export default {
     breadcrumb() {
       const routeName = this.prevRoute.name === null || this.prevRoute.name === 'app' ? 'home' : this.prevRoute.name;
       return `Return to ${routeName} page`;
+    },
+    isValidClip() {
+      const start = this.clipStart;
+      const end = this.clipEnd;
+      if (this.duration === null || (Number.isNaN(end) || Number.isNaN(start)) || start === 0 || end < start || end > this.duration) {
+        return false;
+      }
+      return true;
     },
     processedTranscript() {
       if (!this.transcript) {
@@ -276,6 +298,12 @@ export default {
     },
   },
   watch: {
+    '$route.query.start': function () {
+      this.checkRouteClipStatus();
+    },
+    '$route.query.end': function () {
+      this.checkRouteClipStatus();
+    },
     video() {
       this.updateVideo();
       this.$announcer.set(`The page for video titled: ${this.video.title}, has loaded`);
@@ -293,10 +321,14 @@ export default {
     });
   },
   beforeRouteUpdate(to, from, next) {
-    axios.get(`/api${to.path}`).then(({ data }) => {
-      this.setData(data);
+    if (to.path !== from.path) {
+      axios.get(`/api${to.path}`).then(({ data }) => {
+        this.setData(data);
+        next();
+      });
+    } else {
       next();
-    });
+    }
   },
   mounted() {
     document.body.classList.add('vp');
@@ -304,6 +336,7 @@ export default {
     this.throttledScrollListener = throttle(this.onScroll, 100);
     window.addEventListener('resize', this.debouncedResizeListener);
     window.addEventListener('scroll', this.throttledScrollListener);
+    this.checkRouteClipStatus();
   },
   updated() {
     this.$nextTick(() => {
@@ -316,6 +349,40 @@ export default {
     window.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
+    onUpdateClip(start, end) {
+      this.clipStart = start;
+      if (end < this.duration) {
+        this.clipEnd = end;
+      }
+    },
+    onRemoveClip() {
+      this.$router.push({ path: this.$route.path }).catch();
+    },
+    checkRouteClipStatus() {
+      const query = this.$route.query;
+
+      if (Object.prototype.hasOwnProperty.call(query, 'start')) {
+        this.isClip = true;
+        const start = parseInt(query.start, 10);
+        this.clipStart = start;
+
+        if (Object.prototype.hasOwnProperty.call(query, 'end')) {
+          const end = parseInt(query.end, 10);
+
+          if (end > start) {
+            this.clipEnd = end;
+          }
+        }
+      } else {
+        this.isClip = false;
+      }
+    },
+    onLoadedMetadata(player) {
+      this.duration = Math.ceil(parseInt(player.duration(), 10));
+      if (this.clipEnd > this.duration) {
+        this.clipEnd = null;
+      }
+    },
     onResize() {
       const playerHeight = window.innerWidth * (9 / 16);
       document.querySelector('html').classList.toggle('is-sticky', window.innerHeight > (playerHeight * 2));
