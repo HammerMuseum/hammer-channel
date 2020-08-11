@@ -5,6 +5,8 @@
 /public/css
 /public/fonts
 /public/images
+/public/icons
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 .env
@@ -16,5 +18,4 @@ npm-debug.log
 yarn-error.log
 .idea/
 .env.dusk.local
-public/mix-manifest.json
 .vscode/

@@ -1,6 +1,6 @@
 <template>
   <nav
-    v-if="totalPages"
+    v-if="totalPages > 1"
     class="pagination"
     aria-label="Search results pagination"
   >

@@ -16,9 +16,7 @@ module.exports = (ctx) => ({
     postcssNested(),
     postcssColor(),
     postcssHexrgba(),
-    postcssCustomProperties({
-      preserve: false,
-    }),
+    postcssCustomProperties(),
     postcssPxtorem({
       rootValue: 16,
     }),

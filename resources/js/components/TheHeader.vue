@@ -44,12 +44,15 @@
               <h1 class="visually-hidden">
                 Hammer Video
               </h1>
-              <svg
+              <BaseIcon
+                width="24"
+                height="24"
+                view-box="0 0 189.74 21.78"
+                icon-name="main-logo"
                 title="Hammer video logo"
-                class="icon"
               >
-                <use xlink:href="/images/sprite.svg#sprite-hammer-video" />
-              </svg>
+                <HammerVideoIcon />
+              </BaseIcon>
             </a>
           </RouterLink>
         </div>
@@ -66,10 +69,15 @@
             @click="overlay.footer = !overlay.footer"
           >
             <span class="button__text">About</span>
-            <SvgIcon
-              name="menu"
+            <BaseIcon
+              width="16"
+              height="4"
+              view-box="0 0 4 16"
+              icon-name="menu"
               title="Show information about the archive"
-            />
+            >
+              <MenuIcon />
+            </BaseIcon>
           </button>
           <VDrawer
             id="about"
@@ -86,10 +94,15 @@
               :class="['footer__close-button', 'button', 'button--icon']"
               @click="handleFooterClose"
             >
-              <SvgIcon
-                name="close-pink"
+              <BaseIcon
+                width="36"
+                height="36"
+                view-box="0 0 36 36"
+                icon-name="close-footer"
                 title="Close the description overlay"
-              />
+              >
+                <ClosePinkIcon />
+              </BaseIcon>
             </button>
             <TheFooter
               v-hammer:swipe.up="handleFooterClose"
@@ -105,21 +118,15 @@
             aria-controls="search-overlay"
             @click="overlay.search = !overlay.search"
           >
-            <svg
-              aria-labelledby="search-icon-title"
-              role="img"
-              :class="[
-                'icon',
-                {'icon--search': !overlay.search},
-                {'icon--close': overlay.search}
-              ]"
+            <BaseIcon
+              width="24"
+              height="24"
+              view-box="0 0 24 24"
+              icon-name="search-header"
+              :title="overlay.search ? 'Close the search panel' : 'Open the search panel'"
             >
-              <title
-                id="search-icon-title"
-                lang="en"
-              >{{ overlay.search ? 'Close the search panel' : 'Open the search panel' }}</title>
-              <use xlink:href="/images/sprite.svg#sprite-search" />
-            </svg>
+              <SearchIcon />
+            </BaseIcon>
           </button>
           <VDrawer
             id="search-overlay"
@@ -141,10 +148,15 @@
               :class="['footer__close-button', 'button', 'button--icon']"
               @click="handleSearchClose"
             >
-              <SvgIcon
-                name="close-pink"
+              <BaseIcon
+                width="36"
+                height="36"
+                view-box="0 0 36 36"
+                icon-name="close-footer"
                 title="Close the description overlay"
-              />
+              >
+                <ClosePinkIcon />
+              </BaseIcon>
             </button>
             <SearchBar
               v-hammer:swipe.up="handleSearchClose"

@@ -27,12 +27,17 @@
           tabindex="0"
           @click="$refs.carousel.previous()"
         >
-          <svg
-            class="icon icon--rotate"
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 36 36"
+            icon-name="next-with-circle"
+            title="Select previous item"
+            :classes="['icon--rotate']"
           >
-            <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
-          </svg>
-          <span class="icon-text visually-hidden">Go to previous item</span>
+            <!--  Icon is rotated to point in the correct direction-->
+            <NextWithCircleIcon />
+          </BaseIcon>
         </button>
         <button
           type="submit"
@@ -47,12 +52,15 @@
           tabindex="0"
           @click="$refs.carousel.next()"
         >
-          <svg
-            class="icon"
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 36 36"
+            icon-name="next-with-circle"
+            title="Select next item"
           >
-            <use xlink:href="/images/sprite.svg#sprite-next-with-circle" />
-          </svg>
-          <span class="icon-text visually-hidden">Go to next item</span>
+            <NextWithCircleIcon />
+          </BaseIcon>
         </button>
       </div>
       <Flickity
@@ -73,10 +81,14 @@
 import { debounce } from 'lodash';
 import Flickity from 'vue-flickity';
 import imagesLoaded from 'vue-images-loaded';
+import BaseIcon from './base/BaseIcon.vue';
+import NextWithCircleIcon from './icons/NextWithCircleIcon.vue';
 
 export default {
   components: {
+    BaseIcon,
     Flickity,
+    NextWithCircleIcon,
   },
   directives: { imagesLoaded },
   filters: {

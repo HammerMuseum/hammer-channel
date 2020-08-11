@@ -19,9 +19,15 @@
             aria-label="Close filter options"
             @click.stop="close"
           >
-            <svg class="icon icon--close">
-              <use xlink:href="/images/sprite.svg#sprite-close" />
-            </svg>
+            <BaseIcon
+              width="36"
+              height="36"
+              view-box="0 0 36 36"
+              icon-name="close-overlay"
+              :classes="['icon--close']"
+            >
+              <CloseIcon />
+            </BaseIcon>
           </button>
           <slot />
         </div>

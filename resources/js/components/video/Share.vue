@@ -8,11 +8,16 @@
           target="blank"
           aria-label="Share on Facebook"
         >
-          <svg
-            class="icon share-buttons__icon"
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 512 512"
+            icon-name="facebook"
+            title="Share on facebook"
+            :class="['icon--reverse']"
           >
-            <use xlink:href="/images/sprite.svg#sprite-facebook" />
-          </svg>
+            <FacebookIcon />
+          </BaseIcon>
         </a>
         <a
           class="share-button button button--icon"
@@ -20,22 +25,32 @@
           target="blank"
           aria-label="Share on Twitter"
         >
-          <svg
-            class="icon share-buttons__icon"
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 512 512"
+            icon-name="twitter"
+            title="Share on Twitter"
+            :class="['icon--reverse']"
           >
-            <use xlink:href="/images/sprite.svg#sprite-twitter" />
-          </svg>
+            <TwitterIcon />
+          </BaseIcon>
         </a>
         <button
           class="share-button button button--icon"
           aria-label="Get citation for video"
           @click="showCitation = !showCitation"
         >
-          <svg
-            class="icon share-buttons__icon"
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 448 512"
+            icon-name="cite"
+            title="Cite"
+            :class="['icon--reverse']"
           >
-            <use xlink:href="/images/sprite.svg#sprite-cite" />
-          </svg>
+            <CiteIcon />
+          </BaseIcon>
           <span class="icon-text">Cite</span>
         </button>
       </div>

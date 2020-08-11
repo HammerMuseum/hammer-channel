@@ -13,10 +13,14 @@
               @click="handleHighlighterToggle"
             >
               <span class="visually-hidden">Search within the transcript</span>
-              <SvgIcon
-                name="search"
+              <BaseIcon
+                width="36"
+                height="36"
+                icon-name="search-transcript"
                 title="Search within the transcript"
-              />
+              >
+                <SearchIcon />
+              </BaseIcon>
             </button>
             <button
               class="button button--action"
@@ -58,10 +62,15 @@
                       class="button button--light"
                       @mousedown="handleTranscriptClick(item.start)"
                     >
-                      <SvgIcon
-                        name="play"
+                      <BaseIcon
+                        width="18"
+                        height="18"
+                        view-box="0 0 448 512"
+                        icon-name="play-from-position"
                         :title="`Play from ${item.timecode}`"
-                      />
+                      >
+                        <PlayIcon />
+                      </BaseIcon>
                       <time>{{ item.timecode }}</time>
                     </button>
                   </template>
@@ -100,10 +109,15 @@
           @scroll-top="handleBackToTopScroll"
         >
           <span class="visually-hidden">Go to top of transcript</span>
-          <SvgIcon
-            name="next"
-            title="Go to top of transcript"
-          />
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 36 36"
+            icon-name="back-to-top-transcript"
+            title="Back to top of transcript"
+          >
+            <NextIcon />
+          </BaseIcon>
         </BackToTop>
       </div>
     </template>
@@ -115,7 +129,6 @@ import { saveAs } from 'file-saver';
 import scrollIntoView from 'scroll-into-view';
 import { vueWindowSizeMixin } from 'vue-window-size';
 import { VTooltip } from 'vuetensils/src/components';
-import SvgIcon from './SvgIcon.vue';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
 import isIos from '../mixins/isIos';
@@ -126,7 +139,6 @@ export default {
   components: {
     BackToTop,
     HighlightText,
-    SvgIcon,
     VTooltip,
   },
   mixins: [vueWindowSizeMixin],

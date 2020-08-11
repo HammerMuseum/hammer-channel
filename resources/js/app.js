@@ -1,5 +1,3 @@
-// TODO: Is there a way we can use the runtime only build of vue?
-import 'svgxuse';
 import 'intersection-observer';
 import Vue from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
@@ -55,6 +53,7 @@ const app = new Vue({ // eslint-disable-line
       }
     },
     overlayOpen() {
+      document.body.classList.toggle('overlay--open', this.overlayOpen);
       if (this.overlayOpen) {
         document.body.style.overflow = 'hidden';
       } else {
