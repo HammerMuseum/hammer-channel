@@ -4,7 +4,8 @@
       Clip information
     </h4>
     <p class="clip-display__content">
-      <slot />
+      <slot name="description" />
     </p>
+    <slot name="controls" />
   </div>
 </template>
