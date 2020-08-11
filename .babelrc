@@ -4,8 +4,7 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "usage",
-        "debug": true,
-        "modules": false,
+        "modules": "auto",
         "forceAllTransforms": true,
         "corejs": {
           "version": 3,
@@ -19,5 +18,19 @@
   ],
   "plugins": [
     "@babel/plugin-transform-runtime"
-  ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    }
+  }
 }

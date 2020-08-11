@@ -6,12 +6,14 @@
         <div class="clip__controls">
           <div class="clip__control">
             <button
+              id="clip__start-input"
               class="clip__control__button clip__control__button--left"
               @click="setTime('start')"
             >
               Set start time
             </button>
             <VInput
+              ref="startInput"
               v-model="clipStartTime"
               label="Set clip start time"
               placeholder="00:00:00"
@@ -22,12 +24,14 @@
 
           <div class="clip__control">
             <button
+              id="clip__end-input"
               class="clip__control__button clip__control__button--right"
               @click="setTime('end')"
             >
               Set end time
             </button>
             <VInput
+              ref="endInput"
               v-model="clipEndTime"
               label="Set clip end time"
               placeholder="00:00:00"
@@ -45,10 +49,6 @@
           >
         </div>
         <div class="clip__controls clip__sharing">
-          <span
-            v-show="error"
-            class="clip-error"
-          >Please set a valid start and/or end time.</span>
           <button
             :class="['button', 'button--action']"
             aria-label="Copy citation to clipboard"
@@ -107,15 +107,19 @@
 <script>
 import { VInput } from 'vuetensils/src/components';
 import { convertTimeToSeconds, convertSecondsToTime } from '../../utils';
+import VideoMeta from '../VideoMeta.vue';
 import BaseIcon from '../base/BaseIcon.vue';
+import CloseIcon from '../icons/CloseIcon.vue';
 import CopyIcon from '../icons/CopyIcon.vue';
 import CopyTo from '../../mixins/copyToClipboard';
 
 export default {
   components: {
     BaseIcon,
+    CloseIcon,
     CopyIcon,
     VInput,
+    VideoMeta,
   },
   mixins: [CopyTo],
   props: {
@@ -144,7 +148,6 @@ export default {
   },
   data() {
     return {
-      error: false,
       domain: window.location.origin,
       path: this.$route.path,
       tips: `Make a clip from this video to share. Set the video progress bar to the beginning of your clip, then click or touch ‘Set start time.’ Repeat for the end time.`,
