@@ -324,7 +324,7 @@
                 >
                   <div class="ui-card__thumbnail">
                     <img
-                      :src="`/images/${item.thumbnailId}/medium`"
+                      :src="`/images/d/medium/${item.thumbnailId}.jpg`"
                       class="ui-card__thumbnail-image"
                       alt=""
                     >
