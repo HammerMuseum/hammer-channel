@@ -10,3 +10,6 @@ task('app:permissions', function () {
     run('cd {{deploy_path}}/shared && chown -Rf {{app_user}}:{{app_user}} storage');
     run('cd {{release_path}} && chown -Rf {{app_user}}:{{app_user}} storage bootstrap/cache && chown -Rf {{app_user}}:{{app_user}} public/*');
 });
+
+desc('Execute artisan responsecache:clear');
+task('artisan:responsecache:clear', artisan('responsecache:clear'));

@@ -32,14 +32,14 @@ return [
      * This setting determines the name of the http header that contains
      * the time at which the response was cached
      */
-    'cache_time_header_name' => env('RESPONSE_CACHE_HEADER_NAME', 'laravel-responsecache'),
+    'cache_time_header_name' => env('RESPONSE_CACHE_HEADER_NAME', 'X-CACHE'),
 
     /*
      * Here you may define the cache store that should be used to store
      * requests. This can be the name of any store that is
      * configured in app/config/cache.php
      */
-    'cache_store' => env('RESPONSE_CACHE_DRIVER', 'file'),
+    'cache_store' => env('RESPONSE_CACHE_DRIVER', 'redis'),
 
     /*
      * Here you may define replacers that dynamically replace content from the response.

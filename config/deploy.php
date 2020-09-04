@@ -71,6 +71,7 @@ return [
         'ready' => [
             'artisan:storage:link',
             'app:permissions',
+            'artisan:responsecache:clear',
             'artisan:view:clear',
             'artisan:cache:clear',
             'artisan:config:cache',
