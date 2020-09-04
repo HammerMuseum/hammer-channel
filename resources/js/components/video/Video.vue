@@ -291,7 +291,7 @@ export default {
       if (!video.thumbnailId) {
         return '';
       }
-      return `/images/${video.thumbnailId}/large`;
+      return `/images/d/large/${video.thumbnailId}.jpg`;
     },
     transcriptInit() {
       return store.transcriptInit;

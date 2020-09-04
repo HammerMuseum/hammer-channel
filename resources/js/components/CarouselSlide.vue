@@ -71,7 +71,7 @@ export default {
       return this.item.title_slug;
     },
     thumbnailUrl() {
-      return `/images/${this.item.thumbnailId}/medium`;
+      return `/images/d/medium/${this.item.thumbnailId}.jpg`;
     },
     title() {
       return this.item.title;

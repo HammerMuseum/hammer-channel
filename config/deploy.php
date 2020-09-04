@@ -70,6 +70,8 @@ return [
         // Deployment is done but not live yet (before symlink)
         'ready' => [
             'artisan:storage:link',
+            'app:permissions',
+            'artisan:responsecache:clear',
             'artisan:view:clear',
             'artisan:cache:clear',
             'artisan:config:cache',
@@ -105,6 +107,7 @@ return [
     'options' => [
         'application' => env('APP_NAME', 'Laravel'),
         'http_user' => 'www-data',
+        'app_user' => 'deploy',
         'upload_vendors' => true,
         'upload_options' => [
             'options' => [
@@ -200,7 +203,7 @@ return [
     */
 
     'include' => [
-        // 'recipe/custom_task.php',
+        'recipe/tasks.php',
     ],
 
     /*
