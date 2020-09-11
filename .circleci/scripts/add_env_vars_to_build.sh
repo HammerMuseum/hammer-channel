@@ -24,6 +24,6 @@ if [ "$CIRCLE_BRANCH" = "develop" ]; then
 fi
 
 if [ "$CIRCLE_BRANCH" = "master" ]; then
-    echo "MIX_DATASTORE_URL=https://datastore.hammer.cogapp.com/api/" > .env
-    echo "MIX_APP_URL=https://video.hammer.cogapp.com/api/" >> .env
+    echo "MIX_DATASTORE_URL=https://datastore.hammer.ucla.edu/api/" > .env
+    echo "MIX_APP_URL=https://video.hammer.ucla.edu/api/" >> .env
 fi
