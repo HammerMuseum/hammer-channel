@@ -9,6 +9,7 @@ defaults: &defaults
     - image: circleci/php:7.4-buster-node-browsers-legacy
       environment:
         HOST_URL: video.hammer.ucla.edu
+        PROD_DEPLOY_URL: video.hammer.cogapp.com
         STAGE_HOST_URL: stage.video.hammer.cogapp.com
         DEV_HOST_URL: dev.video.hammer.cogapp.com
 
@@ -131,11 +132,11 @@ deploy: &deploy
         tag-value: bastion
     - run:
         name: Add host to known hosts
-        command: ssh-keyscan -H $(echo "$HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+        command: ssh-keyscan -H $(echo "$PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
-        name: Deploy to $HOST_URL
-        command: php artisan deploy $HOST_URL
-    - run: ssh deploy@$HOST_URL sudo systemctl reload php7.4-fpm.service
+        name: Deploy to $PROD_DEPLOY_URL
+        command: php artisan deploy $PROD_DEPLOY_URL
+    - run: ssh deploy@$PROD_DEPLOY_URL sudo systemctl reload php7.4-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
