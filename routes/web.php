@@ -9,6 +9,9 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
+| Any routes that require user sessions, should go into the "stateful"
+| grouping of routes.
+|
 */
 
 Route::get('/', 'ListingController@index');
