@@ -3,10 +3,11 @@
     class="footer"
   >
     <div class="footer__inner">
-      <span class="visually-hidden">Information about the archive</span>
+      <span class="visually-hidden">Information about the site</span>
       <h2 class="heading heading--footer">
-        Welcome to Hammer ON
+        {{ copy.aboutHeading }}
       </h2>
+      <p>{{ copy.aboutStrapline }}</p>
       <div class="footer__body">
         <div class="footer__actions">
           <a
@@ -14,7 +15,7 @@
             target="_blank"
             class="link"
           >
-            Sign up to our newsletters
+            {{ copy.emailSignup }}
             <BaseIcon
               width="36"
               height="36"
@@ -30,7 +31,7 @@
             target="_blank"
             class="link"
           >
-            Talks happening soon
+            {{ copy.calendarLink }}
             <BaseIcon
               width="39"
               height="32"
@@ -43,8 +44,9 @@
           </a>
         </div>
         <div class="footer__info">
-          <p>Hammer ON is the video archive of the Hammer Museum. The archive was made possible thanks to a grant from the Mellon Foundation.</p>
-          <p>If you would like to use any of the footage for broadcast, please contact example@example.org</p>
+          <p>We encourage the use and sharing of these videos for nonprofit educational purposes. Please share via links to this website or embed videos from the Hammer’s YouTube channel.</p>
+          <p>To use selections from these videos for any purpose, or request video files, please contact us at info@hammer.ucla.edu.</p>
+          <p>Transcripts provided on this site are generated automatically, and are not 100% accurate. Please send suggestions for corrections to <a href="mailto:info@hammer.ucla.edu">info@hammer.ucla.edu</a>.</p><p /><p>This is an open source project. Source code and documentation is available on GitHub. Contact the <a href="https://www.cogapp.com">site’s developers</a> at cogapp for technical queries.</p>
         </div>
         <div class="footer__links">
           <a
@@ -62,8 +64,15 @@
 </template>
 
 <script>
+import { store } from '../store';
+
 export default {
   name: 'TheFooter',
+  computed: {
+    copy() {
+      return store.copy;
+    },
+  },
   methods: {
     close() {
       this.$emit('close');

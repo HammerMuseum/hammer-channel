@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import SiteCopy from './siteCopy';
 
 export const store = Vue.observable({
   searchOverlayActive: false,
@@ -6,6 +7,7 @@ export const store = Vue.observable({
   footerActive: false,
   searchTerm: '',
   transcriptInit: false,
+  copy: SiteCopy,
 });
 
 export const mutations = {

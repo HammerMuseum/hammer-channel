@@ -9,6 +9,9 @@
       id="start-of-content"
       class="page-wrapper page-wrapper--full"
     >
+      <p class="strapline">
+        {{ copy.strapline }}
+      </p>
       <Loader v-if="!featured" />
       <Carousel
         v-else
@@ -20,7 +23,11 @@
         :show-heading="false"
       >
         <template #heading>
-          <span tabindex="0" role="heading" aria-level="2">Featured videos</span>
+          <span
+            tabindex="0"
+            role="heading"
+            aria-level="2"
+          >Featured videos</span>
         </template>
         <FeaturedCarouselSlide
           v-for="video in featured"
@@ -94,6 +101,7 @@ import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
 import Loader from './Loader.vue';
 import mixin from '../mixins/getRouteData';
+import { store } from '../store';
 
 export default {
   name: 'Home',
@@ -117,6 +125,11 @@ export default {
       groupCells: null,
       videos: null,
     };
+  },
+  computed: {
+    copy() {
+      return store.copy;
+    },
   },
   mounted() {
     this.getFeatured();
