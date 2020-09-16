@@ -14,14 +14,16 @@
 |
 */
 
-Route::get('/', 'ListingController@index');
+Route::group(['middleware' => 'cacheResponse:600'], function () {
+    Route::get('/video/{id}/{slug}', 'VideoController@view');
+    Route::get('/container/{id}', 'VideoController@container')
+        ->name('video.container');
+});
 
-Route::get('/video/{id}/{slug}', 'VideoController@view');
-
-Route::get('/container/{id}', 'VideoController@container')
-    ->name('video.container');
-
-Route::get('/search', 'SearchController@view');
+Route::group(['middleware' => 'cacheResponse:3600'], function () {
+    Route::get('/', 'ListingController@index');
+    Route::get('/search', 'SearchController@view');
+});
 
 Route::get('/images/d/{size}/{id}', 'ImageController')
     ->name('images');

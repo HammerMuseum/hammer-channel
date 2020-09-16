@@ -254,6 +254,7 @@
                 "phar",
                 "update"
             ],
+            "abandoned": true,
             "time": "2019-12-12T13:45:57+00:00"
         },
         {
@@ -2678,28 +2679,32 @@
         },
         {
             "name": "spatie/laravel-responsecache",
-            "version": "6.6.2",
+            "version": "6.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-responsecache.git",
-                "reference": "9c9f00cf7ad0f675705d0cf95f3ada6229704602"
+                "reference": "e0c1ab1d18c0fd2a06a3c19ded7f5a3f2aabf005"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/9c9f00cf7ad0f675705d0cf95f3ada6229704602",
-                "reference": "9c9f00cf7ad0f675705d0cf95f3ada6229704602",
+                "url": "https://api.github.com/repos/spatie/laravel-responsecache/zipball/e0c1ab1d18c0fd2a06a3c19ded7f5a3f2aabf005",
+                "reference": "e0c1ab1d18c0fd2a06a3c19ded7f5a3f2aabf005",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "^7.13",
+                "illuminate/cache": "^7.13|^8.0",
+                "illuminate/console": "^7.13|^8.0",
+                "illuminate/container": "^7.13|^8.0",
+                "illuminate/http": "^7.13|^8.0",
+                "illuminate/support": "^7.13|^8.0",
                 "nesbot/carbon": "^2.35",
                 "php": "^7.4"
             },
             "require-dev": {
+                "laravel/framework": "^7.13|^8.0",
                 "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^5.2",
-                "phpunit/phpunit": "^9.1.5",
-                "vimeo/psalm": "^3.11"
+                "orchestra/testbench": "^5.2|^6.0",
+                "phpunit/phpunit": "^9.1.5"
             },
             "type": "library",
             "extra": {
@@ -2739,7 +2744,7 @@
                 "response",
                 "spatie"
             ],
-            "time": "2020-06-03T18:57:54+00:00"
+            "time": "2020-09-09T08:34:30+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
