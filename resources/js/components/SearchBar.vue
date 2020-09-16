@@ -50,7 +50,10 @@
             <span class="link--tag__text">show me everything</span>
           </RouterLink>
         </div>
-        <div class="search-bar__option search-bar__option--right">
+        <div
+          v-if="showTags"
+          class="search-bar__option search-bar__option--right"
+        >
           <span class="search-bar__option-label">or try</span>
           <TagGroup
             :items="tags"
@@ -85,6 +88,10 @@ export default {
     tags: {
       type: Array,
       default: () => [],
+    },
+    showTags: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

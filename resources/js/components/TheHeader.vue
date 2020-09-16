@@ -163,6 +163,7 @@
               :classes="['search-bar--overlay']"
               focus
               :tags="tags"
+              :show-tags="true"
               @close="overlay.search = false"
             />
           </VDrawer>
