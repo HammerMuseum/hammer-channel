@@ -20,9 +20,9 @@
         </h1>
         <div
           v-show="video.date_recorded"
-          class="video-meta__date"
         >
-          {{ new Date(video.date_recorded) | dateFormat('MMM D, YYYY') }}
+          <span>Original program date: </span>
+          <span class="video-meta__date">{{ new Date(video.date_recorded) | dateFormat('MMM D, YYYY') }}</span>
         </div>
       </header>
       <div
@@ -148,6 +148,7 @@
               <Share
                 :title="video.title"
                 :date="video.date_recorded"
+                :duration="video.duration"
               />
             </BTab>
 

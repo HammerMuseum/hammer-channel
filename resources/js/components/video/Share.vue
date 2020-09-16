@@ -107,6 +107,10 @@ export default {
       type: String,
       required: true,
     },
+    duration: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -123,10 +127,10 @@ export default {
   },
   computed: {
     dateFormatted() {
-      return this.$options.filters.dateFormat(new Date(this.date), 'dddd DD MMMM, YYYY');
+      return this.$options.filters.dateFormat(new Date(this.date), 'MMMM DD, YYYY');
     },
     name() {
-      return 'Hammer Museum Video Archive';
+      return 'Hammer Channel video';
     },
     text() {
       return this.title;
@@ -135,7 +139,7 @@ export default {
       return window.location.href;
     },
     citation() {
-      return `"${this.title}", ${this.name}, recorded ${this.dateFormatted}, ${this.url}`;
+      return `"${this.title}", ${this.name}, ${this.duration}, ${this.dateFormatted}, ${this.url}`;
     },
     facebook() {
       return this.providers.facebook.replace(':u', encodeURIComponent(this.url)).replace(':title', encodeURIComponent(this.text));
