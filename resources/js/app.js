@@ -9,6 +9,7 @@ import { VueHammer } from 'vue2-hammer';
 import { VSkip } from 'vuetensils/src/components';
 import router from './router';
 import { store } from './store';
+import App from './components/App.vue';
 
 // /**
 //  * The following block of code may be used to automatically register your
@@ -35,7 +36,6 @@ Vue.use(VueScrollTo);
 Vue.component('VSkip', VSkip);
 
 const app = new Vue({ // eslint-disable-line
-  el: '#app',
   router,
   computed: {
     overlayOpen() {
@@ -91,4 +91,5 @@ const app = new Vue({ // eslint-disable-line
       this.$el.focus();
     },
   },
-});
+  render: h => h(App),
+}).$mount('#app');
