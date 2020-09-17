@@ -107,6 +107,9 @@ return [
     'options' => [
         'application' => env('APP_NAME', 'Laravel'),
         'http_user' => 'www-data',
+        'writable_mode' => 'chown',
+        'writable_recursive' => true,
+        'writable_use_sudo' => true,
         'app_user' => 'deploy',
         'upload_vendors' => true,
         'upload_options' => [
