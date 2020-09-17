@@ -62,7 +62,7 @@ class SearchController extends Controller
 
         $this->setMeta($state);
 
-        return view('main', [
+        return view('search', [
             'state' => $state,
         ]);
     }

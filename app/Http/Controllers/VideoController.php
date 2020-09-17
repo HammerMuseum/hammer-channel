@@ -67,10 +67,17 @@ class VideoController extends Controller
             abort(404);
         }
 
-        $this->setMeta($data['data'][0]);
+        $video = $data['data'][0];
+        $this->setMeta($video);
 
-        return view('main', [
+        return view('video', [
             'state' => $this->getAppState($path, $data),
+            'src' => $video['src'],
+            'thumbnailUrl' => '/images/d/large/' . $video['thumbnailId'] . '.jpg',
+            'description' => $video['description'],
+            'title' => $video['title'],
+            'date' => date('M d, Y', strtotime($video['date_recorded'])),
+            'trackUrl' => config('app.datastore_url') . 'videos/' . $id . '/transcript?format=vtt',
         ]);
     }
 

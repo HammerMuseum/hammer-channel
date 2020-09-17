@@ -28,17 +28,28 @@
   <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+  {{-- <link rel="stylesheet" href="{{ mix('css/app.css') }}"> --}}
+  <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="https://use.typekit.net/onc8trv.css">
 </head>
 
 <body>
-  @yield('state')
+  <style>
+    .Q_js .script--disabled {
+      display: none;
+    }
+  </style>
+  <script type="text/javascript">
+    document.getElementsByTagName('html')[0].className += ' Q_js';
+    window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
+  </script>
 
   <div id="app" tabindex="-1">
-    @yield('content')
+    @include('includes.header')
+    <div class="container">
+      @yield('content')
+    </div>
   </div>
-
   <script src="{{ mix('js/manifest.js') }}"></script>
   <script src="{{ mix('js/vendor.js') }}"></script>
   <script src="{{ mix('js/app.js') }}"></script>

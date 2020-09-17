@@ -1,18 +1,44 @@
 @extends('layouts.app')
 
-@section('state')
-<script type="text/javascript">
-  window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
-</script>
-@endsection
-
 @section('content')
-  <vue-progress-bar></vue-progress-bar>
-  <vue-announcer></vue-announcer>
-  <the-header></the-header>
-  <transition name="fade">
-    <main class="main" role="main">
-      <router-view ref="routerView"></router-view>
-    </main>
-  </transition>
+<div id="start-of-content" class="page-wrapper page-wrapper--full">
+  <svg viewBox="0 0 800 217" version="1.1" preserveAspectRatio="xMidYMid meet">
+    <rect clip-path="url(#2px9eixpmrz)" x="0" y="0" width="800" height="250" style="fill: url(&quot;#0hia3u67x8c9&quot;);"></rect>
+    <defs>
+      <clipPath id="2px9eixpmrz">
+        <rect x="425" y="3" rx="2" ry="2" width="361" height="26"></rect>
+        <rect x="425" y="44" rx="2" ry="2" width="361" height="26"></rect>
+        <rect x="6" y="2" rx="2" ry="2" width="400" height="192"></rect>
+        <rect x="425" y="83" rx="2" ry="2" width="361" height="26"></rect>
+        <rect x="425" y="124" rx="2" ry="2" width="361" height="26"></rect>
+      </clipPath>
+      <linearGradient id="0hia3u67x8c9">
+        <stop offset="0%" stop-color="#c6c6c6" stop-opacity="1"></stop>
+        <stop offset="50%" stop-color="#c6c6c6" stop-opacity="1"></stop>
+        <stop offset="100%" stop-color="#c6c6c6" stop-opacity="1"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+  @foreach ($state['videos'] as $category)
+  <h2 class="carousel__title">
+    <a href="/search?topics={{ $category['id'] }}">{{ $category['label'] }}</a>
+  </h2>
+  <div class="carousel-wrapper carousel-wrapper--static">
+    @foreach ($category['hits'] as $video)
+    <div class="ui-card">
+      <a href="/video/{{$video['asset_id']}}/{{$video['title_slug']}}">
+        <div class="ui-card__thumbnail">
+          <img src="/images/d/medium/{{$video['thumbnailId']}}.jpg" alt="" class="ui-card__thumbnail-image">
+        </div>
+        <h2 class="ui-card__title">
+          <span>{{ $video['title'] }}</span>
+        </h2>
+        <p class="ui-card__description">{{ html_entity_decode(strip_tags(Str::of($video['description'])->limit(180))) }}</p>
+        <time class="ui-card__duration">{{ $video['duration']}}</time>
+      </a>
+    </div>
+    @endforeach
+  </div>
+  @endforeach
+</div>
 @endsection
