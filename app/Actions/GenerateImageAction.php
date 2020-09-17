@@ -33,12 +33,17 @@ class GenerateImageAction
         $pathinfo = pathinfo($id);
         $filename = $pathinfo['filename'];
         $extension = $pathinfo['extension'];
-        $directory = "$template/";
-        $cachePath = "$template/$filename/$extension";
+        $directory = "images/d/$template/";
+        $cachePath = "$directory/$filename.$extension";
 
         if (empty($this->baseUrl)) {
             Log::error('Images base URL has not been defined.');
             abort(503);
+        }
+
+        $allowedExtensions = ['webp', 'jpg'];
+        if (!in_array($extension, $allowedExtensions)) {
+            abort(404);
         }
 
         $filter = $this->getFilter($template);
@@ -51,15 +56,7 @@ class GenerateImageAction
             abort(404);
         }
 
-        if (!Storage::disk('dynamic_images')->exists($directory)) {
-            Storage::disk('dynamic_images')->makeDirectory($directory);
-        }
-
-        if ($extension === 'webp') {
-            Storage::disk('dynamic_images')->put($cachePath, $image->encode('webp', 60)->stream());
-        } else {
-            Storage::disk('dynamic_images')->put($cachePath, $image->stream('jpg', 60));
-        }
+        Storage::put($cachePath, $image->encode($extension, 60), 'public');
 
         return $image->response();
     }
