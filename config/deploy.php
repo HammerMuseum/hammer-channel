@@ -70,7 +70,7 @@ return [
         // Deployment is done but not live yet (before symlink)
         'ready' => [
             'artisan:storage:link',
-            'app:permissions',
+            // 'app:permissions',
             'artisan:responsecache:clear',
             'artisan:view:clear',
             'artisan:cache:clear',
