@@ -454,7 +454,7 @@ export default {
         .get(`${this.datastore}videos/${this.$route.params.id}/transcript?format=json`)
         .then((response) => {
           // Group word level data into paragraph level data.
-          const { words, speakers } = response.data.data;
+          const { words, speakers } = response.data;
           const map = new Map(Array.from(words, (obj) => [obj.paragraphId, []]));
           words.forEach((obj) => map.get(obj.paragraphId).push(obj));
           const paragraphs = Array.from(map.values());
