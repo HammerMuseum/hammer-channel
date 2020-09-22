@@ -9,23 +9,3 @@ export default {
   name: 'UiGrid',
 };
 </script>
-
-<style>
-.ui-grid {
-  display: grid;
-  grid-gap: 24px;
-  grid-template-columns: repeat(1, 1fr);
-}
-
-@media (min-width: 30em) {
-  .ui-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 84.5em) {
-  .ui-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-</style>

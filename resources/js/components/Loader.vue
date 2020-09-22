@@ -1,7 +1,7 @@
 <template>
   <ContentLoader
     :width="800"
-    :height="250"
+    :height="217"
     :animate="false"
     primary-color="#c6c6c6"
     secondary-color="#c6c6c6"
