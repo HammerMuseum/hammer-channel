@@ -20,7 +20,3 @@ Route::group(['middleware' => 'cacheResponse:3600'], function () {
     Route::get('/', 'ListingController@indexJson');
     Route::get('/search', 'SearchController@viewJson');
 });
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
