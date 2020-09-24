@@ -6,6 +6,10 @@ use Illuminate\Support\Arr;
 
 /**
  * Class Pagination
+ *
+ * Utility functions for helping
+ * with search pagination.
+ *
  * @package App\Library
  */
 class Pagination
@@ -17,12 +21,14 @@ class Pagination
      * @param array $params
      * @return mixed
      */
-    public function pagerLinks($pager, $params = [])
+    public function generatePagerQueries($pager, $params = [])
     {
+        unset($params['page']);
         foreach ($pager as $key => $pagerLink) {
-            if ($pagerLink !== '') {
-                // If there are already query parameters, use the correct concatenation
-                $pager[$key] = empty($params) ? $pagerLink : '&' . $pagerLink;
+            if (!empty($pagerLink)) {
+                [$linkParam, $linkValue] = explode('=', $pagerLink);
+                $params[$linkParam] = $linkValue;
+                $pager[$key] = http_build_query($params);
             } else {
                 $pager[$key] = '';
             }

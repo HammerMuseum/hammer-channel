@@ -41,6 +41,8 @@
 
           @foreach ($state['videos'] as $video)
           <div class="ui-card">
+
+            @if(isset($video['asset_id']) && isset($video['title_slug']))
             <a href="/video/{{$video['asset_id']}}/{{$video['title_slug']}}">
               <div class="ui-card__thumbnail">
                 <img src="/images/d/medium/{{$video['thumbnailId']}}.jpg" alt="" class="ui-card__thumbnail-image">
@@ -48,13 +50,35 @@
               <h2 class="ui-card__title">
                 <span>{{ $video['title'] }}</span>
               </h2>
+
+              @isset($video['date_recorded'])
               <div class="ui-card__date">{{ date('M d, Y', strtotime($video['date_recorded'])) }}</div>
+              @endisset
+
+              @isset($video['duration'])
               <time class="ui-card__duration">{{ $video['duration']}}</time>
+              @endisset
             </a>
+            @endif
           </div>
           @endforeach
 
         </div>
+
+        @isset($state['pagerLinks'])
+        <div class="pagination">
+          <ul class="pagination__list">
+            @isset($state['pagerLinks']['previous'])
+            <li><a href="{{$state['pagerLinks']['previous']}}">Prev</a></li>
+            @endisset
+
+            @isset($state['pagerLinks']['previous'])
+            <li><a href="{{ Request::path() }}?{{$state['pagerLinks']['next']}}">Next</a></li>
+
+            @endisset
+          </ul>
+        </div>
+        @endisset
       </div>
     </div>
   </div>

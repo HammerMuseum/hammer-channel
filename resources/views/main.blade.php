@@ -26,16 +26,32 @@
   <div class="carousel-wrapper carousel-wrapper--static">
     @foreach ($category['hits'] as $video)
     <div class="ui-card">
+
+      @if(isset($video['asset_id']) && isset($video['title_slugs']))
       <a href="/video/{{$video['asset_id']}}/{{$video['title_slug']}}">
+
         <div class="ui-card__thumbnail">
+
+        @isset($video['thumbnailId'])
           <img src="/images/d/medium/{{$video['thumbnailId']}}.jpg" alt="" class="ui-card__thumbnail-image">
+        @endisset
         </div>
+
         <h2 class="ui-card__title">
+        @isset($video['title'])
           <span>{{ $video['title'] }}</span>
+        @endisset
         </h2>
+
+        @isset($video['description'])
         <p class="ui-card__description">{{ html_entity_decode(strip_tags(Str::of($video['description'])->limit(180))) }}</p>
-        <time class="ui-card__duration">{{ $video['duration']}}</time>
+        @endisset
+
+        @isset($video['duration'])
+          <time class="ui-card__duration">{{ $video['duration']}}</time>
+        @endisset
       </a>
+      @endif
     </div>
     @endforeach
   </div>

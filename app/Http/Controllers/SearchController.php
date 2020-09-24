@@ -94,7 +94,7 @@ class SearchController extends Controller
 
         $pagerLinks = [];
         if (!empty($data['pages'])) {
-            $pagerLinks = $this->pagination->pagerLinks($data['pages']['pager'], $params);
+            $pagerLinks = $this->pagination->generatePagerQueries($data['pages']['pager'], $params);
         }
 
         $facets = [];
@@ -116,6 +116,7 @@ class SearchController extends Controller
             'clearedSortQuery' => $this->pagination->clearParams($params, ['sort', 'order']),
             'show_clear' => true,
             'totals' => isset($data['pages']) ? $data['pages'] : [],
+            'pagerLinks' => $pagerLinks,
         ];
     }
 
