@@ -60,7 +60,6 @@ class VideoController extends Controller
      */
     public function view(Request $request, $id, $slug)
     {
-        $path = '/video/' . $id . '/' . $slug;
         $data = $this->api->request('videos/' . $id);
 
         if (empty($data['data'])) {
@@ -68,10 +67,18 @@ class VideoController extends Controller
         }
 
         $video = $data['data'][0];
+
+        if (!$this->validateSlug($video['title_slug'], $slug)) {
+            return redirect()->action('VideoController@view', [
+                'id' => $id,
+                'slug' => $video['title_slug'],
+            ]);
+        }
+
         $this->setMeta($video);
 
         return view('video', [
-            'state' => $this->getAppState($path, $data),
+            'state' => $this->getAppState($id, $data),
             'src' => $video['src'],
             'thumbnailUrl' => '/images/d/large/' . $video['thumbnailId'] . '.jpg',
             'description' => $video['description'],
@@ -88,9 +95,24 @@ class VideoController extends Controller
      */
     public function viewJson(Request $request, $id, $slug)
     {
-        $path = '/video/' . $id . '/' . $slug;
         $data = $this->api->request('videos/' . $id);
-        $state = $this->getAppState($path, $data);
+
+        if (empty($data['data'])) {
+            abort(404);
+        }
+
+        $video = $data['data'][0];
+
+        if (!$this->validateSlug($video['title_slug'], $slug)) {
+            return redirect()->action('VideoController@viewJson', [
+                'id' => $id,
+                'slug' => $video['title_slug'],
+            ]);
+        }
+
+
+        $state = $this->getAppState($id, $data);
+
         return response()->json($state);
     }
 
@@ -98,12 +120,13 @@ class VideoController extends Controller
      * @param $data
      * @return array
      */
-    public function getAppState($path, $data)
+    public function getAppState($id, $data)
     {
         $state = [];
-        $state['path'] = $path;
         if (!empty($data['data'])) {
             $state['video'] = $data['data'][0];
+            $path = '/video/' . $id . '/' . $state['video']['title_slug'];
+            $state['path'] = $path;
         }
         return $state;
     }
@@ -154,5 +177,17 @@ class VideoController extends Controller
                 ->set('og:video:width', 480)
                 ->set('og:video:height', 480);
         }
+    }
+
+    /**
+     * Ensure pages are returned with the correct slug value.
+     *
+     * @param string $valid
+     * @param string $submitted
+     * @return bool
+     */
+    private function validateSlug(string $valid, string $submitted)
+    {
+        return $valid === $submitted;
     }
 }
