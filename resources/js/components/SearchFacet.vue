@@ -6,7 +6,7 @@
       v-for="option in facet.items"
       ref="listChildren"
       :key="option.key"
-      :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(option, facet.type))}"
+      :class="{'search-facet__item': true, 'search-facet__item--active': isActive(getValue(option, facet.type), facet.id)}"
     >
       <a
         :href="`/search?${query(facet.id, getValue(option, facet.type))}`"
@@ -16,7 +16,7 @@
         @click.prevent="handleClick($event, facet.id, getValue(option, facet.type))"
       >
         <span
-          v-if="!isActive(getValue(option, facet.type))"
+          v-if="!isActive(getValue(option, facet.type), facet.id)"
           class="search-facet__item-text"
         >{{ getValue(option, facet.type) }}</span>
         <span
@@ -83,8 +83,8 @@ export default {
       }
       return queryStr === '' ? `${queryStr}${param}` : `${queryStr}&${param}`;
     },
-    isActive(value) {
-      return this.activeFacets && this.activeFacets.includes(String(value));
+    isActive(value, key) {
+      return this.activeFacets[key] && (this.activeFacets[key] === value || this.activeFacets[key].includes(value));
     },
     getValue(item, type) {
       return type === 'date' ? new Date(item.key_as_string).getFullYear() : item.key;

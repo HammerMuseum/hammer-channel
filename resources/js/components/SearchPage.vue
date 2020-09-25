@@ -419,14 +419,14 @@ export default {
   },
   computed: {
     activeFacets() {
-      const active = [];
       const query = this.$route.query;
-      const keys = Object.keys(query);
-      for (let i = 0; i < keys.length; i += 1) {
-        const key = keys[i];
-        active.push(query[key]);
-      }
-      return [].concat(...active);
+      const allowed = ['topics', 'tags', 'speakers', 'date_recorded', 'in_playlists'];
+      return Object.keys(query)
+        .filter((key) => allowed.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = query[key];
+          return obj;
+        }, {});
     },
     hasFacets() {
       return !!this.facets;

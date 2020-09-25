@@ -66,7 +66,7 @@
           >
             <RouterLink
               :class="['link', 'link--text', 'link--text-secondary']"
-              :to="{name: 'search', query: { topic: item } }"
+              :to="{name: 'search', query: { topics: item } }"
             >
               {{ item }}
             </RouterLink>

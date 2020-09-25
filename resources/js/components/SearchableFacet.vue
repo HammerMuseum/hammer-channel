@@ -33,7 +33,7 @@
         :key="item.key"
         :class="{
           'search-facet__item': true,
-          'search-facet__item--active': isActive(getValue(item, facet.type))
+          'search-facet__item--active': isActive(getValue(item, facet.type), facet.id)
         }"
       >
         <a
@@ -43,7 +43,7 @@
           :aria-label="`Add ${getValue(item, facet.type)} to selection`"
           @click.prevent="handleClick($event)"
         >
-          <template v-if="!isActive(getValue(item, facet.type))">
+          <template v-if="!isActive(getValue(item, facet.type), facet.id)">
             <span
               class="search-facet__item-text"
             >{{ getValue(item, facet.type) }}</span>
@@ -156,8 +156,9 @@ export default {
       }
       return queryStr === '' ? `${queryStr}${param}` : `${queryStr}&${param}`;
     },
-    isActive(value) {
-      return this.activeFacets && this.activeFacets.includes(value);
+    isActive(value, key) {
+      return this.activeFacets[key]
+      && (this.activeFacets[key] === value || this.activeFacets[key].includes(value));
     },
     getValue(item, type) {
       return type === 'date' ? new Date(item.key_as_string).getFullYear() : item.key;
