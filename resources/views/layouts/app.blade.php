@@ -35,18 +35,18 @@
 
 <body>
   <style>
-    .Q_js .script--disabled {
+    .hvjs .script--disabled {
       display: none;
     }
   </style>
   <script type="text/javascript">
-    document.getElementsByTagName('html')[0].className += ' Q_js';
+    document.getElementsByTagName('html')[0].className += 'hvjs';
     window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
   </script>
 
   <div id="app" tabindex="-1">
     @include('includes.header')
-    <div class="container">
+    <div class="container script--disabled">
       @yield('content')
     </div>
   </div>
