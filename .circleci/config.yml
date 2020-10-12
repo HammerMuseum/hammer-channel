@@ -70,7 +70,13 @@ build_and_test: &build_and_test
             .circleci/scripts/add_env_vars_to_build.sh $CIRCLE_BRANCH
           fi
 
-    - run: npm run production
+    - run:
+        name: Run frontend test suites
+        command: npm run test
+
+    - run:
+        name: Create production frontend build
+        command: npm run production
 
     # prepare database
     - run: touch storage/testing.sqlite
