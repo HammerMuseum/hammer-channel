@@ -86,11 +86,13 @@
 
 <script>
 import RichText from '../RichText.vue';
+import VideoMeta from '../VideoMeta.vue';
 
 export default {
   name: 'About',
   components: {
     RichText,
+    VideoMeta,
   },
   props: {
     dateRecorded: {
