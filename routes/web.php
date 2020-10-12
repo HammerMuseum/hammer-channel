@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ListingController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\VideoController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,15 +20,15 @@
 */
 
 Route::group(['middleware' => 'cacheResponse:600'], function () {
-    Route::get('/video/{id}/{slug}', 'VideoController@view');
-    Route::get('/container/{id}', 'VideoController@container')
+    Route::get('/video/{id}/{slug}', [VideoController::class, 'view']);
+    Route::get('/container/{id}', [VideoController::class, 'container'])
         ->name('video.container');
 });
 
 Route::group(['middleware' => 'cacheResponse:3600'], function () {
-    Route::get('/', 'ListingController@index');
-    Route::get('/search', 'SearchController@view');
+    Route::get('/', [ListingController::class, 'index']);
+    Route::get('/search', [SearchController::class, 'view']);
 });
 
-Route::get('/images/d/{size}/{id}', 'ImageController')
+Route::get('/images/d/{size}/{id}', [ImageController::class])
     ->name('images');
