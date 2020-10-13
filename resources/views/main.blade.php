@@ -27,7 +27,7 @@
     @foreach ($category['hits'] as $video)
     <div class="ui-card">
 
-      @if(isset($video['asset_id']) && isset($video['title_slugs']))
+      @if(isset($video['asset_id']) && isset($video['title_slug']))
       <a href="/video/{{$video['asset_id']}}/{{$video['title_slug']}}">
 
         <div class="ui-card__thumbnail">
