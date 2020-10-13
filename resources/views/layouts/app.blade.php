@@ -44,7 +44,6 @@
 
   <script type="text/javascript">
     window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
-
   </script>
 </head>
 
