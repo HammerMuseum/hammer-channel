@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ListingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VideoController;
@@ -30,5 +29,7 @@ Route::group(['middleware' => 'cacheResponse:3600'], function () {
     Route::get('/search', [SearchController::class, 'view']);
 });
 
-Route::get('/images/d/{size}/{id}', [ImageController::class])
+# Single action controllers do not work as advertised
+# https://laravel.com/docs/8.x/controllers#single-action-controllers
+Route::get('/images/d/{size}/{id}', '\App\Http\Controllers\ImageController')
     ->name('images');
