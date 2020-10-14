@@ -59,7 +59,11 @@ export default new VueRouter({
       return false;
     }
     if (savedPosition) {
-      return savedPosition;
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(savedPosition);
+        }, 200);
+      });
     }
     return { x: 0, y: 0 };
   },
