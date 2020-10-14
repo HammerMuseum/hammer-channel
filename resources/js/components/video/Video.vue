@@ -70,7 +70,10 @@
                 >
                   <InfoIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Info
                 </h3>
               </template>
@@ -97,7 +100,10 @@
                 >
                   <TranscriptIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Transcript
                 </h3>
               </template>
@@ -120,7 +126,10 @@
                 >
                   <ClipIcon />
                 </BaseIcon>
-                <h3 :class="['vp__tabs__label', {'vp__tabs__label--notify': isClip}] ">
+                <h3
+                  data-tracking-gtm="video page links"
+                  :class="['vp__tabs__label', {'vp__tabs__label--notify': isClip}] "
+                >
                   Clip
                 </h3>
               </template>
@@ -145,7 +154,10 @@
                 >
                   <ShareIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Share
                 </h3>
               </template>
@@ -167,7 +179,10 @@
                 >
                   <RelatedIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Related
                 </h3>
               </template>
