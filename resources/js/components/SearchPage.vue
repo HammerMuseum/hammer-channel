@@ -468,9 +468,15 @@ export default {
           let pageTitle = `Search | Video Archive | Hammer Museum`;
 
           if (to.query.term) {
-            this.setSearchTerm(to.query.term);
-            this.$announcer.set(`Search results for ${to.query.term}. Page loaded with ${this.total} results.`);
-            pageTitle = `Search results for ${to.query.term} | Video Archive | Hammer Museum`;
+            const term = to.query.term;
+            this.setSearchTerm(term);
+            this.$announcer.set(`Search results for ${term}. Page loaded with ${this.total} results.`);
+            pageTitle = `Search results for ${term} | Video Archive | Hammer Museum`;
+            this.$gtm.trackEvent({
+              event: 'videoSearch',
+              searchTerm: term,
+              searchResults: this.total,
+            });
           } else {
             this.setSearchTerm('');
             this.$announcer.set(`Search results page loaded`);

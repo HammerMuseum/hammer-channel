@@ -8,6 +8,7 @@
             <button
               id="clip__start-input"
               class="clip__control__button clip__control__button--left"
+              data-tracking-gtm="video page links"
               @click="setTime('start')"
             >
               Set start time
@@ -26,6 +27,7 @@
             <button
               id="clip__end-input"
               class="clip__control__button clip__control__button--right"
+              data-tracking-gtm="video page links"
               @click="setTime('end')"
             >
               Set end time
@@ -52,6 +54,7 @@
           <button
             :class="['button', 'button--action']"
             aria-label="Copy citation to clipboard"
+            data-tracking-gtm="video page links"
             @click="copyToClipboard(clipUrl)"
           >
             <transition
@@ -86,6 +89,7 @@
         <button
           class="button button--icon search-facet__item-remove"
           aria-label="Remove clip"
+          data-tracking-gtm="video page links"
           @click="handleRemoveClip"
         >
           <BaseIcon

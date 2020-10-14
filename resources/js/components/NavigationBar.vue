@@ -20,6 +20,7 @@
       >
         <a
           href="#"
+          data-tracking-gtm="home filters"
           :aria-label="`Topic ${label}`"
           :class="['link', {'link--active': activeItem === id }]"
           tabindex="-1"

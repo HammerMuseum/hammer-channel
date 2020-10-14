@@ -10,6 +10,7 @@
               class="button button--action highlighter-toggle"
               aria-haspopup="true"
               :aria-expanded="highlightControlsActive ? 'true' : 'false'"
+              data-tracking-gtm="video page links"
               @click="handleHighlighterToggle"
             >
               <span class="visually-hidden">Search within the transcript</span>
@@ -24,6 +25,7 @@
             </button>
             <button
               class="button button--action"
+              data-tracking-gtm="video page links"
               @click="initDownload"
             >
               <span class="download__title">Download transcript</span>
@@ -60,6 +62,7 @@
                     <button
                       :aria-label="`Go to ${item.timecode}`"
                       class="button button--light"
+                      data-tracking-gtm="video page links"
                       @mousedown="handleTranscriptClick(item.start)"
                     >
                       <BaseIcon

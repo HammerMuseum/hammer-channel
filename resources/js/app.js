@@ -26,6 +26,7 @@ Vue.use(VueGtm, {
   id: 'GTM-WN8VRS9',
   defer: false,
   enabled: true,
+  debug: true,
   loadScript: true,
 });
 

@@ -13,6 +13,7 @@
         class="search-facet__item-link"
         tabindex="0"
         :aria-label="`Add ${getValue(option, facet.type)} to selection`"
+        :data-tracking-gtm="`search filter - ${facet.id}`"
         @click.prevent="handleClick($event, facet.id, getValue(option, facet.type))"
       >
         <span

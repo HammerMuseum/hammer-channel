@@ -7,6 +7,7 @@
           :href="facebook"
           target="blank"
           aria-label="Share on Facebook"
+          data-tracking-gtm="video page links"
         >
           <BaseIcon
             width="36"
@@ -24,6 +25,7 @@
           :href="twitter"
           target="blank"
           aria-label="Share on Twitter"
+          data-tracking-gtm="video page links"
         >
           <BaseIcon
             width="36"
@@ -39,6 +41,7 @@
         <button
           class="share-button button button--icon"
           aria-label="Get citation for video"
+          data-tracking-gtm="video page links"
           @click="showCitation = !showCitation"
         >
           <BaseIcon
@@ -75,6 +78,7 @@
             <button
               :class="['button', 'button--action']"
               aria-label="Copy citation to clipboard"
+              data-tracking-gtm="video page links"
               @click="copyToClipboard(citation)"
             >
               <transition
