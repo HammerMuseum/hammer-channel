@@ -10,7 +10,7 @@
 
 .panel--right {
   flex: 1 0 auto;
-  min-height: calc(50vh + 24px);
+  min-height: calc(100vh - var(--video-player-max-width) * var(--video-player-aspect-ratio));
   padding-bottom: 40px;
 }
 
@@ -37,7 +37,6 @@
     flex: 1;
     min-height: 100%;
     margin-top: -43px;
-    padding-bottom: 0;
   }
 }
 

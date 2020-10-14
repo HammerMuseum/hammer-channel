@@ -56,7 +56,10 @@
             class="vp__tabs"
             lazy
           >
-            <BTab active>
+            <BTab
+              active
+              @click="jumpToLowerPanel"
+            >
               <template v-slot:title>
                 <BaseIcon
                   width="18"
@@ -82,6 +85,7 @@
 
             <BTab
               class="tab--transcript"
+              @click="jumpToLowerPanel"
             >
               <template v-slot:title>
                 <BaseIcon
@@ -105,7 +109,7 @@
               />
             </BTab>
 
-            <BTab>
+            <BTab @click="jumpToLowerPanel">
               <template v-slot:title>
                 <BaseIcon
                   width="18"
@@ -130,7 +134,7 @@
               />
             </BTab>
 
-            <BTab>
+            <BTab @click="jumpToLowerPanel">
               <template v-slot:title>
                 <BaseIcon
                   width="18"
@@ -152,7 +156,7 @@
               />
             </BTab>
 
-            <BTab>
+            <BTab @click="jumpToLowerPanel">
               <template v-slot:title>
                 <BaseIcon
                   width="18"
@@ -220,6 +224,8 @@ export default {
       datastore: process.env.MIX_DATASTORE_URL,
       debouncedResizeObserver: null,
       duration: null,
+      hasReachedSticky: false,
+      isSticky: false,
       isClip: false,
       options: {
         sources: null,
@@ -350,6 +356,11 @@ export default {
     window.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
+    jumpToLowerPanel() {
+      if (this.isSticky && !this.hasReachedSticky) {
+        window.scrollTo(0, this.$refs.videoPlayer.offsetTop + 24);
+      }
+    },
     onUpdateClip(start, end) {
       this.clipStart = start;
       if (end < this.duration) {
@@ -386,12 +397,16 @@ export default {
     },
     onResize() {
       const playerHeight = window.innerWidth * (9 / 16);
-      document.querySelector('html').classList.toggle('is-sticky', window.innerHeight > (playerHeight * 2));
+      const condition = window.innerHeight > (playerHeight * 2);
+      document.querySelector('html').classList.toggle('is-sticky', condition);
+      this.isSticky = condition;
     },
     onScroll() {
       const el = document.querySelector('.panels');
       const { top } = el.getBoundingClientRect();
-      document.querySelector('html').classList.toggle('has-reached-sticky', top <= 18);
+      const condition = top <= 18;
+      document.querySelector('html').classList.toggle('has-reached-sticky', condition);
+      this.hasReachedSticky = condition;
     },
     setVideoSource(url) {
       const sources = [{
@@ -429,7 +444,9 @@ export default {
     },
     observerCallback(e) {
       const el = document.querySelector('.panels');
-      el.classList.toggle('has-reached-sticky', e[0].intersectionRatio < 1);
+      const condition = e[0].intersectionRatio < 1;
+      el.classList.toggle('has-reached-sticky', condition);
+      this.hasReachedSticky = condition;
     },
     onPlayerError() {
       axios
