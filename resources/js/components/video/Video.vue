@@ -70,7 +70,10 @@
                 >
                   <InfoIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Info
                 </h3>
               </template>
@@ -78,7 +81,7 @@
                 :description="video.description"
                 :date-recorded="video.date_recorded"
                 :people="video.speakers"
-                :playlists="video.in_playlists"
+                :playlists="videoPlaylists"
                 :topics="video.topics"
               />
             </BTab>
@@ -97,7 +100,10 @@
                 >
                   <TranscriptIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Transcript
                 </h3>
               </template>
@@ -120,7 +126,10 @@
                 >
                   <ClipIcon />
                 </BaseIcon>
-                <h3 :class="['vp__tabs__label', {'vp__tabs__label--notify': isClip}] ">
+                <h3
+                  data-tracking-gtm="video page links"
+                  :class="['vp__tabs__label', {'vp__tabs__label--notify': isClip}] "
+                >
                   Clip
                 </h3>
               </template>
@@ -145,7 +154,10 @@
                 >
                   <ShareIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Share
                 </h3>
               </template>
@@ -167,7 +179,10 @@
                 >
                   <RelatedIcon />
                 </BaseIcon>
-                <h3 class="vp__tabs__label">
+                <h3
+                  class="vp__tabs__label"
+                  data-tracking-gtm="video page links"
+                >
                   Related
                 </h3>
               </template>
@@ -303,6 +318,10 @@ export default {
     transcriptInit() {
       return store.transcriptInit;
     },
+    videoPlaylists() {
+      const v = this.video;
+      return typeof v.in_playlists === 'string' ? [] : v.in_playlists;
+    },
   },
   watch: {
     '$route.query.start': function () {
@@ -314,7 +333,13 @@ export default {
     video() {
       this.updateVideo();
       this.$announcer.set(`The page for video titled: ${this.video.title}, has loaded`);
-      document.title = this.video.title;
+      document.title = `${this.video.title} | Video Archive | Hammer Museum`;
+      this.$gtm.trackEvent({
+        event: 'virtualPageView',
+        virtualPageURL: this.$route.fullPath,
+        virtualPageTitle: document.title,
+        topic: this.video.topics,
+      });
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {

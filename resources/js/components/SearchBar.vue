@@ -45,6 +45,7 @@
           <RouterLink
             :class="['link--text', 'link--text-secondary', 'link--tag']"
             :to="{ name: 'search', query: {} }"
+            data-tracking-gtm="search menu links"
             @click.native="close"
           >
             <span class="link--tag__text">show me everything</span>

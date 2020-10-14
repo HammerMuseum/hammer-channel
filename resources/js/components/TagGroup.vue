@@ -5,6 +5,7 @@
       :key="item.id"
       :class="['link--text', 'link--text-secondary', 'link--tag']"
       :to="{ name: 'search', query: item.query }"
+      data-tracking-gtm="search menu links"
       @click.native="$emit('tag-selected')"
     >
       <span class="link--tag__text">{{ item.term }}</span>
