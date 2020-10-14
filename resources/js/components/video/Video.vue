@@ -78,7 +78,7 @@
                 :description="video.description"
                 :date-recorded="video.date_recorded"
                 :people="video.speakers"
-                :playlists="video.in_playlists"
+                :playlists="videoPlaylists"
                 :topics="video.topics"
               />
             </BTab>
@@ -302,6 +302,10 @@ export default {
     },
     transcriptInit() {
       return store.transcriptInit;
+    },
+    videoPlaylists() {
+      const v = this.video;
+      return typeof v.in_playlists === 'string' ? [] : v.in_playlists;
     },
   },
   watch: {

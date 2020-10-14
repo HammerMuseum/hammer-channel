@@ -93,7 +93,7 @@ export default {
       required: true,
     },
     activeFacets: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
