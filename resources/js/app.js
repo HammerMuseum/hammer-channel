@@ -3,6 +3,7 @@ import Vue from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
+import VueGtm from 'vue-gtm';
 import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import { VueHammer } from 'vue2-hammer';
@@ -20,6 +21,13 @@ import App from './components/App.vue';
 //  */
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+
+Vue.use(VueGtm, {
+  id: 'GTM-WN8VRS9',
+  defer: false,
+  enabled: true,
+  loadScript: true,
+});
 
 Vue.use(VueHammer);
 Vue.use(VueFilterDateFormat);
