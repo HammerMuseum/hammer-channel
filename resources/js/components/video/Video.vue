@@ -314,7 +314,13 @@ export default {
     video() {
       this.updateVideo();
       this.$announcer.set(`The page for video titled: ${this.video.title}, has loaded`);
-      document.title = this.video.title;
+      document.title = `${this.video.title} | Video Archive | Hammer Museum`;
+      this.$gtm.trackEvent({
+        event: 'virtualPageView',
+        virtualPageURL: this.$route.fullPath,
+        virtualPageTitle: document.title,
+        topic: this.video.topics,
+      });
     },
     transcriptInit(init) {
       if (init && !this.transcriptLoaded) {

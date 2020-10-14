@@ -316,7 +316,7 @@
             <UiGrid>
               <UiCard
                 v-for="item in hits"
-                :key="item.asset_id"
+                :key="item.id"
               >
                 <RouterLink
                   :to="{name: 'video', params: {id: item.asset_id, slug: item.title_slug }}"
@@ -465,15 +465,23 @@ export default {
       handler(to) {
         if (to.query) {
           this.getPageData(stringifyQuery(to.query));
+          let pageTitle = `Search | Video Archive | Hammer Museum`;
+
           if (to.query.term) {
             this.setSearchTerm(to.query.term);
             this.$announcer.set(`Search results for ${to.query.term}. Page loaded with ${this.total} results.`);
-            document.title = `Search results for ${to.query.term} - Hammer Museum Video Archive`;
+            pageTitle = `Search results for ${to.query.term} | Video Archive | Hammer Museum`;
           } else {
             this.setSearchTerm('');
             this.$announcer.set(`Search results page loaded`);
-            document.title = `Search results - Hammer Museum Video Archive`;
           }
+
+          document.title = pageTitle;
+          this.$gtm.trackEvent({
+            event: 'virtualPageView',
+            virtualPageURL: to.fullPath,
+            virtualPageTitle: document.title,
+          });
         }
       },
     },

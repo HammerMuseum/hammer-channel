@@ -135,7 +135,14 @@ export default {
     this.getFeatured();
     document.body.classList.add('front');
     this.groupCells = this.windowWidth < 840 ? 1 : 2;
-    document.title = 'Hammer Museum Video Archive';
+    const pageTitle = 'Video Archive | Hammer Museum';
+    document.title = pageTitle;
+
+    this.$gtm.trackEvent({
+      event: 'virtualPageView',
+      virtualPageURL: this.$route.fullPath,
+      virtualPageTitle: document.title,
+    });
   },
   destroyed() {
     document.body.classList.remove('front');
