@@ -44,6 +44,8 @@
   a::after {
     content: " < https://video.hammer.ucla.edu" attr(href) "> ";
     font-weight: normal;
+    font-size: 16px;
+    display: block;
   }
 
   * {
@@ -52,13 +54,41 @@
 
   button,
   .header,
+  .search-page__sidebar,
   .nav-tabs .nav-link,
   .transcript__options,
   .tab--transcript .video-meta__inner::after,
   .video-meta__breadcrumb,
   .ui-card__thumbnail,
-  .ui-card__duration {
+  .ui-card__duration,
+  .topic-menu {
     display: none !important;
+  }
+
+  .strapline {
+    text-align: left;
+  }
+
+  .flickity-slider,
+  .flickity-viewport,
+  .carousel__slide {
+    all: unset !important;
+  }
+
+  .carousels,
+  .ui-card__info {
+    padding: 0 0 16px 0;
+  }
+
+  .carousel__title a {
+    padding-bottom: 16px;
+    font-size: 1.25rem;
+    font-weight: 200 !important;
+  }
+
+  .search-header {
+    margin-left: 0;
+    padding: 0;
   }
 
   .nav {
@@ -82,6 +112,6 @@
   }
 
   @page {
-    margin: 2cm;
+    margin: 0.8cm;
   }
 }
