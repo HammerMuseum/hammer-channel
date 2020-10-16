@@ -32,7 +32,6 @@ mix.webpackConfig({
   ],
 });
 
-
 mix.js('resources/js/app.js', 'public/js');
 mix.postCss('resources/css/app.pcss', 'public/css', [
   require('autoprefixer'),
