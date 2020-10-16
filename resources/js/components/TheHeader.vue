@@ -18,16 +18,18 @@
       <div class="header__content">
         <div class="header__branding">
           <a
-            class="link link--with-image"
+            class="link--text link--text-secondary"
             href="https://hammer.ucla.edu"
-            aria-label="Go to the main Hammer Museum website"
           >
+            Visit the main Hammer website
+          </a>
+          <div class="logo__wrapper">
             <img
               src="/images/logo-hammer-vertical.png"
+              srcset="/images/logo-hammer-vertical.png 1x, /images/logo-hammer-vertical@2x.png 2x"
               alt="Hammer Museum Logo"
             >
-            <span class="visually-hidden">Go to the main Hammer Museum website</span>
-          </a>
+          </div>
         </div>
         <div class="header__title">
           <RouterLink

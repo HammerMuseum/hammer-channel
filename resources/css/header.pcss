@@ -25,15 +25,29 @@
   position: absolute;
   left: 0;
   height: 100%;
-  background: white;
+  display: flex;
+  align-items: center;
+  background: var(--background-darker);
+  transform: translateX(-228px);
+  transition: transform var(--default-transition);
 
-  .link {
-    height: 100%;
+  &:hover {
+    transform: translateX(0);
   }
 
-  img {
+  .branding__link {
+    margin: 0 16px;
+  }
+
+  .logo__wrapper {
     height: 100%;
-    width: auto;
+    background: var(--background-white);
+
+    img {
+      height: 100%;
+      display: block;
+      width: auto;
+    }
   }
 }
 
