@@ -18,7 +18,7 @@
       <div class="header__content">
         <div class="header__branding">
           <a
-            class="link--text link--text-secondary"
+            class="branding__link link--text link--text-secondary"
             href="https://hammer.ucla.edu"
           >
             Visit the main Hammer website
