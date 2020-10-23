@@ -51,6 +51,12 @@ class GenerateImageAction
             abort(404);
         }
 
+        $exists = Storage::disk('local')->has($cachePath);
+        if ($exists) {
+            $path = Storage::path($cachePath);
+            return response()->file($path);
+        }
+
         $image = $this->getImage($id, $filter);
         if (!$image) {
             abort(404);
