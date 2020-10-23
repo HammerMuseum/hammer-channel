@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container container--full">
     <NavigationBar
       :items="videos"
       :active-item="currentSectionInView"
@@ -134,7 +134,7 @@ export default {
   mounted() {
     this.getFeatured();
     document.body.classList.add('front');
-    this.groupCells = this.windowWidth < 840 ? 1 : 2;
+    // this.groupCells = this.windowWidth < 840 ? 1 : 2;
     const pageTitle = 'Video Archive | Hammer Museum';
     document.title = pageTitle;
 
