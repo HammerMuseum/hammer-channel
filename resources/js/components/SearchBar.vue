@@ -41,7 +41,7 @@
 
       <div class="search-bar__options">
         <div class="search-bar__option search-bar__option--left">
-          <span>or</span>
+          <span class="search-bar__option-label">or</span>
           <RouterLink
             :class="['link--text', 'link--text-secondary', 'link--tag']"
             :to="{ name: 'search', query: {} }"

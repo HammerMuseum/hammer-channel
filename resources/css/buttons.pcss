@@ -17,7 +17,13 @@
 }
 
 .button--disabled {
-  opacity: 0.5;
+  transition: all var(--default-transition);
+  opacity: 0.2;
+  color: var(--element-disabled);
+
+  .icon {
+    color: var(--element-disabled);
+  }
 }
 
 .button--icon {
