@@ -41,7 +41,7 @@
 
 @media (min-width: 37.5em) {
   .carousel__slide {
-    width: 47.5%;
+    width: calc(50% - 10px);
   }
 }
 
@@ -51,7 +51,13 @@
   }
 
   .carousel__slide {
-    width: 32.5%;
+    width: calc(33% - 10px);
+  }
+}
+
+@media (min-width: 90em) {
+  .carousel__slide {
+    width: calc(20% - 10px);
   }
 }
 
