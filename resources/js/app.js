@@ -23,10 +23,10 @@ const files = require.context('./', true, /\.vue$/i);
 files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 Vue.use(VueGtm, {
-  id: 'GTM-WN8VRS9',
+  id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
   defer: false,
-  enabled: true,
-  debug: true,
+  enabled: !!process.env.MIX_PROD,
+  debug: !!process.env.MIX_PROD,
   loadScript: true,
 });
 

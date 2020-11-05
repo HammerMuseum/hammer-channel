@@ -39,7 +39,6 @@
   <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  {{-- <link rel="stylesheet" href="{{ mix('css/app.css') }}"> --}}
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="https://use.typekit.net/onc8trv.css">
 
