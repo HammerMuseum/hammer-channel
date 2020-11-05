@@ -21,6 +21,7 @@
         :classes="['carousel--featured']"
         :options="featuredCarouselOptions"
         :show-heading="false"
+        :full-width="true"
       >
         <template #heading>
           <span

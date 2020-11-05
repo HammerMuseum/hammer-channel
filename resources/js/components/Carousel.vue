@@ -8,7 +8,7 @@
     >
       <slot name="heading" />
     </h2>
-    <div class="carousel-wrapper">
+    <div :class="['carousel-wrapper', {'carousel--full-width': fullWidth}]">
       <div
         v-if="controls"
         ref="controls"
@@ -108,6 +108,10 @@ export default {
     id: {
       type: String,
       default: '',
+    },
+    fullWidth: {
+      type: Boolean,
+      default: false,
     },
     options: {
       type: Object,
