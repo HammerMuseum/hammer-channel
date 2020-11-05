@@ -1,52 +1,64 @@
 <template>
-  <ContentLoader
-    :width="800"
-    :height="217"
-    :animate="false"
-    primary-color="#c6c6c6"
-    secondary-color="#c6c6c6"
-  >
-    <rect
-      x="425"
-      y="3"
-      rx="2"
-      ry="2"
-      width="361"
-      height="26"
-    />
-    <rect
-      x="425"
-      y="44"
-      rx="2"
-      ry="2"
-      width="361"
-      height="26"
-    />
-    <rect
-      x="6"
-      y="2"
-      rx="2"
-      ry="2"
-      width="400"
-      height="192"
-    />
-    <rect
-      x="425"
-      y="83"
-      rx="2"
-      ry="2"
-      width="361"
-      height="26"
-    />
-    <rect
-      x="425"
-      y="124"
-      rx="2"
-      ry="2"
-      width="361"
-      height="26"
-    />
-  </ContentLoader>
+  <div>
+    <ContentLoader
+      class="content-loader"
+      :height="153"
+      :width="400"
+      :speed="2"
+      :animate="false"
+      primary-color="#4d4b4b"
+      secondary-color="#4d4b4b"
+    >
+      <rect
+        x="2.5"
+        y="1.4"
+        rx="0"
+        ry="0"
+        width="180"
+        height="150"
+      />
+      <rect
+        x="190"
+        y="12"
+        rx="0"
+        ry="0"
+        width="180"
+        height="16"
+      />
+      <rect
+        x="190"
+        y="32"
+        rx="0"
+        ry="0"
+        width="180"
+        height="16"
+      />
+      <rect
+        x="190"
+        y="108"
+        rx="0"
+        ry="0"
+        width="180"
+        height="8"
+      />
+      <rect
+        x="190"
+        y="120"
+        rx="0"
+        ry="0"
+        width="180"
+        height="8"
+      />
+      <rect
+        x="190"
+        y="132"
+        rx="0"
+        ry="0"
+        width="180"
+        height="8"
+      />
+    </ContentLoader>
+  </div>
 </template>
 
 <script>
@@ -59,3 +71,12 @@ export default {
   },
 };
 </script>
+
+<style>
+  .content-loader {
+    display: block;
+    max-height: 342px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+</style>

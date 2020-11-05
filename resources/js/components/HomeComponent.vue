@@ -12,7 +12,10 @@
       <p class="strapline">
         {{ copy.strapline }}
       </p>
-      <Loader v-if="!featured" />
+      <Loader
+        v-if="!featured"
+        class="carousel--full-width"
+      />
       <Carousel
         v-else
         id="featured"
