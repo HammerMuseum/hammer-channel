@@ -476,6 +476,11 @@ export default {
               event: 'videoSearch',
               searchTerm: term,
               searchResults: this.total,
+              searchTopic: this.activeFacets.topics ? [this.activeFacets.topics].join() : null,
+              searchTag: this.activeFacets.tags ? [this.activeFacets.tags].join() : null,
+              searchPeople: this.activeFacets.speakers ? [this.activeFacets.speakers].join() : null,
+              searchDate: this.activeFacets.date_recorded ? [this.activeFacets.date_recorded].join() : null,
+              searchPlaylist: this.activeFacets.in_playlists ? [this.activeFacets.in_playlists].join() : null,
             });
           } else {
             this.setSearchTerm('');
