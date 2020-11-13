@@ -338,7 +338,8 @@ export default {
         event: 'virtualPageView',
         virtualPageURL: this.$route.fullPath,
         virtualPageTitle: document.title,
-        topic: this.video.topics,
+        topic: [this.video.topics].join(),
+        partOf: this.videoPlaylists.join(),
       });
     },
     transcriptInit(init) {
