@@ -337,9 +337,6 @@ export default {
 
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
-        // For Google Tag Manager.
-        window.VIDEOJS = {};
-        window.VIDEOJS.player = self.player;
       });
     },
     async onFullscreenChange() {
