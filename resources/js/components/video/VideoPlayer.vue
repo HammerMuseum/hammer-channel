@@ -74,6 +74,7 @@ import prettyms from 'humanize-duration';
 import videojs from 'video.js';
 import 'videojs-markers';
 import 'videojs-offset';
+import 'videojs-event-tracking';
 import ClipDisplay from './ClipDisplay.vue';
 import { convertSecondsToTime } from '../../utils';
 import getOrientation from '../../mixins/getOrientation';
@@ -161,6 +162,9 @@ export default {
         sources: null,
         textTrackSettings: false,
         preload: 'metadata',
+        plugins: {
+          eventTracking: true,
+        },
       },
     };
   },
@@ -276,8 +280,10 @@ export default {
         'seeked',
         'seeking',
         'texttrackchange',
-        'useractive',
-        'userinactive',
+        'tracking:firstplay',
+        'tracking:buffered',
+        // 'useractive',
+        // 'userinactive',
         'volumechange',
         'waiting',
       ];
@@ -293,8 +299,8 @@ export default {
           if (typeof events[i] === 'string' && onEdEvents[events[i]] === undefined) {
             ((event) => {
               onEdEvents[event] = null;
-              this.on(event, () => {
-                self.$emit(event, self.player);
+              this.on(event, (...args) => {
+                self.$emit(event, args);
               });
             })(events[i]);
           }
@@ -318,13 +324,14 @@ export default {
         });
 
         this.one('loadedmetadata', function () {
+          const duration = Math.ceil(parseInt(this.duration(), 10));
+          self.$emit('loadedmetadata', duration);
+
           if (self.hasActiveClip) {
             self.initClipMarkers(self.clipStart, self.clipEnd);
             self.initClipPosition();
           }
         });
-
-        self.$emit('ready', this);
       });
 
       if (!this.isEmbed) {

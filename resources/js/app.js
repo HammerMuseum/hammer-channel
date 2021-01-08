@@ -25,8 +25,8 @@ files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], file
 Vue.use(VueGtm, {
   id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
   defer: false,
-  enabled: !!process.env.MIX_PROD,
-  debug: !!process.env.MIX_PROD,
+  enabled: process.env.MIX_PROD,
+  debug: process.env.MIX_PROD,
   loadScript: true,
 });
 

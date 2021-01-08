@@ -48,6 +48,11 @@
             @timeupdate="onTimeUpdate"
             @timecode-reset="onTimecodeReset"
             @remove-clip="onRemoveClip"
+            @play="onPlay"
+            @pause="onPause"
+            @ended="onEnded"
+            @seeking="onSeek"
+            @error="onError"
           />
         </div>
         <div class="panel--right">
@@ -245,6 +250,7 @@ export default {
       options: {
         sources: null,
       },
+      playerMarkers: [],
       prevRoute: null,
       relatedContent: [],
       retrySources: null,
@@ -415,12 +421,6 @@ export default {
         this.isClip = false;
       }
     },
-    onLoadedMetadata(player) {
-      this.duration = Math.ceil(parseInt(player.duration(), 10));
-      if (this.clipEnd > this.duration) {
-        this.clipEnd = null;
-      }
-    },
     onResize() {
       const playerHeight = window.innerWidth * (9 / 16);
       const condition = window.innerHeight > (playerHeight * 2);
@@ -474,15 +474,6 @@ export default {
       el.classList.toggle('has-reached-sticky', condition);
       this.hasReachedSticky = condition;
     },
-    onPlayerError() {
-      axios
-        .get(`/api/video/${this.$route.params.id}/${this.$route.params.slug}`)
-        .then((response) => {
-          this.retrySources = [{ src: response.data.video.src, type: 'video/mp4' }];
-        }).catch((err) => {
-          console.error(err);
-        });
-    },
     fetchRelatedContent() {
       axios
         .get(`${this.datastore}videos/${this.$route.params.id}/related`)
@@ -509,8 +500,56 @@ export default {
           console.error(err);
         });
     },
-    onTimeUpdate(value) {
-      this.currentTimecode = value;
+    dataLayerPush(type, time) {
+      this.$gtm.trackEvent({
+        event: 'Video',
+        category: 'VideoJS',
+        action: type,
+        label: 'video',
+        videoCurrentTime: Math.ceil(parseInt(time, 10)),
+      });
+    },
+    onEnded() {
+      this.dataLayerPush('100%', this.currentTimecode);
+    },
+    onError(e) {
+      this.dataLayerPush('Video error', e.message);
+    },
+    onLoadedMetadata(duration) {
+      this.duration = duration;
+      if (this.clipEnd > this.duration) {
+        this.clipEnd = null;
+      }
+    },
+    onPause() {
+      this.dataLayerPush('Paused video', this.currentTimecode);
+    },
+    onPlay() {
+      const playResume = this.currentTimecode < 2 ? 'Played video' : 'Resumed video';
+      this.dataLayerPush(playResume, this.currentTimecode);
+    },
+    onPlayerError() {
+      axios
+        .get(`/api/video/${this.$route.params.id}/${this.$route.params.slug}`)
+        .then((response) => {
+          this.retrySources = [{ src: response.data.video.src, type: 'video/mp4' }];
+        }).catch((err) => {
+          console.error(err);
+        });
+    },
+    onSeek() {
+      this.dataLayerPush('Timeline Jump', this.currentTimecode);
+    },
+    onTimeUpdate(timecode) {
+      this.currentTimecode = timecode;
+      // Event tracking percentage played.
+      const markers = [5, 10, 15, 20, 25, 50, 75, 100];
+      const percentPlayed = Math.floor((timecode * 100) / this.duration);
+      if (markers.indexOf(percentPlayed) > -1
+        && this.playerMarkers.indexOf(percentPlayed) === -1) {
+        this.playerMarkers.push(percentPlayed);
+        this.dataLayerPush(`${percentPlayed}%`, timecode);
+      }
     },
     onTimecodeReset() {
       // If trying to replay a section whilst still within the
@@ -518,8 +557,8 @@ export default {
       // maintain reactivity.
       this.timecode = 0;
     },
-    updateTimecode(value) {
-      this.timecode = value;
+    updateTimecode(timecode) {
+      this.timecode = timecode;
     },
   },
 };
