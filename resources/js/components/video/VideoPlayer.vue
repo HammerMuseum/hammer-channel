@@ -10,6 +10,7 @@
           class="video-js video-player vjs-default-skin"
           :poster="poster"
           playsinline
+          crossorigin="anonymous"
         >
           <p class="vjs-no-js">
             To view this video please enable JavaScript, and consider upgrading to a
