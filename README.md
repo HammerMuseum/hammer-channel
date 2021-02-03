@@ -38,7 +38,7 @@ Note the double `php` in the second command above. The first `php` refers to the
 
 **Not Docker**
 
-Install `PHP 7.2+` on the host machine or use a tool such as [Laravel Valet](https://laravel.com/docs/6.x/valet).
+Install `PHP 7.4+` on the host machine or use a tool such as [Laravel Valet](https://laravel.com/docs/6.x/valet).
 
 ### Build
 
@@ -53,7 +53,7 @@ php artisan key:generate key
 npm install
 
 # Build frontend and watch for changes.
-npm run watch-dev
+npm run hot
 ```
 
 ### Front-end notes
