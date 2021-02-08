@@ -8,7 +8,7 @@ defaults: &defaults
   docker:
     - image: circleci/php:7.4-buster-node-browsers-legacy
       environment:
-        HOST_URL: video.hammer.ucla.edu
+        HOST_URL: channel.hammer.ucla.edu
         PROD_DEPLOY_URL: video.hammer.cogapp.com
         STAGE_HOST_URL: stage.video.hammer.cogapp.com
         DEV_HOST_URL: dev.video.hammer.cogapp.com
