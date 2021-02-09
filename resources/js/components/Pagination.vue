@@ -32,7 +32,7 @@
       </li>
 
       <li
-        v-for="i in totalPages"
+        v-for="i in pageRange"
         :key="i"
         :class="['pagination__list-item', {['pagination__list-item--current link--disabled']: i === currentPage}]"
       >
@@ -104,7 +104,40 @@ export default {
       default: 0,
     },
   },
+  data() {
+    return {
+      maxPages: 6,
+    };
+  },
   computed: {
+    pageRange() {
+      const max = this.maxPages;
+      const range = [];
+
+      if (this.totalPages < max) {
+        return this.totalPages;
+      }
+
+      const halfMax = (max / 2);
+      let start = this.currentPage - halfMax;
+      let stop = this.currentPage + halfMax;
+
+      if (this.currentPage <= halfMax) {
+        start = 1;
+        stop = max;
+      }
+
+      if ((this.currentPage + halfMax) > this.totalPages) {
+        start = this.totalPages - 6;
+        stop = this.totalPages;
+      }
+
+      for (let i = start; i <= stop; i += 1) {
+        range.push(i);
+      }
+
+      return range.sort((a, b) => a - b);
+    },
     prevPageNumber() {
       if ((this.currentPage - 1) > 0) {
         return this.currentPage - 1;
