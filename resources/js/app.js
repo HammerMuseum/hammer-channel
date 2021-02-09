@@ -26,7 +26,7 @@ Vue.use(VueGtm, {
   id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
   defer: false,
   enabled: process.env.MIX_PROD,
-  debug: process.env.MIX_PROD,
+  debug: false,
   loadScript: true,
 });
 
