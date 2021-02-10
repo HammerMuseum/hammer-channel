@@ -70,7 +70,7 @@
             <BaseIcon
               width="18"
               height="18"
-              view-box="0 0 448 512"
+              view-box="0 0 24 17"
               icon-name="copy"
               title="Copy link to clipboard"
             >
