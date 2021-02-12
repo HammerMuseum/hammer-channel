@@ -82,7 +82,7 @@
             </BaseIcon>
           </button>
           <VDrawer
-            id="about"
+            id="about-overlay"
             v-model="overlay.footer"
             transition="slide-down"
             bg-transition="fade"
