@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { truncate } from 'lodash';
+import truncate from 'lodash/truncate';
 import RichText from './RichText.vue';
 import UiCard from './UiCard.vue';
 
