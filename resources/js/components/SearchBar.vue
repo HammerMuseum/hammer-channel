@@ -17,8 +17,10 @@
           :name="inputId"
           label="Search"
           aria-label="Search"
-          placeholder="Search"
+          :placeholder="placeholder"
           @keydown.enter.prevent="search"
+          @focus="placeholder = 'Type something'"
+          @blur="placeholder = 'Search'"
         />
 
         <div class="form__submit-wrapper">
@@ -98,6 +100,7 @@ export default {
   data() {
     return {
       clonedTerm: '',
+      placeholder: 'Search',
     };
   },
   computed: {
