@@ -11,13 +11,15 @@
     .hvjs .script--disabled {
       display: none;
     }
-
   </style>
 
   <script type="text/javascript">
     document.getElementsByTagName('html')[0].className += 'hvjs';
-
   </script>
+
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://p.typekit.net">
+  <link rel="preconnect" href="https://use.typekit.net">
 
   @meta
 
