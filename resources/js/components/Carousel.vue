@@ -143,6 +143,7 @@ export default {
         prevNextButtons: false,
         wrapAround: false,
       },
+      isFinalSlideVisible: false,
     };
   },
   computed: {
@@ -155,7 +156,7 @@ export default {
       if (group && group > 1) {
         total = this.totalSlides / group;
       }
-      return !this.mergedOptions.wrapAround && this.currentSlide === total;
+      return !this.mergedOptions.wrapAround && (this.currentSlide === total || this.isFinalSlideVisible);
     },
     isFirstSlide() {
       return !this.mergedOptions.wrapAround && this.currentSlide === 0;
@@ -165,6 +166,7 @@ export default {
     },
   },
   mounted() {
+    this.setupObservers();
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
@@ -216,6 +218,17 @@ export default {
         const top = itemHeight / 1.4;
         this.$refs.controls.style.top = `${top}px`;
       }
+    },
+    setupObservers() {
+      const finalSlide = this.$refs.carousel.$el.querySelector('.carousel__slide:last-child');
+      const observer = new IntersectionObserver(
+        this.observerCallback,
+        { threshold: [1] },
+      );
+      observer.observe(finalSlide);
+    },
+    observerCallback(e) {
+      this.isFinalSlideVisible = e[0].intersectionRatio === 1;
     },
   },
 };
