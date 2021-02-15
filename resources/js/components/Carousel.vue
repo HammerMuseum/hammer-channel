@@ -143,6 +143,7 @@ export default {
         prevNextButtons: false,
         wrapAround: false,
       },
+      observer: null,
       isFinalSlideVisible: false,
     };
   },
@@ -166,11 +167,12 @@ export default {
     },
   },
   mounted() {
-    this.setupObservers();
+    this.setupObserver();
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   beforeDestroy() {
+    this.observer.disconnect();
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
@@ -219,13 +221,13 @@ export default {
         this.$refs.controls.style.top = `${top}px`;
       }
     },
-    setupObservers() {
+    setupObserver() {
       const finalSlide = this.$refs.carousel.$el.querySelector('.carousel__slide:last-child');
-      const observer = new IntersectionObserver(
+      this.observer = new IntersectionObserver(
         this.observerCallback,
         { threshold: [1] },
       );
-      observer.observe(finalSlide);
+      this.observer.observe(finalSlide);
     },
     observerCallback(e) {
       this.isFinalSlideVisible = e[0].intersectionRatio === 1;
