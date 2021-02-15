@@ -252,6 +252,10 @@ export default {
   position: absolute;
 }
 
+.control[aria-disabled] {
+  pointer-events: none;
+}
+
 .carousel-controls .control--previous {
   left: 0;
   padding-left: 8px;
