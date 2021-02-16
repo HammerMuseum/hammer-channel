@@ -75,18 +75,21 @@
                 :key="video.id"
                 :item="video"
               />
-              <div class="carousel__slide see-more">
+              <div class="carousel__slide">
                 <router-link
-                  class="ui-card"
+                  class="ui-card see-more"
                   :to="{name: 'search', query: {topics: label}}"
                 >
-                  <div class="ui-card__thumbnail">
-                    <div class="ui-card__thumbnail-image">
-                      <span class="see-more__link">
-                        {{ seeAllLinkText(count, label) }}
-                      </span>
-                    </div>
-                  </div>
+                  <span class="see-more__text">
+                    {{ seeAllLinkText(count, label) }}
+                    <BaseIcon
+                      width="36"
+                      height="36"
+                      view-box="0 0 36 36"
+                    >
+                      <NextIcon />
+                    </BaseIcon>
+                  </span>
                 </router-link>
               </div>
             </Carousel>
@@ -172,7 +175,8 @@ export default {
     },
     seeAllLinkText(count, name) {
       const videos = count > 1 ? 'videos' : 'video';
-      return `See all ${count} ${videos} tagged ${name}`;
+      // return `See all ${count} ${videos} tagged ${name}`;
+      return `See ${count} ${name} ${videos}`;
     },
     viewHandler(e) {
       if (e.percentInView === 1 && e.percentTop < 0.9) {

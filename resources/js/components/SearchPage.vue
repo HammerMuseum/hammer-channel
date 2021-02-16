@@ -149,8 +149,10 @@
                       :name="inputId"
                       label="Search"
                       aria-label="Enter search query"
-                      placeholder="Search"
+                      :placeholder="placeholder"
                       @keydown.enter.prevent="submitSearch"
+                      @focus="placeholder = 'Type something'"
+                      @blur="placeholder = 'Search'"
                     />
                     <div class="form__submit-wrapper">
                       <button
@@ -415,6 +417,7 @@ export default {
       videos: null,
       debouncedResize: null,
       initialWidth: 0,
+      placeholder: 'Search',
     };
   },
   computed: {

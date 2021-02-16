@@ -212,8 +212,16 @@ export default {
     },
     setControlsPosition() {
       if (this.$refs.carousel) {
-        const itemHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
-        const top = itemHeight / 1.4;
+        let top = 0;
+        if (this.id === 'featured') {
+          const carouselHeight = this.$refs.carousel.$el.offsetHeight;
+          // Half-way down minus half the height of the buttons
+          top = carouselHeight / 2 - 16;
+        } else {
+          const imageHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
+          top = imageHeight / 1.4;
+        }
+
         this.$refs.controls.style.top = `${top}px`;
       }
     },
