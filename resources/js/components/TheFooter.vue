@@ -47,16 +47,20 @@
           <p>We encourage the use and sharing of these videos for nonprofit educational purposes. Please share via links to this website or embed videos from the <a href="https://www.youtube.com/user/hammermuseum" target="_blank" rel="noopener noreferrer">Hammer’s YouTube channel</a>.</p>
           <p>To use selections from these videos for any purpose, or request video files, please contact us at <a href="mailto:info@hammer.ucla.edu">info@hammer.ucla.edu</a>.</p>
           <p>Transcripts provided on this site are generated automatically, and are not 100% accurate. Please send suggestions for corrections to <a href="mailto:info@hammer.ucla.edu">info@hammer.ucla.edu</a>.</p>
-          <p>This is an open source project. Source code and documentation is available on GitHub. Contact the site’s developers at <a href="https://www.cogapp.com">cogapp</a> for technical queries.</p>
+          <p>This is an open source project. Source code and documentation is available on GitHub. Contact the site’s developers at <a href="https://www.cogapp.com" target="_blank" rel="noopener noreferrer">cogapp</a> for technical queries.</p>
         </div>
         <div class="footer__links">
           <a
             class="link link--pink"
             href="https://hammer.ucla.edu/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
           >Privacy Policy</a>
           <a
             class="link link--pink"
             href="https://hammer.ucla.edu/terms-of-use"
+            target="_blank"
+            rel="noopener noreferrer"
           >Terms of Use</a>
         </div>
       </div>
