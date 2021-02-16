@@ -7,8 +7,10 @@
         :name="inputId"
         label="Type to filter list..."
         :classes="{ text: 'visually-hidden', input: 'form__input form__input--search' }"
-        placeholder="Search to filter list"
+        :placeholder="placeholder"
         autocomplete="new-password"
+        @focus="placeholder = 'Type something'"
+        @blur="placeholder = 'Search to filter list'"
       />
     </div>
     <div
@@ -101,6 +103,7 @@ export default {
     return {
       searchTerm: '',
       noResults: false,
+      placeholder: 'Search to filter list',
     };
   },
   computed: {
