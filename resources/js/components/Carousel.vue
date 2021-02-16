@@ -172,14 +172,14 @@ export default {
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
-    handleCarouselCellFocus(carousel) {
-      carousel.cells().slice(0, carousel.cells().length - 1).forEach((el) => {
-        el.element.querySelector('a').setAttribute('tabindex', '-1');
-      });
-      carousel.selectedElements().forEach((el) => {
-        el.querySelector('a').setAttribute('tabindex', '0');
-      });
-    },
+    // handleCarouselCellFocus(carousel) {
+    //   carousel.cells().slice(0, carousel.cells().length - 1).forEach((el) => {
+    //     el.element.querySelector('a').setAttribute('tabindex', '-1');
+    //   });
+    //   carousel.selectedElements().forEach((el) => {
+    //     el.querySelector('a').setAttribute('tabindex', '0');
+    //   });
+    // },
     imgsLoaded() {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
@@ -189,11 +189,11 @@ export default {
     initCarousel() {
       const carousel = this.$refs.carousel;
       this.totalSlides = carousel.cells().length - 1;
-      this.handleCarouselCellFocus(carousel);
+      // this.handleCarouselCellFocus(carousel);
 
       carousel.on('change', (index) => {
         this.currentSlide = index;
-        this.handleCarouselCellFocus(carousel);
+        // this.handleCarouselCellFocus(carousel);
       });
 
       carousel.on('dragMove', function () {
@@ -207,6 +207,43 @@ export default {
           slide.style.pointerEvents = 'all';
         });
       });
+
+      this.$refs.carousel.$el.addEventListener('keyup', (event) => {
+        // Only care about Tabs
+        if (event.which !== 9) {
+          return;
+        }
+
+        // Moving backwards
+        if (event.shiftKey && event.target === event.currentTarget) {
+          // The standard browser behavior is fine here since focus will be outside the carousel
+          console.log('Focus leaving carousel container');
+
+          return;
+        }
+
+        var focusedElement = (
+          document.hasFocus() &&
+          document.activeElement !== document.body &&
+          document.activeElement !== document.documentElement &&
+          document.activeElement
+        ) || null;
+
+        // Moving forwards
+        if (!focusedElement) {
+          console.log('Nothing to focus on in the carousel');
+          // event.preventDefault();
+          // this.selectNextFocusableElement(event.currentTarget);
+
+          return;
+        }
+
+        // Find the parent of the focused element
+        const parentSlide = focusedElement.closest('.carousel__slide')
+        const index = [...parentSlide.parentNode.children].indexOf(parentSlide)
+        this.$refs.carousel.select(index);
+        this.$refs.carousel.select(index);
+      })
 
       this.setControlsPosition();
     },
