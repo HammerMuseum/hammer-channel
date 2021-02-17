@@ -69,7 +69,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 192 512"
+                  view-box="0 0 24 17"
                   icon-name="info"
                   title="Information about the video"
                 >
@@ -99,7 +99,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 18 18"
+                  view-box="0 0 24 17"
                   icon-name="transcript"
                   title="View transcript"
                 >
@@ -153,7 +153,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 18 18"
+                  view-box="0 0 24 17"
                   icon-name="share"
                   title="Share the video"
                 >
@@ -178,7 +178,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 18 18"
+                  view-box="0 0 24 17"
                   icon-name="related"
                   title="Related videos"
                 >
