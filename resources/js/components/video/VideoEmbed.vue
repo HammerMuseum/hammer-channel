@@ -76,7 +76,7 @@ export default {
     setVideo() {
       this.setVideoSource(this.video.src);
       this.track = {
-        src: `${this.datastore}videos/${this.video.asset_id}/transcript?format=vtt`,
+        src: `/api/videos/${this.video.asset_id}/transcript?format=vtt`,
         kind: 'captions',
         language: 'en',
         label: 'English',

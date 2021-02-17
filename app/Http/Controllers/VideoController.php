@@ -84,7 +84,7 @@ class VideoController extends Controller
             'description' => $video['description'],
             'title' => $video['title'],
             'date' => date('M d, Y', strtotime($video['date_recorded'])),
-            'trackUrl' => config('app.datastore_url') . 'videos/' . $id . '/transcript?format=vtt',
+            'trackUrl' => '/api/videos/' . $id . '/transcript?format=vtt',
         ]);
     }
 

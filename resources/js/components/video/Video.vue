@@ -445,7 +445,7 @@ export default {
     updateVideo() {
       this.setVideoSource(this.video.src);
       this.track = {
-        src: `${this.datastore}videos/${this.$route.params.id}/transcript?format=vtt`,
+        src: `/api/videos/${this.$route.params.id}/transcript?format=vtt`,
         kind: 'captions',
         language: 'en',
         label: 'English',
@@ -485,7 +485,7 @@ export default {
     },
     fetchTranscript() {
       axios
-        .get(`${this.datastore}videos/${this.$route.params.id}/transcript?format=json`)
+        .get(`/api/videos/${this.$route.params.id}/transcript?format=json`)
         .then((response) => {
           // Group word level data into paragraph level data.
           const { words, speakers } = response.data;
