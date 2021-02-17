@@ -143,6 +143,8 @@ export default {
         prevNextButtons: false,
         wrapAround: false,
       },
+      observer: null,
+      isFinalSlideVisible: false,
     };
   },
   computed: {
@@ -155,7 +157,7 @@ export default {
       if (group && group > 1) {
         total = this.totalSlides / group;
       }
-      return !this.mergedOptions.wrapAround && this.currentSlide === total;
+      return !this.mergedOptions.wrapAround && (this.currentSlide === total || this.isFinalSlideVisible);
     },
     isFirstSlide() {
       return !this.mergedOptions.wrapAround && this.currentSlide === 0;
@@ -165,10 +167,12 @@ export default {
     },
   },
   mounted() {
+    this.setupObserver();
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   beforeDestroy() {
+    this.observer.disconnect();
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
@@ -225,6 +229,17 @@ export default {
         this.$refs.controls.style.top = `${top}px`;
       }
     },
+    setupObserver() {
+      const finalSlide = this.$refs.carousel.$el.querySelector('.carousel__slide:last-child');
+      this.observer = new IntersectionObserver(
+        this.observerCallback,
+        { threshold: [1] },
+      );
+      this.observer.observe(finalSlide);
+    },
+    observerCallback(e) {
+      this.isFinalSlideVisible = e[0].intersectionRatio === 1;
+    },
   },
 };
 </script>
@@ -245,6 +260,10 @@ export default {
 
 .carousel-controls .control {
   position: absolute;
+}
+
+.control[aria-disabled] {
+  pointer-events: none;
 }
 
 .carousel-controls .control--previous {
