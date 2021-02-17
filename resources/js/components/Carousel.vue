@@ -130,6 +130,7 @@ export default {
     return {
       currentSlide: 0,
       totalSlides: 0,
+      carouselLinks: [],
       debouncedSetControlsPosition: null,
       defaultOptions: {
         accessibility: false,
@@ -172,14 +173,6 @@ export default {
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
-    // handleCarouselCellFocus(carousel) {
-    //   carousel.cells().slice(0, carousel.cells().length - 1).forEach((el) => {
-    //     el.element.querySelector('a').setAttribute('tabindex', '-1');
-    //   });
-    //   carousel.selectedElements().forEach((el) => {
-    //     el.querySelector('a').setAttribute('tabindex', '0');
-    //   });
-    // },
     imgsLoaded() {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
@@ -189,11 +182,9 @@ export default {
     initCarousel() {
       const carousel = this.$refs.carousel;
       this.totalSlides = carousel.cells().length - 1;
-      // this.handleCarouselCellFocus(carousel);
 
       carousel.on('change', (index) => {
         this.currentSlide = index;
-        // this.handleCarouselCellFocus(carousel);
       });
 
       carousel.on('dragMove', function () {
@@ -208,41 +199,40 @@ export default {
         });
       });
 
-      this.$refs.carousel.$el.addEventListener('keyup', (event) => {
-        // Only care about Tabs
+      this.carouselLinks = this.$refs.carousel.$el.querySelectorAll('a');
+
+      this.$refs.carousel.$el.addEventListener('keydown', (event) => {
+        let targetLink = null;
+
+        // Only listen for Tab key presses
         if (event.which !== 9) {
           return;
         }
-
-        // Moving backwards
-        if (event.shiftKey && event.target === event.currentTarget) {
-          // The standard browser behavior is fine here since focus will be outside the carousel
-          console.log('Focus leaving carousel container');
-
-          return;
-        }
-
-        var focusedElement = (
-          document.hasFocus() &&
-          document.activeElement !== document.body &&
-          document.activeElement !== document.documentElement &&
-          document.activeElement
-        ) || null;
-
-        // Moving forwards
+        // Get curently focused element
+        const focusedElement = event.target;
         if (!focusedElement) {
-          console.log('Nothing to focus on in the carousel');
-          // event.preventDefault();
-          // this.selectNextFocusableElement(event.currentTarget);
-
           return;
         }
 
-        // Find the parent of the focused element
-        const parentSlide = focusedElement.closest('.carousel__slide')
-        const index = [...parentSlide.parentNode.children].indexOf(parentSlide)
-        this.$refs.carousel.select(index);
-        this.$refs.carousel.select(index);
+        // Find the currently focused element in the array of links
+        const selectedLinkIndex = [...this.carouselLinks].indexOf(focusedElement)
+        if (selectedLinkIndex === -1) {
+          return;
+        }
+
+        if (!event.shiftKey && this.carouselLinks[selectedLinkIndex + 1]) {
+          targetLink = this.carouselLinks[selectedLinkIndex + 1];
+        } else if (event.shiftKey && this.carouselLinks[selectedLinkIndex - 1]) {
+          targetLink = this.carouselLinks[selectedLinkIndex - 1];
+        }
+
+        const parentSlide = targetLink ? targetLink.closest('.carousel__slide') : null;
+        if (parentSlide) {
+          event.preventDefault();
+          const index = [...parentSlide.parentNode.children].indexOf(parentSlide);
+          this.$refs.carousel.select(index, false, true);
+          targetLink.focus();
+        }
       })
 
       this.setControlsPosition();
