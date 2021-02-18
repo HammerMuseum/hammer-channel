@@ -230,7 +230,10 @@ export default {
           targetLink = this.carouselLinks[selectedLinkIndex - 1];
         }
 
-        const parentSlide = targetLink ? targetLink.closest('.carousel__slide') : null;
+        // Check whether
+        // a) 'element.closest' is supported and
+        // b) the target link is inside a carousel slide
+        const parentSlide = Element.prototype.closest && targetLink ? targetLink.closest('.carousel__slide') : null;
         if (parentSlide) {
           event.preventDefault();
           const index = [...parentSlide.parentNode.children].indexOf(parentSlide);
