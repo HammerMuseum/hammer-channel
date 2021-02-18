@@ -196,3 +196,9 @@
 .vjs-menu li.vjs-selected {
   background-color: #fff !important;
 }
+
+/* Fix issue where progress indicator would appear
+  above menu */
+.vjs-menu-button-popup .vjs-menu {
+  z-index: 1;
+}
