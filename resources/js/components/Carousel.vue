@@ -31,7 +31,7 @@
             width="36"
             height="36"
             view-box="0 0 36 36"
-            icon-name="next-with-circle"
+            icon-name="previous-with-circle"
             title="Select previous item"
             :classes="['icon--rotate']"
           >
