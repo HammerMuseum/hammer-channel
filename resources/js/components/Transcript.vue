@@ -183,7 +183,7 @@ export default {
       return this.items.length;
     },
     transcriptScrollContainer() {
-      if (!this.windowWidth < 840) {
+      if (this.windowWidth >= 840) {
         return '.tab--transcript .video-meta__inner';
       }
       return null;

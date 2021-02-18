@@ -69,7 +69,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 192 512"
+                  view-box="0 0 24 17"
                   icon-name="info"
                   title="Information about the video"
                 >
@@ -99,7 +99,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 18 18"
+                  view-box="0 0 24 17"
                   icon-name="transcript"
                   title="View transcript"
                 >
@@ -153,7 +153,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 18 18"
+                  view-box="0 0 24 17"
                   icon-name="share"
                   title="Share the video"
                 >
@@ -178,7 +178,7 @@
                 <BaseIcon
                   width="18"
                   height="18"
-                  view-box="0 0 18 18"
+                  view-box="0 0 24 17"
                   icon-name="related"
                   title="Related videos"
                 >
@@ -445,7 +445,7 @@ export default {
     updateVideo() {
       this.setVideoSource(this.video.src);
       this.track = {
-        src: `${this.datastore}videos/${this.$route.params.id}/transcript?format=vtt`,
+        src: `/api/videos/${this.$route.params.id}/transcript?format=vtt`,
         kind: 'captions',
         language: 'en',
         label: 'English',
@@ -485,7 +485,7 @@ export default {
     },
     fetchTranscript() {
       axios
-        .get(`${this.datastore}videos/${this.$route.params.id}/transcript?format=json`)
+        .get(`/api/videos/${this.$route.params.id}/transcript?format=json`)
         .then((response) => {
           // Group word level data into paragraph level data.
           const { words, speakers } = response.data;

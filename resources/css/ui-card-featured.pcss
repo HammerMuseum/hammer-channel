@@ -13,11 +13,18 @@
 .ui-card--featured {
   background-color: var(--background-darker);
   width: 100%;
+
+  /* Prevent half-pixel of one image bleeding into previous slide */
+  border-left: 1px solid var(--background-darker);
 }
 
 .ui-card--featured .ui-card--inner {
   padding-right: 0;
   width: 100%;
+
+  &:hover .ui-card__title {
+    color: var(--highlight-primary);
+  }
 }
 
 .ui-card--featured .ui-card--inner[disabled] {
@@ -31,6 +38,7 @@
 .ui-card--featured .ui-card__title {
   padding-top: 0;
   color: var(--text-secondary);
+  transition: color 0.08s ease;
 }
 
 .ui-card--featured .ui-card__teaser .ui-card__title {
