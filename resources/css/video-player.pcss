@@ -190,3 +190,9 @@
   opacity: 0;
   transition: visibility 1s, opacity 1s;
 }
+
+/* Fix issue where currently selected item would
+  appear as dark text on a dark background */
+.vjs-menu li.vjs-selected {
+  background-color: #fff !important;
+}
