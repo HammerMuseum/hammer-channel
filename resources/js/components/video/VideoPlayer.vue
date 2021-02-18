@@ -347,8 +347,7 @@ export default {
       });
     },
     async onFullscreenChange() {
-      const orientation = getOrientation();
-      const newOrientation = orientation.startsWith('portrait') ? 'landscape' : 'portrait';
+      const newOrientation = 'landscape';
       if (this.player.isFullscreen()) {
         try {
           await window.screen.orientation.lock(newOrientation);
