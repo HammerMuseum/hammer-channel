@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     scrollTo(id) {
-      const offset = ((window.innerHeight / 2) * -1);
+      const offset = -85;
       this.$scrollTo(`#${id}`, 0, { offset });
     },
     selectNavigationItem(item) {

@@ -31,3 +31,11 @@
     color: var(--highlight-primary);
   }
 }
+
+/* Prevent users of touch input devices from
+ seeing hover state */
+@media (hover: none) {
+  .navigation-bar .link:hover {
+    color: var(--text-secondary);
+  }
+}
