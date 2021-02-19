@@ -203,9 +203,13 @@
   z-index: 1;
 }
 
-/* Hide volume control on touch devices */
+/* Hide volume slider on touch devices */
 @media (hover: none) {
-  .video-js .vjs-volume-panel {
+  .video-js .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-hover {
+    width: 4em;
+  }
+
+  .video-js .vjs-volume-panel .vjs-volume-control {
     display: none;
   }
 }
