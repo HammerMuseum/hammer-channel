@@ -202,3 +202,10 @@
 .vjs-menu-button-popup .vjs-menu {
   z-index: 1;
 }
+
+/* Hide volume control on touch devices */
+@media (hover: none) {
+  .video-js .vjs-volume-panel {
+    display: none;
+  }
+}
