@@ -24,7 +24,7 @@
             {'button--disabled': isFirstSlide}
           ]"
           :aria-disabled="isFirstSlide"
-          tabindex="0"
+          tabindex="-1"
           @click="$refs.carousel.previous()"
         >
           <BaseIcon
@@ -49,7 +49,7 @@
             {'button--disabled': isFinalSlide}
           ]"
           :aria-disabled="isFinalSlide"
-          tabindex="0"
+          tabindex="-1"
           @click="$refs.carousel.next()"
         >
           <BaseIcon
