@@ -359,7 +359,7 @@
 
 <script>
 import axios from 'axios';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import AnimatedNumber from 'animated-number-vue';
 import { VToggle, VInput } from 'vuetensils/src/components';
 import NoResults from './NoResults.vue';

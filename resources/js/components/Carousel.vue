@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import Flickity from 'vue-flickity';
 import imagesLoaded from 'vue-images-loaded';
 import BaseIcon from './base/BaseIcon.vue';
