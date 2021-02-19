@@ -24,14 +24,14 @@
             {'button--disabled': isFirstSlide}
           ]"
           :aria-disabled="isFirstSlide"
-          tabindex="0"
+          tabindex="-1"
           @click="$refs.carousel.previous()"
         >
           <BaseIcon
             width="36"
             height="36"
             view-box="0 0 36 36"
-            icon-name="next-with-circle"
+            icon-name="previous-with-circle"
             title="Select previous item"
             :classes="['icon--rotate']"
           >
@@ -49,7 +49,7 @@
             {'button--disabled': isFinalSlide}
           ]"
           :aria-disabled="isFinalSlide"
-          tabindex="0"
+          tabindex="-1"
           @click="$refs.carousel.next()"
         >
           <BaseIcon
@@ -130,6 +130,7 @@ export default {
     return {
       currentSlide: 0,
       totalSlides: 0,
+      carouselLinks: [],
       debouncedSetControlsPosition: null,
       defaultOptions: {
         accessibility: false,
@@ -176,14 +177,6 @@ export default {
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
-    handleCarouselCellFocus(carousel) {
-      carousel.cells().slice(0, carousel.cells().length - 1).forEach((el) => {
-        el.element.querySelector('a').setAttribute('tabindex', '-1');
-      });
-      carousel.selectedElements().forEach((el) => {
-        el.querySelector('a').setAttribute('tabindex', '0');
-      });
-    },
     imgsLoaded() {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
@@ -193,11 +186,9 @@ export default {
     initCarousel() {
       const carousel = this.$refs.carousel;
       this.totalSlides = carousel.cells().length - 1;
-      this.handleCarouselCellFocus(carousel);
 
       carousel.on('change', (index) => {
         this.currentSlide = index;
-        this.handleCarouselCellFocus(carousel);
       });
 
       carousel.on('dragMove', function () {
@@ -211,6 +202,45 @@ export default {
           slide.style.pointerEvents = 'all';
         });
       });
+
+      this.carouselLinks = this.$refs.carousel.$el.querySelectorAll('a');
+
+      this.$refs.carousel.$el.addEventListener('keydown', (event) => {
+        let targetLink = null;
+
+        // Only listen for Tab key presses
+        if (event.which !== 9) {
+          return;
+        }
+        // Get curently focused element
+        const focusedElement = event.target;
+        if (!focusedElement) {
+          return;
+        }
+
+        // Find the currently focused element in the array of links
+        const selectedLinkIndex = [...this.carouselLinks].indexOf(focusedElement)
+        if (selectedLinkIndex === -1) {
+          return;
+        }
+
+        if (!event.shiftKey && this.carouselLinks[selectedLinkIndex + 1]) {
+          targetLink = this.carouselLinks[selectedLinkIndex + 1];
+        } else if (event.shiftKey && this.carouselLinks[selectedLinkIndex - 1]) {
+          targetLink = this.carouselLinks[selectedLinkIndex - 1];
+        }
+
+        // Check whether
+        // a) 'element.closest' is supported and
+        // b) the target link is inside a carousel slide
+        const parentSlide = Element.prototype.closest && targetLink ? targetLink.closest('.carousel__slide') : null;
+        if (parentSlide) {
+          event.preventDefault();
+          const index = [...parentSlide.parentNode.children].indexOf(parentSlide);
+          this.$refs.carousel.select(index, false, true);
+          targetLink.focus();
+        }
+      })
 
       this.setControlsPosition();
     },
