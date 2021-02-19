@@ -347,10 +347,10 @@ export default {
       });
     },
     async onFullscreenChange() {
-      const newOrientation = 'landscape';
       if (this.player.isFullscreen()) {
         try {
-          await window.screen.orientation.lock(newOrientation);
+          // Make screen landscape even if device was previously portrait
+          await window.screen.orientation.lock('landscape');
         } catch (err) {
           console.error(err);
         }
