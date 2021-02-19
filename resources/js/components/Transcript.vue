@@ -32,6 +32,7 @@
             </button>
           </div>
           <HighlightText
+            :offset-right="scrollBarWidth"
             :show-highlighter="highlightControlsActive"
             @toggle-highlighter="handleHighlighterToggle"
             @scroll-to="handleHighlighterScroll"
@@ -170,6 +171,7 @@ export default {
       ios: false,
       scrollInProgress: false,
       highlightControlsActive: false,
+      scrollBarWidth: 0,
     };
   },
   computed: {
@@ -201,6 +203,9 @@ export default {
       this.highlightControlsActive = !this.highlightControlsActive;
       const condition = (this.windowWidth < 840 || this.ios) && !this.highlightControlsActive;
       document.querySelector('html').classList.toggle('is-sticky', condition);
+      // Get the width of the scrollbar to make sure it isn't covered
+      const scrollContainer = document.querySelector('.video-meta__inner.video-meta__highlighted');
+      this.scrollBarWidth = scrollContainer ? scrollContainer.offsetWidth - scrollContainer.clientWidth : 0;
       // Having to workaround iOS fixed positioning oddities
       // Only when closing the highlighter input.
       if (this.ios) {
