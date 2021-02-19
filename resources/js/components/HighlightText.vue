@@ -7,6 +7,7 @@
       <div
         v-show="showHighlighter"
         class="highlighter__inner"
+        :style="style"
       >
         <div
           class="highlighter__controls"
@@ -106,6 +107,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    offsetRight: {
+      type: Number,
+      required: false,
+    }
   },
   data() {
     return {
@@ -135,6 +140,9 @@ export default {
     searchTerm() {
       return store.searchTerm;
     },
+    style() {
+      return `right: ${this.offsetRight}px`;
+    }
   },
   watch: {
     query() {
