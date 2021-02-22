@@ -31,10 +31,10 @@
         class="navigation-bar__item"
       >
         <a
-          v-scroll-to="{ el: `body`, duration: 0, offset: -80 }"
           href="#"
           tabindex="-1"
           :class="['link']"
+          @click.prevent="scrollToTop()"
         >Back to top
           <BaseIcon
             width="36"
@@ -111,6 +111,10 @@ export default {
     scrollTo(id) {
       const offset = -85;
       this.$scrollTo(`#${id}`, 0, { offset });
+    },
+    scrollToTop() {
+      this.$refs.flickity.selectCell(0, false);
+      this.$scrollTo(`body`, 0);
     },
     selectNavigationItem(item) {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);
