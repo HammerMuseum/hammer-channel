@@ -77,7 +77,6 @@ import 'videojs-offset';
 import 'videojs-event-tracking';
 import ClipDisplay from './ClipDisplay.vue';
 import { convertSecondsToTime } from '../../utils';
-import getOrientation from '../../mixins/getOrientation';
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
