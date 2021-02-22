@@ -82,7 +82,7 @@ export default {
         // scroll anchor element has gone above the viewport
         this.visible = orientation === 'landscape' && document.querySelector(this.scrollAnchor)
           ? document.querySelector(this.scrollAnchor).getBoundingClientRect().top < 0
-          : window.pageYOffset > 250
+          : window.pageYOffset > 350
       }
     },
   },
