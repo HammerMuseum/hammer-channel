@@ -264,7 +264,7 @@ export default {
         'durationchange',
         'ended',
         'enterFullWindow',
-        'enterpictupicture',
+        'enterpictureinpicture',
         'error',
         'exitFullWindow',
         'fullscreenchange',
