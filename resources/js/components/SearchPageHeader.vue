@@ -5,10 +5,25 @@
         Search results
       </h1>
       <div
-        v-show="!loading"
         class="search-header__summary"
       >
-        <slot name="summary" />
+        <div v-if="!loading">
+          <slot name="summary" />
+        </div>
+        <div v-else>
+          <svg
+            width="20px"
+            height="20px"
+          >
+            <path
+              d="M 0 0 H 20 V 20 H 0 Z"
+              fill="transparent"
+              stroke="#4d4b4b"
+              stroke-width="2"
+              class="svg-square-animate"
+            />
+          </svg>
+        </div>
       </div>
       <div class="search-header__extras">
         <slot name="extras" />
