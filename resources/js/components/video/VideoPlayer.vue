@@ -427,6 +427,7 @@ export default {
       this.player.addRemoteTextTrack(this.track, true);
       this.player.off('ready');
       this.player.src(val);
+      this.initOverlays();
     },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
