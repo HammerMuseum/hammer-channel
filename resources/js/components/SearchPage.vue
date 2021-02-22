@@ -468,13 +468,13 @@ export default {
       handler(to) {
         if (to.query) {
           this.getPageData(stringifyQuery(to.query));
-          let pageTitle = `Search | Video Archive | Hammer Museum`;
+          let pageTitle = `Search | Hammer Channel | Hammer Museum`;
 
           if (to.query.term) {
             const term = to.query.term;
             this.setSearchTerm(term);
             this.$announcer.set(`Search results for ${term}. Page loaded with ${this.total} results.`);
-            pageTitle = `Search results for ${term} | Video Archive | Hammer Museum`;
+            pageTitle = `Search results for ${term} | Hammer Channel | Hammer Museum`;
             this.$gtm.trackEvent({
               event: 'videoSearch',
               searchTerm: term,
