@@ -179,7 +179,7 @@ export default {
       return `See ${count} ${name} ${videos}`;
     },
     viewHandler(e) {
-      if (e.percentInView === 1 && e.percentTop < 0.9) {
+      if (e.percentInView === 1 && e.target.rect.top > 85) {
         this.currentSectionInView = e.target.element.dataset.sectionId;
         this.$emit('update-current-section', this.currentSectionInView);
       }
