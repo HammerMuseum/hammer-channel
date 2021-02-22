@@ -14,6 +14,7 @@
 
 <script>
 import throttle from 'lodash/throttle';
+import getOrientation from '../mixins/getOrientation';
 
 export default {
   name: 'BackToTop',
@@ -30,6 +31,10 @@ export default {
       type: String,
       required: true,
     },
+    scrollAnchor: {
+      type: String,
+      required: true,
+    }
   },
   data() {
     return {
@@ -72,7 +77,12 @@ export default {
       if (this.container !== null) {
         this.visible = this.scrollContainer.scrollTop > 150;
       } else {
-        this.visible = window.pageYOffset > 150;
+        const orientation = getOrientation();
+        // On landscape devices, show the BackToTop button when the
+        // scroll anchor element has gone above the viewport
+        this.visible = orientation === 'landscape' && document.querySelector(this.scrollAnchor)
+          ? document.querySelector(this.scrollAnchor).getBoundingClientRect().top < 0
+          : window.pageYOffset > 350
       }
     },
   },

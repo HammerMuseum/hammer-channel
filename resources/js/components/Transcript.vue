@@ -110,6 +110,7 @@
         <BackToTop
           label="Go to top of transcript"
           :container="transcriptScrollContainer"
+          scrollAnchor="#transcript-anchor"
           @scroll-top="handleBackToTopScroll"
         >
           <span class="visually-hidden">Go to top of transcript</span>
