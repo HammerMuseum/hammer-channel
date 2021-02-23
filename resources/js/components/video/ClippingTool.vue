@@ -4,7 +4,7 @@
       <div class="clip">
         <p>{{ tips }}</p>
         <div class="clip__controls">
-          <div class="clip__control">
+          <div class="clip__control clip__control--left">
             <button
               id="clip__start-input"
               class="clip__control__button clip__control__button--left"
@@ -19,11 +19,24 @@
               label="Set clip start time"
               placeholder="00:00:00"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
-              :classes="{ text: 'visually-hidden', input: 'clip__control__input' }"
-            />
+              :classes="{
+                root: 'clip-control__input-wrap',
+                text: 'visually-hidden',
+                input: 'clip__control__input',
+                description: 'clip-control__error'
+              }"
+            >
+              <template #description="input">
+                <template v-if="input.error">
+                  <small v-if="input.invalid.pattern">
+                    <strong>Please enter a valid timestamp: HH:MM:SS</strong>
+                  </small>
+                </template>
+              </template>
+            </VInput>
           </div>
 
-          <div class="clip__control">
+          <div class="clip__control clip__control--right">
             <button
               id="clip__end-input"
               class="clip__control__button clip__control__button--right"
@@ -38,8 +51,21 @@
               label="Set clip end time"
               placeholder="00:00:00"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
-              :classes="{ text: 'visually-hidden', input: 'clip__control__input' }"
-            />
+              :classes="{
+                root: 'clip-control__input-wrap',
+                text: 'visually-hidden',
+                input: 'clip__control__input',
+                description: 'clip-control__error'
+              }"
+            >
+              <template #description="input">
+                <template v-if="input.error">
+                  <small v-if="input.invalid.pattern">
+                    Please enter a valid timestamp: HH:MM:SS
+                  </small>
+                </template>
+              </template>
+            </VInput>
           </div>
         </div>
         <div
