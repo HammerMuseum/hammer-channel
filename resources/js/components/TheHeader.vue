@@ -16,21 +16,6 @@
     </VSkip>
     <header class="header">
       <div class="header__content">
-        <div class="header__branding">
-          <a
-            class="branding__link link--text link--text-secondary"
-            href="https://hammer.ucla.edu"
-          >
-            Visit the main Hammer website
-          </a>
-          <div class="logo__wrapper">
-            <img
-              src="/images/logo-hammer-vertical.png"
-              srcset="/images/logo-hammer-vertical.png 1x, /images/logo-hammer-vertical@2x.png 2x"
-              alt="Hammer Museum Logo"
-            >
-          </div>
-        </div>
         <div class="header__title">
           <RouterLink
             v-slot="{ href, isExactActive, navigate }"
@@ -44,19 +29,28 @@
               @click="navigate"
             >
               <h1 class="visually-hidden">
-                Hammer Video
+                Hammer Channel
               </h1>
               <BaseIcon
                 width="24"
                 height="24"
-                view-box="0 0 189.74 21.78"
+                view-box="0 0 2000 196.21"
                 icon-name="main-logo"
-                title="Hammer video logo"
+                title="Hammer Channel logo"
               >
-                <HammerVideoIcon />
+                <HammerChannelIcon />
               </BaseIcon>
             </a>
           </RouterLink>
+          <span class="header__subtitle">
+            Powered by the
+            <a
+              class="link--text"
+              href="https://hammer.ucla.edu"
+            >
+              Hammer Museum
+            </a>
+          </span>
         </div>
         <nav
           aria-label="Main navigation"

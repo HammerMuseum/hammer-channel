@@ -21,40 +21,6 @@
   background: var(--background-white);
 }
 
-.header__branding {
-  position: absolute;
-  left: 0;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  background: var(--background-darker);
-  transform: translateX(calc(-100% + 36px));
-  transition: transform var(--default-transition);
-
-  &:hover {
-    transform: translateX(0);
-  }
-
-  &:focus-within {
-    transform: translateX(0);
-  }
-
-  .branding__link {
-    margin: 0 8px 0 20px;
-  }
-
-  .logo__wrapper {
-    height: 100%;
-    background: var(--background-white);
-
-    img {
-      height: 100%;
-      display: block;
-      width: auto;
-    }
-  }
-}
-
 .header__actions {
   display: flex;
   justify-content: flex-end;
@@ -63,12 +29,29 @@
 }
 
 .header__title {
-  margin: 0 auto;
   padding: 0 20px;
+  display: flex;
+  align-items: baseline;
 
   .icon {
-    width: 40vw;
-    max-width: 180px;
+    width: 60vw;
+    max-width: 216px;
+  }
+}
+
+.header__subtitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-left: 12px;
+  display: none;
+
+  @media (min-width: 40em) {
+    display: block;
+  }
+
+  a {
+    font-weight: 600;
+    border-bottom-color: currentColor;
   }
 }
 
