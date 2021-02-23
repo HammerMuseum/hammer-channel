@@ -142,7 +142,7 @@ export default {
     this.getFeatured();
     document.body.classList.add('front');
     // this.groupCells = this.windowWidth < 840 ? 1 : 2;
-    const pageTitle = 'Video Archive | Hammer Museum';
+    const pageTitle = 'Hammer Channel | Hammer Museum';
     document.title = pageTitle;
 
     this.$gtm.trackEvent({

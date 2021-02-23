@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Video Archive'),
+    'name' => env('APP_NAME', 'Hammer Channel | Hammer Museum'),
 
     /*
     |--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ return [
     | Hammer Variables
     |--------------------------------------------------------------------------
     |
-    | Variables specific to the Hammer Video Archive project
+    | Variables specific to the Hammer Hammer Channel project
     |
     */
 

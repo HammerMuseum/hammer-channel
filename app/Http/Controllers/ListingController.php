@@ -91,7 +91,7 @@ class ListingController extends Controller
         $pageUrl = $this->metatagHelper->getCurrentUrl();
 
         meta()
-            ->set('title', config('app.name'))
+            ->set('title', $title)
             ->set('canonical', $pageUrl)
             ->set('description', $description)
             ->set('og:description', $description)

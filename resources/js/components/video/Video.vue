@@ -339,7 +339,7 @@ export default {
     video() {
       this.updateVideo();
       this.$announcer.set(`The page for video titled: ${this.video.title}, has loaded`);
-      document.title = `${this.video.title} | Video Archive | Hammer Museum`;
+      document.title = `${this.video.title} | Hammer Channel | Hammer Museum`;
       this.$gtm.trackEvent({
         event: 'virtualPageView',
         virtualPageURL: this.$route.fullPath,

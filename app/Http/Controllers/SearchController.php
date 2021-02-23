@@ -108,7 +108,7 @@ class SearchController extends Controller
             'videos' => isset($data['data']) ? $data['data'] : [],
             'term' => $term,
             'message' => false,
-            'title' => !is_null($term) ? 'Results for "' . ucfirst($term) . '"' : '""',
+            'title' => !is_null($term) ? 'Serach results for "' . ucfirst($term) . '"' : '""',
             'facets' => $facets,
             'url' => $requestUrl,
             'currentQuery' => $originalQuery,
@@ -130,11 +130,11 @@ class SearchController extends Controller
         $description = config('app.description');
         $term = $data['term'];
         $name = config('app.name');
-        $title = !is_null($term) ? 'Searched for ' . $term . ' - ' . $name : 'Search - ' .  $name;
+        $title = !is_null($term) ? 'Search results for ' . $term . ' | ' . $name : 'Search | ' .  $name;
         $pageUrl = $this->metatagHelper->getCurrentUrl();
 
         meta()
-            ->set('title', config('app.name'))
+            ->set('title', $title)
             ->set('description', $description)
             ->set('og:description', $description)
             ->set('og:type', 'website')
