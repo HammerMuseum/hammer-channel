@@ -7,7 +7,7 @@
       <h2 class="heading heading--footer">
         {{ copy.aboutHeading }}
       </h2>
-      <p class="footer__intro">{{ copy.aboutStrapline }}</p>
+      <p class="footer__intro" v-html="copy.aboutStrapline"></p>
       <div class="footer__body">
         <div class="footer__actions">
           <a
