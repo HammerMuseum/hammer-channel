@@ -29,7 +29,7 @@
               <template #description="input">
                 <template v-if="input.error">
                   <small v-if="input.invalid.pattern">
-                    <strong>Please enter a valid timestamp: HH:MM:SS</strong>
+                    Please enter a valid timestamp: HH:MM:SS
                   </small>
                 </template>
               </template>
