@@ -173,7 +173,7 @@ export default {
       ios: false,
       scrollInProgress: false,
       highlightControlsActive: false,
-      scrollBarWidth: 0,
+      scrollBarWidth: 16,
     };
   },
   computed: {
@@ -207,7 +207,7 @@ export default {
       document.querySelector('html').classList.toggle('is-sticky', condition);
       // Get the width of the scrollbar to make sure it isn't covered
       const scrollContainer = document.querySelector('.video-meta__inner.video-meta__highlighted');
-      this.scrollBarWidth = scrollContainer ? scrollContainer.offsetWidth - scrollContainer.clientWidth : 0;
+      this.scrollBarWidth = scrollContainer ? scrollContainer.offsetWidth - scrollContainer.clientWidth : 16;
       // Having to workaround iOS fixed positioning oddities
       // Only when closing the highlighter input.
       if (this.ios) {
