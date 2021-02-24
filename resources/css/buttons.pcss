@@ -50,12 +50,14 @@
 .button--to-top {
   position: fixed;
   bottom: 24px;
-
-  /* Move button up on certain iOS devices to not interfere with other UI elements */
-  bottom: calc(env(safe-area-inset-bottom, 0) + 24px);
   right: 24px;
   transform: rotate(-90deg);
   z-index: 1;
+}
+
+.button--safe-area-bottom {
+  /* Move button up to not interfere with certain iOS UI elements */
+  bottom: calc(env(safe-area-inset-bottom, 0) + 50px);
 }
 
 @media screen and (min-width: 60em) {
