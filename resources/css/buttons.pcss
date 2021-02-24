@@ -55,6 +55,11 @@
   z-index: 1;
 }
 
+.button--safe-area-bottom {
+  /* Move button up to not interfere with certain iOS UI elements */
+  bottom: calc(env(safe-area-inset-bottom, 0) + 50px);
+}
+
 @media screen and (min-width: 60em) {
   .button--small-devices {
     display: none;

@@ -27,6 +27,10 @@ export default {
       type: String,
       default: '',
     },
+    isIOS: {
+      type: Boolean,
+      default: false,
+    },
     label: {
       type: String,
       required: true,
@@ -45,7 +49,12 @@ export default {
   },
   computed: {
     classNames() {
-      return ['button', 'button--to-top', ...this.classes];
+      return [
+        'button',
+        'button--to-top',
+        ...(this.isIOS ? ['button--safe-area-bottom'] : []),
+        ...this.classes
+      ];
     },
   },
   watch: {
