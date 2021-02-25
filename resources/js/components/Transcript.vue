@@ -165,6 +165,10 @@ export default {
         return [];
       },
     },
+    title: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -246,7 +250,7 @@ export default {
     initDownload() {
       const output = this.items.map((el) => `${el.message}${'\r\n\r\n'}`);
       const blob = new Blob(output, { type: 'text/plain;charset=utf-8' });
-      saveAs(blob, 'transcript.txt');
+      saveAs(blob, `transcript_${this.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.txt`);
     },
     isActive(start, end, paraId) {
       if (this.currentTimecode >= start && this.currentTimecode <= end) {
