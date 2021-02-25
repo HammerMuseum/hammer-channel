@@ -113,6 +113,7 @@
                 </h3>
               </template>
               <Transcript
+                :title="video.title"
                 :error="transcriptError"
                 :items="processedTranscript"
                 :current-timecode="currentTimecode"
@@ -280,10 +281,17 @@ export default {
       if (!this.transcript) {
         return [];
       }
+
       const { paragraphs, speakers } = this.transcript;
+
       return Object.keys(paragraphs).map((id) => {
         const para = paragraphs[id];
         const paraStart = para[0].time;
+
+        if (paraStart === undefined || typeof paraStart !== 'number') {
+          return false;
+        }
+
         const paraEnd = para[para.length - 1].time;
         const duration = (paraEnd - paraStart);
 
@@ -312,7 +320,7 @@ export default {
           duration,
           timecode,
         };
-      });
+      }).filter((item) => item);
     },
     poster() {
       const video = this.video;
