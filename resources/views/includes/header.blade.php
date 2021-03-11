@@ -12,7 +12,7 @@
           </svg>
         </a>
         <span class="header__subtitle">
-          Powered by the
+          A project of the
           <a href="https://hammer.ucla.edu" class="link--text">
             Hammer Museum
           </a>

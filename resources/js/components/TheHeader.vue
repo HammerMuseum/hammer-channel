@@ -43,7 +43,7 @@
             </a>
           </RouterLink>
           <span class="header__subtitle">
-            Powered by the<br>
+            A project of the<br>
             <a
               class="link--text"
               href="https://hammer.ucla.edu"
