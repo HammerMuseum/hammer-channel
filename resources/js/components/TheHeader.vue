@@ -47,6 +47,7 @@
             <a
               class="link--text"
               href="https://hammer.ucla.edu"
+              target="_blank"
             >
               Hammer Museum
             </a>
