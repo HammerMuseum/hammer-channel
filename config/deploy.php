@@ -162,17 +162,20 @@ return [
     */
 
     'hosts' => [
-        'video.hammer.cogapp.com' => [
+        '13.56.128.221' => [
             'deploy_path' => '/var/www/channel.hammer.ucla.edu',
             'user' => 'deploy',
+            'stage' => 'production'
         ],
         'stage.video.hammer.cogapp.com' => [
             'deploy_path' => '/var/www/stage.video.hammer.cogapp.com',
             'user' => 'deploy',
+            'stage' => 'staging'
         ],
         'dev.video.hammer.cogapp.com' => [
             'deploy_path' => '/var/www/dev.video.hammer.cogapp.com',
             'user' => 'deploy',
+            'stage' => 'dev'
         ]
     ],
 
