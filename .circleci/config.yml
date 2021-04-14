@@ -9,7 +9,7 @@ defaults: &defaults
     - image: circleci/php:7.4-buster-node-browsers-legacy
       environment:
         HOST_URL: channel.hammer.ucla.edu
-        PROD_DEPLOY_URL: video.hammer.cogapp.com
+        PROD_DEPLOY_URL: 13.56.128.221
         STAGE_HOST_URL: stage.video.hammer.cogapp.com
         DEV_HOST_URL: dev.video.hammer.cogapp.com
 
@@ -100,7 +100,7 @@ build_and_test: &build_and_test
     - run:
         name: Run Laravel Dusk Tests
         command: |
-          php artisan dusk:chrome-driver
+          php artisan dusk:chrome-driver --detect
           php artisan dusk
 
     - persist_to_workspace:
