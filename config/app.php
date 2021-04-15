@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:ignoreFile
+ */
+
 return [
 
     /*
