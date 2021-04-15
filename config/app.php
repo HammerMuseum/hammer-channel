@@ -26,7 +26,10 @@ return [
     |
     */
 
-    'description'  => env('DESCRIPTION', ''),
+    'description'  => env(
+        'DESCRIPTION',
+        'Hammer Channel lets you watch, search, clip, and share videos from the Hammer Museum’s programs and exhibitions, from 2005 to the present.'
+    ),
 
     /*
     |--------------------------------------------------------------------------
