@@ -58,14 +58,14 @@ class MetatagHelper
     }
 
     /**
-     * @param $data
-     * @return string
+     * Returns the URL for a social share image.
      */
     public function getImageUrl($id = null)
     {
-        if (!is_null($id)) {
-            return route('images', [$id, 'medium']);
+        if (is_null($id)) {
+            return config('app.url') . '/images/share-default-light.png';
         }
-        return config('app.url') . '/images/logo-hammer-video.png';
+
+        return route('images', [$id, 'medium']);
     }
 }
