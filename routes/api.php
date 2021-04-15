@@ -14,9 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/video/{id}/{slug}', 'VideoController@viewJson');
-Route::get('/suggestions', 'ListingController@suggestionsJson');
+Route::get('/suggestions', 'HomeController@suggestionsJson');
 
 Route::group(['middleware' => 'cacheResponse:3600'], function () {
-    Route::get('/', 'ListingController@indexJson');
+    Route::get('/', 'HomeController@indexJson');
     Route::get('/search', 'SearchController@viewJson');
 });

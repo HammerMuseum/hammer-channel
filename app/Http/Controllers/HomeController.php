@@ -7,10 +7,10 @@ use App\Library\MetatagHelper;
 use Illuminate\Http\Request;
 
 /**
- * Class ListingController
+ * Class HomeController
  * @package App\Http\Controllers
  */
-class ListingController extends Controller
+class HomeController extends Controller
 {
     /** @var Api */
     protected $api;
@@ -19,7 +19,7 @@ class ListingController extends Controller
     protected $metatagHelper;
 
     /**
-     * ListingController constructor.
+     * HomeController constructor.
      * @param Api $api
      * @param MetatagHelper $metatagHelper
      */
@@ -99,7 +99,7 @@ class ListingController extends Controller
             ->set('twitter:title', $title)
             ->set('twitter:description', $description)
             ->set('twitter:image', $imageUrl)
-            ->set('twitter:card', 'summary')
+            ->set('twitter:card', 'summary_large_image')
             ->set('og:url', $pageUrl)
             ->set('og:title', $title)
             ->set('og:description', $description)
