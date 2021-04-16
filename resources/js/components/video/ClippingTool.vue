@@ -72,12 +72,15 @@
           class="share-link"
         >
           <input
+            v-if="canGenerateClip"
             v-model="clipUrl"
+            readonly
             class="clip__control__input clip__control__input--unrestrained"
           >
         </div>
         <div class="clip__controls clip__sharing">
           <button
+            :disabled="!canGenerateClip"
             :class="['button', 'button--action']"
             aria-label="Copy citation to clipboard"
             data-tracking-gtm="video page links"
