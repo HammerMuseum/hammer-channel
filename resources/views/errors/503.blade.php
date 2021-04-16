@@ -6,7 +6,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex nofollow">
-  <title>Under maintenance</title>
+  <title>503 Site Under Maintenance</title>
 
   <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png">
@@ -55,9 +55,21 @@
         </div>
       </header>
     </div>
-    <div class="container">
-      Undergoing maintenance - please try again shortly.
-    </div>
+    <main class="main">
+      <div class="container container--full">
+        <div id="start-of-content" class="page-wrapper page-wrapper--full">
+          <div class="footer">
+            <div class="footer__inner">
+              <h1 class="heading heading--footer">Site Under Maintenance</h1>
+              <div class="footer__body">
+                <p>Hammer Channel is offline right now. Please try again later.</p>
+                <p><a href="https://hammer.ucla.edu/">Visit the main Hammer Museum site</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
-
