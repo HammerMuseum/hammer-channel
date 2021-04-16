@@ -65,16 +65,6 @@
           </div>
         </div>
         <div class="highlighter__summary">
-          <div v-if="previousSearch">
-            <transition name="fade">
-              <button
-                class="button button--action"
-                @click="handleUsePreviousSearch"
-              >
-                {{ `Use your search query: "${previousSearch}"?` }}
-              </button>
-            </transition>
-          </div>
           <span v-show="query.length >= 3">
             {{ searchSummary }}
           </span>
@@ -96,7 +86,6 @@
 <script>
 import { VInput } from 'vuetensils/src/components';
 import Mark from 'mark.js';
-import { store } from '../store';
 
 export default {
   components: {
@@ -125,7 +114,6 @@ export default {
         separateWordSearch: false,
         ignorePunctuation: ":;.,-–—‒_(){}[]!'\"+=".split(''),
       },
-      previousSearch: null,
       query: '',
     };
   },
@@ -136,9 +124,6 @@ export default {
       const current = this.currentIndex + 1;
       const results = num > 1 ? 'results' : 'result';
       return `${current} of ${num} ${results}`;
-    },
-    searchTerm() {
-      return store.searchTerm;
     },
     style() {
       return `right: ${this.offsetRight}px`;
@@ -151,15 +136,8 @@ export default {
   },
   mounted() {
     this.markInstance = new Mark(this.$refs.context);
-    this.previousSearch = this.searchTerm;
   },
   methods: {
-    handleUsePreviousSearch() {
-      if (this.previousSearch) {
-        this.query = this.previousSearch;
-        this.previousSearch = null;
-      }
-    },
     handleEnter() {
       this.$nextTick(() => {
         setTimeout(() => {
