@@ -15,7 +15,7 @@ cp .env.example .env
 Install the correct version of Docker for your operating system. 
 
 ```sh
-tee .env.example.docker .env
+cat .env.example.docker >> .env
 ```
 Check that the correct php image is selected in .env (choice depends on host operating system).
 
@@ -31,7 +31,7 @@ docker-compose exec php <command>
 docker-compose exec php composer install
 
 # and
-docker-compose exec php php artisan key: generate
+docker-compose exec php php artisan key:generate
 ```
 
 Note the double `php` in the second command above. The first `php` refers to the name of the Docker service, the second refers to the command to invoke `php` on the command line.
@@ -55,6 +55,8 @@ npm install
 # Build frontend and watch for changes.
 npm run hot
 ```
+
+You should now be able to access the site at [http://hv.docker.localhost:8001/](http://hv.docker.localhost:8001/).
 
 ### Front-end notes
 
