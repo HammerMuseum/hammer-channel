@@ -109,8 +109,8 @@ export default {
     },
     offsetRight: {
       type: Number,
-      required: false,
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -122,7 +122,7 @@ export default {
       options: {
         className: 'ht',
         element: 'span',
-        separateWordSearch: true,
+        separateWordSearch: false,
         ignorePunctuation: ":;.,-–—‒_(){}[]!'\"+=".split(''),
       },
       previousSearch: null,
@@ -142,7 +142,7 @@ export default {
     },
     style() {
       return `right: ${this.offsetRight}px`;
-    }
+    },
   },
   watch: {
     query() {
