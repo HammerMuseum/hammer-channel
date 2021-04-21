@@ -39,6 +39,7 @@ export default {
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
       options: {
+        muted: true,
         sources: [{
           src: this.video.src,
           type: 'video/mp4',
