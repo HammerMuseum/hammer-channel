@@ -34,7 +34,6 @@ Vue.use(VueHammer);
 Vue.use(VueFilterDateFormat);
 Vue.use(VueAnnouncer, {}, router);
 Vue.use(VueCheckView);
-Vue.use(VueFilterDateFormat);
 Vue.use(VueProgressBar, {
   color: '#ee2a7b',
   failedColor: 'red',
@@ -100,5 +99,5 @@ const app = new Vue({ // eslint-disable-line
       this.$el.focus();
     },
   },
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');

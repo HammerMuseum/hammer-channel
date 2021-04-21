@@ -32,7 +32,8 @@ mix.webpackConfig({
   ],
 });
 
-mix.js('resources/js/app.js', 'public/js');
+mix.js('resources/js/app.js', 'public/js/app.js');
+mix.js('resources/js/embed.js', 'public/js/embed.js');
 mix.postCss('resources/css/app.pcss', 'public/css', [
   require('autoprefixer'),
   require('postcss-import'),

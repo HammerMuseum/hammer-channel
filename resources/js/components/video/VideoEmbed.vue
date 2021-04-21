@@ -62,8 +62,11 @@ export default {
     this.setVideo();
   },
   methods: {
-    onLoadedMetadata(player) {
-      this.duration = Math.ceil(parseInt(player.duration(), 10));
+    onLoadedMetadata(duration) {
+      this.duration = duration;
+      if (this.clipEnd > this.duration) {
+        this.clipEnd = null;
+      }
     },
     setVideoSource(url) {
       const sources = [{
