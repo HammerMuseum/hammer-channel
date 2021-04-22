@@ -66,6 +66,6 @@ class MetatagHelper
             return config('app.url') . '/images/share-default-light.png';
         }
 
-        return route('images', [$id, 'medium']);
+        return route('images', ['medium', $id . '.jpg']);
     }
 }
