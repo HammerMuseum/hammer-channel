@@ -161,8 +161,8 @@ class VideoController extends Controller
                 ->set('twitter:image', $imageUrl)
                 ->set('og:image', $imageUrl)
                 ->set('og:image:type', 'image/jpg')
-                ->set('og:image:width', 320)
-                ->set('og:image:height', 180);
+                ->set('og:image:width', 480)
+                ->set('og:image:height', 270);
         }
 
         if (isset($data['asset_id'])) {
