@@ -87,7 +87,7 @@
         <template
           v-else-if="error"
         >
-          Sorry, the transcript for this video failed to load correctly.
+          Sorry, there is not yet a transcript available for this video. Please check back soon.
         </template>
         <template
           v-else
@@ -110,8 +110,8 @@
         <BackToTop
           label="Go to top of transcript"
           :container="transcriptScrollContainer"
-          scrollAnchor="#transcript-anchor"
-          :isIOS="ios"
+          scroll-anchor="#transcript-anchor"
+          :is-i-o-s="ios"
           @scroll-top="handleBackToTopScroll"
         >
           <span class="visually-hidden">Go to top of transcript</span>
