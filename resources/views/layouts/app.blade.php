@@ -2,10 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex nofollow">
   <meta name="referrer" content="no-referrer-when-downgrade">
   <style>
     .hvjs .script--disabled {
@@ -13,7 +10,7 @@
     }
   </style>
 
-  <script type="text/javascript">
+  <script>
     document.getElementsByTagName('html')[0].className += 'hvjs';
   </script>
 
@@ -44,7 +41,7 @@
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="https://use.typekit.net/onc8trv.css">
 
-  <script type="text/javascript">
+  <script>
     window.INITIAL_STATE = "{!! addslashes(json_encode($state ?? '')) !!}";
   </script>
 </head>

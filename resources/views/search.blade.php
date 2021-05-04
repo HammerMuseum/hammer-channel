@@ -56,7 +56,7 @@
               @endisset
 
               @isset($video['duration'])
-              <time class="ui-card__duration">{{ $video['duration']}}</time>
+              <span class="ui-card__duration">{{ $video['duration']}}</span>
               @endisset
             </a>
             @endif

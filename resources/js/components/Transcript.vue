@@ -75,7 +75,7 @@
                       >
                         <PlayIcon />
                       </BaseIcon>
-                      <time>{{ item.timecode }}</time>
+                      <span>{{ item.timecode }}</span>
                     </button>
                   </template>
                   {{ item.message }}
