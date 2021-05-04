@@ -1,2 +1,19 @@
+# Social media crawlers are allowed to access some specific routes
+==================================================================
+User-agent: Twitterbot
+Allow: /images/*
+Allow: /container/*
+
+User-agent: facebookexternalhit
+Allow: /images/*
+Allow: /container/*
+
+# Other bots
+============
 User-agent: *
-Disallow: /
+
+Disallow: /container/*
+Disallow: /search?term=*
+
+# Wait 1 second between successive requests.
+Crawl-delay: 1
