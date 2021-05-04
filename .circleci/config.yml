@@ -229,6 +229,7 @@ workflows:
   build_and_test:
     jobs:
       - shellcheck/check:
+          exclude: SC2087
           filters:
               tags:
                 only: /.*/
