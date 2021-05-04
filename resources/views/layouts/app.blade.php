@@ -45,7 +45,7 @@
   <link rel="stylesheet" href="https://use.typekit.net/onc8trv.css">
 
   <script type="text/javascript">
-    window.INITIAL_STATE = "{!! addslashes(json_encode($state)) !!}";
+    window.INITIAL_STATE = "{!! addslashes(json_encode($state ?? '')) !!}";
   </script>
 </head>
 

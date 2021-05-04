@@ -39,6 +39,7 @@ export default {
       currentTimecode: 0,
       datastore: process.env.MIX_DATASTORE_URL,
       options: {
+        muted: true,
         sources: [{
           src: this.video.src,
           type: 'video/mp4',
@@ -62,8 +63,11 @@ export default {
     this.setVideo();
   },
   methods: {
-    onLoadedMetadata(player) {
-      this.duration = Math.ceil(parseInt(player.duration(), 10));
+    onLoadedMetadata(duration) {
+      this.duration = duration;
+      if (this.clipEnd > this.duration) {
+        this.clipEnd = null;
+      }
     },
     setVideoSource(url) {
       const sources = [{
