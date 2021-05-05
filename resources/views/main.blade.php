@@ -2,23 +2,6 @@
 
 @section('content')
 <div id="start-of-content" class="page-wrapper page-wrapper--full">
-  <svg viewBox="0 0 800 217" version="1.1" preserveAspectRatio="xMidYMid meet">
-    <rect clip-path="url(#2px9eixpmrz)" x="0" y="0" width="800" height="250" style="fill: url(&quot;#0hia3u67x8c9&quot;);"></rect>
-    <defs>
-      <clipPath id="2px9eixpmrz">
-        <rect x="425" y="3" rx="2" ry="2" width="361" height="26"></rect>
-        <rect x="425" y="44" rx="2" ry="2" width="361" height="26"></rect>
-        <rect x="6" y="2" rx="2" ry="2" width="400" height="192"></rect>
-        <rect x="425" y="83" rx="2" ry="2" width="361" height="26"></rect>
-        <rect x="425" y="124" rx="2" ry="2" width="361" height="26"></rect>
-      </clipPath>
-      <linearGradient id="0hia3u67x8c9">
-        <stop offset="0%" stop-color="#c6c6c6" stop-opacity="1"></stop>
-        <stop offset="50%" stop-color="#c6c6c6" stop-opacity="1"></stop>
-        <stop offset="100%" stop-color="#c6c6c6" stop-opacity="1"></stop>
-      </linearGradient>
-    </defs>
-  </svg>
   @foreach ($state['videos'] as $category)
   <h2 class="carousel__title">
     <a href="/search?topics={{ $category['id'] }}">{{ $category['label'] }}</a>
@@ -48,7 +31,7 @@
         @endisset
 
         @isset($video['duration'])
-          <time class="ui-card__duration">{{ $video['duration']}}</time>
+          <span class="ui-card__duration">{{ $video['duration']}}</span>
         @endisset
       </a>
       @endif
