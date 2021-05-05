@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Api;
 use App\Library\MetatagHelper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class HomeController
@@ -85,6 +86,10 @@ class HomeController extends Controller
      */
     public function setMeta()
     {
+        if (App::environment('prod')) {
+            meta()->set('google-site-verification', 'xKnZabtTHiBkTeTgtq8vG5Q0gYb2fdTTYyIxjFWqOps');
+        }
+
         $imageUrl = $this->metatagHelper->getImageUrl();
         $description = config('app.description');
         $title = config('app.name');
