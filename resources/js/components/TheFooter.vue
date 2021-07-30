@@ -63,6 +63,7 @@
               rel="noopener noreferrer"
             >cogapp</a> for technical queries.
           </p>
+          <p>Support for the development of Hammer Channel provided by The Andrew W. Mellon Foundation.</p>
         </div>
         <div class="footer__links">
           <a
