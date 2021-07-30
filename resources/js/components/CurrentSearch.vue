@@ -95,7 +95,7 @@ export default {
       return queryStr === '' ? `${queryStr}${param}` : `${queryStr}&${param}`;
     },
     getValue(item, type) {
-      return type === 'date' ? new Date(item.key_as_string).getFullYear() : item.key;
+      return type === 'date' ? new Date(item.key_as_string).getUTCFullYear() : item.key;
     },
   },
 };
