@@ -53,6 +53,7 @@
                 :class="{
                   'transcript__paragraph--active': isActive(item.start, item.end, item.id)
                 }"
+                @click="handleTranscriptParagraphClick"
               >
                 <VTooltip
                   focus
@@ -64,7 +65,7 @@
                       :aria-label="`Go to ${item.timecode}`"
                       class="button button--light"
                       data-tracking-gtm="video page links"
-                      @mousedown="handleTranscriptClick(item.start)"
+                      @mousedown="handleTranscriptTimeButtonClick(item.start)"
                     >
                       <BaseIcon
                         width="18"
@@ -211,7 +212,9 @@ export default {
       document.querySelector('html').classList.toggle('is-sticky', condition);
       // Get the width of the scrollbar to make sure it isn't covered
       const scrollContainer = document.querySelector('.video-meta__inner.video-meta__highlighted');
-      this.scrollBarWidth = scrollContainer ? scrollContainer.offsetWidth - scrollContainer.clientWidth : 16;
+      this.scrollBarWidth = scrollContainer
+        ? scrollContainer.offsetWidth - scrollContainer.clientWidth
+        : 16;
       // Having to workaround iOS fixed positioning oddities
       // Only when closing the highlighter input.
       if (this.ios) {
@@ -228,14 +231,14 @@ export default {
       this.currentHighlight = el;
       this.handleScrollTo(el, offset);
     },
-    handleScrollTo(el, offset) {
+    handleScrollTo(el, offset, top = 0.5, time = 0) {
       const width = this.windowWidth;
       scrollIntoView(el, {
-        time: 0,
         align: {
-          top: 0.5,
+          top,
           topOffset: offset,
         },
+        time,
         validTarget(target) {
           return width < 840 ? true : target !== window;
         },
@@ -244,7 +247,11 @@ export default {
     handleBackToTopScroll() {
       this.handleScrollTo(document.querySelector('#transcript-anchor'), 0);
     },
-    handleTranscriptClick(timecode) {
+    handleTranscriptParagraphClick(e) {
+      const paragraphEl = e.currentTarget;
+      this.handleScrollTo(paragraphEl, '60', 0, 200);
+    },
+    handleTranscriptTimeButtonClick(timecode) {
       this.$emit('update-timecode', timecode);
     },
     initDownload() {
