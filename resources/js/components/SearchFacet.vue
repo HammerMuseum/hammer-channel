@@ -88,7 +88,7 @@ export default {
       return this.activeFacets[key] && (this.activeFacets[key] === value || this.activeFacets[key].includes(value));
     },
     getValue(item, type) {
-      return type === 'date' ? new Date(item.key_as_string).getFullYear() : item.key;
+      return type === 'date' ? new Date(item.key_as_string).getUTCFullYear() : item.key;
     },
   },
 };
