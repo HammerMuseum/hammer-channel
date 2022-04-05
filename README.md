@@ -1,62 +1,40 @@
-# Video Archive
+# Hammer Channel Video Archive
 
 [![CircleCI](https://circleci.com/gh/HammerMuseum/hammer-video/tree/develop.svg?style=svg&circle-token=cb38c33f1816b91c8cbc3a79ff2c75ebb36e9a8f)](https://circleci.com/gh/HammerMuseum/hammer-video/tree/develop)
 
-A Laravel application.
+This application provides the frontend of the Hammer Channel.
+
+To use it with real data, you should either set up the [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore) locally, or, once you have run through the setup below, use the remote Hammer Datastore development environment.
+
+## Requirements
+
+- DDEV
+- NodeJS 14 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#intro))
 
 ## Getting started
 
 ```sh
-cp .env.example .env
+cp .env.ddev.example .env
+ddev start
 ```
 
-**Docker**
+### Connect to a remote datastore
 
-Install the correct version of Docker for your operating system. 
+By default this application is setup to connect to a local copy of the [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore). To connect to the staging Datastore service, update the value of:
 
-```sh
-cat .env.example.docker >> .env
-```
-Check that the correct php image is selected in .env (choice depends on host operating system).
+`DATASTORE_URL` and `MIX_DATASTORE_URL` to be: <https://stage.datastore.hammer.cogapp.com/api>
 
-```sh
-make up
-```
+### Build the frontend application
 
 ```sh
-# When running php-based tools and Docker, prefix commands with:
-docker-compose exec php <command>
-
-# e.g.
-docker-compose exec php composer install
-
-# and
-docker-compose exec php php artisan key:generate
-```
-
-Note the double `php` in the second command above. The first `php` refers to the name of the Docker service, the second refers to the command to invoke `php` on the command line.
-
-**Not Docker**
-
-Install `PHP 7.4+` on the host machine or use a tool such as [Laravel Valet](https://laravel.com/docs/6.x/valet).
-
-### Build
-
-```sh
-# Install dependencies.
-composer install
-
-# Generate the Laravel application key.
-php artisan key:generate key
-
-# Install frontend dependencies.
-npm install
-
 # Build frontend and watch for changes.
+npm run watch
+
+# Hot reload - currently not working.
 npm run hot
 ```
 
-You should now be able to access the site at [http://hv.docker.localhost:8001/](http://hv.docker.localhost:8001/).
+You should be able to access the site at <https://hammer-channel.ddev.site/>.
 
 ### Front-end notes
 
