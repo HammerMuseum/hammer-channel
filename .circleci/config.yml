@@ -6,7 +6,7 @@
 ## Defines images and working directory.
 defaults: &defaults
   docker:
-    - image: circleci/php:7.4-buster-node-browsers-legacy
+    - image: cimg/php:7.4.26-browsers
       environment:
         HOST_URL: channel.hammer.ucla.edu
         PROD_DEPLOY_URL: 13.56.128.221
