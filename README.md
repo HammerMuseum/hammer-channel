@@ -13,9 +13,21 @@ To use it with real data, you should either set up the [Hammer Datastore](https:
 
 ## Getting started
 
+### Create the DDEV environment
+
+Create a local copy of the `.env` file by copying the ddev example file.
+
 ```sh
 cp .env.ddev.example .env
 ddev start
+```
+
+The site should be running at <https://hammer-channel.ddev.site>.
+
+If you get a message about a missing application key, run the following command:
+
+```sh
+ddev exec php artisan key:generate && php artisan config:clear && php artisan config:cache
 ```
 
 ### Connecting to a remote datastore
