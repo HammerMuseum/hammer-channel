@@ -1,4 +1,4 @@
-# Hammer Channel Video Archive
+# Hammer Channel front end application
 
 [![CircleCI](https://circleci.com/gh/HammerMuseum/hammer-video/tree/develop.svg?style=svg&circle-token=cb38c33f1816b91c8cbc3a79ff2c75ebb36e9a8f)](https://circleci.com/gh/HammerMuseum/hammer-video/tree/develop)
 
@@ -18,25 +18,34 @@ cp .env.ddev.example .env
 ddev start
 ```
 
-### Connect to a remote datastore
+### Connecting to a remote datastore
 
-By default this application is setup to connect to a local copy of the [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore). To connect to the staging Datastore service, update the value of:
+By default this application will send queries for data to the local DDEV [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore) environment.
 
-`DATASTORE_URL` and `MIX_DATASTORE_URL` to be: <https://stage.datastore.hammer.cogapp.com/api>
+If you don't want to set this up or want to change the Datatore environment that the frontend is connecting to, change the following values in the `.env` file.
+
+#### Example connection to staging Datastore environment
+
+```env
+DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
+MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
+```
 
 ### Build the frontend application
 
 ```sh
 # Build frontend and watch for changes.
-npm run watch
+npm run dev
 
-# Hot reload - currently not working.
+# Laravel Mix hot reload - currently not working with ddev.
 npm run hot
 ```
 
-You should be able to access the site at <https://hammer-channel.ddev.site/>.
+### Access the application
 
-### Front-end notes
+The application will be running at <https://hammer-channel.ddev.site/>.
+
+## Front-end notes
 
 Most of the time during development you'll likely just want to run `npm run hot`, but a full list of commands is located in the `scripts` section of the `package.json`.
 
