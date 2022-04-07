@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: cimg/php:7.4.26-browsers
+    - image: cimg/php:8.1.4-browsers
       environment:
         HOST_URL: channel.hammer.ucla.edu
         PROD_DEPLOY_URL: 13.56.128.221
@@ -140,7 +140,7 @@ deploy: &deploy
     - run:
         name: Deploy to $PROD_DEPLOY_URL
         command: php artisan deploy production
-    - run: ssh deploy@$PROD_DEPLOY_URL sudo systemctl reload php7.4-fpm.service
+    - run: ssh deploy@$PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
@@ -175,7 +175,7 @@ deploy_stage: &deploy_stage
     - run:
         name: Deploy to $STAGE_HOST_URL
         command: php artisan deploy staging
-    - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php7.4-fpm.service
+    - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
@@ -204,7 +204,7 @@ deploy_dev: &deploy_dev
         tag-value: bastion
     - run: ssh-keyscan -H $(echo "$DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run: php artisan deploy dev
-    - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php7.4-fpm.service
+    - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
