@@ -1,64 +1,63 @@
-# Video Archive
+# Hammer Channel front end application
 
 [![CircleCI](https://circleci.com/gh/HammerMuseum/hammer-video/tree/develop.svg?style=svg&circle-token=cb38c33f1816b91c8cbc3a79ff2c75ebb36e9a8f)](https://circleci.com/gh/HammerMuseum/hammer-video/tree/develop)
 
-A Laravel application.
+This application provides the frontend of the Hammer Channel.
+
+To use it with real data, you should either set up the [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore) locally, or, once you have run through the setup below, use the remote Hammer Datastore development environment.
+
+## Requirements
+
+- DDEV
+- NodeJS 14 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#intro))
 
 ## Getting started
 
+### Create the DDEV environment
+
+Create a local copy of the `.env` file by copying the ddev example file.
+
 ```sh
-cp .env.example .env
+cp .env.ddev.example .env
+ddev start
 ```
 
-**Docker**
+The site should be running at <https://hammer-channel.ddev.site>.
 
-Install the correct version of Docker for your operating system. 
-
-```sh
-cat .env.example.docker >> .env
-```
-Check that the correct php image is selected in .env (choice depends on host operating system).
+If you get a message about a missing application key, run the following command:
 
 ```sh
-make up
+ddev exec php artisan key:generate && php artisan config:clear && php artisan config:cache
 ```
 
-```sh
-# When running php-based tools and Docker, prefix commands with:
-docker-compose exec php <command>
+### Connecting to a remote datastore
 
-# e.g.
-docker-compose exec php composer install
+By default this application will send queries for data to the local DDEV [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore) environment.
 
-# and
-docker-compose exec php php artisan key:generate
+If you don't want to set this up or want to change the Datatore environment that the frontend is connecting to, change the following values in the `.env` file.
+
+#### Example connection to staging Datastore environment
+
+```env
+DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
+MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
 ```
 
-Note the double `php` in the second command above. The first `php` refers to the name of the Docker service, the second refers to the command to invoke `php` on the command line.
-
-**Not Docker**
-
-Install `PHP 7.4+` on the host machine or use a tool such as [Laravel Valet](https://laravel.com/docs/6.x/valet).
-
-### Build
+### Build the frontend application
 
 ```sh
-# Install dependencies.
-composer install
-
-# Generate the Laravel application key.
-php artisan key:generate key
-
-# Install frontend dependencies.
-npm install
-
 # Build frontend and watch for changes.
+npm run dev
+
+# Laravel Mix hot reload - currently not working with ddev.
 npm run hot
 ```
 
-You should now be able to access the site at [http://hv.docker.localhost:8001/](http://hv.docker.localhost:8001/).
+### Access the application
 
-### Front-end notes
+The application will be running at <https://hammer-channel.ddev.site/>.
+
+## Front-end notes
 
 Most of the time during development you'll likely just want to run `npm run hot`, but a full list of commands is located in the `scripts` section of the `package.json`.
 
