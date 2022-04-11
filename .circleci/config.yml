@@ -122,7 +122,7 @@ deploy: &deploy
         at: /home/circleci/project
     - run:
         name: Install deploy dependencies
-        command: sudo apt install rsync python3 python3-venv
+        command: sudo apt-get update && sudo apt-get install rsync python3 python3-venv
     - run:
         name: Ensure python3 is default
         command: sudo ln -sf /usr/bin/python3 /usr/bin/python
