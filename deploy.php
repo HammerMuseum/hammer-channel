@@ -14,14 +14,26 @@ set('repository', 'git@github.com:HammerMuseum/hammer-video.git');
 set('git_tty', true);
 
 // Shared files/dirs between deploys
-add('shared_files', []);
-add('shared_dirs', []);
+add('shared_files', ['.env']);
+add('shared_dirs', ['storage']);
 
 // Writable dirs by web server
-add('writable_dirs', []);
+add('writable_dirs', [
+  'bootstrap/cache',
+  'storage',
+  'storage/app',
+  'storage/app/public',
+  'storage/framework',
+  'storage/framework/cache',
+  'storage/framework/sessions',
+  'storage/framework/views',
+  'storage/logs',
+]);
 set('allow_anonymous_stats', false);
 
 set('http_user', 'www-data');
+set('rsync_src', __DIR__);
+set('rsync_dest', '{{release_path}}');
 
 set('rsync', [
   'exclude'      => [
@@ -80,14 +92,17 @@ host('dev.video.hammer.cogapp.com')
     ->set('stage', 'dev');
 
 // Tasks
-
-//task('build', function () {
-//    run('cd {{release_path}} && build');
-//});
-
-task('build', [
+task('deploy', [
   // prepare is a group task which includes info, setup, lock, release, update_code, shared and writable.
-  'deploy:prepare',
+//  'deploy:prepare',
+  'deploy:info',
+  'deploy:setup',
+  'deploy:lock',
+  'deploy:release',
+  'rsync',
+//  'deploy:update_code',
+  'deploy:shared',
+  'deploy:writable',
 //  'deploy:vendor',
   'artisan:storage:link',
 //  'artisan:responsecache:clear',
@@ -96,6 +111,10 @@ task('build', [
   'artisan:config:cache',
   // publish is a group task which includes symlink, unlock, cleanup and success.
   'deploy:publish',
+//  'deploy:symlink',
+//  'deploy:unlock',
+//  'deploy:cleanup',
+//  'deploy:success',
 ]);
 
 
