@@ -11,13 +11,13 @@ defaults: &defaults
 restore_cache: &restore_cache
   # We use the composer.lock as a way to determine if we can cache our build.
   keys:
-  - composer-v2-{{ checksum "composer.lock" }}
+  - composer-v3-{{ checksum "composer.lock" }}
   # fallback to using the latest cache if no exact match is found
-  - composer-v2
+  - composer-v3
 
 # Defines the cache saving mechanism for composer dependencies.
 save_cache: &save_cache
-  key: composer-v2-{{ checksum "composer.lock" }}
+  key: composer-v3-{{ checksum "composer.lock" }}
   paths:
     - vendor
 
