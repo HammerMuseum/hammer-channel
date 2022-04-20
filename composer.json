@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.1",
         "f9webltd/laravel-meta": "^1.6",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^2.0",
