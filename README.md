@@ -57,6 +57,16 @@ npm run hot
 
 The application will be running at <https://hammer-channel.ddev.site/>.
 
+## Dev tools
+
+### phpstan
+
+You can use phpstan to find potential issues with PHP code.
+
+`vendor/bin/phpstan analyse`
+
+The config file is `phpstan.neon`.
+
 ## Front-end notes
 
 Most of the time during development you'll likely just want to run `npm run hot`, but a full list of commands is located in the `scripts` section of the `package.json`.
