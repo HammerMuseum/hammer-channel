@@ -3,6 +3,7 @@ namespace Deployer;
 
 require 'contrib/rsync.php';
 require 'recipe/laravel.php';
+require 'recipe/tasks.php';
 
 // Project name
 set('application', 'Laravel');
@@ -93,8 +94,6 @@ host('dev.video.hammer.cogapp.com')
 
 // Tasks
 task('deploy', [
-  // prepare is a group task which includes info, setup, lock, release, update_code, shared and writable.
-//  'deploy:prepare',
   'deploy:info',
   'deploy:setup',
   'deploy:lock',
@@ -103,18 +102,13 @@ task('deploy', [
 //  'deploy:update_code',
   'deploy:shared',
   'deploy:writable',
-//  'deploy:vendor',
   'artisan:storage:link',
-//  'artisan:responsecache:clear',
+  'artisan:responsecache:clear',
   'artisan:view:clear',
   'artisan:cache:clear',
   'artisan:config:cache',
   // publish is a group task which includes symlink, unlock, cleanup and success.
   'deploy:publish',
-//  'deploy:symlink',
-//  'deploy:unlock',
-//  'deploy:cleanup',
-//  'deploy:success',
 ]);
 
 
