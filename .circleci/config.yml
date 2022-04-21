@@ -121,6 +121,12 @@ deploy: &deploy
     - attach_workspace:
         at: /home/circleci/project
     - run:
+        name: Install Deployer
+        command: |
+          curl -LO https://deployer.org/deployer.phar
+          sudo mv deployer.phar /usr/local/bin/dep
+          sudo chmod +x /usr/local/bin/dep
+    - run:
         name: Install deploy dependencies
         command: sudo apt-get update && sudo apt-get install rsync python3 python3-venv
     - run:
@@ -139,7 +145,7 @@ deploy: &deploy
         command: ssh-keyscan -H $(echo "$PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
         name: Deploy to $PROD_DEPLOY_URL
-        command: php artisan deploy production
+        command: ./vendor/deployer/deployer/deployer.phar deploy 13.56.128.221
     - run: ssh deploy@$PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
@@ -152,6 +158,12 @@ deploy_stage: &deploy_stage
     - checkout
     - attach_workspace:
         at: /home/circleci/project
+    - run:
+        name: Install Deployer
+        command: |
+          curl -LO https://deployer.org/deployer.phar
+          sudo mv deployer.phar /usr/local/bin/dep
+          sudo chmod +x /usr/local/bin/dep
     - run:
         name: Install deploy dependencies
         command: sudo apt-get update && sudo apt-get install rsync python3 python3-venv
@@ -174,7 +186,7 @@ deploy_stage: &deploy_stage
         command: ssh-keyscan -H $(echo "$STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
         name: Deploy to $STAGE_HOST_URL
-        command: php artisan deploy staging
+        command: ./vendor/deployer/deployer/deployer.phar deploy stage.video.hammer.cogapp.com
     - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
@@ -191,6 +203,12 @@ deploy_dev: &deploy_dev
     - attach_workspace:
         at: /home/circleci/project
     - run:
+        name: Install Deployer
+        command: |
+          curl -LO https://deployer.org/deployer.phar
+          sudo mv deployer.phar /usr/local/bin/dep
+          sudo chmod +x /usr/local/bin/dep
+    - run:
         name: Install deploy dependencies
         command: sudo apt-get update && sudo apt-get install rsync python3 python3-venv
     - run:
@@ -203,7 +221,7 @@ deploy_dev: &deploy_dev
         tag-key: group
         tag-value: bastion
     - run: ssh-keyscan -H $(echo "$DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: php artisan deploy dev
+    - run: ./vendor/deployer/deployer/deployer.phar deploy dev.video.hammer.cogapp.com
     - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
