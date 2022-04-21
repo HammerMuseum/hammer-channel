@@ -86,11 +86,20 @@ set('rsync', [
 ]);
 
 // Hosts
+host('13.56.128.221')
+    ->set('remote_user', 'deploy')
+    ->set('deploy_path', '/var/www/channel.hammer.ucla.edu')
+    ->set('stage', 'production');
+
+host('stage.video.hammer.cogapp.com')
+  ->set('remote_user', 'deploy')
+  ->set('deploy_path', '/var/www/stage.video.hammer.cogapp.com')
+  ->set('stage', 'staging');
 
 host('dev.video.hammer.cogapp.com')
-    ->set('remote_user', 'deploy')
-    ->set('deploy_path', '/var/www/dev.video.hammer.cogapp.com')
-    ->set('stage', 'dev');
+  ->set('remote_user', 'deploy')
+  ->set('deploy_path', '/var/www/dev.video.hammer.cogapp.com')
+  ->set('stage', 'dev');
 
 // Tasks
 task('deploy', [
@@ -99,7 +108,6 @@ task('deploy', [
   'deploy:lock',
   'deploy:release',
   'rsync',
-//  'deploy:update_code',
   'deploy:shared',
   'deploy:writable',
   'artisan:storage:link',
