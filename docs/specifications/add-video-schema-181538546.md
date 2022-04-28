@@ -32,12 +32,12 @@ This should be in a `<script type="application/ld+json">` tag in the `<head>`
 ```
 
 ## Implementation
-- Use the scehma data from the existing method 'view@VideoController' in the front-end hammer-channel repo and create a VideoObject as following.
+- Use the schema data from the existing method 'view@VideoController' in the front-end hammer-channel repo and create a VideoObject as following.
   - Use 'title' as 'name'
   - Use description as description
   - Use 'thumbnail_url' as 'thumbnailUrl'
   - Use 'duration' as 'duration', match the time format as in below example
-  - Use 'src' from data response as 'contentUrl'
+  - Use '$state["video"]["id"]' from data response and build a URL, e.g. 'https://channel.hammer.ucla.edu/container/$state["video"]["id"]' and put in value of 'contentUrl' in the VideoObject
   - Use date_recorded as the 'uploadDate', match the time format as in below example
   - An example videoObject is below, hard code @context and @type values at the top.
 ```
@@ -55,7 +55,7 @@ This should be in a `<script type="application/ld+json">` tag in the `<head>`
 }
 
 ```
-- In 'TheHeader.vue' include the VideoObject under the <header><script></script></header> tags.
+- In the 'app.blade.php' include the VideoObject under the <header><script></script></header> tags.
 
 ## Documentation required
 No
