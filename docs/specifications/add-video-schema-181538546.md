@@ -51,7 +51,7 @@ This should be in a `<script type="application/ld+json">` tag in the `<head>`
   ],
   "uploadDate": "2021-01-19T13:25:00.000Z",
   "duration": "PT00H34M30S",
-  "contentUrl": "https://assetbank-us-east-1.s3.amazonaws.com/hammer_b0f882c43c57e94c02d0900798e043bb/c7a/PP202101-04.mp4?response-content-disposition=attachment%3B%20filename%3D%22PP202101-04.mp4%22%3B%20filename%2A%3DUTF-8%27%27PP202101%252D04%252Emp4&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220201T131134Z&X-Amz-SignedHeaders=host&X-Amz-Expires=900&X-Amz-Credential=AKIATJ7XNAYVIDRUS5GS%2F20220201%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=abe99ce7cbc5f54d2be79742dcde7f28e5e244e9fee575c44f8e2b1d7817afc8"
+  "contentUrl": "https://channel.hammer.ucla.edu/container/1728"
 }
 
 ```
