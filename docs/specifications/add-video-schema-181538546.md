@@ -55,7 +55,7 @@ This should be in a `<script type="application/ld+json">` tag in the `<head>`
 }
 
 ```
-- In the 'app.blade.php' include the VideoObject under the <header><script></script></header> tags.
+- In the 'app.blade.php' include the VideoObject under the '<header><script></script></header>' tags.
 
 ## Documentation required
 No
