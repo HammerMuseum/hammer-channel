@@ -36,9 +36,9 @@ This should be in a `<script type="application/ld+json">` tag in the `<head>`
   - Use 'title' as 'name'
   - Use description as description
   - Use 'thumbnail_url' as 'thumbnailUrl'
-  - Use 'duration' as 'duration', convert the format to ''
+  - Use 'duration' as 'duration', match the time format as in below example
   - Use 'src' from data response as 'contentUrl'
-  - Use date_recorded as the 'uploadDate'
+  - Use date_recorded as the 'uploadDate', match the time format as in below example
   - An example videoObject is below, hard code @context and @type values at the top.
 ```
 {
