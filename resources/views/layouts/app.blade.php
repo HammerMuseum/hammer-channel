@@ -44,6 +44,11 @@
   <script>
     window.INITIAL_STATE = "{!! addslashes(json_encode($state ?? '')) !!}";
   </script>
+  <script type="application/ld+json">
+    @if(isset($VideoObject))
+      {!! $VideoObject !!}
+    @endif
+  </script>
 </head>
 
 <body>

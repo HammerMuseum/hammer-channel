@@ -74,10 +74,12 @@ class VideoController extends Controller
                 'slug' => $video['title_slug'],
             ]);
         }
+        $videoObject = $this->getVideoObject($id, $data);
 
         $this->setMeta($video);
 
         return view('video', [
+            'VideoObject' => json_encode($videoObject, true),
             'state' => $this->getAppState($id, $data),
             'src' => $video['src'],
             'thumbnailUrl' => '/images/d/large/' . $video['thumbnailId'] . '.jpg',
@@ -190,5 +192,29 @@ class VideoController extends Controller
     private function validateSlug(string $valid, string $submitted)
     {
         return $valid === $submitted;
+    }
+
+  /**
+   * @param $id
+   * @param $data
+   * @return array
+   */
+    public function getVideoObject($id, $data)
+    {
+        $videoObject = [];
+        if (!empty($data['data'])) {
+            $video = $data['data'][0];
+            $videoObject['@context'] = "https://schema.org";
+            $videoObject['@type'] = "VideoObject";
+            $videoObject['name'] = $video['title'];
+            $videoObject['description'] = $video['description'];
+            $videoObject['thumbnailUrl'] = $video['thumbnail_url'];
+            $videoObject['uploadDate'] = date('Y-m-d h:i:s', strtotime($video['date_recorded']));
+            $parsed = date_parse($video['duration']);
+            $videoObject['duration'] = 'PT' . sprintf("%02d", $parsed['hour']) . 'H' .
+              sprintf("%02d", $parsed['minute']) . 'M' . sprintf("%02d", $parsed['second']) .'S';
+            $videoObject['embedUrl'] = url('/container/' . $id);
+        }
+        return $videoObject;
     }
 }
