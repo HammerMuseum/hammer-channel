@@ -1,4 +1,4 @@
-@extends('layouts.app', ['VideoObject' => $VideoObject])
+@extends('layouts.app', ['videoObject' => $videoObject])
 
 @section('content')
 

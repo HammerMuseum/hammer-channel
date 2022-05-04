@@ -79,7 +79,7 @@ class VideoController extends Controller
         $this->setMeta($video);
 
         return view('video', [
-            'VideoObject' => json_encode($videoObject, true),
+            'videoObject' => json_encode($videoObject, true),
             'state' => $this->getAppState($id, $data),
             'src' => $video['src'],
             'thumbnailUrl' => '/images/d/large/' . $video['thumbnailId'] . '.jpg',
