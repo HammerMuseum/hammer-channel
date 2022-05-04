@@ -40,4 +40,7 @@ Access to the dev site https://dev.video.hammer.cogapp.com/
 - Goto Hammer channel and click on any video, now open dev tools and select the <html> tag and right click and choose edit as html -> select all and copy.
 - Now go to https://search.google.com/test/rich-results and choose the code panel and paste the copied html from the page.
 - Now press 'test' button and wait for results, you should get '1 valid item detected'.
+- Now go to dev tools and find the <script type="application/ld+json"></script> tag.
+  - Validate the duration stamp in json matches the duration of actual video
+  - Ensure Json is correct according to video data, for e.g. title, description and other properties matches
 - Now try 5 more random videos as above and all should have 1 valid item.
