@@ -89,6 +89,8 @@
             <template #toggle />
             <button
               :class="['footer__close-button', 'button', 'button--icon']"
+              aria-label="Close information about the archive"
+              aria-controls="about-overlay"
               @click="handleFooterClose"
             >
               <BaseIcon
@@ -96,7 +98,7 @@
                 height="36"
                 view-box="0 0 36 36"
                 icon-name="close-footer"
-                title="Close the description overlay"
+                title="Close the about overlay"
               >
                 <ClosePinkIcon />
               </BaseIcon>
@@ -143,6 +145,8 @@
             <template #toggle />
             <button
               :class="['footer__close-button', 'button', 'button--icon']"
+              aria-label="Close the search panel"
+              aria-controls="search-overlay"
               @click="handleSearchClose"
             >
               <BaseIcon
@@ -150,7 +154,7 @@
                 height="36"
                 view-box="0 0 36 36"
                 icon-name="close-footer"
-                title="Close the description overlay"
+                title="Close the search overlay"
               >
                 <ClosePinkIcon />
               </BaseIcon>
