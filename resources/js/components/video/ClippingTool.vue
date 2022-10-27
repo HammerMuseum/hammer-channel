@@ -82,7 +82,7 @@
           <button
             :disabled="!canGenerateClip"
             :class="['button', 'button--action']"
-            aria-label="Copy citation to clipboard"
+            aria-label="Copy clip link to clipboard"
             data-tracking-gtm="video page links"
             @click="copyToClipboard(clipUrl)"
           >
