@@ -53,6 +53,11 @@ body {
   outline-offset: 0;
 }
 
+[data-interaction-mode="keyboard"] :focus-visible {
+  outline: var(--highlight-primary) auto 2px;
+  outline-offset: 4px;
+}
+
 [data-interaction-mode="pointer"] :focus {
   outline: none;
 }
