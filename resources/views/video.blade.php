@@ -17,7 +17,7 @@
     <div class="panel--left">
       <div class="video-player__wrapper">
           <div class="video-player__container">
-            <div id="video" class="video-player" label="Video Player" style="gap:24px;max-width:66vw;margin:0 auto;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;">
+            <div id="video" class="video-player" aria-label="Video Player" style="gap:24px;max-width:66vw;margin:0 auto;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;">
               <video
                 style="width: 100%;height: 100%;height:auto;"
                 poster="{{ $thumbnailUrl }}"
