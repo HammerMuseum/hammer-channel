@@ -161,6 +161,7 @@
             </button>
             <SearchBar
               v-hammer:swipe.up="handleSearchClose"
+              id-prefix="header"
               :classes="['search-bar--overlay']"
               focus
               :tags="tags"

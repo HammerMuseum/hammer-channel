@@ -48,7 +48,9 @@
             class="inline-block--search"
           >
             <div class="background--grate">
-              <SearchBar />
+              <SearchBar
+                id-prefix="carousel"
+              />
             </div>
           </div>
           <div

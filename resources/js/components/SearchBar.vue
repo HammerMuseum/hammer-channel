@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="`${idPrefix}-search-bar__container`"
     :class="['search-bar', ...classes]"
   >
     <div
@@ -32,8 +33,8 @@
               width="48"
               height="48"
               view-box="0 0 24 24"
-              icon-name="search-bar"
               title="Submit search"
+              :icon-name="`${idPrefix}-search-bar`"
             >
               <SearchIcon />
             </BaseIcon>
@@ -80,6 +81,10 @@ export default {
     VInput,
   },
   props: {
+    idPrefix: {
+      type: String,
+      default: '',
+    },
     classes: {
       type: Array,
       default: () => [],
