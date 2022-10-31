@@ -181,7 +181,7 @@
                   class="search-page__facet-controls"
                 >
                   <button
-                    aria-owns="topics"
+                    :aria-owns="openFacetName === 'topics' ? openFacetName : false"
                     data-facet-id="topics"
                     :class="['button',
                              'search-facet__label',
@@ -193,7 +193,7 @@
                     <span aria-label="Search filter: Topics & Tags">Topics & Tags</span>
                   </button>
                   <button
-                    aria-owns="people"
+                    :aria-owns="openFacetName === 'people' ? openFacetName : false"
                     data-facet-id="people"
                     :class="['button',
                              'search-facet__label',
@@ -204,7 +204,7 @@
                     <span aria-label="Search filter: People">People</span>
                   </button>
                   <button
-                    aria-owns="playlists"
+                    :aria-owns="openFacetName === 'playlists' ? openFacetName : false"
                     data-facet-id="playlists"
                     :class="['button',
                              'search-facet__label',
@@ -215,7 +215,7 @@
                     <span aria-label="Search filter: Playlists">Playlists</span>
                   </button>
                   <button
-                    aria-owns="date"
+                    :aria-owns="openFacetName === 'date' ? openFacetName : false"
                     data-facet-id="date"
                     :class="['button',
                              'search-facet__label',
