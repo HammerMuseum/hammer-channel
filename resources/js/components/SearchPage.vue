@@ -182,6 +182,7 @@
                 >
                   <button
                     :aria-owns="openFacetName === 'topics' ? openFacetName : false"
+                    aria-label="Search filter: Topics & Tags"
                     data-facet-id="topics"
                     :class="['button',
                              'search-facet__label',
@@ -190,10 +191,11 @@
                     :disabled="!topicsAndTags.length"
                     @click="toggleFacetOverlay('topics')"
                   >
-                    <span aria-label="Search filter: Topics & Tags">Topics & Tags</span>
+                    Topics & Tags
                   </button>
                   <button
                     :aria-owns="openFacetName === 'people' ? openFacetName : false"
+                    aria-label="Search filter: People"
                     data-facet-id="people"
                     :class="['button',
                              'search-facet__label',
@@ -201,10 +203,11 @@
                     :disabled="!facets.speakers.items.length"
                     @click="toggleFacetOverlay('people')"
                   >
-                    <span aria-label="Search filter: People">People</span>
+                    People
                   </button>
                   <button
                     :aria-owns="openFacetName === 'playlists' ? openFacetName : false"
+                    aria-label="Search filter: Playlists"
                     data-facet-id="playlists"
                     :class="['button',
                              'search-facet__label',
@@ -212,10 +215,11 @@
                     :disabled="!facets.in_playlists.items.length"
                     @click="toggleFacetOverlay('playlists')"
                   >
-                    <span aria-label="Search filter: Playlists">Playlists</span>
+                    Playlists
                   </button>
                   <button
                     :aria-owns="openFacetName === 'date' ? openFacetName : false"
+                    aria-label="Search filter: Date"
                     data-facet-id="date"
                     :class="['button',
                              'search-facet__label',
@@ -223,7 +227,7 @@
                     :disabled="!facets.date_recorded.items.length"
                     @click="toggleFacetOverlay('date')"
                   >
-                    <span aria-label="Search filter: Date">Date</span>
+                    Date
                   </button>
                 </div>
               </div>
