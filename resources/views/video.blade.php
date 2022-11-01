@@ -34,9 +34,9 @@
       <div class="tabs vp__tabs">
         <ul class="nav nav-tabs">
           <li role="presentation" class="nav-item nav-link active">
-            <h3 class="vp__tabs__label">
+            <h2 class="vp__tabs__label">
               Info
-            </h3>
+            </h2>
           </li>
         </ul>
       </div>

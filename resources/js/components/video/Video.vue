@@ -75,12 +75,12 @@
                 >
                   <InfoIcon />
                 </BaseIcon>
-                <h3
+                <h2
                   class="vp__tabs__label"
                   data-tracking-gtm="video page links"
                 >
                   Info
-                </h3>
+                </h2>
               </template>
               <About
                 :description="video.description"
@@ -105,12 +105,12 @@
                 >
                   <TranscriptIcon />
                 </BaseIcon>
-                <h3
+                <h2
                   class="vp__tabs__label"
                   data-tracking-gtm="video page links"
                 >
                   Transcript
-                </h3>
+                </h2>
               </template>
               <Transcript
                 :title="video.title"
@@ -132,12 +132,12 @@
                 >
                   <ClipIcon />
                 </BaseIcon>
-                <h3
+                <h2
                   data-tracking-gtm="video page links"
                   :class="['vp__tabs__label', {'vp__tabs__label--notify': isClip}] "
                 >
                   Clip
-                </h3>
+                </h2>
               </template>
               <ClippingTool
                 :clip-start="clipStart"
@@ -160,12 +160,12 @@
                 >
                   <ShareIcon />
                 </BaseIcon>
-                <h3
+                <h2
                   class="vp__tabs__label"
                   data-tracking-gtm="video page links"
                 >
                   Share
-                </h3>
+                </h2>
               </template>
               <Share
                 :title="video.title"
@@ -185,12 +185,12 @@
                 >
                   <RelatedIcon />
                 </BaseIcon>
-                <h3
+                <h2
                   class="vp__tabs__label"
                   data-tracking-gtm="video page links"
                 >
                   Related
-                </h3>
+                </h2>
               </template>
               <RelatedContent
                 :items="relatedContent"
