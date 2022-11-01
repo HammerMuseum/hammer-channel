@@ -19,6 +19,7 @@
               label="Set clip start time"
               placeholder="00:00:00"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+              role="alert"
               :classes="{
                 root: 'clip-control__input-wrap',
                 text: 'visually-hidden',
@@ -51,6 +52,7 @@
               label="Set clip end time"
               placeholder="00:00:00"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
+              role="alert"
               :classes="{
                 root: 'clip-control__input-wrap',
                 text: 'visually-hidden',
@@ -83,6 +85,7 @@
             :disabled="!canGenerateClip"
             :class="['button', 'button--action']"
             aria-label="Copy clip link to clipboard"
+            aria-live="polite"
             data-tracking-gtm="video page links"
             @click="copyToClipboard(clipUrl)"
           >
