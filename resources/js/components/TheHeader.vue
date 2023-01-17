@@ -82,6 +82,7 @@
             transition="slide-down"
             bg-transition="fade"
             no-scroll
+            tag="div"
             :classes="{
               bg: 'drawer__container drawer__container--footer',
               content: ['drawer__content', 'drawer__content--footer'] }"
@@ -133,6 +134,7 @@
             transition="slide-down"
             bg-transition="fade"
             no-scroll
+            tag="div"
             :classes="{
               bg: 'drawer__container',
               content: [
