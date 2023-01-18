@@ -1,12 +1,7 @@
 <template>
   <div class="container container--full">
-    <NavigationBar
-      :items="videos"
-      :active-item="currentSectionInView"
-      :classes="['topic-menu']"
-    />
     <div
-      id="start-of-content"
+    id="start-of-content"
       class="page-wrapper page-wrapper--full"
     >
       <p class="strapline">
@@ -99,6 +94,11 @@
         </template>
       </div>
     </div>
+    <NavigationBar
+      :items="videos"
+      :active-item="currentSectionInView"
+      :classes="['topic-menu']"
+    />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'container',
+      'container--full',
       'container--fixed',
       'container--top',
       'header-container',

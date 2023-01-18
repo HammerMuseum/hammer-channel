@@ -6,6 +6,13 @@
   width: 100%;
   z-index: 2;
   box-shadow: 0 6px 10px 6px var(--background-darker);
+
+  /* for small desktop screens, render nav in normal document flow.
+  This allows mobile users to still see the nav as regular desktop users */
+  @media (max-width: 768px) and (orientation: landscape) {
+    position: absolute;
+    bottom: auto;
+  }
 }
 
 .navigation-bar__item {
