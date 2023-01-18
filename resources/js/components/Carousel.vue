@@ -275,12 +275,6 @@ export default {
 </script>
 
 <style>
-@media (max-width: 50em) {
-  .carousel-controls {
-    display: none;
-  }
-}
-
 .carousel-controls {
   position: absolute;
   width: 100%;
