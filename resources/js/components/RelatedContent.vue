@@ -9,9 +9,6 @@
       :controls="true"
       :show-heading="false"
     >
-      <template #heading>
-        Related content
-      </template>
       <CarouselSlide
         v-for="item in items"
         :key="item.id"

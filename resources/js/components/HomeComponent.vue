@@ -21,13 +21,6 @@
         :show-heading="false"
         :full-width="true"
       >
-        <template #heading>
-          <span
-            tabindex="0"
-            role="heading"
-            aria-level="2"
-          >Featured videos</span>
-        </template>
         <FeaturedCarouselSlide
           v-for="video in featured"
           :key="video.id"

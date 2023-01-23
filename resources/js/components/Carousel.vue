@@ -3,8 +3,9 @@
     :id="id | filterId"
   >
     <h2
+      v-if="showHeading"
       :id="headingId |filterId "
-      :class="['carousel__title', {'visually-hidden': !showHeading}]"
+      :class="['carousel__title']"
     >
       <slot name="heading" />
     </h2>
