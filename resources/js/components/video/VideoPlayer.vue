@@ -106,6 +106,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    id: {
+      type: String,
+      default() {
+        return '';
+      },
+    },
     title: {
       type: String,
       default() {
@@ -314,6 +320,7 @@ export default {
         this.on('timeupdate', function () {
           self.currentTime = this.currentTime();
           self.$emit('timeupdate', self.currentTime);
+          localStorage.setItem(`lastWatched-${self.id}`, self.currentTime);
         });
 
         this.on('fullscreenchange', function () {
@@ -326,10 +333,20 @@ export default {
           const duration = Math.ceil(parseInt(this.duration(), 10));
           self.$emit('loadedmetadata', duration);
 
+          // defer to query param i.e. a highlighted clip
           if (self.hasActiveClip) {
             self.initClipMarkers(self.clipStart, self.clipEnd);
             self.initClipPosition();
+          } else {
+            // otherwise resume from last playback (if it exists)
+            const initTime = localStorage.getItem(`lastWatched-${self.id}`) || 0;
+            self.player.currentTime(initTime);
           }
+        });
+
+        this.on('ended', function () {
+          // when video fully watched, reset status
+          localStorage.removeItem(`lastWatched-${self.id}`);
         });
       });
 
