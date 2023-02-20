@@ -338,9 +338,21 @@ export default {
             self.initClipMarkers(self.clipStart, self.clipEnd);
             self.initClipPosition();
           } else {
-            // otherwise resume from last playback (if it exists)
-            const initTime = localStorage.getItem(`lastWatched-${self.id}`) || 0;
-            self.player.currentTime(initTime);
+            // check if returning to video
+            const lastWatched = localStorage.getItem(`lastWatched-${self.id}`) || 0;
+            // round down to the nearest second
+            const parsedTime = Math.floor(parseFloat(lastWatched));
+
+            // if returning, check if user wants to resume or restart
+            if (parsedTime > 0) {
+              // modal handles setting time
+              const modal = self.resumeModal(parsedTime);
+              // when the modal closes, resume playback.
+              modal.on('modalclose', function () {
+                self.player.play();
+              });
+            }
+            // otherwise player is initialised at 0 seconds
           }
         });
 
@@ -445,6 +457,35 @@ export default {
       this.player.src(val);
       this.initOverlays();
     },
+    resumeModal(time) {
+      const container = document.createElement('div');
+      container.className = 'modal__container';
+
+      const heading = document.createElement('h2');
+      heading.className = 'modal__heading';
+      heading.innerText = 'Resume or restart?';
+
+      const resumeButton = document.createElement('button');
+      resumeButton.className = 'modal__button';
+      resumeButton.innerText = `Resume at ${time} second${time > 1 ? 's' : ''}`;
+
+      const restartButton = document.createElement('button');
+      restartButton.className = 'modal__button';
+      restartButton.innerText = 'Restart from the beginning';
+
+      container.append(heading, resumeButton, restartButton);
+
+      const modal = this.player.createModal(container);
+      resumeButton.onclick = () => {
+        this.player.currentTime(time);
+        modal.close();
+      };
+      restartButton.onclick = () => {
+        this.player.currentTime(0);
+        modal.close();
+      };
+      return modal;
+    },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
       let initdone = false;
@@ -506,5 +547,24 @@ export default {
   .video-player__wrapper {
     margin: 0;
   }
+}
+
+.modal__container {
+  display: flex;
+  font-family: var(--font-family--body);
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal__heading {
+  margin-bottom: 8px;
+}
+
+.modal__button {
+  width: max-content;
+  padding: 0;
+  font-family: inherit;
+  font-size: 16px !important; /* required to override video.js styling */
+  cursor: pointer;
 }
 </style>
