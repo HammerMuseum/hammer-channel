@@ -355,9 +355,26 @@ export default {
           }
         });
 
+        this.on('playing', function () {
+          // when video fully watched, clear interval & reset status
+          if (!this.intervalId) {
+            this.intervalId = self.updateLastWatched();
+          }
+        });
+
+        this.on('pause', function () {
+          // when video paused, clear interval
+          this.intervalId = clearInterval(this.intervalId);
+        });
+
+        this.on('dispose', function () {
+          // when video paused, clear interval
+          this.intervalId = clearInterval(this.intervalId);
+        });
+
         this.on('ended', function () {
           // when video fully watched, clear interval & reset status
-          clearInterval(this.intervalId);
+          this.intervalId = clearInterval(this.intervalId);
           localStorage.removeItem(`lastWatched-${self.id}`);
         });
       });
@@ -372,7 +389,6 @@ export default {
 
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
-        this.intervalId = self.updateLastWatched();
       });
     },
     async onFullscreenChange() {
