@@ -320,7 +320,6 @@ export default {
         this.on('timeupdate', function () {
           self.currentTime = this.currentTime();
           self.$emit('timeupdate', self.currentTime);
-          localStorage.setItem(`lastWatched-${self.id}`, self.currentTime);
         });
 
         this.on('fullscreenchange', function () {
@@ -357,7 +356,8 @@ export default {
         });
 
         this.on('ended', function () {
-          // when video fully watched, reset status
+          // when video fully watched, clear interval & reset status
+          clearInterval(this.intervalId);
           localStorage.removeItem(`lastWatched-${self.id}`);
         });
       });
@@ -372,6 +372,7 @@ export default {
 
       this.player.ready(function () {
         self.player.addRemoteTextTrack(self.track, true);
+        this.intervalId = self.updateLastWatched();
       });
     },
     async onFullscreenChange() {
@@ -467,11 +468,11 @@ export default {
 
       const resumeButton = document.createElement('button');
       resumeButton.className = 'modal__button';
-      resumeButton.innerText = `Resume at ${time} second${time > 1 ? 's' : ''}`;
+      resumeButton.innerText = `Resume video at ${time} second${time > 1 ? 's' : ''}`;
 
       const restartButton = document.createElement('button');
       restartButton.className = 'modal__button';
-      restartButton.innerText = 'Restart from the beginning';
+      restartButton.innerText = 'Restart video';
 
       container.append(heading, resumeButton, restartButton);
 
@@ -485,6 +486,17 @@ export default {
         modal.close();
       };
       return modal;
+    },
+    updateLastWatched(delay = 1000) {
+      return setInterval(() => {
+        try {
+          // https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem#exceptions
+          // in case localstorage is full
+          localStorage.setItem(`lastWatched-${this.id}`, this.player.currentTime());
+        } catch (error) {
+          console.error(error);
+        }
+      }, delay);
     },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
