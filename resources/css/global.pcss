@@ -101,6 +101,19 @@ p {
   white-space: nowrap;
 }
 
+/* Screen reader only (not visible) (stolen from Tailwind CSS) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .carousels {
   padding-left: 10px;
   margin-bottom: 25vh;

@@ -13,12 +13,18 @@
             >
               Set start time
             </button>
+            <!-- Screen reader announces start time on change -->
+            <div
+              class="sr-only"
+              aria-live="polite"
+            >
+              {{ `Start time set to ${clipStartTime}` }}
+            </div>
             <VInput
               ref="startInput"
               v-model="clipStartTime"
               label="Set clip start time"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
-              aria-live="assertive"
               :classes="{
                 root: 'clip-control__input-wrap',
                 text: 'visually-hidden',
@@ -45,12 +51,18 @@
             >
               Set end time
             </button>
+            <!-- Screen reader announces end time on change -->
+            <div
+              class="sr-only"
+              aria-live="polite"
+            >
+              {{ `End time set to ${clipEndTime}` }}
+            </div>
             <VInput
               ref="endInput"
               v-model="clipEndTime"
               label="Set clip end time"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
-              aria-live="assertive"
               :classes="{
                 root: 'clip-control__input-wrap',
                 text: 'visually-hidden',
