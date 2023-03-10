@@ -40,7 +40,6 @@
             <div
               ref="transcriptContent"
               class="transcript__content"
-              tabindex="0"
             >
               <span
                 id="transcript-anchor"
