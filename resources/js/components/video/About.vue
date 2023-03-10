@@ -5,9 +5,9 @@
         v-if="playlists.length"
         class="ui-table"
       >
-        <h4 class="ui-list__title">
+        <h3 class="ui-list__title">
           Part of
-        </h4>
+        </h3>
         <ul
           class="ui-list"
         >
@@ -29,9 +29,9 @@
         v-if="people.length"
         class="ui-table"
       >
-        <h4 class="ui-list__title">
+        <h3 class="ui-list__title">
           Featuring
-        </h4>
+        </h3>
         <ul
           class="ui-list"
         >
@@ -53,9 +53,9 @@
         v-if="topics.length"
         class="ui-table"
       >
-        <h4 class="ui-list__title">
+        <h3 class="ui-list__title">
           Topics
-        </h4>
+        </h3>
         <ul
           class="ui-list"
         >

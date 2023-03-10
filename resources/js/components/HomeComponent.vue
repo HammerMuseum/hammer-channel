@@ -1,12 +1,7 @@
 <template>
   <div class="container container--full">
-    <NavigationBar
-      :items="videos"
-      :active-item="currentSectionInView"
-      :classes="['topic-menu']"
-    />
     <div
-      id="start-of-content"
+    id="start-of-content"
       class="page-wrapper page-wrapper--full"
     >
       <p class="strapline">
@@ -26,13 +21,6 @@
         :show-heading="false"
         :full-width="true"
       >
-        <template #heading>
-          <span
-            tabindex="0"
-            role="heading"
-            aria-level="2"
-          >Featured videos</span>
-        </template>
         <FeaturedCarouselSlide
           v-for="video in featured"
           :key="video.id"
@@ -48,7 +36,9 @@
             class="inline-block--search"
           >
             <div class="background--grate">
-              <SearchBar />
+              <SearchBar
+                id-prefix="carousel"
+              />
             </div>
           </div>
           <div
@@ -97,6 +87,11 @@
         </template>
       </div>
     </div>
+    <NavigationBar
+      :items="videos"
+      :active-item="currentSectionInView"
+      :classes="['topic-menu']"
+    />
   </div>
 </template>
 

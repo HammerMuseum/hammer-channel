@@ -41,6 +41,7 @@
         <button
           class="share-button button button--icon"
           aria-label="Get citation for video"
+          aria-controls="citation"
           data-tracking-gtm="video page links"
           @click="showCitation = !showCitation"
         >
@@ -62,13 +63,14 @@
       <transition name="fade">
         <div
           v-show="showCitation"
+          id="citation"
           class="citation"
+          aria-live="polite"
         >
           <h4 class="video-meta__label">
             Citation
           </h4>
           <p
-            id="citation"
             name="citation"
             class="citation__content"
           >
@@ -77,7 +79,6 @@
           <div class="citation__copy">
             <button
               :class="['button', 'button--action']"
-              aria-label="Copy citation to clipboard"
               data-tracking-gtm="video page links"
               @click="copyToClipboard(citation)"
             >

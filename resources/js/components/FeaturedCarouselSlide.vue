@@ -25,7 +25,7 @@
           <template v-else>
             <span class="ui-card__title">{{ title }}</span>
             <div class="ui-card__teaser">
-              <h2 class="ui-card__subtitle">
+              <h2 v-if="subtitle" class="ui-card__subtitle">
                 {{ subtitle }}
               </h2>
               <RichText

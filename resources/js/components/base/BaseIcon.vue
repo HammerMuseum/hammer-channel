@@ -6,7 +6,7 @@
     :height="height"
     :viewBox="viewBox"
     :aria-labelledby="iconName"
-    role="presentation"
+    role="img"
   >
     <title
       :id="iconName"
