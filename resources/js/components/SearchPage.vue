@@ -663,7 +663,7 @@ export default {
 
       // Split the list of IDs into an array and add the current ID
       const idArray = savedIds.split('|');
-      idArray.push(item.asset_id);
+      idArray.push(item.asset_id.toString());
 
       // Use a Set to remove duplicates and convert back to an array
       const uniqueIds = Array.from(new Set(idArray));

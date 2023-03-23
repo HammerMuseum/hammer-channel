@@ -57,6 +57,29 @@
           </BaseIcon>
           <span class="icon-text">Cite</span>
         </button>
+        <button
+          class="share-button button button--icon"
+          aria-label="Get citation for video"
+          aria-controls="citation"
+          data-tracking-gtm="video page links"
+          @click="saveVideo(id)"
+        >
+          <BaseIcon
+            width="36"
+            height="36"
+            view-box="0 0 24 24"
+            fill="none"
+            stroke-width="1.5"
+            stroke="currentColor"
+            icon-name="clock"
+            icon-color="none"
+            title="Watch later"
+            :class="['icon--reverse']"
+          >
+            <ClockIcon />
+          </BaseIcon>
+          <span class="icon-text">Watch<br>later</span>
+        </button>
       </div>
     </template>
     <template v-slot:content>
@@ -98,6 +121,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import VideoMeta from '../VideoMeta.vue';
 import CopyTo from '../../mixins/copyToClipboard';
 
@@ -118,6 +142,10 @@ export default {
     },
     title: {
       type: String,
+      required: true,
+    },
+    id: {
+      type: Number,
       required: true,
     },
   },
@@ -151,6 +179,25 @@ export default {
     },
     twitter() {
       return this.providers.twitter.replace(':url', encodeURIComponent(this.url)).replace(':text', encodeURIComponent(this.text));
+    },
+  },
+  methods: {
+    saveVideo(videoId) {
+      // Get the current list of saved video IDs from the cookie
+      const savedIds = Cookies.get('saved_video_ids') || '';
+
+      // Split the list of IDs into an array and add the current ID
+      const idArray = savedIds.split('|');
+      idArray.push(videoId.toString());
+
+      // Use a Set to remove duplicates and convert back to an array
+      const uniqueIds = Array.from(new Set(idArray));
+
+      // Filter out any empty items in the array and join the remaining IDs
+      // into a pipe-separated string
+      const newIds = uniqueIds.filter((id) => id !== '').join('|');
+
+      Cookies.set('saved_video_ids', newIds);
     },
   },
 };

@@ -164,10 +164,11 @@
                   class="vp__tabs__label"
                   data-tracking-gtm="video page links"
                 >
-                  Share
+                  Share &amp; Save
                 </h2>
               </template>
               <Share
+                :id="video.asset_id"
                 :title="video.title"
                 :date="video.date_recorded"
                 :duration="video.duration"

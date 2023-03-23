@@ -22,6 +22,9 @@
         >
           {{ new Date(item.date_recorded) | dateFormat('MMM D, YYYY') }}
         </span>
+        <button @click="saveVideo(item)">
+          Save video to watch later
+        </button>
         <RichText
           :classes="['ui-card__description']"
           :text="item.description"
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import truncate from 'lodash/truncate';
 import RichText from './RichText.vue';
 import UiCard from './UiCard.vue';
@@ -81,5 +85,24 @@ export default {
       return this.item.title;
     },
   },
+  methods: {
+    saveVideo(item) {
+      // Get the current list of saved video IDs from the cookie
+      const savedIds = Cookies.get('saved_video_ids') || '';
+
+      // Split the list of IDs into an array and add the current ID
+      const idArray = savedIds.split('|');
+      idArray.push(item.asset_id.toString());
+
+      // Use a Set to remove duplicates and convert back to an array
+      const uniqueIds = Array.from(new Set(idArray));
+
+      // Filter out any empty items in the array and join the remaining IDs
+      // into a pipe-separated string
+      const newIds = uniqueIds.filter((id) => id !== '').join('|');
+
+      Cookies.set('saved_video_ids', newIds);
+    },
+  }
 };
 </script>
