@@ -5,6 +5,7 @@
       class="page-wrapper page--search"
     >
       <SearchPageHeader
+        title="Watch later"
         :loading="loading"
         :extra-classes="['heading', 'heading--primary', 'heading--search']"
       >
@@ -40,74 +41,6 @@
               </button>
             </a>
           </div>
-        </template>
-        <template #extras>
-          <button
-            class="button button--action button--search-toggle button--small-devices"
-            @click="toggleSearchFilters"
-          >
-            {{ 'Search and filter' }}
-          </button>
-          <VToggle
-            transition="slide-down"
-            :classes="{
-              root: 'search-page__sorting',
-              label: 'search-page__sorting-control button',
-              content: 'search-page__sorting-content'
-            }"
-          >
-            <template #label>
-              <span
-                class="search-page__sorting-control-label"
-              >
-                <span>Sort by</span>
-                <BaseIcon
-                  width="18"
-                  height="18"
-                  view-box="0 0 36 36"
-                  icon-name="sorting-options"
-                  title="Sorting options"
-                >
-                  <DropdownIcon />
-                </BaseIcon>
-              </span>
-            </template>
-
-            <template #default>
-              <ul>
-                <li>
-                  <RouterLink
-                    aria-label="Sort by date from newest to oldest"
-                    class="link link--text"
-                    :to="{
-                      name: 'search',
-                      query: {
-                        ...$route.query,
-                        ...{ sort: 'date_recorded', order: 'desc' }
-                      }
-                    }"
-                  >
-                    Date (newest-oldest)
-                  </RouterLink>
-                </li>
-                <li>
-                  <RouterLink
-                    aria-label="Sort by date from oldest to newest"
-                    class="link link--text"
-                    :to="{
-                      name: 'search',
-                      query: {
-                        ...$route.query,
-                        ...{ sort: 'date_recorded', order: 'asc' }
-                      }
-                    }"
-                  >
-                    Date (oldest-newest)
-                  </RouterLink>
-                </li>
-              </ul>
-            </template>
-          </VToggle>
         </template>
         <CurrentSearch />
       </SearchPageHeader>
@@ -341,8 +274,8 @@
                   <div class="ui-card__date">
                     {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
                   </div>
-                  <button @click="saveVideo(item)">
-                    Save video to watch later
+                  <button @click="removeVideo(item)">
+                    Remove video
                   </button>
                   <SearchSnippets
                     :snippets="item.snippets"
@@ -385,7 +318,7 @@ import Overlay from './Overlay.vue';
 import { store, mutations } from '../store';
 
 export default {
-  name: 'Search',
+  name: 'WatchLater',
   components: {
     AnimatedNumber,
     CurrentSearch,
@@ -476,7 +409,7 @@ export default {
       handler(to) {
         if (to.query) {
           this.getPageData(stringifyQuery(to.query));
-          let pageTitle = `Search | Hammer Channel | Hammer Museum`;
+          let pageTitle = `Watch Later | Hammer Channel | Hammer Museum`;
 
           if (to.query.term) {
             const term = to.query.term;
@@ -534,7 +467,7 @@ export default {
       this.videos = null;
       this.loading = true;
       axios
-        .get(`/api/search${params}`)
+        .get(`/api/watch-later`)
         .then((response) => {
           this.setVars(response);
           this.loading = false;
@@ -657,20 +590,19 @@ export default {
         this.showFilters = false;
       }
     },
-    saveVideo(item) {
+    removeVideo(item) {
       // Get the current list of saved video IDs from the cookie
       const savedIds = Cookies.get('saved_video_ids') || '';
 
       // Split the list of IDs into an array and add the current ID
       const idArray = savedIds.split('|');
-      idArray.push(item.asset_id);
 
       // Use a Set to remove duplicates and convert back to an array
       const uniqueIds = Array.from(new Set(idArray));
 
-      // Filter out any empty items in the array and join the remaining IDs
-      // into a pipe-separated string
-      const newIds = uniqueIds.filter((id) => id !== '').join('|');
+      // Filter out any empty items, as well as the item to remove
+      // and join the remaining IDs into a pipe-separated string
+      const newIds = uniqueIds.filter((id) => id !== '' && id !== item.asset_id.toString()).join('|');
 
       Cookies.set('saved_video_ids', newIds);
     },

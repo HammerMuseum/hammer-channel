@@ -40,6 +40,11 @@ If you don't want to set this up or want to change the Datatore environment that
 
 ```env
 DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
+```
+
+and 
+
+```env
 MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
 ```
 

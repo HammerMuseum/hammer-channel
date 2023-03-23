@@ -108,7 +108,7 @@ class SearchController extends Controller
             'videos' => isset($data['data']) ? $data['data'] : [],
             'term' => $term,
             'message' => false,
-            'title' => !is_null($term) ? 'Serach results for "' . ucfirst($term) . '"' : '""',
+            'title' => !is_null($term) ? 'Search results for "' . ucfirst($term) . '"' : '""',
             'facets' => $facets,
             'url' => $requestUrl,
             'currentQuery' => $originalQuery,

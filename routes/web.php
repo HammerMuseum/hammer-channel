@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\WatchLaterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::group(['middleware' => 'cacheResponse:3600'], function () {
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/search', [SearchController::class, 'view']);
 });
+
+Route::get('/watch-later', [WatchLaterController::class, 'index']);
 
 # Single action controllers do not work as advertised
 # https://laravel.com/docs/8.x/controllers#single-action-controllers

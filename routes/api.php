@@ -23,3 +23,5 @@ Route::group(['middleware' => 'cacheResponse:3600'], function () {
     Route::get('/', 'HomeController@indexJson');
     Route::get('/search', 'SearchController@viewJson');
 });
+
+Route::get('/watch-later', 'WatchLaterController@indexJson');

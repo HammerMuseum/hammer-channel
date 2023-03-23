@@ -2,7 +2,7 @@
   <header class="search-header">
     <div class="search-header__inner search-header__inner-layout">
       <h1 :class="headingClasses">
-        Search results
+        {{ title }}
       </h1>
       <div
         class="search-header__summary"
@@ -39,6 +39,10 @@
 export default {
   name: 'SearchPageHeader',
   props: {
+    title: {
+      type: String,
+      default: 'Search results',
+    },
     extraClasses: {
       type: Array,
       default() {

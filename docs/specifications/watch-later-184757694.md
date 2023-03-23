@@ -18,6 +18,8 @@ Add a 'Watch later' feature to Hammer Channel so users can save videos in a cust
 
 - Add a "Watch Later" button to the 'Share' tab on the video page. Rename this to 'Share and Save'
 - When the user clicks on the button, the video's id will be stored in a cookie. The button's text should change to "Saved to watch later" to indicate that the video has been added to the playlist. Clicking on the button again will remove the video from the playlist
+- Add a "Watch Later" button video previews. e.g. on search results page. These should behave the same as the version on the video page.
+- Using a notification library or a custom solution. e.g. [vue-toast-notification](https://www.npmjs.com/package/vue-toast-notification) (it looks like this package doesn't handle announcements to screen readers), show a notification at the bottom of the screen when a video is added / removed from the saved videos
 - The playlist will be saved in a cookie using the 'js-cookie' library.
 - Create a new route in routes/web.php, '/watch-later'
 - Add a link to this route in the header, next to 'About' 

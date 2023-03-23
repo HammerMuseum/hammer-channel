@@ -4,6 +4,7 @@ import Home from '../components/HomeComponent.vue';
 import Search from '../components/SearchPage.vue';
 import NotFound from '../components/NotFoundComponent.vue';
 import Video from '../components/video/Video.vue';
+import WatchLater from '../components/WatchLaterPage.vue';
 
 Vue.use(VueRouter);
 
@@ -34,6 +35,16 @@ const routes = [
     name: 'video',
     component: Video,
     props: (route) => ({ id: String(route.params.id) }),
+    meta: {
+      announcer: {
+        skip: true,
+      },
+    },
+  },
+  {
+    path: '/watch-later',
+    name: 'watch-later',
+    component: WatchLater,
     meta: {
       announcer: {
         skip: true,

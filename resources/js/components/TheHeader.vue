@@ -57,6 +57,20 @@
           aria-label="Main navigation"
           class="header__actions"
         >
+          <RouterLink
+            v-slot="{ href, isExactActive, navigate }"
+            class="link"
+            aria-label="Watch later"
+            :to="{name: 'watch-later'}"
+          >
+            <a
+              :href="href"
+              :aria-current="isExactActive ? 'page' : false"
+              @click="navigate"
+            >
+              Watch later
+            </a>
+          </RouterLink>
           <button
             class="button button--action button--light overlay-toggle--footer"
             :aria-pressed="overlay.footer"
