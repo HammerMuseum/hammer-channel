@@ -4,7 +4,8 @@
 
 This application provides the frontend of the Hammer Channel.
 
-To use it with real data, you should either set up the [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore) locally, or, once you have run through the setup below, use the remote Hammer Datastore development environment.
+The data for the front-end comes from the [datastore](https://github.com/hammermuseum/hammer-datastore).
+You will also need to set this up to get access to data in the development environment.
 
 ## Requirements
 
@@ -32,15 +33,15 @@ ddev exec php artisan key:generate && php artisan config:clear && php artisan co
 
 ### Connecting to a remote datastore
 
-By default this application will send queries for data to the local DDEV [Hammer Datastore](https://github.com/hammermuseum/hammer-datastore) environment.
+By default this application will send queries for data to the local 
+DDEV [backend](https://github.com/hammermuseum/hammer-datastore).
 
-If you don't want to set this up or want to change the Datatore environment that the frontend is connecting to, change the following values in the `.env` file.
-
-#### Example connection to staging Datastore environment
+If you don't want to set this up or want to change the environment that 
+the frontend is connecting to, change the following values in the `.env` file.
 
 ```env
-DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
-MIX_DATASTORE_URL=https://stage.datastore.hammer.cogapp.com/api/
+DATASTORE_URL=
+MIX_DATASTORE_URL=
 ```
 
 ### Build the frontend application
@@ -69,8 +70,13 @@ The config file is `phpstan.neon`.
 
 ## Front-end notes
 
-Most of the time during development you'll likely just want to run `npm run hot`, but a full list of commands is located in the `scripts` section of the `package.json`.
+Most of the time during development you'll likely just want to run `npm run hot`, but 
+a full list of commands is located in the `scripts` section of the `package.json`.
 
-Please don't bypass or disable the linting rules or webpack configuration we have setup yourself. They are there for everyone's benefit (including the user), but if they do become particularly annoying please feel free to suggest changes.
+Please don't bypass or disable the linting rules or webpack configuration we have setup 
+yourself. They are there for everyone's benefit (including the user), but if they do 
+become particularly annoying please feel free to suggest changes.
 
-Stylelint is currently enforcing a rule aimed at reducing nesting and encourages BEM style classes. [If you aren't familiar in writing BEM, you should read the supporting documentation](./docs/BEM.md).
+Stylelint is currently enforcing a rule aimed at reducing nesting and encourages BEM 
+style classes. [If you aren't familiar in writing BEM, you should read the 
+supporting documentation](./docs/BEM.md).
