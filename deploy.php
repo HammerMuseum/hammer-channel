@@ -85,20 +85,28 @@ set('rsync', [
   'timeout'      => 60,
 ]);
 
+// Get host from CI environment variable
+$dev_host = getenv('CI_DEV_HOST_URL');
+$stage_host = getenv('CI_STAGE_HOST_URL');
+$prod_host = getenv('CI_PROD_DEPLOY_URL');
+
 // Hosts
-host('13.56.128.221')
+host('live')
+    ->set('hostname', $prod_host)
     ->set('remote_user', 'deploy')
     ->set('deploy_path', '/var/www/channel.hammer.ucla.edu')
     ->set('stage', 'production');
 
-host('stage.video.hammer.cogapp.com')
+host('stage')
+  ->set('hostname', $stage_host)
   ->set('remote_user', 'deploy')
-  ->set('deploy_path', '/var/www/stage.video.hammer.cogapp.com')
+  ->set('deploy_path', '/var/www/' . $stage_host)
   ->set('stage', 'staging');
 
-host('dev.video.hammer.cogapp.com')
+host('dev')
+  ->set('hostname', $dev_host)
   ->set('remote_user', 'deploy')
-  ->set('deploy_path', '/var/www/dev.video.hammer.cogapp.com')
+  ->set('deploy_path', '/var/www/' . $dev_host)
   ->set('stage', 'dev');
 
 // Tasks
