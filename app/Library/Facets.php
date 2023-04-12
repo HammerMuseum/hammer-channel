@@ -52,8 +52,19 @@ class Facets
                 $facetOptions[$facet]['label'] = $this->facetMap[$facet]['label'];
                 $facetOptions[$facet]['type'] = $this->facetMap[$facet]['type'];
                 $facetOptions[$facet]['id'] = $facet;
+
+                if ($facet == "speakers") {
+                  // Sort the array using a custom comparison function
+                  usort($facetOptions[$facet]['items'], function($a, $b) {
+                    $a_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($a['key'], 'UTF-8'));
+                    $b_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($b['key'], 'UTF-8'));
+                    return strcoll($a_key, $b_key);
+                  });
+                }
+
             }
         }
+
         return $facetOptions;
     }
 

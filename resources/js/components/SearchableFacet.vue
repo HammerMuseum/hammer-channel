@@ -107,21 +107,10 @@ export default {
     };
   },
   computed: {
-    sortedFacetList() {
-      // Make a shallow copy of facetList
-      const list = [...this.facetList];
-
-      // Sort the list array by key alphabetically with case insensitivity
-      list[0].items = list[0].items.sort((a, b) => a.key.localeCompare(b.key, 'en-US', { sensitivity: 'base' }));
-      return list;
-    },
     filteredItems() {
       const filteredOptions = [];
-      // Use the sortedFacetList computed property
-      const list = this.sortedFacetList;
-
+      const list = this.facetList;
       const query = this.searchTerm.toLowerCase();
-
       if (query) {
         for (let i = 0; i < list.length; i += 1) {
           const {
@@ -131,8 +120,6 @@ export default {
             id, label, type, items: matchSorter(items, query, { keys: ['key'] }),
           });
         }
-        // Sort the filteredOptions array by key alphabetically with case insensitivity
-        filteredOptions[0].items = filteredOptions[0].items.sort((a, b) => a.key.localeCompare(b.key, 'en-US', { sensitivity: 'base' }));
         return filteredOptions;
       }
       return list;
