@@ -54,14 +54,13 @@ class Facets
                 $facetOptions[$facet]['id'] = $facet;
 
                 if ($facet == "speakers") {
-                  // Sort items with case insensitivity and ignoring accents and umlauts
-                  usort($facetOptions[$facet]['items'], function($a, $b) {
-                    $a_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($a['key'], 'UTF-8'));
-                    $b_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($b['key'], 'UTF-8'));
-                    return strcoll($a_key, $b_key);
-                  });
+                    // Sort items with case insensitivity and ignoring accents and umlauts
+                    usort($facetOptions[$facet]['items'], function ($a, $b) {
+                        $a_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($a['key'], 'UTF-8'));
+                        $b_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($b['key'], 'UTF-8'));
+                        return strcoll($a_key, $b_key);
+                    });
                 }
-
             }
         }
 
