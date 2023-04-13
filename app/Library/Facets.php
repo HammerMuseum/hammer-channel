@@ -56,8 +56,8 @@ class Facets
                 if ($facet == "speakers") {
                     // Sort items ignoring diacritic marks and case
                     usort($facetOptions[$facet]['items'], function ($a, $b) {
-                        $a_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($a['key'], 'UTF-8'));
-                        $b_key = iconv('UTF-8', 'ASCII//TRANSLIT', mb_strtolower($b['key'], 'UTF-8'));
+                        $a_key = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', mb_strtolower($a['key']));
+                        $b_key = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', mb_strtolower($b['key']));
                         return strcoll($a_key, $b_key);
                     });
                 }
