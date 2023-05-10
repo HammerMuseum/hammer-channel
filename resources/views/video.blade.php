@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['videoObject' => $videoObject])
 
 @section('content')
 
@@ -17,7 +17,7 @@
     <div class="panel--left">
       <div class="video-player__wrapper">
           <div class="video-player__container">
-            <div id="video" class="video-player" label="Video Player" style="gap:24px;max-width:66vw;margin:0 auto;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;">
+            <div id="video" class="video-player" aria-label="Video Player" style="gap:24px;max-width:66vw;margin:0 auto;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;">
               <video
                 style="width: 100%;height: 100%;height:auto;"
                 poster="{{ $thumbnailUrl }}"
@@ -34,9 +34,9 @@
       <div class="tabs vp__tabs">
         <ul class="nav nav-tabs">
           <li role="presentation" class="nav-item nav-link active">
-            <h3 class="vp__tabs__label">
+            <h2 class="vp__tabs__label">
               Info
-            </h3>
+            </h2>
           </li>
         </ul>
       </div>

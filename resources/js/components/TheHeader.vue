@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'container',
+      'container--full',
       'container--fixed',
       'container--top',
       'header-container',
@@ -82,6 +82,7 @@
             transition="slide-down"
             bg-transition="fade"
             no-scroll
+            tag="div"
             :classes="{
               bg: 'drawer__container drawer__container--footer',
               content: ['drawer__content', 'drawer__content--footer'] }"
@@ -89,6 +90,8 @@
             <template #toggle />
             <button
               :class="['footer__close-button', 'button', 'button--icon']"
+              aria-label="Close information about the archive"
+              aria-controls="about-overlay"
               @click="handleFooterClose"
             >
               <BaseIcon
@@ -96,7 +99,7 @@
                 height="36"
                 view-box="0 0 36 36"
                 icon-name="close-footer"
-                title="Close the description overlay"
+                title="Close the about overlay"
               >
                 <ClosePinkIcon />
               </BaseIcon>
@@ -131,6 +134,7 @@
             transition="slide-down"
             bg-transition="fade"
             no-scroll
+            tag="div"
             :classes="{
               bg: 'drawer__container',
               content: [
@@ -143,6 +147,8 @@
             <template #toggle />
             <button
               :class="['footer__close-button', 'button', 'button--icon']"
+              aria-label="Close the search panel"
+              aria-controls="search-overlay"
               @click="handleSearchClose"
             >
               <BaseIcon
@@ -150,13 +156,14 @@
                 height="36"
                 view-box="0 0 36 36"
                 icon-name="close-footer"
-                title="Close the description overlay"
+                title="Close the search overlay"
               >
                 <ClosePinkIcon />
               </BaseIcon>
             </button>
             <SearchBar
               v-hammer:swipe.up="handleSearchClose"
+              id-prefix="header"
               :classes="['search-bar--overlay']"
               focus
               :tags="tags"

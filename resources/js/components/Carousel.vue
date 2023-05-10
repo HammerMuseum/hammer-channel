@@ -3,8 +3,9 @@
     :id="id | filterId"
   >
     <h2
+      v-if="showHeading"
       :id="headingId |filterId "
-      :class="['carousel__title', {'visually-hidden': !showHeading}]"
+      :class="['carousel__title']"
     >
       <slot name="heading" />
     </h2>
@@ -31,8 +32,8 @@
             width="36"
             height="36"
             view-box="0 0 36 36"
-            icon-name="previous-with-circle"
             title="Select previous item"
+            :icon-name="`${id}-previous-with-circle`"
             :classes="['icon--rotate']"
           >
             <!--  Icon is rotated to point in the correct direction-->
@@ -56,8 +57,8 @@
             width="36"
             height="36"
             view-box="0 0 36 36"
-            icon-name="next-with-circle"
             title="Select next item"
+            :icon-name="`${id}-next-with-circle`"
           >
             <NextWithCircleIcon />
           </BaseIcon>
@@ -275,12 +276,6 @@ export default {
 </script>
 
 <style>
-@media (max-width: 50em) {
-  .carousel-controls {
-    display: none;
-  }
-}
-
 .carousel-controls {
   position: absolute;
   width: 100%;

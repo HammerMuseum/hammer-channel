@@ -13,6 +13,7 @@
         v-for="item in items"
         :key="item.id"
         :item="item"
+        :heading-type="h3"
         show-date
         class="ui-card--dark-mode"
       />

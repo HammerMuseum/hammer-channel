@@ -13,11 +13,17 @@
             >
               Set start time
             </button>
+            <!-- Screen reader announces start time on change -->
+            <div
+              class="sr-only"
+              aria-live="polite"
+            >
+              {{ `Start time set to ${clipStartTime}` }}
+            </div>
             <VInput
               ref="startInput"
               v-model="clipStartTime"
               label="Set clip start time"
-              placeholder="00:00:00"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
                 root: 'clip-control__input-wrap',
@@ -45,11 +51,17 @@
             >
               Set end time
             </button>
+            <!-- Screen reader announces end time on change -->
+            <div
+              class="sr-only"
+              aria-live="polite"
+            >
+              {{ `End time set to ${clipEndTime}` }}
+            </div>
             <VInput
               ref="endInput"
               v-model="clipEndTime"
               label="Set clip end time"
-              placeholder="00:00:00"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
                 root: 'clip-control__input-wrap',
@@ -82,7 +94,6 @@
           <button
             :disabled="!canGenerateClip"
             :class="['button', 'button--action']"
-            aria-label="Copy citation to clipboard"
             data-tracking-gtm="video page links"
             @click="copyToClipboard(clipUrl)"
           >
@@ -93,7 +104,6 @@
               <span
                 :key="copied"
                 class="copy-status"
-                :aria-label="copied ? 'Clip link copied to clipboard' : 'Click to copy clip link to clipboard'"
               >{{ copied ? 'Copied' : 'Copy link' }}</span>
             </transition>
             <BaseIcon
@@ -101,7 +111,6 @@
               height="18"
               view-box="0 0 24 17"
               icon-name="copy"
-              title="Copy link to clipboard"
             >
               <CopyIcon />
             </BaseIcon>

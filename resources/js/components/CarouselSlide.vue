@@ -13,9 +13,9 @@
             alt=""
           >
         </div>
-        <h2 class="ui-card__title">
+        <component :is="headingType" class="ui-card__title">
           <span>{{ title }}</span>
-        </h2>
+        </component>
         <span
           v-if="showDate"
           class="ui-card__date"
@@ -53,6 +53,10 @@ export default {
     showDate: {
       type: Boolean,
       default: false,
+    },
+    headingType: {
+      type: String,
+      default: 'h2',
     },
   },
   computed: {
