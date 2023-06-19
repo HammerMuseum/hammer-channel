@@ -21,7 +21,8 @@
             width="36"
             height="36"
             view-box="0 0 36 36"
-            icon-name="remove-item"
+            :title="`Remove ${item.value} filter from selection`"
+            :icon-name="`remove-item_${item.key}-${stringToSlug(item.value)}`"
           >
             <ClosePinkIcon />
           </BaseIcon>
@@ -33,6 +34,7 @@
 
 <script>
 import stringifyQuery from '../mixins/stringifyQuery';
+import stringToSlug from '../mixins/stringToSlug';
 
 export default {
   name: 'CurrentSearch',
@@ -96,6 +98,9 @@ export default {
     },
     getValue(item, type) {
       return type === 'date' ? new Date(item.key_as_string).getUTCFullYear() : item.key;
+    },
+    stringToSlug(string) {
+      return stringToSlug(string);
     },
   },
 };

@@ -145,7 +145,7 @@ class HomeController extends Controller
                         ];
                     }
                 }
-                if (isset($video['people'])) {
+                if (!empty($video['people'])) {
                     foreach ($video['people'] as $person) {
                         $cannedTerms[] = [
                             'term' => $person,

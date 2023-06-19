@@ -40,13 +40,12 @@
             <div
               ref="transcriptContent"
               class="transcript__content"
-              tabindex="0"
             >
               <span
                 id="transcript-anchor"
                 class="visually-hidden"
               >Transcript content</span>
-              <p
+              <div
                 v-for="item in items"
                 :key="item.id"
                 class="transcript__paragraph"
@@ -55,33 +54,25 @@
                 }"
                 @click="handleTranscriptParagraphClick"
               >
-                <VTooltip
-                  focus
-                  tag="div"
-                  :classes="{ toggle: 'tooltip--transcript', content: 'tooltip__content' }"
+                <button
+                  :aria-label="`Go to ${item.timecode}`"
+                  class="button button--action"
+                  data-tracking-gtm="video page links"
+                  @click="handleTranscriptTimeButtonClick(item.start)"
                 >
-                  <template #tooltip>
-                    <button
-                      :aria-label="`Go to ${item.timecode}`"
-                      class="button button--light"
-                      data-tracking-gtm="video page links"
-                      @mousedown="handleTranscriptTimeButtonClick(item.start)"
-                    >
-                      <BaseIcon
-                        width="18"
-                        height="18"
-                        view-box="0 0 448 512"
-                        icon-name="play-from-position"
-                        :title="`Play from ${item.timecode}`"
-                      >
-                        <PlayIcon />
-                      </BaseIcon>
-                      <span>{{ item.timecode }}</span>
-                    </button>
-                  </template>
-                  {{ item.message }}
-                </VTooltip>
-              </p>
+                  <BaseIcon
+                    width="18"
+                    height="18"
+                    view-box="0 0 448 512"
+                    icon-name="play-from-position"
+                    :title="`Play from ${item.timecode}`"
+                  >
+                    <PlayIcon />
+                  </BaseIcon>
+                  <span>{{ item.timecode }}</span>
+                </button>
+                <p>{{ item.message }}</p>
+              </div>
             </div>
           </HighlightText>
         </template>
@@ -135,7 +126,6 @@
 import { saveAs } from 'file-saver';
 import scrollIntoView from 'scroll-into-view';
 import { vueWindowSizeMixin } from 'vue-window-size';
-import { VTooltip } from 'vuetensils/src/components';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
 import isIos from '../mixins/isIos';
@@ -146,7 +136,6 @@ export default {
   components: {
     BackToTop,
     HighlightText,
-    VTooltip,
   },
   mixins: [vueWindowSizeMixin],
   props: {

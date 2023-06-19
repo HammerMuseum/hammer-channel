@@ -1,11 +1,6 @@
 defaults: &defaults
   docker:
     - image: cimg/php:8.1.4-browsers
-      environment:
-        HOST_URL: channel.hammer.ucla.edu
-        PROD_DEPLOY_URL: 13.56.128.221
-        STAGE_HOST_URL: stage.video.hammer.cogapp.com
-        DEV_HOST_URL: dev.video.hammer.cogapp.com
 
 # Defines the cache restore mechanism for composer dependencies.
 restore_cache: &restore_cache
@@ -142,11 +137,11 @@ deploy: &deploy
         tag-value: bastion
     - run:
         name: Add host to known hosts
-        command: ssh-keyscan -H $(echo "$PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+        command: ssh-keyscan -H $(echo "$CI_PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
-        name: Deploy to $PROD_DEPLOY_URL
-        command: ./vendor/deployer/deployer/deployer.phar deploy 13.56.128.221
-    - run: ssh deploy@$PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
+        name: Deploy to $CI_PROD_DEPLOY_URL
+        command: ./vendor/deployer/deployer/deployer.phar deploy live
+    - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
@@ -183,11 +178,11 @@ deploy_stage: &deploy_stage
           - "a2:22:da:24:fd:c3:76:8d:80:de:ae:af:a3:00:c3:3e"
     - run:
         name: Add staging host to known hosts
-        command: ssh-keyscan -H $(echo "$STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+        command: ssh-keyscan -H $(echo "$CI_STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
-        name: Deploy to $STAGE_HOST_URL
-        command: ./vendor/deployer/deployer/deployer.phar deploy stage.video.hammer.cogapp.com
-    - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
+        name: Deploy to $CI_STAGE_HOST_URL
+        command: ./vendor/deployer/deployer/deployer.phar deploy stage
+    - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
@@ -220,9 +215,9 @@ deploy_dev: &deploy_dev
         port: 22
         tag-key: group
         tag-value: bastion
-    - run: ssh-keyscan -H $(echo "$DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: ./vendor/deployer/deployer/deployer.phar deploy dev.video.hammer.cogapp.com
-    - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
+    - run: ssh-keyscan -H $(echo "$CI_DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+    - run: ./vendor/deployer/deployer/deployer.phar deploy dev
+    - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
         tag-key: group
