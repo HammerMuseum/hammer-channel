@@ -226,7 +226,7 @@ deploy_dev: &deploy_dev
 # Declare all of the jobs we should run.
 version: 2.1
 orbs:
-  browser-tools: circleci/browser-tools@1.2.5
+  browser-tools: circleci/browser-tools@1.4.6
   aws-cli: circleci/aws-cli@2.0.3
   aws-white-list-circleci-ip: avvo/aws-white-list-circleci-ip@0.0.2
 
