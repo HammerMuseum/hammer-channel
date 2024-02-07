@@ -140,7 +140,7 @@ deploy: &deploy
         command: ssh-keyscan -H $(echo "$CI_PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
         name: Deploy to $CI_PROD_DEPLOY_URL
-        command: ./vendor/deployer/deployer/deployer.phar deploy live
+        command: ./vendor/deployer/deployer/dep deploy live
     - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
@@ -181,7 +181,7 @@ deploy_stage: &deploy_stage
         command: ssh-keyscan -H $(echo "$CI_STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
         name: Deploy to $CI_STAGE_HOST_URL
-        command: ./vendor/deployer/deployer/deployer.phar deploy stage
+        command: ./vendor/deployer/deployer/dep deploy stage
     - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
@@ -216,7 +216,7 @@ deploy_dev: &deploy_dev
         tag-key: group
         tag-value: bastion
     - run: ssh-keyscan -H $(echo "$CI_DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: ./vendor/deployer/deployer/deployer.phar deploy dev
+    - run: ./vendor/deployer/deployer/dep deploy dev
     - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
     - aws-white-list-circleci-ip/remove:
         port: 22
