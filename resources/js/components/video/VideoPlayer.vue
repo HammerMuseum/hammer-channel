@@ -76,7 +76,7 @@ import 'videojs-markers';
 import 'videojs-offset';
 import 'videojs-event-tracking';
 import ClipDisplay from './ClipDisplay.vue';
-import { convertSecondsToTime } from '../../utils';
+import { convertSecondsToTime, convertSecondsToHumanReadableTime } from '../../utils';
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
@@ -484,7 +484,7 @@ export default {
 
       const resumeButton = document.createElement('button');
       resumeButton.className = 'modal__button';
-      resumeButton.innerText = `Resume video at ${time} second${time > 1 ? 's' : ''}`;
+      resumeButton.innerText = `Resume video at ${convertSecondsToHumanReadableTime(time)}`;
 
       const restartButton = document.createElement('button');
       restartButton.className = 'modal__button';
