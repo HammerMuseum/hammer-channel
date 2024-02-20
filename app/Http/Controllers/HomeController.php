@@ -159,6 +159,8 @@ class HomeController extends Controller
         }
         // Randomise and limit to 12
         if (!empty($cannedTerms)) {
+            // Remove any duplicate terms
+            $cannedTerms = array_map("unserialize", array_unique(array_map("serialize", $cannedTerms)));
             shuffle($cannedTerms);
             $cannedTerms = array_slice($cannedTerms, 0, 12);
         }
