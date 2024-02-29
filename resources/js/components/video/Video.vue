@@ -34,6 +34,7 @@
           class="panel--left"
         >
           <VideoPlayer
+            :id="video.id"
             :options="options"
             :retry-sources="retrySources"
             :title="video.title"
