@@ -124,37 +124,39 @@ class HomeController extends Controller
         $featuredPlaylist = $this->api->request('playlists/Featured');
         if (isset($featuredPlaylist['success']) && $featuredPlaylist['success']) {
             $playlistData = $featuredPlaylist['data'];
-            foreach ($playlistData['videos'] as $video) {
-                if (!empty($video['topics'])) {
-                    foreach ($video['topics'] as $topic) {
-                        $cannedTerms[] = [
-                            'term'=> $topic,
-                            'query' => [
-                                'topics' => $topic
-                            ]
-                        ];
-                    }
-                }
-                if (!empty($video['tags'])) {
-                    foreach ($video['tags'] as $tag) {
-                        $cannedTerms[] = [
-                            'term' => $tag,
-                            'query' => [
-                                'tags' => $tag
-                            ]
-                        ];
-                    }
-                }
-                if (!empty($video['people'])) {
-                    foreach ($video['people'] as $person) {
-                        $cannedTerms[] = [
-                            'term' => $person,
-                            'query' => [
-                                'speakers' => $person
-                            ]
-                        ];
-                    }
-                }
+            if (!empty($playlistData['videos'])) {
+              foreach ($playlistData['videos'] as $video) {
+                  if (!empty($video['topics'])) {
+                      foreach ($video['topics'] as $topic) {
+                          $cannedTerms[] = [
+                              'term'=> $topic,
+                              'query' => [
+                                  'topics' => $topic
+                              ]
+                          ];
+                      }
+                  }
+                  if (!empty($video['tags'])) {
+                      foreach ($video['tags'] as $tag) {
+                          $cannedTerms[] = [
+                              'term' => $tag,
+                              'query' => [
+                                  'tags' => $tag
+                              ]
+                          ];
+                      }
+                  }
+                  if (!empty($video['people'])) {
+                      foreach ($video['people'] as $person) {
+                          $cannedTerms[] = [
+                              'term' => $person,
+                              'query' => [
+                                  'speakers' => $person
+                              ]
+                          ];
+                      }
+                  }
+              }
             }
         }
         // Randomise and limit to 12
