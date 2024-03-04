@@ -7,8 +7,6 @@ restore_cache: &restore_cache
   # We use the composer.lock as a way to determine if we can cache our build.
   keys:
   - composer-v2-{{ checksum "composer.lock" }}
-  # fallback to using the latest cache if no exact match is found
-  - composer-v2
 
 # Defines the cache saving mechanism for composer dependencies.
 save_cache: &save_cache
@@ -20,7 +18,6 @@ save_cache: &save_cache
 restore_node_cache: &restore_node_cache
   keys:
     - node-v1-{{ checksum "package.json" }}
-    - node-v1-
 
 # Defines the cache saving mechanism for node dependencies.
 save_node_cache: &save_node_cache
