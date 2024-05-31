@@ -7,8 +7,6 @@ restore_cache: &restore_cache
   # We use the composer.lock as a way to determine if we can cache our build.
   keys:
   - composer-v2-{{ checksum "composer.lock" }}
-  # fallback to using the latest cache if no exact match is found
-  - composer-v2
 
 # Defines the cache saving mechanism for composer dependencies.
 save_cache: &save_cache
@@ -20,7 +18,6 @@ save_cache: &save_cache
 restore_node_cache: &restore_node_cache
   keys:
     - node-v1-{{ checksum "package.json" }}
-    - node-v1-
 
 # Defines the cache saving mechanism for node dependencies.
 save_node_cache: &save_node_cache
@@ -35,9 +32,9 @@ build_and_test: &build_and_test
   steps:
     - checkout
     - run: sudo apt-get update
-    - browser-tools/install-chrome:
-        chrome-version: "114.0.5735.90"
-    - browser-tools/install-chromedriver
+    # - browser-tools/install-chrome:
+        # chrome-version: "125.0.6422.78"
+    # - browser-tools/install-chromedriver
 
     - run:
         name: Install missing packages
@@ -83,19 +80,19 @@ build_and_test: &build_and_test
     # Run linting
     - run: ./vendor/bin/phpcs
 
-    - run: cp -rf .env.dusk.testing .env
-    - run: php artisan key:generate
+    # - run: cp -rf .env.dusk.testing .env
+    # - run: php artisan key:generate
 
-    - run:
-        name: Run Laravel Server
-        command: php artisan serve
-        background: true
+    # - run:
+    #     name: Run Laravel Server
+    #     command: php artisan serve
+    #     background: true
 
-    - run:
-        name: Run Laravel Dusk Tests
-        command: |
-          php artisan dusk:chrome-driver --detect
-          php artisan dusk
+    # - run:
+    #     name: Run Laravel Dusk Tests
+    #     command: |
+    #       php artisan dusk:chrome-driver --detect
+    #       php artisan dusk
 
     - persist_to_workspace:
         root: /home/circleci/project

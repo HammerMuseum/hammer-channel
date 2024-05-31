@@ -330,7 +330,7 @@
                 >
                   <div class="ui-card__thumbnail">
                     <img
-                      :src="`/images/d/medium/${item.thumbnailId}.jpg`"
+                      :src="`/images/d/medium/${item.asset_id}.jpg`"
                       class="ui-card__thumbnail-image"
                       alt=""
                     >

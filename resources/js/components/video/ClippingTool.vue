@@ -21,6 +21,7 @@
               {{ `Start time set to ${clipStartTime}` }}
             </div>
             <VInput
+              name="clipStartTime"
               ref="startInput"
               v-model="clipStartTime"
               label="Set clip start time"
@@ -59,6 +60,7 @@
               {{ `End time set to ${clipEndTime}` }}
             </div>
             <VInput
+              name="clipEndTime"
               ref="endInput"
               v-model="clipEndTime"
               label="Set clip end time"
