@@ -53,10 +53,10 @@ export default {
   computed: {
     poster() {
       const video = this.video;
-      if (!video.thumbnailId) {
+      if (!video.asset_id) {
         return '';
       }
-      return `/images/d/large/${video.thumbnailId}.jpg`;
+      return `/images/d/large/${video.asset_id}.jpg`;
     },
   },
   mounted() {
