@@ -1,0 +1,80 @@
+name: Build and Test
+
+on:
+  push
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    env:
+      APP_URL: "http://127.0.0.1:8000"
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      MAIL_MAILER: log
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP and install composer dependencies
+        uses: ./.github/actions/setup-php-environment
+        with:
+          php-version: 8.1
+
+      - name: Install frontend dependencies
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run test
+      - run: npm run production
+
+      - name: Unit tests
+        run: vendor/bin/phpunit
+
+      - name: Linting
+        run: vendor/bin/phpcs
+
+      - name: Run frontend test suites
+        run: npm run test
+
+      - name: Create production frontend build
+        run: npm run production
+
+      - name: Prepare environment
+        run: cp .env.dusk.testing .env
+
+      - run: touch storage/testing.sqlite
+      - run: php artisan key:generate --env=testing
+      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Upgrade Chrome Driver
+        run: php artisan dusk:chrome-driver --detect
+
+      - name: Start Chrome Driver
+        run: ./vendor/laravel/dusk/bin/chromedriver-linux &
+
+      - name: Run Laravel Server
+        run: php artisan serve --no-reload &
+
+      - name: Run Tests
+        run: php artisan dusk
+
+      - name: Upload Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots
+
+      - name: Upload Console Logs
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: console
+          path: tests/Browser/console
