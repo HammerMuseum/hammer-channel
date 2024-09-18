@@ -1,0 +1,182 @@
+name: Build, Test, Deploy
+
+on:
+  push:
+    branches: [master, develop]
+    tags:
+      - 'dev-*'
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP and install composer dependencies
+      uses: ./.github/actions/setup-php-environment
+      with:
+        php-version: 8.1
+
+    - name: Install Composer dependencies
+      run: composer install -n -q
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '14'
+
+    - name: Install Node dependencies
+      run: npm install
+
+    - name: Setup environment variables
+      run: |
+        if [[ -z "${{ github.ref }}" ]]; then
+          .circleci/scripts/add_env_vars_to_build.sh tagged
+        else
+          .circleci/scripts/add_env_vars_to_build.sh ${{ github.ref }}
+        fi
+
+    - name: Run frontend tests
+      run: npm run test
+
+    - name: Create production frontend build
+      run: npm run production
+
+    - name: Prepare database
+      run: |
+        touch storage/testing.sqlite
+        php artisan key:generate --env=testing
+        php artisan migrate --env=testing --database=sqlite_testing --force
+
+    - name: Run PHPUnit tests
+      run: ./vendor/bin/phpunit
+
+    - name: Run PHP CodeSniffer
+      run: ./vendor/bin/phpcs
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          vendor/
+          public/css/
+          public/js/
+          public/fonts/
+          public/images/
+          public/icons/
+          public/mix-manifest.json
+
+  deploy_dev:
+    needs: build_and_test
+    if: startsWith(github.ref, 'refs/tags/dev-')
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+
+    - name: Setup PHP and install composer dependencies
+      uses: ./.github/actions/setup-php-environment
+      with:
+        php-version: 8.1
+
+    - name: Install Deployer
+      run: |
+        curl -LO https://deployer.org/deployer.phar
+        sudo mv deployer.phar /usr/local/bin/dep
+        sudo chmod +x /usr/local/bin/dep
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+    - name: Deploy to dev
+      env:
+        CI_DEV_HOST_URL: ${{ secrets.CI_DEV_HOST_URL }}
+      run: |
+        ./vendor/deployer/deployer/dep deploy dev
+        ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
+
+  deploy_stage:
+    needs: build_and_test
+    if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/stage-')
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+
+    - name: Setup PHP and install composer dependencies
+      uses: ./.github/actions/setup-php-environment
+      with:
+        php-version: 8.1
+
+    - name: Install Deployer
+      run: |
+        curl -LO https://deployer.org/deployer.phar
+        sudo mv deployer.phar /usr/local/bin/dep
+        sudo chmod +x /usr/local/bin/dep
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.STAGE_SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+    - name: Deploy to stage
+      env:
+        CI_STAGE_HOST_URL: ${{ secrets.CI_STAGE_HOST_URL }}
+      run: |
+        ./vendor/deployer/deployer/dep deploy stage
+        ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
+
+  deploy_prod:
+    needs: build_and_test
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+
+    - name: Setup PHP and install composer dependencies
+      uses: ./.github/actions/setup-php-environment
+      with:
+        php-version: 8.1
+
+    - name: Install Deployer
+      run: |
+        curl -LO https://deployer.org/deployer.phar
+        sudo mv deployer.phar /usr/local/bin/dep
+        sudo chmod +x /usr/local/bin/dep
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+    - name: Deploy to production
+      env:
+        CI_PROD_DEPLOY_URL: ${{ secrets.CI_PROD_DEPLOY_URL }}
+      run: |
+        ./vendor/deployer/deployer/dep deploy live
+        ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
