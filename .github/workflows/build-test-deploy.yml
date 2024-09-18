@@ -83,50 +83,18 @@ jobs:
       with:
         name: build-artifacts
 
-    - name: Setup PHP and install composer dependencies
-      uses: ./.github/actions/setup-php-environment
+    - name: Deploy to dev
+      uses: ./.github/actions/deploy-app
       with:
-        php-version: 8.1
-
-    - name: Install Composer dependencies (production)
-      run: composer install --optimize-autoloader --no-dev
-
-    - name: Install Deployer
-      run: |
-        curl -LO https://deployer.org/deployer.phar
-        sudo mv deployer.phar /usr/local/bin/dep
-        sudo chmod +x /usr/local/bin/dep
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
+        php-version: '8.1'
+        ssh-private-key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+        known-hosts: ${{ secrets.KNOWN_HOSTS }}
+        deploy-env: 'dev'
+        host-url: ${{ secrets.CI_DEV_HOST_URL }}
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-
-    - name: Whitelist GitHub Actions IP
-      run: |
-        IP=$(curl -s https://api.ipify.org)
-        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr $IP/32
-
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
-
-    - name: Deploy to dev
-      env:
-        CI_DEV_HOST_URL: ${{ secrets.CI_DEV_HOST_URL }}
-      run: |
-        ./vendor/deployer/deployer/dep deploy dev
-        ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
-
-    - name: Remove GitHub Actions IP from whitelist
-      if: always()
-      run: |
-        IP=$(curl -s https://api.ipify.org)
-        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr $IP/32
+        aws-security-group-id: ${{ secrets.AWS_SECURITY_GROUP_ID }}
 
   deploy_stage:
     needs: build_and_test
@@ -141,50 +109,18 @@ jobs:
       with:
         name: build-artifacts
 
-    - name: Setup PHP and install composer dependencies
-      uses: ./.github/actions/setup-php-environment
+    - name: Deploy to stage
+      uses: ./.github/actions/deploy-app
       with:
-        php-version: 8.1
-
-    - name: Install Composer dependencies (production)
-      run: composer install --optimize-autoloader --no-dev
-
-    - name: Install Deployer
-      run: |
-        curl -LO https://deployer.org/deployer.phar
-        sudo mv deployer.phar /usr/local/bin/dep
-        sudo chmod +x /usr/local/bin/dep
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
+        php-version: '8.1'
+        ssh-private-key: ${{ secrets.STAGE_SSH_PRIVATE_KEY }}
+        known-hosts: ${{ secrets.KNOWN_HOSTS }}
+        deploy-env: 'stage'
+        host-url: ${{ secrets.CI_STAGE_HOST_URL }}
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-
-    - name: Whitelist GitHub Actions IP
-      run: |
-        IP=$(curl -s https://api.ipify.org)
-        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr $IP/32
-
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.STAGE_SSH_PRIVATE_KEY }}
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
-
-    - name: Deploy to stage
-      env:
-        CI_STAGE_HOST_URL: ${{ secrets.CI_STAGE_HOST_URL }}
-      run: |
-        ./vendor/deployer/deployer/dep deploy stage
-        ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
-
-    - name: Remove GitHub Actions IP from whitelist
-      if: always()
-      run: |
-        IP=$(curl -s https://api.ipify.org)
-        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr $IP/32
+        aws-security-group-id: ${{ secrets.AWS_SECURITY_GROUP_ID }}
 
   deploy_prod:
     needs: build_and_test
@@ -199,47 +135,15 @@ jobs:
       with:
         name: build-artifacts
 
-    - name: Setup PHP and install composer dependencies
-      uses: ./.github/actions/setup-php-environment
+    - name: Deploy to production
+      uses: ./.github/actions/deploy-app
       with:
-        php-version: 8.1
-
-    - name: Install Composer dependencies (production)
-      run: composer install --optimize-autoloader --no-dev
-
-    - name: Install Deployer
-      run: |
-        curl -LO https://deployer.org/deployer.phar
-        sudo mv deployer.phar /usr/local/bin/dep
-        sudo chmod +x /usr/local/bin/dep
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
+        php-version: '8.1'
+        ssh-private-key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+        known-hosts: ${{ secrets.KNOWN_HOSTS }}
+        deploy-env: 'live'
+        host-url: ${{ secrets.CI_PROD_DEPLOY_URL }}
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
-
-    - name: Whitelist GitHub Actions IP
-      run: |
-        IP=$(curl -s https://api.ipify.org)
-        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr $IP/32
-
-    - name: Install SSH Key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
-
-    - name: Deploy to production
-      env:
-        CI_PROD_DEPLOY_URL: ${{ secrets.CI_PROD_DEPLOY_URL }}
-      run: |
-        ./vendor/deployer/deployer/dep deploy live
-        ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
-
-    - name: Remove GitHub Actions IP from whitelist
-      if: always()
-      run: |
-        IP=$(curl -s https://api.ipify.org)
-        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SECURITY_GROUP_ID }} --protocol tcp --port 22 --cidr $IP/32
+        aws-security-group-id: ${{ secrets.AWS_SECURITY_GROUP_ID }}
