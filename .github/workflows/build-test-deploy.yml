@@ -18,7 +18,7 @@ jobs:
     - name: Setup PHP and install Composer dependencies
       uses: ./.github/actions/setup-php-environment
       with:
-        php-version: 8.1
+        php-version: ${{ env.PHP_VERSION }}
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
