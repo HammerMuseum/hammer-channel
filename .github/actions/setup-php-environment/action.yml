@@ -6,7 +6,7 @@ inputs:
   php-version:
     description: "The PHP version to install"
     required: true
-    default: "8.1"
+    default: "8.3"
 
 runs:
   using: composite

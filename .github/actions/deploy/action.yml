@@ -4,7 +4,7 @@ inputs:
   php-version:
     description: 'PHP version to use'
     required: true
-    default: '8.1'
+    default: '8.3'
   ssh-private-key:
     description: 'SSH private key for deployment'
     required: true
@@ -12,7 +12,7 @@ inputs:
     description: 'Known hosts for SSH'
     required: true
   deploy-env:
-    description: 'Deployment environment (dev/stage/live)'
+    description: 'Deployment environment (dev/staging/prod)'
     required: true
   host-url:
     description: 'Host URL for deployment'
@@ -33,6 +33,22 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set deployment URLs
+      id: deploy-urls
+      shell: bash
+      run: |
+        case "${{ inputs.deploy-env }}" in
+          "dev")
+            echo "DEV_DEPLOY_URL=${{ inputs.host-url }}" >> $GITHUB_ENV
+            ;;
+          "stage")
+            echo "STAGING_DEPLOY_URL=${{ inputs.host-url }}" >> $GITHUB_ENV
+            ;;
+          "prod")
+            echo "PROD_DEPLOY_URL=${{ inputs.host-url }}" >> $GITHUB_ENV
+            ;;
+        esac
+
     - name: Setup PHP and install composer dependencies
       uses: ./.github/actions/setup-php-environment
       with:
@@ -41,13 +57,6 @@ runs:
     - name: Install Composer dependencies (production)
       shell: bash
       run: composer install --optimize-autoloader --no-dev
-
-    - name: Install Deployer
-      shell: bash
-      run: |
-        curl -LO https://deployer.org/deployer.phar
-        sudo mv deployer.phar /usr/local/bin/dep
-        sudo chmod +x /usr/local/bin/dep
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -68,11 +77,14 @@ runs:
         key: ${{ inputs.ssh-private-key }}
         known_hosts: ${{ inputs.known-hosts }}
 
-    - name: Deploy to environment
-      shell: bash
-      run: |
-        ./vendor/deployer/deployer/dep deploy ${{ inputs.deploy-env }}
-        ssh deploy@${{ inputs.host-url }} sudo systemctl reload php8.1-fpm.service
+    - name: Deploy
+      uses: deployphp/action@v1
+      # env:
+      #   DEV_DEPLOY_URL: ${{ steps.deploy-urls.outputs.DEV_DEPLOY_URL }}
+      #   STAGING_DEPLOY_URL: ${{ steps.deploy-urls.outputs.STAGING_DEPLOY_URL }}
+      #   PROD_DEPLOY_URL: ${{ steps.deploy-urls.outputs.PROD_DEPLOY_URL }}
+      with:
+        dep: deploy ${{ inputs.deploy-env }}
 
     - name: Remove GitHub Actions IP from whitelist
       if: always()
