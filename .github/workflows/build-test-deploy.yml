@@ -5,7 +5,7 @@ on:
     branches: [master, develop]
 
 env:
-  PHP_VERSION: '8.1'
+  PHP_VERSION: '8.2'
   NODE_VERSION: '18'
 
 jobs:
@@ -24,11 +24,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-
-    - name: Install Chrome
-      uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: 120
 
     - name: Install Node dependencies
       run: npm install --legacy-peer-deps
@@ -70,13 +65,14 @@ jobs:
         cp .env.dusk.testing .env
         php artisan key:generate
 
+    - name: Set Chrome Driver
+      run: php artisan dusk:chrome-driver --detect
+
     - name: Start Laravel Server
       run: php artisan serve &
 
     - name: Run Dusk Tests
-      run: |
-        php artisan dusk:chrome-driver 120
-        php artisan dusk
+      run: php artisan dusk
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
