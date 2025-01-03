@@ -4,7 +4,7 @@ inputs:
   php-version:
     description: 'PHP version to use'
     required: true
-    default: '8.3'
+    default: '8.1'
   ssh-private-key:
     description: 'SSH private key for deployment'
     required: true

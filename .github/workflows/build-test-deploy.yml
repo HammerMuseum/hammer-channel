@@ -18,7 +18,7 @@ jobs:
     - name: Setup PHP and install Composer dependencies
       uses: ./.github/actions/setup-php-environment
       with:
-        php-version: ${{ env.PHP_VERSION }}
+        php-version: 8.1
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -30,11 +30,6 @@ jobs:
       with:
         chrome-version: 120
         install-chromedriver: true
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
 
     - name: Install Node dependencies
       run: npm install --legacy-peer-deps
