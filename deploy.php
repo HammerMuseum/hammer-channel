@@ -6,10 +6,10 @@ require 'recipe/laravel.php';
 require 'recipe/tasks.php';
 
 // Project name
-set('application', 'Laravel');
+set('application', 'Hammer Channel');
 
 // Project repository
-set('repository', 'git@github.com:HammerMuseum/hammer-video.git');
+set('repository', 'git@github.com:HammerMuseum/hammer-channel.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true);
@@ -86,21 +86,21 @@ set('rsync', [
 ]);
 
 // Get host from CI environment variable
-$dev_host = getenv('CI_DEV_HOST_URL');
-$stage_host = getenv('CI_STAGE_HOST_URL');
-$prod_host = getenv('CI_PROD_DEPLOY_URL');
+$dev_host = getenv('DEV_HOST_URL');
+$staging_host = getenv('STAGING_HOST_URL');
+$prod_host = getenv('PROD_DEPLOY_URL');
 
 // Hosts
-host('live')
+host('prod')
     ->set('hostname', $prod_host)
     ->set('remote_user', 'deploy')
     ->set('deploy_path', '/var/www/channel.hammer.ucla.edu')
     ->set('stage', 'production');
 
-host('stage')
-  ->set('hostname', $stage_host)
+host('staging')
+  ->set('hostname', $staging_host)
   ->set('remote_user', 'deploy')
-  ->set('deploy_path', '/var/www/' . $stage_host)
+  ->set('deploy_path', '/var/www/' . $staging_host)
   ->set('stage', 'staging');
 
 host('dev')
@@ -127,11 +127,8 @@ task('deploy', [
   'deploy:publish',
 ]);
 
-
-
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
-
 before('deploy:symlink', 'artisan:migrate');

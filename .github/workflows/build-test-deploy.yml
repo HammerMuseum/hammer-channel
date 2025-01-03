@@ -136,21 +136,8 @@ jobs:
       with:
         name: build-artifacts
 
-    - name: Create harvester env file
-      run: |
-        rm -f harvester/.env
-        touch harvester/.env
-        echo -e "AB_CLIENT_ID=${{ secrets.AB_CLIENT_ID }}" >> harvester/.env
-        echo -e "AB_CLIENT_SECRET=${{ secrets.AB_CLIENT_SECRET }}" >> harvester/.env
-        echo -e "AB_USERNAME=${{ secrets.AB_USERNAME }}" >> harvester/.env
-        echo -e "AB_PASSWORD=${{ secrets.AB_PASSWORD }}" >> harvester/.env
-        echo -e "TRINT_API_KEY=${{ secrets.TRINT_API_KEY }}\n" >> harvester/.env
-        echo -e "ELASTICSEARCH_HOST=${{ secrets.ELASTICSEARCH_HOST }}\n" >> harvester/.env
-        echo -e "ELASTICSEARCH_API_KEY=${{ secrets.ELASTICSEARCH_API_KEY }}\n" >> harvester/.env
-        echo -e "SLACK_WEBHOOK=${{ secrets.SLACK_WEBHOOK }}\n" >> harvester/.env
-
     - name: Deploy to staging
-      uses: ./.github/actions/deploy-app
+      uses: ./.github/actions/deploy
       with:
         php-version: ${{ env.PHP_VERSION }}
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -175,21 +162,8 @@ jobs:
       with:
         name: build-artifacts
 
-    - name: Create harvester env file
-      run: |
-        rm -f harvester/.env
-        touch harvester/.env
-        echo -e "AB_CLIENT_ID=${{ secrets.AB_CLIENT_ID }}" >> harvester/.env
-        echo -e "AB_CLIENT_SECRET=${{ secrets.AB_CLIENT_SECRET }}" >> harvester/.env
-        echo -e "AB_USERNAME=${{ secrets.AB_USERNAME }}" >> harvester/.env
-        echo -e "AB_PASSWORD=${{ secrets.AB_PASSWORD }}" >> harvester/.env
-        echo -e "TRINT_API_KEY=${{ secrets.TRINT_API_KEY }}\n" >> harvester/.env
-        echo -e "ELASTICSEARCH_HOST=${{ secrets.ELASTICSEARCH_HOST }}\n" >> harvester/.env
-        echo -e "ELASTICSEARCH_API_KEY=${{ secrets.ELASTICSEARCH_API_KEY }}\n" >> harvester/.env
-        echo -e "SLACK_WEBHOOK=${{ secrets.SLACK_WEBHOOK }}\n" >> harvester/.env
-
     - name: Deploy to production
-      uses: ./.github/actions/deploy-app
+      uses: ./.github/actions/deploy
       with:
         php-version: ${{ env.PHP_VERSION }}
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
