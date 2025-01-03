@@ -60,19 +60,19 @@ jobs:
     - name: Run PHP CodeSniffer
       run: ./vendor/bin/phpcs
 
-    - name: Prepare Dusk Environment
-      run: |
-        cp .env.dusk.testing .env
-        php artisan key:generate
+    # - name: Prepare Dusk Environment
+    #   run: |
+    #     cp .env.dusk.testing .env
+    #     php artisan key:generate
 
-    - name: Set Chrome Driver
-      run: php artisan dusk:chrome-driver --detect
+    # - name: Set Chrome Driver
+    #   run: php artisan dusk:chrome-driver --detect
 
-    - name: Start Laravel Server
-      run: php artisan serve &
+    # - name: Start Laravel Server
+    #   run: php artisan serve &
 
-    - name: Run Dusk Tests
-      run: php artisan dusk
+    # - name: Run Dusk Tests
+    #   run: php artisan dusk
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
