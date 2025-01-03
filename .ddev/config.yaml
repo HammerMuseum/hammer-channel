@@ -11,8 +11,6 @@ additional_fqdns: []
 database:
   type: mariadb
   version: "10.3"
-nfs_mount_enabled: false
-mutagen_enabled: false
 hooks:
   post-start:
   - composer: install
@@ -20,11 +18,10 @@ hooks:
   - exec: php artisan config:clear
   - exec: php artisan config:cache
   - exec-host: npm install && npm run dev
-upload_dir: custom/upload/dir
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
-nodejs_version: "14"
+nodejs_version: "18"
 
 # Key features of ddev's config.yaml:
 
