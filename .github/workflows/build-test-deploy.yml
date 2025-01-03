@@ -29,7 +29,6 @@ jobs:
       uses: browser-actions/setup-chrome@v1
       with:
         chrome-version: 120
-        install-chromedriver: true
 
     - name: Install Node dependencies
       run: npm install --legacy-peer-deps
@@ -76,7 +75,7 @@ jobs:
 
     - name: Run Dusk Tests
       run: |
-        php artisan dusk:chrome-driver --detect
+        php artisan dusk:chrome-driver 120
         php artisan dusk
 
     - name: Upload Artifacts
