@@ -12,7 +12,7 @@
           <BaseIcon
             width="36"
             height="36"
-            view-box="0 0 512 512"
+            view-box="0 0 24 24"
             icon-name="facebook"
             title="Share on facebook"
             :class="['icon--reverse']"
@@ -22,20 +22,20 @@
         </a>
         <a
           class="share-button button button--icon"
-          :href="twitter"
+          :href="bluesky"
           target="blank"
-          aria-label="Share on Twitter"
+          aria-label="Share on Bluesky"
           data-tracking-gtm="video page links"
         >
           <BaseIcon
             width="36"
             height="36"
-            view-box="0 0 512 512"
-            icon-name="twitter"
-            title="Share on Twitter"
+            view-box="0 0 24 24"
+            icon-name="bluesky"
+            title="Share on Bluesky"
             :class="['icon--reverse']"
           >
-            <TwitterIcon />
+            <BlueskyIcon />
           </BaseIcon>
         </a>
         <button
@@ -124,7 +124,7 @@ export default {
   data() {
     return {
       providers: {
-        twitter: 'https://twitter.com/intent/tweet/?url=:url&text=:text',
+        bluesky: 'https://bsky.app/intent/compose?text=:text',
         facebook: 'https://www.facebook.com/sharer/sharer.php?u=:u&title=:title',
       },
       showCitation: false,
@@ -146,11 +146,11 @@ export default {
     citation() {
       return `"${this.title}", ${this.name}, ${this.duration}, ${this.dateFormatted}, ${this.url}`;
     },
+    bluesky() {
+      return this.providers.bluesky.replace(':text', `${encodeURIComponent(this.text)} ${encodeURIComponent(this.url)}`);
+    },
     facebook() {
       return this.providers.facebook.replace(':u', encodeURIComponent(this.url)).replace(':title', encodeURIComponent(this.text));
-    },
-    twitter() {
-      return this.providers.twitter.replace(':url', encodeURIComponent(this.url)).replace(':text', encodeURIComponent(this.text));
     },
   },
 };

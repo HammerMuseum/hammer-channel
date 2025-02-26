@@ -141,7 +141,7 @@ deploy: &deploy
         name: Deploy to $CI_PROD_DEPLOY_URL
         command: ./vendor/deployer/deployer/dep deploy live
     - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
-    - aws-white-list-circleci-ip/remove:
+    - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
         tag-value: bastion
@@ -182,7 +182,7 @@ deploy_stage: &deploy_stage
         name: Deploy to $CI_STAGE_HOST_URL
         command: ./vendor/deployer/deployer/dep deploy stage
     - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
-    - aws-white-list-circleci-ip/remove:
+    - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
         tag-value: bastion
@@ -217,7 +217,7 @@ deploy_dev: &deploy_dev
     - run: ssh-keyscan -H $(echo "$CI_DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run: ./vendor/deployer/deployer/dep deploy dev
     - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
-    - aws-white-list-circleci-ip/remove:
+    - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
         tag-value: bastion
@@ -227,7 +227,7 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.6
   aws-cli: circleci/aws-cli@2.0.3
-  aws-white-list-circleci-ip: avvo/aws-white-list-circleci-ip@0.0.2
+  aws-white-list-circleci-ip: inokappa/aws-sg-white-list-circleci-ip@0.0.1
 
 jobs:
   build_and_test:
