@@ -102,13 +102,13 @@ class SearchController extends Controller
             $facets = $this->facetHandler->getFacetOptions($data['aggregations']);
         }
 
-        $term = $request->get('term');
+        $term = e($request->get('term'));
         return [
             'path' => '/search',
             'videos' => isset($data['data']) ? $data['data'] : [],
             'term' => $term,
             'message' => false,
-            'title' => !is_null($term) ? 'Serach results for "' . ucfirst($term) . '"' : '""',
+            'title' => !is_null($term) ? 'Search results for "' . ucfirst($term) . '"' : '""',
             'facets' => $facets,
             'url' => $requestUrl,
             'currentQuery' => $originalQuery,
@@ -128,7 +128,7 @@ class SearchController extends Controller
     {
         $imageUrl = $this->metatagHelper->getImageUrl();
         $description = config('app.description');
-        $term = $data['term'];
+        $term = e($data['term']);
         $name = config('app.name');
         $title = !is_null($term) ? 'Search results for ' . $term . ' | ' . $name : 'Search | ' .  $name;
         $pageUrl = $this->metatagHelper->getCurrentUrl();
