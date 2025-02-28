@@ -42,7 +42,6 @@ mix.postCss('resources/css/app.pcss', 'public/css', [
   require('postcss-nested'),
   require('postcss-color-function'),
   require('postcss-hexrgba'),
-  require('postcss-custom-properties'),
   require('postcss-pxtorem')({
     rootValue: 16,
   }),
