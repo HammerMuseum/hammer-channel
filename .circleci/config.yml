@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: cimg/php:8.1.4-browsers
+    - image: cimg/php:8.3.24-browsers
 
 # Defines the cache restore mechanism for composer dependencies.
 restore_cache: &restore_cache
@@ -140,7 +140,7 @@ deploy: &deploy
     - run:
         name: Deploy to $CI_PROD_DEPLOY_URL
         command: ./vendor/deployer/deployer/dep deploy live
-    - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
+    - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.3-fpm.service
     - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
@@ -181,7 +181,7 @@ deploy_stage: &deploy_stage
     - run:
         name: Deploy to $CI_STAGE_HOST_URL
         command: ./vendor/deployer/deployer/dep deploy stage
-    - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
+    - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.3-fpm.service
     - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
@@ -216,7 +216,7 @@ deploy_dev: &deploy_dev
         tag-value: bastion
     - run: ssh-keyscan -H $(echo "$CI_DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run: ./vendor/deployer/deployer/dep deploy dev
-    - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
+    - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.3-fpm.service
     - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
