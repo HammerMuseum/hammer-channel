@@ -42,6 +42,10 @@ build_and_test: &build_and_test
           sudo apt-get update
           sudo apt-get install -y libnss3 automake
 
+    - run:
+        name: Show files for debugging
+        command: ls -la
+
     # Install Composer dependencies.
     - restore_cache: *restore_cache
     - run: composer install -n -q
@@ -215,7 +219,7 @@ deploy_dev: &deploy_dev
         tag-key: group
         tag-value: bastion
     - run: ssh-keyscan -H $(echo "$CI_DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: ./vendor/deployer/deployer/dep deploy dev
+    - run: php ./vendor/deployer/deployer/dep deploy dev
     - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.3-fpm.service
     - aws-white-list-circleci-ip/del:
         port: 22
