@@ -139,7 +139,7 @@ deploy: &deploy
         command: ssh-keyscan -H $(echo "$CI_PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
         name: Deploy to $CI_PROD_DEPLOY_URL
-        command: ./vendor/deployer/deployer/dep deploy live
+        command: ./vendor/bin/dep deploy live
     - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.3-fpm.service
     - aws-white-list-circleci-ip/del:
         port: 22
@@ -180,7 +180,7 @@ deploy_stage: &deploy_stage
         command: ssh-keyscan -H $(echo "$CI_STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
         name: Deploy to $CI_STAGE_HOST_URL
-        command: ./vendor/deployer/deployer/dep deploy stage
+        command: ./vendor/bin/dep deploy stage
     - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.3-fpm.service
     - aws-white-list-circleci-ip/del:
         port: 22
