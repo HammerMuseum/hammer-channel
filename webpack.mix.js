@@ -48,7 +48,7 @@ mix.postCss('resources/css/app.pcss', 'public/css', [
 ]);
 
 if (dev) {
-  mix.sourceMaps();
+  mix.sourceMaps(true, 'source-map');
   mix.options({
     hmrOptions: {
       host: 'localhost',
@@ -67,3 +67,4 @@ if (!dev) {
 if (process.env.NODE_ENV !== 'test') {
   mix.extract();
 }
+
