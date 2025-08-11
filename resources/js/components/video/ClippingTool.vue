@@ -189,6 +189,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    duration: {
+      type: String,
+      default() {
+        return "00:00:00";
+      },
+    },
   },
   data() {
     return {
@@ -201,18 +207,19 @@ export default {
     canGenerateClip() {
       const start = this.clipStart;
       const end = this.clipEnd;
-      return start !== null && (end !== null ? end > start : true);
+      return end !== null || start !== null
     },
     clipUrl() {
       if (!this.canGenerateClip) { return ''; }
-      const start = this.clipStart;
-      const end = this.clipEnd;
+
+      const start = this.clipStart ?? 0;
+      const end = this.clipEnd ?? convertTimeToSeconds(this.duration);
       let url = `${this.domain + this.path}`;
       if (start !== null) {
         url += `?start=${start}`;
       }
       if (end !== null && end > start) {
-        url += `&end=${this.clipEnd}`;
+        url += `&end=${end}`;
       }
       return url;
     },
