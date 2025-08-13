@@ -76,7 +76,7 @@ import 'videojs-markers';
 import 'videojs-offset';
 import 'videojs-event-tracking';
 import ClipDisplay from './ClipDisplay.vue';
-import { convertSecondsToTime } from '../../utils';
+import { convertSecondsToTime, convertSecondsToHumanReadableTime } from '../../utils';
 
 window.VIDEOJS_NO_BASE_THEME = true;
 
@@ -105,6 +105,12 @@ export default {
     isEmbed: {
       type: Boolean,
       default: false,
+    },
+    id: {
+      type: String,
+      default() {
+        return '';
+      },
     },
     title: {
       type: String,
@@ -326,10 +332,50 @@ export default {
           const duration = Math.ceil(parseInt(this.duration(), 10));
           self.$emit('loadedmetadata', duration);
 
+          // defer to query param i.e. a highlighted clip
           if (self.hasActiveClip) {
             self.initClipMarkers(self.clipStart, self.clipEnd);
             self.initClipPosition();
+          } else {
+            // check if returning to video
+            const lastWatched = localStorage.getItem(`lastWatched-${self.id}`) || 0;
+            // round down to the nearest second
+            const parsedTime = Math.floor(parseFloat(lastWatched));
+
+            // if returning, check if user wants to resume or restart
+            if (parsedTime > 0) {
+              // modal handles setting time
+              const modal = self.resumeModal(parsedTime);
+              // when the modal closes, resume playback.
+              modal.on('modalclose', function () {
+                self.player.play();
+              });
+            }
+            // otherwise player is initialised at 0 seconds
           }
+        });
+
+        this.on('playing', function () {
+          // when video fully watched, clear interval & reset status
+          if (!this.intervalId) {
+            this.intervalId = self.updateLastWatched();
+          }
+        });
+
+        this.on('pause', function () {
+          // when video paused, clear interval
+          this.intervalId = clearInterval(this.intervalId);
+        });
+
+        this.on('dispose', function () {
+          // when video paused, clear interval
+          this.intervalId = clearInterval(this.intervalId);
+        });
+
+        this.on('ended', function () {
+          // when video fully watched, clear interval & reset status
+          this.intervalId = clearInterval(this.intervalId);
+          localStorage.removeItem(`lastWatched-${self.id}`);
         });
       });
 
@@ -428,6 +474,46 @@ export default {
       this.player.src(val);
       this.initOverlays();
     },
+    resumeModal(time) {
+      const container = document.createElement('div');
+      container.className = 'modal__container';
+
+      const heading = document.createElement('h2');
+      heading.className = 'modal__heading';
+      heading.innerText = 'Resume or restart?';
+
+      const resumeButton = document.createElement('button');
+      resumeButton.className = 'modal__button';
+      resumeButton.innerText = `Resume video at ${convertSecondsToHumanReadableTime(time)}`;
+
+      const restartButton = document.createElement('button');
+      restartButton.className = 'modal__button';
+      restartButton.innerText = 'Restart video';
+
+      container.append(heading, resumeButton, restartButton);
+
+      const modal = this.player.createModal(container);
+      resumeButton.onclick = () => {
+        this.player.currentTime(time);
+        modal.close();
+      };
+      restartButton.onclick = () => {
+        this.player.currentTime(0);
+        modal.close();
+      };
+      return modal;
+    },
+    updateLastWatched(delay = 1000) {
+      return setInterval(() => {
+        try {
+          // https://developer.mozilla.org/en-US/docs/Web/API/Storage/setItem#exceptions
+          // in case localstorage is full
+          localStorage.setItem(`lastWatched-${this.id}`, this.player.currentTime());
+        } catch (error) {
+          console.error(error);
+        }
+      }, delay);
+    },
     updatePlayerSrc(val) {
       const time = this.player.currentTime();
       let initdone = false;
@@ -489,5 +575,24 @@ export default {
   .video-player__wrapper {
     margin: 0;
   }
+}
+
+.modal__container {
+  display: flex;
+  font-family: var(--font-family--body);
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal__heading {
+  margin-bottom: 8px;
+}
+
+.modal__button {
+  width: max-content;
+  padding: 0;
+  font-family: inherit;
+  font-size: 16px !important; /* required to override video.js styling */
+  cursor: pointer;
 }
 </style>
