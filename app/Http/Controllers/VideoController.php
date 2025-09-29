@@ -82,7 +82,7 @@ class VideoController extends Controller
             'videoObject' => json_encode($videoObject, true),
             'state' => $this->getAppState($id, $data),
             'src' => $video['src'],
-            'thumbnailUrl' => '/images/d/large/' . $video['thumbnailId'] . '.jpg',
+            'thumbnailUrl' => '/images/d/large/' . $video['asset_id'] . '.jpg',
             'description' => $video['description'],
             'title' => $video['title'],
             'date' => date('M d, Y', strtotime($video['date_recorded'])),
@@ -157,8 +157,8 @@ class VideoController extends Controller
             ->set('og:description', $description)
             ->set('og:type', 'video.other');
 
-        if (isset($data['thumbnailId'])) {
-            $imageUrl = $this->metatagHelper->getImageUrl($data['thumbnailId']);
+        if (isset($data['asset_id'])) {
+            $imageUrl = $this->metatagHelper->getImageUrl($data['asset_id']);
             meta()
                 ->set('twitter:image', $imageUrl)
                 ->set('og:image', $imageUrl)

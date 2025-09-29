@@ -45,7 +45,7 @@
             @if(isset($video['asset_id']) && isset($video['title_slug']))
             <a href="/video/{{$video['asset_id']}}/{{$video['title_slug']}}">
               <div class="ui-card__thumbnail">
-                <img src="/images/d/medium/{{$video['thumbnailId']}}.jpg" alt="" class="ui-card__thumbnail-image">
+                <img src="/images/d/medium/{{$video['asset_id']}}.jpg" alt="" class="ui-card__thumbnail-image">
               </div>
               <h2 class="ui-card__title">
                 <span>{{ $video['title'] }}</span>

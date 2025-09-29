@@ -79,7 +79,7 @@ export default {
       return this.item.title_slug;
     },
     thumbnailUrl() {
-      return `/images/d/medium/${this.item.thumbnailId}.jpg`;
+      return `/images/d/medium/${this.item.asset_id}.jpg`;
     },
     title() {
       return this.item.title;

@@ -80,7 +80,7 @@ export default {
       return this.item.subtitle;
     },
     thumbnailUrl() {
-      return `/images/d/large/${this.item.thumbnailId}.jpg`;
+      return `/images/d/large/${this.item.asset_id}.jpg`;
     },
     title() {
       return this.item.title;

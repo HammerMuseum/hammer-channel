@@ -15,8 +15,8 @@
 
         <div class="ui-card__thumbnail">
 
-        @isset($video['thumbnailId'])
-          <img src="/images/d/medium/{{$video['thumbnailId']}}.jpg" alt="" class="ui-card__thumbnail-image">
+        @isset($video['asset_id'])
+          <img src="/images/d/medium/{{$video['asset_id']}}.jpg" alt="" class="ui-card__thumbnail-image">
         @endisset
         </div>
 

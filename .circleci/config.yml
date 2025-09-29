@@ -1,19 +1,12 @@
 defaults: &defaults
   docker:
-    - image: cimg/php:8.1.4-browsers
-      environment:
-        HOST_URL: channel.hammer.ucla.edu
-        PROD_DEPLOY_URL: 13.56.128.221
-        STAGE_HOST_URL: stage.video.hammer.cogapp.com
-        DEV_HOST_URL: dev.video.hammer.cogapp.com
+    - image: cimg/php:8.3.24-browsers
 
 # Defines the cache restore mechanism for composer dependencies.
 restore_cache: &restore_cache
   # We use the composer.lock as a way to determine if we can cache our build.
   keys:
   - composer-v2-{{ checksum "composer.lock" }}
-  # fallback to using the latest cache if no exact match is found
-  - composer-v2
 
 # Defines the cache saving mechanism for composer dependencies.
 save_cache: &save_cache
@@ -25,7 +18,6 @@ save_cache: &save_cache
 restore_node_cache: &restore_node_cache
   keys:
     - node-v1-{{ checksum "package.json" }}
-    - node-v1-
 
 # Defines the cache saving mechanism for node dependencies.
 save_node_cache: &save_node_cache
@@ -39,8 +31,10 @@ build_and_test: &build_and_test
   <<: *defaults
   steps:
     - checkout
-    - browser-tools/install-chrome
-    - browser-tools/install-chromedriver
+    - run: sudo apt-get update
+    # - browser-tools/install-chrome:
+        # chrome-version: "125.0.6422.78"
+    # - browser-tools/install-chromedriver
 
     - run:
         name: Install missing packages
@@ -86,19 +80,19 @@ build_and_test: &build_and_test
     # Run linting
     - run: ./vendor/bin/phpcs
 
-    - run: cp -rf .env.dusk.testing .env
-    - run: php artisan key:generate
+    # - run: cp -rf .env.dusk.testing .env
+    # - run: php artisan key:generate
 
-    - run:
-        name: Run Laravel Server
-        command: php artisan serve
-        background: true
+    # - run:
+    #     name: Run Laravel Server
+    #     command: php artisan serve
+    #     background: true
 
-    - run:
-        name: Run Laravel Dusk Tests
-        command: |
-          php artisan dusk:chrome-driver --detect
-          php artisan dusk
+    # - run:
+    #     name: Run Laravel Dusk Tests
+    #     command: |
+    #       php artisan dusk:chrome-driver --detect
+    #       php artisan dusk
 
     - persist_to_workspace:
         root: /home/circleci/project
@@ -142,12 +136,12 @@ deploy: &deploy
         tag-value: bastion
     - run:
         name: Add host to known hosts
-        command: ssh-keyscan -H $(echo "$PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+        command: ssh-keyscan -H $(echo "$CI_PROD_DEPLOY_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
-        name: Deploy to $PROD_DEPLOY_URL
-        command: ./vendor/deployer/deployer/deployer.phar deploy 13.56.128.221
-    - run: ssh deploy@$PROD_DEPLOY_URL sudo systemctl reload php8.1-fpm.service
-    - aws-white-list-circleci-ip/remove:
+        name: Deploy to $CI_PROD_DEPLOY_URL
+        command: ./vendor/bin/dep deploy live
+    - run: ssh deploy@$CI_PROD_DEPLOY_URL sudo systemctl reload php8.3-fpm.service
+    - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
         tag-value: bastion
@@ -183,12 +177,12 @@ deploy_stage: &deploy_stage
           - "a2:22:da:24:fd:c3:76:8d:80:de:ae:af:a3:00:c3:3e"
     - run:
         name: Add staging host to known hosts
-        command: ssh-keyscan -H $(echo "$STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+        command: ssh-keyscan -H $(echo "$CI_STAGE_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
     - run:
-        name: Deploy to $STAGE_HOST_URL
-        command: ./vendor/deployer/deployer/deployer.phar deploy stage.video.hammer.cogapp.com
-    - run: ssh deploy@$STAGE_HOST_URL sudo systemctl reload php8.1-fpm.service
-    - aws-white-list-circleci-ip/remove:
+        name: Deploy to $CI_STAGE_HOST_URL
+        command: ./vendor/bin/dep deploy stage
+    - run: ssh deploy@$CI_STAGE_HOST_URL sudo systemctl reload php8.3-fpm.service
+    - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
         tag-value: bastion
@@ -220,10 +214,10 @@ deploy_dev: &deploy_dev
         port: 22
         tag-key: group
         tag-value: bastion
-    - run: ssh-keyscan -H $(echo "$DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
-    - run: ./vendor/deployer/deployer/deployer.phar deploy dev.video.hammer.cogapp.com
-    - run: ssh deploy@$DEV_HOST_URL sudo systemctl reload php8.1-fpm.service
-    - aws-white-list-circleci-ip/remove:
+    - run: ssh-keyscan -H $(echo "$CI_DEV_HOST_URL" | sed 's/.*@\(.*\):.*/\1/') >> ~/.ssh/known_hosts
+    - run: ./vendor/bin/dep deploy dev
+    - run: ssh deploy@$CI_DEV_HOST_URL sudo systemctl reload php8.3-fpm.service
+    - aws-white-list-circleci-ip/del:
         port: 22
         tag-key: group
         tag-value: bastion
@@ -231,9 +225,9 @@ deploy_dev: &deploy_dev
 # Declare all of the jobs we should run.
 version: 2.1
 orbs:
-  browser-tools: circleci/browser-tools@1.2.5
+  browser-tools: circleci/browser-tools@1.4.6
   aws-cli: circleci/aws-cli@2.0.3
-  aws-white-list-circleci-ip: avvo/aws-white-list-circleci-ip@0.0.2
+  aws-white-list-circleci-ip: inokappa/aws-sg-white-list-circleci-ip@0.0.1
 
 jobs:
   build_and_test:

@@ -1,7 +1,6 @@
 <?php
 
 return [
-  'imagesPath' => env('IMAGES_PATH'),
   'validQueryParams' => [
     'term',
     'sort',

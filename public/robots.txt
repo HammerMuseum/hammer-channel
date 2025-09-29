@@ -4,6 +4,10 @@ User-agent: Twitterbot
 Allow: /images/*
 Allow: /container/*
 
+User-agent: Bluesky Cardyb
+Allow: /images/*
+Allow: /container/*
+
 User-agent: facebookexternalhit
 Allow: /images/*
 Allow: /container/*

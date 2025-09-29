@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Api;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Image;
@@ -9,16 +10,14 @@ use Intervention\Image\Exception\NotReadableException;
 
 class GenerateImageAction
 {
-    /**
-     * The base URL for remote images.
-     * @var string $basUrl
-     */
-    protected $baseUrl;
+    protected $api;
 
-    public function __construct()
-    {
-        $this->baseUrl = config('constants.imagesPath');
+    public function __construct(
+        Api $api,
+    ) {
+        $this->api = $api;
     }
+
     /**
      * Generates a thumbnail image.
      *
@@ -36,11 +35,6 @@ class GenerateImageAction
         $directory = "images/d/$template/";
         $cachePath = "$directory/$filename.$extension";
 
-        if (empty($this->baseUrl)) {
-            Log::error('Images base URL has not been defined.');
-            abort(503);
-        }
-
         $allowedExtensions = ['webp', 'jpg'];
         if (!in_array($extension, $allowedExtensions)) {
             abort(404);
@@ -57,6 +51,7 @@ class GenerateImageAction
             return response()->file($path);
         }
 
+        $id = $filename;
         $image = $this->getImage($id, $filter);
         if (!$image) {
             abort(404);
@@ -95,7 +90,14 @@ class GenerateImageAction
             return false;
         }
 
-        $url = "{$this->baseUrl}{$id}";
+        // Get preview url from API
+        $video = $this->api->request('videos/' . $id);
+        if (empty($video['data'])) {
+            return false;
+        }
+
+        $url = $video['data'][0]['thumbnail_url'];
+
         try {
             $img = Image::make($url)->filter($filter);
             return $img;

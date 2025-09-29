@@ -102,7 +102,7 @@ class SearchController extends Controller
             $facets = $this->facetHandler->getFacetOptions($data['aggregations']);
         }
 
-        $term = $request->get('term');
+        $term = e($request->get('term'));
         return [
             'path' => '/search',
             'videos' => isset($data['data']) ? $data['data'] : [],
@@ -128,7 +128,7 @@ class SearchController extends Controller
     {
         $imageUrl = $this->metatagHelper->getImageUrl();
         $description = config('app.description');
-        $term = $data['term'];
+        $term = e($data['term']);
         $name = config('app.name');
         $title = !is_null($term) ? 'Search results for ' . $term . ' | ' . $name : 'Search | ' .  $name;
         $pageUrl = $this->metatagHelper->getCurrentUrl();
