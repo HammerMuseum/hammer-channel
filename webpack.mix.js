@@ -48,7 +48,7 @@ mix.postCss('resources/css/app.pcss', 'public/css', [
 ]);
 
 if (dev) {
-  mix.sourceMaps(true, 'source-map');
+  mix.sourceMaps();
   mix.options({
     hmrOptions: {
       host: 'localhost',
