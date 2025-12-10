@@ -332,8 +332,11 @@ export default {
           const duration = Math.ceil(parseInt(this.duration(), 10));
           self.$emit('loadedmetadata', duration);
 
-          // defer to query param i.e. a highlighted clip
-          if (self.hasActiveClip) {
+          // Check for clip query params directly - more reliable than hasActiveClip prop due to
+          // the timing of the event firing making hasActiveClip false when this loads.
+          const hasClipInRoute = self.clipStart > 0 && self.clipEnd > self.clipStart && self.clipEnd <= duration;
+
+          if (hasClipInRoute) {
             self.initClipMarkers(self.clipStart, self.clipEnd);
             self.initClipPosition();
           } else {
