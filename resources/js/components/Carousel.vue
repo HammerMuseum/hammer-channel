@@ -220,7 +220,7 @@ export default {
         }
 
         // Find the currently focused element in the array of links
-        const selectedLinkIndex = [...this.carouselLinks].indexOf(focusedElement)
+        const selectedLinkIndex = [...this.carouselLinks].indexOf(focusedElement);
         if (selectedLinkIndex === -1) {
           return;
         }
@@ -241,7 +241,7 @@ export default {
           this.$refs.carousel.select(index, false, true);
           targetLink.focus();
         }
-      })
+      });
 
       this.setControlsPosition();
     },

@@ -13,7 +13,10 @@
             alt=""
           >
         </div>
-        <component :is="headingType" class="ui-card__title">
+        <component
+          :is="headingType"
+          class="ui-card__title"
+        >
           <span>{{ title }}</span>
         </component>
         <span

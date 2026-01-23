@@ -65,7 +65,7 @@
               active
               @click="jumpToLowerPanel"
             >
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -95,7 +95,7 @@
               class="tab--transcript"
               @click="jumpToLowerPanel"
             >
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -122,7 +122,7 @@
             </BTab>
 
             <BTab @click="jumpToLowerPanel">
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -150,7 +150,7 @@
             </BTab>
 
             <BTab @click="jumpToLowerPanel">
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -175,7 +175,7 @@
             </BTab>
 
             <BTab @click="jumpToLowerPanel">
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -231,6 +231,21 @@ export default {
     VideoPlayer,
   },
   mixins: [getRouteData],
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.path !== from.path) {
+      axios.get(`/api${to.path}`).then(({ data }) => {
+        this.setData(data);
+        next();
+      });
+    } else {
+      next();
+    }
+  },
   props: {
     id: {
       type: String,
@@ -361,21 +376,6 @@ export default {
         this.fetchTranscript();
       }
     },
-  },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.prevRoute = from;
-    });
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.path !== from.path) {
-      axios.get(`/api${to.path}`).then(({ data }) => {
-        this.setData(data);
-        next();
-      });
-    } else {
-      next();
-    }
   },
   mounted() {
     document.body.classList.add('vp');

@@ -1,6 +1,6 @@
 <template>
   <VideoMeta>
-    <template v-slot:highlighted>
+    <template #highlighted>
       <div class="share-buttons">
         <a
           class="share-button button button--icon"
@@ -59,7 +59,7 @@
         </button>
       </div>
     </template>
-    <template v-slot:content>
+    <template #content>
       <transition name="fade">
         <div
           v-show="showCitation"

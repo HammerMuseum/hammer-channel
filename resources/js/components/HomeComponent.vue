@@ -1,7 +1,7 @@
 <template>
   <div class="container container--full">
     <div
-    id="start-of-content"
+      id="start-of-content"
       class="page-wrapper page-wrapper--full"
     >
       <p class="strapline">

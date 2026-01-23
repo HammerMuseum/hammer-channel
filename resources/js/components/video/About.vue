@@ -1,6 +1,6 @@
 <template>
   <VideoMeta>
-    <template v-slot:highlighted>
+    <template #highlighted>
       <div
         v-if="playlists.length"
         class="ui-table"
@@ -74,7 +74,7 @@
         </ul>
       </div>
     </template>
-    <template v-slot:content>
+    <template #content>
       <RichText
         :classes="['video-meta__description']"
         :text="description"

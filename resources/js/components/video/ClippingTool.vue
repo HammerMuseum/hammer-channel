@@ -1,6 +1,6 @@
 <template>
   <VideoMeta>
-    <template v-slot:highlighted>
+    <template #highlighted>
       <div class="clip">
         <p>{{ tips }}</p>
         <div class="clip__controls">
@@ -21,9 +21,9 @@
               {{ `Start time set to ${clipStartTime}` }}
             </div>
             <VInput
-              name="clipStartTime"
               ref="startInput"
               v-model="clipStartTime"
+              name="clipStartTime"
               label="Set clip start time"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
@@ -60,9 +60,9 @@
               {{ `End time set to ${clipEndTime}` }}
             </div>
             <VInput
-              name="clipEndTime"
               ref="endInput"
               v-model="clipEndTime"
+              name="clipEndTime"
               label="Set clip end time"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
@@ -120,7 +120,7 @@
         </div>
       </div>
     </template>
-    <template v-slot:content>
+    <template #content>
       <p
         v-if="hasActiveClip"
         class="video-meta__description cliptool--remove"

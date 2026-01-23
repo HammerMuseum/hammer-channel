@@ -1,8 +1,16 @@
 <template>
   <div class="ui-card__snippets">
     <template v-if="!snippetsAreEmpty">
-      <p class="ui-card__snippet" v-for="match in descriptionMatches" v-html="match" />
-      <em class="ui-card__snippet" v-for="match in transcriptMatches" v-html="match" />
+      <p
+        v-for="match in descriptionMatches"
+        class="ui-card__snippet"
+        v-html="match"
+      />
+      <em
+        v-for="match in transcriptMatches"
+        class="ui-card__snippet"
+        v-html="match"
+      />
     </template>
     <template v-else>
       <p>{{ defaultContent }}</p>

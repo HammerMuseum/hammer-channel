@@ -6,7 +6,7 @@
 export default {
   data() {
     return {
-      message: "oh 404.",
+      message: 'oh 404.',
     };
   },
 };

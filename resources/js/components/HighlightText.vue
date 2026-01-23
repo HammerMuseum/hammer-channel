@@ -110,7 +110,7 @@ export default {
     offsetRight: {
       type: Number,
       required: false,
-    }
+    },
   },
   data() {
     return {
@@ -142,7 +142,7 @@ export default {
     },
     style() {
       return `right: ${this.offsetRight}px`;
-    }
+    },
   },
   watch: {
     query() {
