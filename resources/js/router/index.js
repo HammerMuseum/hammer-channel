@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/HomeComponent.vue';
 import Search from '../components/SearchPage.vue';
 import NotFound from '../components/NotFoundComponent.vue';
 import Video from '../components/video/Video.vue';
-
-Vue.use(VueRouter);
 
 const routes = [
   {
@@ -41,7 +38,7 @@ const routes = [
     },
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     component: NotFound,
     meta: {
       announcer: {
@@ -51,8 +48,8 @@ const routes = [
   },
 ];
 
-export default new VueRouter({
-  mode: 'history',
+export default createRouter({
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (to.name === from.name) {

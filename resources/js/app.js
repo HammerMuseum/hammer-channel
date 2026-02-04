@@ -1,5 +1,5 @@
 import 'intersection-observer';
-import Vue from 'vue';
+import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
 import VueFilterDateFormat from 'vue-filter-date-format';
@@ -12,6 +12,12 @@ import router from './router';
 import { store } from './store';
 import App from './components/App.vue';
 
+// Enable Vue 2 compatibility mode
+configureCompat({
+  MODE: 2, // Run in Vue 2 compatibility mode
+  GLOBAL_MOUNT: false, // Use createApp instead of new Vue
+});
+
 // /**
 //  * The following block of code may be used to automatically register your
 //  * Vue components. It will recursively scan this directory for the Vue
@@ -19,35 +25,17 @@ import App from './components/App.vue';
 //  *
 //  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
 //  */
-const files = require.context('./', true, /\.vue$/i);
-files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+// const files = require.context('./', true, /\.vue$/i);
+// files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.use(VueGtm, {
-  id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
-  defer: false,
-  enabled: process.env.MIX_PROD,
-  debug: false,
-  loadScript: true,
-});
-
-Vue.use(VueHammer);
-Vue.use(VueFilterDateFormat);
-Vue.use(VueAnnouncer, {}, router);
-Vue.use(VueCheckView);
-Vue.use(VueProgressBar, {
-  color: '#ee2a7b',
-  failedColor: 'red',
-  height: '2px',
-});
-Vue.use(VueScrollTo);
-
-Vue.component('VSkip', VSkip);
-
-const app = new Vue({ // eslint-disable-line
-  router,
+const app = createApp({
   computed: {
     overlayOpen() {
-      return store.searchOverlayActive || store.facetOverlayActive || store.footerActive;
+      return (
+        store.searchOverlayActive ||
+        store.facetOverlayActive ||
+        store.footerActive
+      );
     },
   },
   watch: {
@@ -72,7 +60,6 @@ const app = new Vue({ // eslint-disable-line
   created() {
     document.addEventListener('keydown', this.onKeyDown, true);
     document.addEventListener('mousedown', this.onPointerDown, true);
-    // See https://github.com/hilongjw/vue-progressbar for progress bar docs.
     this.$Progress.start();
     this.$router.beforeEach((to, from, next) => {
       if (from.hash !== to.hash) return;
@@ -83,7 +70,8 @@ const app = new Vue({ // eslint-disable-line
       this.$Progress.finish();
     });
   },
-  destroyed() {
+  unmounted() {
+    // changed from destroyed
     document.removeEventListener('keydown', this.onKeyDown, true);
     document.removeEventListener('mousedown', this.onPointerDown, true);
   },
@@ -99,5 +87,37 @@ const app = new Vue({ // eslint-disable-line
       this.$el.focus();
     },
   },
-  render: (h) => h(App),
-}).$mount('#app');
+  render: () => h(App),
+});
+
+// Register plugins
+app.use(router);
+app.use(VueGtm, {
+  id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
+  defer: false,
+  enabled: process.env.MIX_PROD,
+  debug: false,
+  loadScript: true,
+});
+app.use(VueHammer);
+app.use(VueFilterDateFormat);
+app.use(VueAnnouncer, {}, router);
+app.use(VueCheckView);
+app.use(VueProgressBar, {
+  color: '#ee2a7b',
+  failedColor: 'red',
+  height: '2px',
+});
+app.use(VueScrollTo);
+
+// Auto-register components
+const files = require.context('./', true, /\.vue$/i);
+files.keys().forEach((key) => {
+  const component = files(key).default;
+  const name = key.split('/').pop().split('.')[0];
+  app.component(name, component);
+});
+
+app.component('VSkip', VSkip);
+
+app.mount('#app');

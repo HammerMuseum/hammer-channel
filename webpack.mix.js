@@ -20,7 +20,25 @@ mix.copy('resources/images/favicons', 'public/icons', false);
 
 mix.webpackConfig({
   resolve: {
-    fallback: { fs: false }
+    fallback: { fs: false },
+    alias: {
+      vue: '@vue/compat'
+    },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2
+            }
+          }
+        }
+      }
+    ]
   },
   plugins: [
     new StyleLintPlugin({
@@ -34,8 +52,8 @@ mix.webpackConfig({
   ],
 });
 
-mix.js('resources/js/app.js', 'public/js/app.js').vue({ version: 2 });
-mix.js('resources/js/embed.js', 'public/js/embed.js').vue({ version: 2 });
+mix.js('resources/js/app.js', 'public/js/app.js').vue({ version: 3 });
+mix.js('resources/js/embed.js', 'public/js/embed.js').vue({ version: 3 });
 mix.postCss('resources/css/app.pcss', 'public/css', [
   require('autoprefixer'),
   require('postcss-import'),

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import VueGtm from 'vue-gtm';
 import VueRouter from 'vue-router';
@@ -23,6 +23,6 @@ const router = new VueRouter({
   ],
 });
 
-const app = new Vue({ // eslint-disable-line
-  router,
-}).$mount('#app');
+const app = createApp();
+app.use(router);
+app.mount('#app');
