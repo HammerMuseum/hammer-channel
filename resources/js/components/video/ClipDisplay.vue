@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <div class="clip-display">
     <h4 class="clip-display__heading">
       Clip information

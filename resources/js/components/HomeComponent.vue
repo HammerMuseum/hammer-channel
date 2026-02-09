@@ -11,7 +11,7 @@
         v-if="!featured"
         class="carousel--full-width"
       />
-      <Carousel
+      <!-- <Carousel
         v-else
         id="featured"
         title="Featured programs"
@@ -26,7 +26,7 @@
           :key="video.id"
           :item="video"
         />
-      </Carousel>
+      </Carousel> -->
 
       <div class="carousels">
         <template v-for="({id, label, count, hits}, idx) in videos">
@@ -113,11 +113,6 @@ export default {
     FeaturedCarouselSlide,
     Loader,
   },
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
-  },
   mixins: [mixin, vueWindowSizeMixin],
   data() {
     return {
@@ -134,7 +129,7 @@ export default {
     },
   },
   mounted() {
-    this.getFeatured();
+    // this.getFeatured();
     document.body.classList.add('front');
     // this.groupCells = this.windowWidth < 840 ? 1 : 2;
     const pageTitle = 'Hammer Channel | Hammer Museum';
@@ -150,15 +145,15 @@ export default {
     document.body.classList.remove('front');
   },
   methods: {
-    getFeatured() {
-      axios
-        .get(`${process.env.MIX_DATASTORE_URL}playlists/Featured`)
-        .then((response) => {
-          this.featured = response.data.data.videos;
-        }).catch((err) => {
-          console.error(err);
-        });
-    },
+    // getFeatured() {
+    //   axios
+    //     .get(`${process.env.MIX_DATASTORE_URL}playlists/Featured`)
+    //     .then((response) => {
+    //       this.featured = response.data.data.videos;
+    //     }).catch((err) => {
+    //       console.error(err);
+    //     });
+    // },
     getPageData() {
       axios
         .get('/api')

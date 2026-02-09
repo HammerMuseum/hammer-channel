@@ -1,21 +1,15 @@
 <template>
   <a
-    :href="href | filterId | anchor"
+    :href="processedHref"
     :class="['link', {'link--active': activeItem === item }]"
   >{{ item }}</a>
 </template>
 
 <script>
+import { filterId, anchorLink } from '../filters';
+
 export default {
   name: 'NavigationBarLink',
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
-    anchor(value) {
-      return `#${value}`;
-    },
-  },
   props: {
     href: {
       type: Object,
@@ -34,6 +28,11 @@ export default {
       default() {
         return [];
       },
+    },
+  },
+  computed: {
+    processedHref() {
+      return anchorLink(filterId(this.href));
     },
   },
 };

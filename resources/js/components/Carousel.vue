@@ -1,20 +1,14 @@
 <template>
-  <div
-    :id="id | filterId"
-  >
+  <div :id="filterId(id)">
     <h2
       v-if="showHeading"
-      :id="headingId |filterId "
+      :id="filterId(headingId)"
       :class="['carousel__title']"
     >
       <slot name="heading" />
     </h2>
-    <div :class="['carousel-wrapper', {'carousel--full-width': fullWidth}]">
-      <div
-        v-if="controls"
-        ref="controls"
-        class="carousel-controls"
-      >
+    <div :class="['carousel-wrapper', { 'carousel--full-width': fullWidth }]">
+      <div v-if="controls" ref="controls" class="carousel-controls">
         <button
           type="submit"
           :class="[
@@ -22,7 +16,7 @@
             'control--previous',
             'button',
             'button--icon',
-            {'button--disabled': isFirstSlide}
+            { 'button--disabled': isFirstSlide },
           ]"
           :aria-disabled="isFirstSlide"
           tabindex="-1"
@@ -47,7 +41,7 @@
             'control--next',
             'button',
             'button--icon',
-            {'button--disabled': isFinalSlide}
+            { 'button--disabled': isFinalSlide },
           ]"
           :aria-disabled="isFinalSlide"
           tabindex="-1"
@@ -79,11 +73,12 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce';
-import Flickity from 'vue-flickity';
-import imagesLoaded from 'vue-images-loaded';
-import BaseIcon from './base/BaseIcon.vue';
-import NextWithCircleIcon from './icons/NextWithCircleIcon.vue';
+import debounce from "lodash/debounce";
+import Flickity from "vue-flickity";
+import imagesLoaded from "vue-images-loaded";
+import BaseIcon from "./base/BaseIcon.vue";
+import NextWithCircleIcon from "./icons/NextWithCircleIcon.vue";
+import { filterId } from "../filters";
 
 export default {
   components: {
@@ -92,11 +87,6 @@ export default {
     NextWithCircleIcon,
   },
   directives: { imagesLoaded },
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
-  },
   props: {
     classes: {
       type: Array,
@@ -108,7 +98,7 @@ export default {
     },
     id: {
       type: String,
-      default: '',
+      default: "",
     },
     fullWidth: {
       type: Boolean,
@@ -124,7 +114,7 @@ export default {
     },
     title: {
       type: String,
-      default: '',
+      default: "",
     },
   },
   data() {
@@ -135,7 +125,7 @@ export default {
       debouncedSetControlsPosition: null,
       defaultOptions: {
         accessibility: false,
-        cellAlign: 'left',
+        cellAlign: "left",
         contain: false,
         freeScroll: false,
         friction: 0.25,
@@ -159,7 +149,10 @@ export default {
       if (group && group > 1) {
         total = this.totalSlides / group;
       }
-      return !this.mergedOptions.wrapAround && (this.currentSlide === total || this.isFinalSlideVisible);
+      return (
+        !this.mergedOptions.wrapAround &&
+        (this.currentSlide === total || this.isFinalSlideVisible)
+      );
     },
     isFirstSlide() {
       return !this.mergedOptions.wrapAround && this.currentSlide === 0;
@@ -171,13 +164,14 @@ export default {
   mounted() {
     this.setupObserver();
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
-    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    window.addEventListener("resize", this.debouncedSetControlsPosition, false);
   },
   beforeDestroy() {
     this.observer.disconnect();
-    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    window.addEventListener("resize", this.debouncedSetControlsPosition, false);
   },
   methods: {
+    filterId,
     imgsLoaded() {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
@@ -188,25 +182,25 @@ export default {
       const carousel = this.$refs.carousel;
       this.totalSlides = carousel.cells().length - 1;
 
-      carousel.on('change', (index) => {
+      carousel.on("change", (index) => {
         this.currentSlide = index;
       });
 
-      carousel.on('dragMove', function () {
+      carousel.on("dragMove", function () {
         this.slider.childNodes.forEach((slide) => {
-          slide.style.pointerEvents = 'none';
+          slide.style.pointerEvents = "none";
         });
       });
 
-      carousel.on('dragEnd', function () {
+      carousel.on("dragEnd", function () {
         this.slider.childNodes.forEach((slide) => {
-          slide.style.pointerEvents = 'all';
+          slide.style.pointerEvents = "all";
         });
       });
 
-      this.carouselLinks = this.$refs.carousel.$el.querySelectorAll('a');
+      this.carouselLinks = this.$refs.carousel.$el.querySelectorAll("a");
 
-      this.$refs.carousel.$el.addEventListener('keydown', (event) => {
+      this.$refs.carousel.$el.addEventListener("keydown", (event) => {
         let targetLink = null;
 
         // Only listen for Tab key presses
@@ -220,24 +214,34 @@ export default {
         }
 
         // Find the currently focused element in the array of links
-        const selectedLinkIndex = [...this.carouselLinks].indexOf(focusedElement);
+        const selectedLinkIndex = [...this.carouselLinks].indexOf(
+          focusedElement
+        );
         if (selectedLinkIndex === -1) {
           return;
         }
 
         if (!event.shiftKey && this.carouselLinks[selectedLinkIndex + 1]) {
           targetLink = this.carouselLinks[selectedLinkIndex + 1];
-        } else if (event.shiftKey && this.carouselLinks[selectedLinkIndex - 1]) {
+        } else if (
+          event.shiftKey &&
+          this.carouselLinks[selectedLinkIndex - 1]
+        ) {
           targetLink = this.carouselLinks[selectedLinkIndex - 1];
         }
 
         // Check whether
         // a) 'element.closest' is supported and
         // b) the target link is inside a carousel slide
-        const parentSlide = Element.prototype.closest && targetLink ? targetLink.closest('.carousel__slide') : null;
+        const parentSlide =
+          Element.prototype.closest && targetLink
+            ? targetLink.closest(".carousel__slide")
+            : null;
         if (parentSlide) {
           event.preventDefault();
-          const index = [...parentSlide.parentNode.children].indexOf(parentSlide);
+          const index = [...parentSlide.parentNode.children].indexOf(
+            parentSlide
+          );
           this.$refs.carousel.select(index, false, true);
           targetLink.focus();
         }
@@ -248,12 +252,14 @@ export default {
     setControlsPosition() {
       if (this.$refs.carousel) {
         let top = 0;
-        if (this.id === 'featured') {
+        if (this.id === "featured") {
           const carouselHeight = this.$refs.carousel.$el.offsetHeight;
           // Half-way down minus half the height of the buttons
           top = carouselHeight / 2 - 16;
         } else {
-          const imageHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
+          const imageHeight = this.$refs.carousel.$el.querySelector(
+            ".ui-card__thumbnail-image"
+          ).height;
           top = imageHeight / 1.4;
         }
 
@@ -261,11 +267,12 @@ export default {
       }
     },
     setupObserver() {
-      const finalSlide = this.$refs.carousel.$el.querySelector('.carousel__slide:last-child');
-      this.observer = new IntersectionObserver(
-        this.observerCallback,
-        { threshold: [1] },
+      const finalSlide = this.$refs.carousel.$el.querySelector(
+        ".carousel__slide:last-child"
       );
+      this.observer = new IntersectionObserver(this.observerCallback, {
+        threshold: [1],
+      });
       this.observer.observe(finalSlide);
     },
     observerCallback(e) {

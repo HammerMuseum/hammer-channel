@@ -60,14 +60,6 @@ export default {
   components: {
     Flickity,
   },
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
-    anchorLink(value) {
-      return `#${value}`;
-    },
-  },
   props: {
     items: {
       type: Array,

@@ -242,63 +242,65 @@
             @before-enter="setScrollPosition(false)"
             @enter="setElementHeight('.overlay__inner', '.overlay')"
           >
-            <Overlay
-              v-if="openFacetName === 'topics'"
-              id="topics"
-              key="topics"
-              @close-panel="toggleFacetOverlay(null)"
-            >
-              <SearchableFacet
-                v-if="facets"
-                :active-facets="activeFacets"
-                :facet-list="topicsAndTags"
-                :panel-name="'topics'"
+            <div>
+              <Overlay
+                v-if="openFacetName === 'topics'"
+                id="topics"
+                key="topics"
                 @close-panel="toggleFacetOverlay(null)"
-              />
-            </Overlay>
+              >
+                <SearchableFacet
+                  v-if="facets"
+                  :active-facets="activeFacets"
+                  :facet-list="topicsAndTags"
+                  :panel-name="'topics'"
+                  @close-panel="toggleFacetOverlay(null)"
+                />
+              </Overlay>
 
-            <Overlay
-              v-if="openFacetName === 'people'"
-              id="people"
-              key="people"
-              @close-panel="toggleFacetOverlay(null)"
-            >
-              <SearchableFacet
-                v-if="facets"
-                :active-facets="activeFacets"
-                :facet-list="[facets.speakers]"
-                :panel-name="'people'"
+              <Overlay
+                v-if="openFacetName === 'people'"
+                id="people"
+                key="people"
                 @close-panel="toggleFacetOverlay(null)"
-              />
-            </Overlay>
+              >
+                <SearchableFacet
+                  v-if="facets"
+                  :active-facets="activeFacets"
+                  :facet-list="[facets.speakers]"
+                  :panel-name="'people'"
+                  @close-panel="toggleFacetOverlay(null)"
+                />
+              </Overlay>
 
-            <Overlay
-              v-if="openFacetName === 'playlists'"
-              id="playlists"
-              key="playlists"
-              @close-panel="toggleFacetOverlay(null)"
-            >
-              <SearchFacet
-                v-if="facets"
-                :active-facets="activeFacets"
-                :facet="facets.in_playlists"
+              <Overlay
+                v-if="openFacetName === 'playlists'"
+                id="playlists"
+                key="playlists"
                 @close-panel="toggleFacetOverlay(null)"
-              />
-            </Overlay>
+              >
+                <SearchFacet
+                  v-if="facets"
+                  :active-facets="activeFacets"
+                  :facet="facets.in_playlists"
+                  @close-panel="toggleFacetOverlay(null)"
+                />
+              </Overlay>
 
-            <Overlay
-              v-if="openFacetName === 'date'"
-              id="date"
-              key="date"
-              @close-panel="toggleFacetOverlay(null)"
-            >
-              <SearchFacet
-                v-if="facets"
-                :active-facets="activeFacets"
-                :facet="facets.date_recorded"
+              <Overlay
+                v-if="openFacetName === 'date'"
+                id="date"
+                key="date"
                 @close-panel="toggleFacetOverlay(null)"
-              />
-            </Overlay>
+              >
+                <SearchFacet
+                  v-if="facets"
+                  :active-facets="activeFacets"
+                  :facet="facets.date_recorded"
+                  @close-panel="toggleFacetOverlay(null)"
+                />
+              </Overlay>
+            </div>
           </transition>
 
           <span
@@ -339,7 +341,7 @@
                     <span v-html="highlight(item)" />
                   </h2>
                   <div class="ui-card__date">
-                    {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
+                    {{ formatDate(new Date(item.date_recorded), "MMM DD, YYYY") }}
                   </div>
                   <SearchSnippets
                     :snippets="item.snippets"
@@ -379,6 +381,7 @@ import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
 import Overlay from './Overlay.vue';
 import { store, mutations } from '../store';
+import { formatDate } from '../filters';
 
 export default {
   name: 'Search',
@@ -524,6 +527,7 @@ export default {
     window.addEventListener('resize', this.debouncedResize, false);
   },
   methods: {
+    formatDate,
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {

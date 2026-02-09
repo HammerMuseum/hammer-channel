@@ -22,7 +22,7 @@
           v-show="video.date_recorded"
         >
           <span>Original program date: </span>
-          <span class="video-meta__date">{{ new Date(video.date_recorded) | dateFormat('MMM D, YYYY') }}</span>
+          <span class="video-meta__date">{{ formatDate(new Date(video.date_recorded), "MMM D, YYYY") }}</span>
         </div>
       </header>
       <div
@@ -217,6 +217,7 @@ import Transcript from '../Transcript.vue';
 import Share from './Share.vue';
 import VideoPlayer from './VideoPlayer.vue';
 import { store } from '../../store';
+import { formatDate } from '../../filters';
 
 export default {
   name: 'VideoComponent',
@@ -396,6 +397,7 @@ export default {
     window.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
+    formatDate,
     jumpToLowerPanel() {
       if (this.isSticky && !this.hasReachedSticky) {
         window.scrollTo(0, this.$refs.videoPlayer.offsetTop + 24);

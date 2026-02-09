@@ -88,12 +88,6 @@
 <script>
 export default {
   name: 'Pagination',
-  filters: {
-    capitalize(value) {
-      if (!value) return '';
-      return value.toString().charAt(0).toUpperCase() + value.slice(1);
-    },
-  },
   props: {
     totalPages: {
       type: Number,
