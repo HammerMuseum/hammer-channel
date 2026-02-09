@@ -3,7 +3,7 @@
     id="app"
     data-id="vue-app"
   >
-    <vue-progress-bar />
+    <!-- <vue-progress-bar /> -->
     <vue-announcer />
     <the-header />
     <transition name="fade">
