@@ -22,7 +22,7 @@ mix.webpackConfig({
   resolve: {
     fallback: { fs: false },
     alias: {
-      vue: '@vue/compat'
+      vue: '@vue/compat',
     },
   },
   module: {
@@ -33,12 +33,12 @@ mix.webpackConfig({
         options: {
           compilerOptions: {
             compatConfig: {
-              MODE: 2
-            }
-          }
-        }
-      }
-    ]
+              MODE: 2,
+            },
+          },
+        },
+      },
+    ],
   },
   plugins: [
     new StyleLintPlugin({

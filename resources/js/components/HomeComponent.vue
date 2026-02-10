@@ -29,7 +29,7 @@
       </Carousel> -->
 
       <div class="carousels">
-        <template v-for="({id, label, count, hits}, idx) in videos">
+        <template v-for="({id, label, count, hits}, idx) in videos" :key="id">
           <div
             v-if="idx === 3"
             :key="`${id}-search`"
@@ -42,7 +42,6 @@
             </div>
           </div>
           <div
-            :key="id"
             v-view="viewHandler"
             :data-section-id="id"
           >

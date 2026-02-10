@@ -7,13 +7,6 @@
       'header-container',
       { 'overlay--active': overlayActive }]"
   >
-    <VSkip
-      ref="skip"
-      to="#start-of-content"
-      class="link link--text link--skip-to-content"
-    >
-      Skip to content
-    </VSkip>
     <header class="header">
       <div class="header__content">
         <div class="header__title">
