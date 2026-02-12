@@ -22,7 +22,9 @@
           v-show="video.date_recorded"
         >
           <span>Original program date: </span>
-          <span class="video-meta__date">{{ formatDate(new Date(video.date_recorded), "MMM D, YYYY") }}</span>
+          <span class="video-meta__date">
+            {{ formatDate(new Date(video.date_recorded), "MMM D, YYYY") }}
+          </span>
         </div>
       </header>
       <div

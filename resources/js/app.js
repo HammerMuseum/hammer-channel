@@ -2,7 +2,6 @@ import 'intersection-observer';
 import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
-import VueFilterDateFormat from 'vue-filter-date-format';
 import VueGtm from 'vue-gtm';
 // import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
