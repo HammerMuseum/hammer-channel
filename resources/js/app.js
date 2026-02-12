@@ -7,7 +7,7 @@ import VueGtm from 'vue-gtm';
 // import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import { VueHammer } from 'vue2-hammer';
-import { VSkip } from 'vuetensils/src/components';
+// import { VSkip } from 'vuetensils/src/components';
 import router from './router';
 import { store } from './store';
 import App from './components/App.vue';
@@ -32,9 +32,9 @@ const app = createApp({
   computed: {
     overlayOpen() {
       return (
-        store.searchOverlayActive ||
-        store.facetOverlayActive ||
-        store.footerActive
+        store.searchOverlayActive
+        || store.facetOverlayActive
+        || store.footerActive
       );
     },
   },
@@ -118,6 +118,6 @@ files.keys().forEach((key) => {
   app.component(name, component);
 });
 
-app.component('VSkip', VSkip);
+// app.component('VSkip', VSkip);
 
 app.mount('#app');
