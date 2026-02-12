@@ -372,7 +372,6 @@ import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import SearchSnippets from './SearchSnippets.vue';
-import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import Pagination from './Pagination.vue';
 import CurrentSearch from './CurrentSearch.vue';
@@ -400,7 +399,33 @@ export default {
     VInput,
     VToggle,
   },
-  mixins: [getRouteData],
+  beforeRouteEnter(to, from, next) {
+    const getData = function () {
+      return new Promise((resolve) => {
+        const initialState = JSON.parse(window.INITIAL_STATE) || {};
+        if (!initialState.path || to.path !== initialState.path) {
+          // Check if the query object is empty
+          if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+            axios.get(`/api${to.path}`).then(({ data }) => {
+              resolve(data);
+            });
+          } else {
+            axios.get(`/api${to.path}`, { params: to.query }).then(({ data }) => {
+              resolve(data);
+            });
+          }
+        } else {
+          resolve(initialState);
+        }
+      });
+    };
+
+    getData(to).then((data) => {
+      next(
+        (vm) => Object.assign(vm.$data, data),
+      );
+    });
+  },
   props: {
     facetQuery: {
       type: String,

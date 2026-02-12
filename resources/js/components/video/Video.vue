@@ -209,7 +209,6 @@ import axios from 'axios';
 import { BTabs, BTab } from 'bootstrap-vue';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import getRouteData from '../../mixins/getRouteData';
 import About from './About.vue';
 import ClippingTool from './ClippingTool.vue';
 import RelatedContent from '../RelatedContent.vue';
@@ -231,11 +230,35 @@ export default {
     Transcript,
     VideoPlayer,
   },
-  mixins: [getRouteData],
   beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.prevRoute = from;
+    const getData = function () {
+      return new Promise((resolve) => {
+        const initialState = JSON.parse(window.INITIAL_STATE) || {};
+        if (!initialState.path || to.path !== initialState.path) {
+          // Check if the query object is empty
+          if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+            axios.get(`/api${to.path}`).then(({ data }) => {
+              resolve(data);
+            });
+          } else {
+            axios.get(`/api${to.path}`, { params: to.query }).then(({ data }) => {
+              resolve(data);
+            });
+          }
+        } else {
+          resolve(initialState);
+        }
+      });
+    };
+
+    getData(to).then((data) => {
+      next(
+        (vm) => Object.assign(vm.$data, data),
+      );
     });
+    // next((vm) => {
+    //   vm.prevRoute = from;
+    // });
   },
   beforeRouteUpdate(to, from, next) {
     if (to.path !== from.path) {
