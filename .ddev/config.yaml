@@ -15,7 +15,7 @@ hooks:
         - exec: php artisan key:generate
         - exec: php artisan config:clear
         - exec: php artisan config:cache
-        - exec-host: npm install && npm run dev
+        - exec-host: npm install --legacy-peer-deps && npm run dev
 upload_dirs:
     - custom/upload/dir
 use_dns_when_possible: true

@@ -99,7 +99,7 @@ app.use(VueGtm, {
   loadScript: true,
 });
 app.use(VueHammer);
-app.use(VueFilterDateFormat);
+// app.use(VueFilterDateFormat);
 app.use(VueAnnouncer, {}, router);
 app.use(VueCheckView);
 // app.use(VueProgressBar, {
