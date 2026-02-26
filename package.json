@@ -78,9 +78,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@vue-a11y/announcer": "^2.1.0",
+    "@vue-a11y/announcer": "^3.1.5",
     "@vue/compat": "3.5.27",
-    "animated-number-vue": "^1.0.0",
     "axios": "^1.11.0",
     "bootstrap": "^4.6.2",
     "bootstrap-vue": "^2.23.1",

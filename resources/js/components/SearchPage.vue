@@ -13,8 +13,7 @@
             v-show="total"
             :value="total"
             :duration="400"
-            :round="1"
-          /><span v-show="total"> {{ total > 1 ? 'results' : 'result' }}</span>
+          /><span v-show="total"> {{ total > 1 ? ' results' : ' result' }}</span>
           <div
             v-if="searchTerm"
             class="search-page__summary"
@@ -366,8 +365,8 @@
 <script>
 import axios from 'axios';
 import debounce from 'lodash/debounce';
-import AnimatedNumber from 'animated-number-vue';
 import { VToggle, VInput } from 'vuetensils/src/components';
+import AnimatedNumber from './AnimatedNumber.vue';
 import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
