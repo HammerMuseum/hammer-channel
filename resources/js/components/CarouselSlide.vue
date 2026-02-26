@@ -23,7 +23,7 @@
           v-if="showDate"
           class="ui-card__date"
         >
-          {{ format(new Date(item.date_recorded), 'MMM D, YYYY') }}
+          {{ format(new Date(item.date_recorded), 'MMM d, yyyy') }}
         </span>
         <RichText
           :classes="['ui-card__description']"
@@ -38,7 +38,7 @@
 
 <script>
 import truncate from 'lodash/truncate';
-import format from 'date-fns';
+import { format } from 'date-fns';
 import RichText from './RichText.vue';
 import UiCard from './UiCard.vue';
 
