@@ -1,15 +1,15 @@
 import { createApp } from 'vue';
-import VueGtm from 'vue-gtm';
+import { createGtm } from '@gtm-support/vue-gtm';
 import VueRouter from 'vue-router';
 import VideoEmbed from './components/video/VideoEmbed.vue';
 
-Vue.use(VueGtm, {
+Vue.use(createGtm({
   id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
   defer: false,
   enabled: process.env.MIX_PROD,
   debug: false,
   loadScript: true,
-});
+}));
 
 Vue.component('VideoEmbed', VideoEmbed);
 

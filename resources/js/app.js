@@ -2,7 +2,7 @@ import 'intersection-observer';
 import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
-import VueGtm from 'vue-gtm';
+import { createGtm } from '@gtm-support/vue-gtm';
 // import VueProgressBar from 'vue-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import { VueHammer } from 'vue2-hammer';
@@ -91,15 +91,14 @@ const app = createApp({
 
 // Register plugins
 app.use(router);
-app.use(VueGtm, {
+app.use(createGtm({
   id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
   defer: false,
   enabled: process.env.MIX_PROD,
   debug: false,
   loadScript: true,
-});
+}));
 app.use(VueHammer);
-// app.use(VueFilterDateFormat);
 app.use(VueAnnouncer, {}, router);
 app.use(VueCheckView);
 // app.use(VueProgressBar, {
