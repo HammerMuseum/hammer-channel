@@ -340,4 +340,8 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 
 #### vue-images-loaded
 
+- No official update/replacement offered, will break with Vue 3.
+- Tested a bunch removing this directive and although it doesn't seem to affect the homepage carousels (they still load when the images have finished loading, with a minor CLS on the featured carousel, which exists on the production site under the same conditions (throttling, no cache) anyway), it does stop the carousel in related content on the video page from loading properly, so we do need to replace this behaviour, which means replacing w/ new package or custom code.
+- Idea: wrapping the `imagesloaded` package in a simple custom (V3-compatible) directive (which is what this package also originally did for V2)
+
 
