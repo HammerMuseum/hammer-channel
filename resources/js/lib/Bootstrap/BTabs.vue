@@ -1,3 +1,4 @@
+<!-- eslint-disable vuejs-accessibility/anchor-has-content -->
 <template>
   <div :class="['tabs', staticClass]">
     <ul
@@ -18,7 +19,7 @@
           :aria-selected="activeIndex === index"
           @click.prevent="selectTab(index)"
         >
-          <tab-title-renderer :tab="tab" />
+          <TabTitleRenderer :tab="tab" />
         </a>
       </li>
     </ul>
