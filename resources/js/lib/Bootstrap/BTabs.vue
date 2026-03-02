@@ -10,15 +10,16 @@
         class="nav-item"
         role="presentation"
       >
-        <button
+        <a
+          href="#"
           class="nav-link"
           :class="{ active: activeIndex === index }"
           role="tab"
           :aria-selected="activeIndex === index"
-          @click="selectTab(index)"
+          @click.prevent="selectTab(index)"
         >
           <tab-title-renderer :tab="tab" />
-        </button>
+        </a>
       </li>
     </ul>
     <div class="tab-content">
