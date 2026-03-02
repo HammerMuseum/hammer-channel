@@ -9,7 +9,7 @@
     </h2>
     <div :class="['carousel-wrapper', { 'carousel--full-width': fullWidth }]">
       <div
-        v-if="controls"
+        v-if="controls && hasImagesLoaded"
         ref="controls"
         class="carousel-controls"
       >
@@ -79,7 +79,7 @@
 <script>
 import debounce from 'lodash/debounce';
 import Flickity from 'vue-flickity';
-import imagesLoaded from 'vue-images-loaded';
+import imagesLoadedDirective from '../directives/imagesLoaded';
 import BaseIcon from './base/BaseIcon.vue';
 import NextWithCircleIcon from './icons/NextWithCircleIcon.vue';
 import { filterId } from '../filters';
@@ -90,7 +90,9 @@ export default {
     Flickity,
     NextWithCircleIcon,
   },
-  directives: { imagesLoaded },
+  directives: {
+    imagesLoaded: imagesLoadedDirective,
+  },
   props: {
     classes: {
       type: Array,
@@ -141,6 +143,7 @@ export default {
       },
       observer: null,
       isFinalSlideVisible: false,
+      hasImagesLoaded: false,
     };
   },
   computed: {
@@ -180,7 +183,9 @@ export default {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
         this.$refs.carousel.resize();
+        this.setControlsPosition();
       }
+      this.hasImagesLoaded = true;
     },
     initCarousel() {
       const carousel = this.$refs.carousel;
@@ -253,21 +258,29 @@ export default {
       this.setControlsPosition();
     },
     setControlsPosition() {
-      if (this.$refs.carousel) {
-        let top = 0;
-        if (this.id === 'featured') {
-          const carouselHeight = this.$refs.carousel.$el.offsetHeight;
-          // Half-way down minus half the height of the buttons
-          top = carouselHeight / 2 - 16;
-        } else {
-          const imageHeight = this.$refs.carousel.$el.querySelector(
-            '.ui-card__thumbnail-image',
-          ).height;
-          top = imageHeight / 1.4;
-        }
-
-        this.$refs.controls.style.top = `${top}px`;
+      if (!this.$refs.carousel || !this.$refs.controls) {
+        return;
       }
+
+      let top = 0;
+      if (this.id === 'featured') {
+        const carouselHeight = this.$refs.carousel.$el.offsetHeight;
+        // Half-way down minus half the height of the buttons
+        top = carouselHeight / 2 - 16;
+      } else {
+        const image = this.$refs.carousel.$el.querySelector(
+          '.ui-card__thumbnail-image',
+        );
+
+        // Make sure images have loaded before calculating pos of controls
+        if (!image) {
+          return;
+        }
+        const imageHeight = image.height;
+        top = imageHeight / 1.4;
+      }
+
+      this.$refs.controls.style.top = `${top}px`;
     },
     setupObserver() {
       const finalSlide = this.$refs.carousel.$el.querySelector(
