@@ -274,6 +274,8 @@ export default createRouter({
 - App.use(VueFilterDateFormat) -- is this just to initialise the plugin? I think so
   - Removed these and everything still seems to work
 
+- _Trying to fix formatting of this file, please ignore_
+
 ### Errors and Warnings
 #### Homepage
 
