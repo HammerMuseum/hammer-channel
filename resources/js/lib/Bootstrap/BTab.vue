@@ -15,7 +15,6 @@
 <script>
 export default {
   name: 'BTab',
-
   props: {
     active: {
       type: Boolean,
@@ -26,26 +25,21 @@ export default {
       default: '',
     },
   },
-
   emits: ['click'],
-
   data() {
     return {
       index: -1,
       hasBeenActive: false,
     };
   },
-
   computed: {
     isActive() {
       if (!this.$parent) return false;
       return this.$parent.activeIndex === this.index;
     },
-
     parentLazy() {
       return !!(this.$parent && this.$parent.lazy);
     },
-
     shouldRender() {
       // If the parent is not lazy, always render.
       // If lazy, only render once the tab has been activated at least once.
@@ -53,7 +47,6 @@ export default {
       return this.hasBeenActive;
     },
   },
-
   watch: {
     isActive(val) {
       if (val && !this.hasBeenActive) {
@@ -61,7 +54,6 @@ export default {
       }
     },
   },
-
   mounted() {
     const parent = this.$parent;
     if (parent && parent.registerTab) {
@@ -79,7 +71,6 @@ export default {
       }
     }
   },
-
   beforeUnmount() {
     const parent = this.$parent;
     if (parent && parent.unregisterTab) {

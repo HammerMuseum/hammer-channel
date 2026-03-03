@@ -50,9 +50,7 @@ const TabTitleRenderer = {
 
 export default {
   name: 'BTabs',
-
   components: { TabTitleRenderer },
-
   props: {
     modelValue: {
       type: Number,
@@ -67,22 +65,18 @@ export default {
       default: '',
     },
   },
-
   emits: ['update:modelValue'],
-
   data() {
     return {
       tabs: [],
       activeIndex: this.modelValue,
     };
   },
-
   watch: {
     modelValue(val) {
       this.activeIndex = val;
     },
   },
-
   methods: {
     selectTab(index) {
       this.activeIndex = index;
@@ -94,16 +88,13 @@ export default {
         tab.$emit('click');
       }
     },
-
     setActiveIndex(index) {
       this.activeIndex = index;
       this.$emit('update:modelValue', index);
     },
-
     registerTab(tab) {
       this.tabs.push(tab);
     },
-
     unregisterTab(tab) {
       const index = this.tabs.indexOf(tab);
       if (index > -1) {
