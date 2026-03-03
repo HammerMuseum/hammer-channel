@@ -347,3 +347,8 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Idea: wrapping the `imagesloaded` package in a simple custom (V3-compatible) directive (which is what this package also originally did for V2)
 - Have added this custom directive `imagesLoaded.js` which wraps the `imagesloaded` package and we are now using this instead of the old package. Have tested and it seems to be behaving mostly the same as production, the only difference is that the carousel on the video page doesn't load/mount until the images have _finished_ loading, whereas on production (with throttling) the carousel appears w/ content, but I can see the images slowly loading line-by-line, old school style. In both cases there is a layout shift where the entire carousel mounts after the page has started loading which isn't ideal, but was original behaviour so not in the scope of this story to fix, but at least now you don't then see all the images loading in slowly.
 
+### vue-progressbar
+- @TODO:  Add checking the progress bar still appears to the test plan
+- No official update for or replacement for Vue 3.
+- Used a fork for Vue 3 based off of the original package created by a different developer - https://www.npmjs.com/package/@aacassandra/vue3-progressbar.
+- Replaced the original package with is one and the existing code seems to function correctly.
