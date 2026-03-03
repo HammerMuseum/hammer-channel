@@ -12,14 +12,16 @@
         role="presentation"
       >
         <a
+          :ref="el => { if (el) tabRefs[index] = el }"
           href="#"
           class="nav-link"
           :class="{ active: activeIndex === index }"
           role="tab"
           :aria-selected="activeIndex === index"
-          :tabindex="activeIndex !== index && -1"
-          _target="_self"
+          :tabindex="activeIndex !== index ? -1 : 0"
+          target="_self"
           @click.prevent="selectTab(index)"
+          @keydown="onKeydown($event, index)"
         >
           <TabTitleRenderer :tab="tab" />
         </a>
@@ -70,6 +72,7 @@ export default {
     return {
       tabs: [],
       activeIndex: this.modelValue,
+      tabRefs: [],
     };
   },
   watch: {
@@ -99,6 +102,22 @@ export default {
       const index = this.tabs.indexOf(tab);
       if (index > -1) {
         this.tabs.splice(index, 1);
+      }
+    },
+    onKeydown(event, index) {
+      let newIndex = null;
+      if (event.key === 'ArrowRight') {
+        newIndex = (index + 1) % this.tabs.length;
+      } else if (event.key === 'ArrowLeft') {
+        newIndex = (index - 1 + this.tabs.length) % this.tabs.length;
+      }
+
+      if (newIndex !== null) {
+        event.preventDefault();
+        this.selectTab(newIndex);
+        this.$nextTick(() => {
+          this.tabRefs[newIndex]?.focus();
+        });
       }
     },
   },
