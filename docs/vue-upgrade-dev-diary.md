@@ -268,146 +268,82 @@ export default createRouter({
 - Commented out any progress bar stuff because it needs replacing and it was erroring in the console
 - Fixed a missing 'h'
 - Started fixing issues when running `npm run dev`
-  - Removed 'functional' attribute from <template>
+  - Removed 'functional' attribute from `<template>`
   
 - Can't remember if there were more filters which needed to be replaced? Seem to have date formatting working with custom code (we only use it in a couple of places and for the same format)
 - App.use(VueFilterDateFormat) -- is this just to initialise the plugin? I think so
   - Removed these and everything still seems to work
 
+- _Trying to fix formatting of this file, please ignore_
+
 ### Errors and Warnings
 #### Homepage
 
-- Feature flag __VUE_PROD_HYDRATION_MISMATCH_DETAILS__ is not explicitly defined: https://link.vuejs.org/feature-flags
-- (deprecation GLOBAL_MOUNT) The global app bootstrapping API has changed: vm.$mount() and the "el" option have been removed. Use createApp(RootComponent).mount() instead.
-  Details: https://v3-migration.vuejs.org/breaking-changes/global-api.html#mounting-app-instance
-- (deprecation OPTIONS_DATA_FN) The "data" option can no longer be a plain object. Always use a function.
-  Details: https://v3-migration.vuejs.org/breaking-changes/data-option.html
-- (deprecation GLOBAL_EXTEND) Vue.extend() has been removed in Vue 3. Use defineComponent() instead.
-  Details: https://vuejs.org/api/general.html#definecomponent
-- (deprecation GLOBAL_PROTOTYPE) Vue.prototype is no longer available in Vue 3. Use app.config.globalProperties instead.
-  Details: https://v3-migration.vuejs.org/breaking-changes/global-api.html#vue-prototype-replaced-by-config-globalproperties
-- (deprecation FILTERS) filters have been removed in Vue 3. The "|" symbol will be treated as native JavaScript bitwise OR operator. Use method calls or computed properties instead.
-  Details: https://v3-migration.vuejs.org/breaking-changes/filters.html
-- (deprecation RENDER_FUNCTION) Vue 3's render function API has changed. You can opt-in to the new API with:
+- A lot to do with the Flickity carousel - I'm thinking replacing/updating this library will hopefully solve a lot of these
+  - nvm this turned out to be due to the way I was importing the date format function from `date-fns`
 
-  configureCompat({ RENDER_FUNCTION: false })
+- Getting the following: `The global app bootstrapping API has changed: vm.$mount() and the "el" option have been removed. Use createApp(RootComponent).mount() instead.` which seems to be coming from `vue-window-size` which is using the old bootstrapping API. This module will need to be replaced as it hasn't been updated to be compatible with Vue 3. It looks like we're only using it for one small thing, so hopefully quick to replace. Have added to list of modules to replace/update.
+NB: This error also coming from here: `The "data" option can no longer be a plain object. Always use a function.`
 
-  (This can also be done per-component via the "compatConfig" option.)
-  Details: https://v3-migration.vuejs.org/breaking-changes/render-function-api.html 
-  at <App>
-- (deprecation RENDER_FUNCTION) (2) 
-  at <VueAnnouncer> 
-  at <App> 
-  at <App>
-- (deprecation COMPONENT_V_MODEL) v-model usage on component has changed in Vue 3. Component that expects to work with v-model should now use the "modelValue" prop and emit the "update:modelValue" event. You can update the usage and then opt-in to Vue 3 behavior on a per-component basis with `compatConfig: { COMPONENT_V_MODEL: false }`.
-  Details: https://v3-migration.vuejs.org/breaking-changes/v-model.html 
-  at <VDrawer id="about-overlay" modelValue=false onUpdate:modelValue=fn  ... >
-- (deprecation ATTR_FALSE_VALUE) Attribute "aria-pressed" with v-bind value `false` will render aria-pressed="false" instead of removing it in Vue 3. To remove the attribute, use `null` or `undefined` instead. If the usage is intended, you can disable the compat behavior and suppress this warning with:
+- `Vue.extend() has been removed in Vue 3. Use defineComponent() instead` coming from `bootstrap-vue`, which we are going to replace.
 
-  configureCompat({ ATTR_FALSE_VALUE: false })
+- `[Vue warn]: (deprecation GLOBAL_PROTOTYPE) Vue.prototype is no longer available in Vue 3. Use app.config.globalProperties instead.` coming from `@vue-ally`, `animated-number-vue`, `bootstrap-vue`*, `vue-announcer`, `vue-check-view`*, `vue-gtm`, `vue-images-loaded`, `vue-progressbar`, `vue-scrollto`, and `vue-window-size`. (* means we're already definitely removing this module anyway). These will all either need to be replaced or updated.
 
-  Details: https://v3-migration.vuejs.org/breaking-changes/attribute-coercion.html 
-  at <TheHeader> 
-  at <App> 
-  at <App>
-- (deprecation ATTR_FALSE_VALUE) Attribute "aria-expanded" with v-bind value `false` will render aria-expanded="false" instead of removing it in Vue 3. To remove the attribute, use `null` or `undefined` instead. If the usage is intended, you can disable the compat behavior and suppress this warning with:
+- `Vue 3's render function API has changed. You can opt-in to the new API with: configureCompat({ RENDER_FUNCTION: false })` coming from `portal-vue`, `vue-images-loaded`, `vue-window-size`, `vuetensils`, `animated-number-vue`, and `bootstrap-vue`* (* means we're already definitely removing this module anyway). These will all either need to be replaced or updated.
 
-  configureCompat({ ATTR_FALSE_VALUE: false })
+- v-model usage on component has changed in Vue 3. Component that expects to work with v-model should now use the "modelValue" prop and emit the "update:modelValue" event. You can update the usage and then opt-in to Vue 3 behavior on a per-component basis with `compatConfig: { COMPONENT_V_MODEL: false }`. - coming from `vuetensils` (used for VDrawer in Header)
+  - Probably these related too: `(deprecation RENDER_FUNCTION)`, `deprecation OPTIONS_DESTROYED)`, `(deprecation INSTANCE_SCOPED_SLOTS) `, 
 
-  Details: https://v3-migration.vuejs.org/breaking-changes/attribute-coercion.html 
-  at <TheHeader> 
-  at <App> 
-  at <App>
-- (deprecation RENDER_FUNCTION) (3) 
-  at <VDrawer id="about-overlay" transition="slide-down" bg-transition="fade"  ... > 
-  at <TheHeader> 
-  at <App> 
-  at <App>
-- (deprecation OPTIONS_DESTROYED) `destroyed` has been renamed to `unmounted`. 
-  at <VDrawer id="about-overlay" transition="slide-down" bg-transition="fade"  ... > 
-  at <TheHeader> 
-  at <App> 
-  at <App>
-- (deprecation INSTANCE_SCOPED_SLOTS) vm.$scopedSlots has been removed. Use vm.$slots instead.
-  Details: https://v3-migration.vuejs.org/breaking-changes/slots-unification.html 
-  at <VDrawer id="about-overlay" transition="slide-down" bg-transition="fade"  ... > 
-  at <TheHeader> 
-  at <App> 
-  at <App>
-- (deprecation OPTIONS_DESTROYED) (2) 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- (deprecation COMPONENT_FUNCTIONAL) Functional component <ContentLoader> should be defined as a plain function in Vue 3. The "functional" option has been removed. NOTE: Before migrating to use plain functions for functional components, first make sure that all async components usage have been migrated and its compat behavior has been disabled.
-  Details: https://v3-migration.vuejs.org/breaking-changes/functional-components.html 
-  at <Loader key=0 class="carousel--full-width" > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- (deprecation ATTR_FALSE_VALUE) Attribute "animate" with v-bind value `false` will render animate="false" instead of removing it in Vue 3. To remove the attribute, use `null` or `undefined` instead. If the usage is intended, you can disable the compat behavior and suppress this warning with:
+- `Attribute "aria-pressed" with v-bind value `false` will render aria-pressed="false" instead of removing it in Vue 3.` - seems to be coming from `bootstrap-vue`, which we're removing anyway.
 
-  configureCompat({ ATTR_FALSE_VALUE: false })
+- `deprecation OPTIONS_DESTROYED` - requires changing to the following:
+  ```
+  // Vue 2 (Deprecated)
+  beforeDestroy() { ... },
+  destroyed() { ... },
 
-  Details: https://v3-migration.vuejs.org/breaking-changes/attribute-coercion.html 
-  at <ContentLoader class="content-loader" height=153 width=400  ... > 
-  at <Loader key=0 class="carousel--full-width" > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
--  (deprecation OPTIONS_BEFORE_DESTROY) `beforeDestroy` has been renamed to `beforeUnmount`. 
-  at <Carousel id="art" controls=true title="Art"  ... > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {getFeatured: ƒ, getPageData: ƒ, seeAllLinkText: ƒ, viewHandler: ƒ, …} > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- (deprecation OPTIONS_BEFORE_DESTROY) (2) 
-  at <Flickity ref="carousel" class="carousel" aria-labelledby="artheading"  ... > 
-  at <Carousel id="art" controls=true title="Art"  ... > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {getFeatured: ƒ, getPageData: ƒ, seeAllLinkText: ƒ, viewHandler: ƒ, …} > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- Method "format" has type "undefined" in the component definition. Did you reference the function correctly? 
-  at <CarouselSlide key="1930" item= {asset_id: 1930, title: 'John Walsh on Cézanne and the Impressionists', description: '<p><span data-sheets-root="1">In the first of a th…ncent Van Gogh and Rembrandt van Rijn.</span></p>', thumbnail_url: 'https://hammer.assetbank-server.com/assetbank-hammer/servlet/display?file=22137999f120085888.jpg', title_slug: 'john-walsh-on-cezanne-and-the-impressionists', …} > 
-  at <Flickity ref="carousel" class="carousel" aria-labelledby="artheading"  ... > 
-  at <Carousel id="art" controls=true title="Art"  ... > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {getFeatured: ƒ, getPageData: ƒ, seeAllLinkText: ƒ, viewHandler: ƒ, …} > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- Method "format" has type "undefined" in the component definition. Did you reference the function correctly? 
-  at <CarouselSlide key="1929" item= {asset_id: 1929, title: 'Voices of the Diaspora 2025: Porfirio Gutiérrez, Danielle Shang, Paul Mpagi Sepuya & more', description: '<p><span data-sheets-root="1">In an afternoon sess…riched future for generations to come.</span></p>', thumbnail_url: 'https://hammer.assetbank-server.com/assetbank-hammer/servlet/display?file=22137999f1200b6698.jpg', title_slug: 'voices-of-the-diaspora-2025-porfirio-gutierrez-danielle-shang-paul-mpagi-sepuya-more', …} > 
-  at <Flickity ref="carousel" class="carousel" aria-labelledby="artheading"  ... > 
-  at <Carousel id="art" controls=true title="Art"  ... > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {getFeatured: ƒ, getPageData: ƒ, seeAllLinkText: ƒ, viewHandler: ƒ, …} > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- Method "format" has type "undefined" in the component definition. Did you reference the function correctly? 
-  at <CarouselSlide key="1928" item= {asset_id: 1928, title: 'Coltrane on Coltrane: An Oral History', description: '<p><span data-sheets-root="1">Vocalist Michelle Co…Alice Coltrane, Monument Eternal</em>.</span></p>', thumbnail_url: 'https://hammer.assetbank-server.com/assetbank-hammer/servlet/display?file=22137999f1200b5888.jpg', title_slug: 'coltrane-on-coltrane-an-oral-history', …} > 
-  at <Flickity ref="carousel" class="carousel" aria-labelledby="artheading"  ... > 
-  at <Carousel id="art" controls=true title="Art"  ... > 
-  at <Home onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) {getFeatured: ƒ, getPageData: ƒ, seeAllLinkText: ƒ, viewHandler: ƒ, …} > > 
-  at <RouterView ref="routerView" > 
-  at <BaseTransition appear=false persisted=false mode=undefined  ... > 
-  at <Transition name="fade" > 
-  at <App> 
-  at <App>
-- 
+  // Vue 3 (Replacement)
+  beforeUnmount() { ... },
+  unmounted() { ... },
+  ```
+  - Coming from `animated-number-vue`, `bootstrap-vue`*, `focus-trap-vue`, `portal-vue`, `vue-images-loaded`, `vue-window-size`, and `vuetensils`
+
+- **At this point I think I'm just going to start updating/replacing the packages listed so far as it seems that almost all of these warnings are coming from these**
+
+### Plugin updates/replacement
+
+#### Bootstrap Vue
+- Bootstrap to be replaced by Matt M - we are only using it in one place (for tabs on the video pages), so we'll just extract the code we need for those and get rid of the package itself.
+
+#### animated-number-vue
+- Replaced `animated-number-vue` with a small custom component as there wasn't a good alternative package to replace this with, plus we're only using it in one place and the code is _relatively_ simple (just an animated number counting up). Made new `AnimatedNumber.vue` component. Have removed package.
+
+#### @vue-a11y/announcer + vue-announcer
+- Replacing https://www.npmjs.com/package/@vue-a11y/announcer 
+  - Can't tell what the difference between `@vue-a11y/announcer` and `vue-announcer` is - link to the same Github page
+  - @TODO **Will need to add testing the screenreader announcements to the test plan**
+  - Replacing with 'next' version: https://github.com/vue-a11y/vue-announcer/tree/next 
+  - @TODO Run npm audit to check this package hasn't introduced sth bad (will do at end to check all packages)
+  - Doesn't mention I need to migrate any code
+  - Just removed `vue-announcer` as I couldn't see it doing anything...
+    - Okay it seems to be broken now... putting vue-announcer back
+  - Seems to be working again, but @TODO: The announcement when you load the search page with results seems to be broken on production as well as I never managed to get it to say it, only "Search results page loaded" - should be `Search results for ${term}. Page loaded with ${this.total} results.` - SearchPage.vue
+  - Ah, it seems I can remove `vue-announcer` as it's just an older version of this package, I just need to leave `<vue-announcer />` in App.js which I had removed
+
+#### vue-gtm
+
+- @TODO: Add checking GTM is still pushing to data layer to test plan
+- Looks like this is the Vue 3 compatible replacement: https://www.npmjs.com/package/@gtm-support/vue-gtm but hopefully shouldn't need any or much code changing
+- Added replacement and using this to run GTM - minor tweak to code in app.js
+- Put `debug` to `true` so I can see whether it's still working
+- NB: On search page it seems there is a different between the results total showing on the page and the total logged by the GTM package in debug mode - will need to compare with production to see if issue from this package or not
+  - This difference looks like it's showing me the previous total instead of the updated one - I have a feeling this might be an issue which already exists in the code
+- Removed `vue-gtm` and everything seems to be working okay, will need to test more to check it's definitely sending everything to GA
+
+#### vue-images-loaded
+
+- No official update/replacement offered, will break with Vue 3.
+- Tested a bunch removing this directive and although it doesn't seem to affect the homepage carousels (they still load when the images have finished loading, with a minor CLS on the featured carousel, which exists on the production site under the same conditions (throttling, no cache) anyway), it does stop the carousel in related content on the video page from loading properly, so we do need to replace this behaviour, which means replacing w/ new package or custom code.
+- Idea: wrapping the `imagesloaded` package in a simple custom (V3-compatible) directive (which is what this package also originally did for V2)
+- Have added this custom directive `imagesLoaded.js` which wraps the `imagesloaded` package and we are now using this instead of the old package. Have tested and it seems to be behaving mostly the same as production, the only difference is that the carousel on the video page doesn't load/mount until the images have _finished_ loading, whereas on production (with throttling) the carousel appears w/ content, but I can see the images slowly loading line-by-line, old school style. In both cases there is a layout shift where the entire carousel mounts after the page has started loading which isn't ideal, but was original behaviour so not in the scope of this story to fix, but at least now you don't then see all the images loading in slowly.
+
