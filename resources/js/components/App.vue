@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="app"
-    data-id="vue-app"
-  >
+  <div data-id="vue-app">
     <!-- <vue-progress-bar /> -->
     <vue-announcer />
     <the-header />
