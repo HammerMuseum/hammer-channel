@@ -268,11 +268,13 @@ export default createRouter({
 - Commented out any progress bar stuff because it needs replacing and it was erroring in the console
 - Fixed a missing 'h'
 - Started fixing issues when running `npm run dev`
-  - Removed 'functional' attribute from <template>
+  - Removed 'functional' attribute from `<template>`
   
 - Can't remember if there were more filters which needed to be replaced? Seem to have date formatting working with custom code (we only use it in a couple of places and for the same format)
 - App.use(VueFilterDateFormat) -- is this just to initialise the plugin? I think so
   - Removed these and everything still seems to work
+
+- _Trying to fix formatting of this file, please ignore_
 
 ### Errors and Warnings
 #### Homepage
