@@ -33,6 +33,7 @@
 </template>
 
 <script>
+// Sub component to render the title slot of a BTab.
 const TabTitleRenderer = {
   name: 'TabTitleRenderer',
   props: {
@@ -67,6 +68,7 @@ export default {
     return {
       tabs: [],
       activeIndex: this.modelValue,
+      // Refs to the tab buttons, used for keyboard navigation.
       tabRefs: [],
     };
   },
@@ -86,13 +88,16 @@ export default {
         tab.$emit('click');
       }
     },
+    // Called by child BTab components to set themselves as active
     setActiveIndex(index) {
       this.activeIndex = index;
       this.$emit('update:modelValue', index);
     },
+    // Called by child BTab components to register themselves with the parent BTabs
     registerTab(tab) {
       this.tabs.push(tab);
     },
+    // Called by child BTab components to unregister themselves (e.g. on unmount)
     unregisterTab(tab) {
       const index = this.tabs.indexOf(tab);
       if (index > -1) {
@@ -100,6 +105,7 @@ export default {
       }
     },
     onKeydown(event, index) {
+      // If the left or right arrow keys are pressed, move focus to the previous or next tab.
       let newIndex = null;
       if (event.key === 'ArrowRight') {
         newIndex = (index + 1) % this.tabs.length;
