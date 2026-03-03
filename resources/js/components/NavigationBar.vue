@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import scrollIntoView from 'scroll-into-view';
 import Flickity from 'vue-flickity';
 
 export default {
@@ -101,12 +102,16 @@ export default {
   },
   methods: {
     scrollTo(id) {
-      const offset = -85;
-      this.$scrollTo(`#${id}`, 0, { offset });
+      const el = document.querySelector(`#${id}`);
+
+      if (el) {
+        scrollIntoView(el, { time: 0, align: { top: 0, topOffset: 85 } });
+      }
     },
     scrollToTop() {
       this.$refs.flickity.selectCell(0, false);
-      this.$scrollTo(`body`, 0);
+
+      window.scrollTo({ top: 0 });
     },
     selectNavigationItem(item) {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);

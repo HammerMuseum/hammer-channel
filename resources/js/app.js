@@ -4,7 +4,6 @@ import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
 import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
-import VueScrollTo from 'vue-scrollto';
 import { VueHammer } from 'vue2-hammer';
 // import { VSkip } from 'vuetensils/src/components';
 import router from './router';
@@ -106,7 +105,6 @@ app.use(VueProgressBar, {
   failedColor: 'red',
   height: '2px',
 });
-app.use(VueScrollTo);
 
 // Auto-register components
 const files = require.context('./', true, /\.vue$/i);

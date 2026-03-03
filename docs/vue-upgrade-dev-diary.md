@@ -354,6 +354,13 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Used a fork for Vue 3 based off of the original package created by a different developer - https://www.npmjs.com/package/@aacassandra/vue3-progressbar.
 - Replaced the original package with is one and the existing code seems to function correctly.
 
+### vue-scroll-to
+
+- @TODO:  Add Scroll to section and scroll to top still work to the test plan.
+- Provided one function that was only used in NavigationBar.vue.
+- There was another library that provided similar functionality `scroll-into-view` that was already in package.json, compatible with Vue 3 and used elsewhere in the codebase.
+- Refactored `NavigationBar.vue` to use `scroll-into-view` instead and have removed the package and it's initialisation from `app.js`.
+
 #### vue2-hammer
 
 - Adds gesture support for some elements on mobile
