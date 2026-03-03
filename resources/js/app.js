@@ -1,7 +1,6 @@
 import 'intersection-observer';
 import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
-import VueCheckView from 'vue-check-view';
 import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
 import { VueHammer } from 'vue2-hammer';
@@ -88,6 +87,49 @@ const app = createApp({
   render: (h) => h(App),
 });
 
+// Custom directive that replaces `vue-check-view` using IntersectionObserver.
+app.directive('view', {
+  mounted(el, binding) {
+    const callback = binding.value;
+    if (typeof callback !== 'function') return;
+
+    const observer = new IntersectionObserver(
+      // Iterate over IntersectionObserverEntries
+      (entries) => {
+        entries.forEach((entry) => {
+          const rect = entry.boundingClientRect;
+          /* Normalised intersection ratio (0–1), used by handlers to decide when
+          a section is "active". */
+          const percentInView = entry.intersectionRatio;
+
+          // Run callback when el in view
+          callback({
+            percentInView,
+            target: {
+              element: el,
+              rect,
+            },
+          });
+        });
+      },
+      {
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    /* Keep a reference on the element so we can disconnect the observer when
+    the element is unmounted. */
+    el.__viewObserver__ = observer;
+    observer.observe(el);
+  },
+  unmounted(el) {
+    if (el.__viewObserver__) {
+      el.__viewObserver__.disconnect();
+      delete el.__viewObserver__;
+    }
+  },
+});
+
 // Register plugins
 app.use(router);
 app.use(createGtm({
@@ -99,7 +141,6 @@ app.use(createGtm({
 }));
 app.use(VueHammer);
 app.use(VueAnnouncer, {}, router);
-app.use(VueCheckView);
 app.use(VueProgressBar, {
   color: '#ee2a7b',
   failedColor: 'red',

@@ -376,3 +376,7 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 
 - For now going to discuss whether we want to keep this at all because it's not working in half of the places altogether, and where it does work it seems to mess with normal scrolling behaviour @TODO to discuss
 
+#### vue-check-view
+
+- Allows bottom nav bar on homepage to highlight which section you're on
+- Replaced with simple custom directive `v-view` in app.js using IntersectionObserver. No other changes needed.
