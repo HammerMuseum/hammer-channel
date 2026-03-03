@@ -17,6 +17,8 @@
           :class="{ active: activeIndex === index }"
           role="tab"
           :aria-selected="activeIndex === index"
+          :tabindex="activeIndex !== index && -1"
+          _target="_self"
           @click.prevent="selectTab(index)"
         >
           <TabTitleRenderer :tab="tab" />
