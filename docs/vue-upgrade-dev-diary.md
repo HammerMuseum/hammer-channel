@@ -348,13 +348,31 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Have added this custom directive `imagesLoaded.js` which wraps the `imagesloaded` package and we are now using this instead of the old package. Have tested and it seems to be behaving mostly the same as production, the only difference is that the carousel on the video page doesn't load/mount until the images have _finished_ loading, whereas on production (with throttling) the carousel appears w/ content, but I can see the images slowly loading line-by-line, old school style. In both cases there is a layout shift where the entire carousel mounts after the page has started loading which isn't ideal, but was original behaviour so not in the scope of this story to fix, but at least now you don't then see all the images loading in slowly.
 
 ### vue-progressbar
+
 - @TODO:  Add checking the progress bar still appears to the test plan
 - No official update for or replacement for Vue 3.
 - Used a fork for Vue 3 based off of the original package created by a different developer - https://www.npmjs.com/package/@aacassandra/vue3-progressbar.
 - Replaced the original package with is one and the existing code seems to function correctly.
 
 ### vue-scroll-to
+
 - @TODO:  Add Scroll to section and scroll to top still work to the test plan.
 - Provided one function that was only used in NavigationBar.vue.
 - There was another library that provided similar functionality `scroll-into-view` that was already in package.json, compatible with Vue 3 and used elsewhere in the codebase.
 - Refactored `NavigationBar.vue` to use `scroll-into-view` instead and have removed the package and it's initialisation from `app.js`.
+
+#### vue2-hammer
+
+- Adds gesture support for some elements on mobile
+
+- We use it for:
+  - Swipe up to close 'About' modal/"footer"
+  - Swipe up to close 'Search' modal
+  - Swipe left to close facets sidebar on search page
+
+- NB: Doesn't seem to work to close the About modal on my phone - which is good because you want to be able to swipe up to scroll the modal content if it continues below the fold without closing the modal entirely. 
+  - It seems that either this swipe to close mechanism works, or you can scroll the content of the element. So, for me the search facets sidebar cannot be scrolled, but can be swiped to close, which means the bottom of the sidebar is cut off (and half of the last facet is cut off, but you can still read it), whereas the 'About' modal can be scrolled, but swiping up does not close it. (Tested in Safari and Chrome on iPhone).
+  - Found a definite bug where if you open the facets sidebar and close again (by any means), you can no longer scroll the page
+
+- For now going to discuss whether we want to keep this at all because it's not working in half of the places altogether, and where it does work it seems to mess with normal scrolling behaviour @TODO to discuss
+
