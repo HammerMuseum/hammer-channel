@@ -29,7 +29,10 @@
       </Carousel>
 
       <div class="carousels">
-        <template v-for="({id, label, count, hits}, idx) in videos" :key="id">
+        <template
+          v-for="({id, label, count, hits}, idx) in videos"
+          :key="id"
+        >
           <div
             v-if="idx === 3"
             :key="`${id}-search`"
