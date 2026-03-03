@@ -374,7 +374,8 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
   - It seems that either this swipe to close mechanism works, or you can scroll the content of the element. So, for me the search facets sidebar cannot be scrolled, but can be swiped to close, which means the bottom of the sidebar is cut off (and half of the last facet is cut off, but you can still read it), whereas the 'About' modal can be scrolled, but swiping up does not close it. (Tested in Safari and Chrome on iPhone).
   - Found a definite bug where if you open the facets sidebar and close again (by any means), you can no longer scroll the page
 
-- For now going to discuss whether we want to keep this at all because it's not working in half of the places altogether, and where it does work it seems to mess with normal scrolling behaviour @TODO to discuss
+- For now going to discuss whether we want to keep this at all because it's not working in half of the places altogether, and where it does work it seems to mess with normal scrolling behaviour
+  - Neil agrees we can just remove this now as it's not working as expected anyway
 
 #### vue-check-view
 

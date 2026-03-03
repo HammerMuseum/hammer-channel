@@ -3,7 +3,6 @@ import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
-import { VueHammer } from 'vue2-hammer';
 // import { VSkip } from 'vuetensils/src/components';
 import router from './router';
 import { store } from './store';
@@ -139,7 +138,6 @@ app.use(createGtm({
   debug: false,
   loadScript: true,
 }));
-app.use(VueHammer);
 app.use(VueAnnouncer, {}, router);
 app.use(VueProgressBar, {
   color: '#ee2a7b',

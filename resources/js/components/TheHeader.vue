@@ -98,7 +98,6 @@
               </BaseIcon>
             </button>
             <TheFooter
-              v-hammer:swipe.up="handleFooterClose"
               @close="overlay.footer = false"
             />
           </VDrawer>
@@ -155,7 +154,6 @@
               </BaseIcon>
             </button>
             <SearchBar
-              v-hammer:swipe.up="handleSearchClose"
               id-prefix="header"
               :classes="['search-bar--overlay']"
               focus

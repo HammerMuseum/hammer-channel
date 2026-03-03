@@ -119,13 +119,11 @@
           >
             <div
               v-show="showFilters && hasFacets"
-              v-hammer:swipe.left="toggleSearchFilters"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
               @click.self="toggleSearchFilters"
             >
               <div
                 ref="searchFilters"
-                v-hammer:swipe.left="toggleSearchFilters"
                 :class="['search__filters']"
               >
                 <button
