@@ -111,7 +111,7 @@ export default {
     scrollToTop() {
       this.$refs.flickity.selectCell(0, false);
 
-      scrollIntoView('body', { time: 0, align: { top: 0 } });
+      window.scrollTo({ top: 0 });
     },
     selectNavigationItem(item) {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);
