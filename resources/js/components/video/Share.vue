@@ -100,6 +100,7 @@
 <script>
 import VideoMeta from '../VideoMeta.vue';
 import CopyTo from '../../mixins/copyToClipboard';
+import { formatDate } from '../../filters';
 
 export default {
   name: 'Share',
@@ -132,7 +133,7 @@ export default {
   },
   computed: {
     dateFormatted() {
-      return this.$options.filters.dateFormat(new Date(this.date), 'MMMM DD, YYYY');
+      return formatDate(new Date(this.date), 'MMM DD, YYYY');
     },
     name() {
       return 'Hammer Channel video';
