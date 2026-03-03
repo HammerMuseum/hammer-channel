@@ -57,10 +57,6 @@ export default {
       type: Number,
       default: 0,
     },
-    lazy: {
-      type: Boolean,
-      default: false,
-    },
     staticClass: {
       type: String,
       default: '',

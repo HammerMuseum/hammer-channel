@@ -61,7 +61,6 @@
           <BTabs
             v-model="tabIndex"
             class="vp__tabs"
-            lazy
           >
             <BTab
               active
@@ -176,7 +175,10 @@
               />
             </BTab>
 
-            <BTab @click="jumpToLowerPanel">
+            <BTab
+              lazy
+              @click="jumpToLowerPanel"
+            >
               <template #title>
                 <BaseIcon
                   width="18"

@@ -24,6 +24,10 @@ export default {
       type: String,
       default: '',
     },
+    lazy: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ['click'],
   data() {
@@ -37,13 +41,10 @@ export default {
       if (!this.$parent) return false;
       return this.$parent.activeIndex === this.index;
     },
-    parentLazy() {
-      return !!(this.$parent && this.$parent.lazy);
-    },
     shouldRender() {
-      // If the parent is not lazy, always render.
+      // If not lazy, always render.
       // If lazy, only render once the tab has been activated at least once.
-      if (!this.parentLazy) return true;
+      if (!this.lazy) return true;
       return this.hasBeenActive;
     },
   },
