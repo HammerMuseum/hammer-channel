@@ -3,7 +3,7 @@ import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import VueCheckView from 'vue-check-view';
 import { createGtm } from '@gtm-support/vue-gtm';
-// import VueProgressBar from 'vue-progressbar';
+import VueProgressBar from '@aacassandra/vue3-progressbar';
 import VueScrollTo from 'vue-scrollto';
 import { VueHammer } from 'vue2-hammer';
 // import { VSkip } from 'vuetensils/src/components';
@@ -59,15 +59,15 @@ const app = createApp({
   created() {
     document.addEventListener('keydown', this.onKeyDown, true);
     document.addEventListener('mousedown', this.onPointerDown, true);
-    // this.$Progress.start();
+    this.$Progress.start();
     this.$router.beforeEach((to, from, next) => {
       if (from.hash !== to.hash) return;
-      // this.$Progress.start();
+      this.$Progress.start();
       next();
     });
-    // this.$router.afterEach(() => {
-    //   this.$Progress.finish();
-    // });
+    this.$router.afterEach(() => {
+      this.$Progress.finish();
+    });
   },
   unmounted() {
     // changed from destroyed
@@ -101,11 +101,11 @@ app.use(createGtm({
 app.use(VueHammer);
 app.use(VueAnnouncer, {}, router);
 app.use(VueCheckView);
-// app.use(VueProgressBar, {
-//   color: '#ee2a7b',
-//   failedColor: 'red',
-//   height: '2px',
-// });
+app.use(VueProgressBar, {
+  color: '#ee2a7b',
+  failedColor: 'red',
+  height: '2px',
+});
 app.use(VueScrollTo);
 
 // Auto-register components

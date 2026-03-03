@@ -1,6 +1,6 @@
 <template>
   <div tabindex="-1">
-    <!-- <vue-progress-bar /> -->
+    <vue-progress-bar />
     <vue-announcer />
     <the-header />
     <transition name="fade">
