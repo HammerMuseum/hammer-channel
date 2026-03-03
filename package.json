@@ -78,6 +78,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@aacassandra/vue3-progressbar": "^1.0.3",
     "@gtm-support/vue-gtm": "^3.2.0",
     "@vue-a11y/announcer": "^3.1.5",
     "@vue/compat": "3.5.27",
@@ -110,7 +111,6 @@
     "vue-check-view": "^0.3.0",
     "vue-content-loader": "^0.2.3",
     "vue-flickity": "^1.2.1",
-    "vue-progressbar": "^0.7.5",
     "vue-router": "^4.6.4",
     "vue-scrollto": "^2.20.0",
     "vue-window-size": "^0.2.5",
