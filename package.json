@@ -110,7 +110,6 @@
     "vue-content-loader": "^0.2.3",
     "vue-router": "^4.6.4",
     "vue-window-size": "^0.2.5",
-    "vue2-hammer": "^2.1.2",
     "vuetensils": "^0.7.12"
   },
   "jest": {
