@@ -230,6 +230,7 @@ export default createRouter({
 
 - In `resources/js/app.js` + `resources/js/embed.js`
   - Switched `new Vue` to `createApp()`
+  - @TODO figure out how to test embed.js is still working as expected
 
 - In `resources/js/store.js`:
   - `const store = Vue.observable()` -> `const store = reactive()`
