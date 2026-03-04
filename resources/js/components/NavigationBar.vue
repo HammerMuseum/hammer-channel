@@ -54,13 +54,9 @@
 
 <script>
 import scrollIntoView from 'scroll-into-view';
-import Flickity from 'vue-flickity';
 
 export default {
   name: 'NavigationBar',
-  components: {
-    Flickity,
-  },
   props: {
     items: {
       type: Array,
