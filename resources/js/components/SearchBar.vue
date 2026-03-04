@@ -12,7 +12,7 @@
           v-model="clonedTerm"
           :classes="{
             input: ['form__input', 'form__input--search', 'form__input--search-bar'],
-            text: 'visually-hidden'
+            label: 'visually-hidden'
           }"
           type="text"
           :name="inputId"

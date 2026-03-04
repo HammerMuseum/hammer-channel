@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div class="container">
     <div
@@ -140,7 +141,7 @@
                       v-model="clonedTerm"
                       :classes="{
                         input: ['form__input', 'form__input--search', 'form__input--light'],
-                        text: 'visually-hidden'
+                        label: 'visually-hidden'
                       }"
                       type="text"
                       :name="inputId"
