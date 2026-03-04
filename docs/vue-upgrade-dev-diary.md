@@ -413,3 +413,9 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Getting errors from vuetensils, which will be updated after this, so had to add a temp. fix:
   - Stubbed VInput via global.stubs: { VInput: true } to avoid internal vuetensils runtime errors while still testing your own component’s behavior.
   - @TODO: Undo this when vuetensils is up to date
+
+### vue-window-size
+
+- Has a Vue 3 compatible version.  
+- Only used in `Transcript.vue` and `HomeComponent.vue`.
+- The mixin use is no longer supported in the new version so i've updated so these components use the plugin as a composable.  
