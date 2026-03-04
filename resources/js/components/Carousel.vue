@@ -78,7 +78,6 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import Flickity from 'vue-flickity';
 import imagesLoadedDirective from '../directives/imagesLoaded';
 import BaseIcon from './base/BaseIcon.vue';
 import NextWithCircleIcon from './icons/NextWithCircleIcon.vue';
@@ -87,7 +86,6 @@ import { filterId } from '../filters';
 export default {
   components: {
     BaseIcon,
-    Flickity,
     NextWithCircleIcon,
   },
   directives: {
@@ -299,6 +297,11 @@ export default {
 </script>
 
 <style>
+.carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
 .carousel-controls {
   position: absolute;
   width: 100%;

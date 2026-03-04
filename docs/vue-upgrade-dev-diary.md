@@ -347,14 +347,14 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Idea: wrapping the `imagesloaded` package in a simple custom (V3-compatible) directive (which is what this package also originally did for V2)
 - Have added this custom directive `imagesLoaded.js` which wraps the `imagesloaded` package and we are now using this instead of the old package. Have tested and it seems to be behaving mostly the same as production, the only difference is that the carousel on the video page doesn't load/mount until the images have _finished_ loading, whereas on production (with throttling) the carousel appears w/ content, but I can see the images slowly loading line-by-line, old school style. In both cases there is a layout shift where the entire carousel mounts after the page has started loading which isn't ideal, but was original behaviour so not in the scope of this story to fix, but at least now you don't then see all the images loading in slowly.
 
-### vue-progressbar
+#### vue-progressbar
 
 - @TODO:  Add checking the progress bar still appears to the test plan
 - No official update for or replacement for Vue 3.
 - Used a fork for Vue 3 based off of the original package created by a different developer - https://www.npmjs.com/package/@aacassandra/vue3-progressbar.
 - Replaced the original package with is one and the existing code seems to function correctly.
 
-### vue-scroll-to
+#### vue-scroll-to
 
 - @TODO:  Add Scroll to section and scroll to top still work to the test plan.
 - Provided one function that was only used in NavigationBar.vue.
@@ -384,10 +384,21 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 
 #### vuetensils
 
-@TODO:  Verify Search bar and search page looks visually the same and functions correctly.
+- @TODO:  Verify Search bar and search page looks visually the same and functions correctly.
 - Utility library - provides a bunch of preconfigured Vue components.  
 - Previously on version 0.7.12 - which did not support Vue 3.
 - Update to version 0.13.3 as versions above 0.10.0 provide Vue 3 support.
 - This new version slightly changes the DOM output for VInput elements but seems to function identically.
 - The `text` property in the class prop for `VInput` previously targetted the element providing the label.  In the new version the name of this property has been changed to `label`.  We were using this in a few places to provide a `visually-hidden` label, mainly in search related elements and has been updated.  
 - The package itself still seems to be emitting some warnings due to prop order with `v-bind` being used after `class`.
+
+#### vue-flickity
+
+- Powers the carousels
+- Is a Vue-compatible wrapper around the flickity module
+- Tried `@toneflix-code/flickity-vue` as a drop-in replacement, but it broke, so decided on a quick (and simpler than expected) custom wrapper component `Flickity.vue`, which allowed me to have to make 0 changes to the way we were using this in templates, and only add 2 lines of CSS to stop the carousel from breaking out of its container on video pages
+
+#### focus-trap-vue
+
+- Used on search page facets panels when using keyboard to access filters (e.g.: clicking on 'Dates', then should be focus-trapped inside of that sub-panel)
+- Just needed an update to the package to make it Vue 3 compatible

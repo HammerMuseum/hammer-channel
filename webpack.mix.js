@@ -77,7 +77,7 @@ if (dev) {
 }
 
 if (!dev) {
-  mix.transpileNodeModules(['vue-flickity', 'quick-score']);
+  mix.transpileNodeModules(['quick-score']);
   // Breaks tranpilation for IE11 for some reason...
   mix.version();
 }
