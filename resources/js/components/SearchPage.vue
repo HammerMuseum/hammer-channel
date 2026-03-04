@@ -545,7 +545,7 @@ export default {
     this.debouncedResize = debounce(this.handleResize, 200).bind(this);
     window.addEventListener('resize', this.debouncedResize, false);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.addEventListener('resize', this.debouncedResize, false);
   },
   methods: {

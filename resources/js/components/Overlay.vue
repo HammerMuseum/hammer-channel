@@ -48,7 +48,7 @@ export default {
     document.addEventListener('keyup', this.onEscape);
     this.$refs.close.focus();
   },
-  destroyed() {
+  unmounted() {
     document.removeEventListener('keyup', this.onEscape);
   },
   methods: {

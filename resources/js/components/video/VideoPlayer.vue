@@ -246,7 +246,7 @@ export default {
       this.reInit(newOptions.sources);
     },
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.player) {
       this.player.dispose();
     }
