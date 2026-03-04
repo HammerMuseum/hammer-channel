@@ -22,6 +22,8 @@
     "@babel/preset-env": "^7.28.0",
     "@babel/register": "^7.27.1",
     "@vue/compiler-sfc": "3.5.27",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/vue3-jest": "^28.1.0",
     "autoprefixer": "^10.4.21",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^29.7.0",
@@ -71,7 +73,6 @@
     "stylelint-webpack-plugin": "^2.5.0",
     "svg-spritemap-webpack-plugin": "^4.7.0",
     "svgo": "^3.3.2",
-    "vue-jest": "^3.0.7",
     "vue-loader": "^16.0.0",
     "webpack": "^5.101.0",
     "webpack-bundle-analyzer": "^4.10.2",
@@ -128,13 +129,19 @@
     ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+      ".*\\.(vue)$": "<rootDir>/node_modules/@vue/vue3-jest"
     },
     "snapshotSerializers": [
       "<rootDir>/node_modules/jest-serializer-vue"
     ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/resources/js/$1"
+    },
+    "testEnvironmentOptions": {
+      "customExportConditions": [
+        "node",
+        "node-addons"
+      ]
     }
   },
   "volta": {

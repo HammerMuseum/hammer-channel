@@ -392,3 +392,24 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 
 - Used on search page facets panels when using keyboard to access filters (e.g.: clicking on 'Dates', then should be focus-trapped inside of that sub-panel)
 - Just needed an update to the package to make it Vue 3 compatible
+
+#### vue-jest
+
+- There are 2 jest tests which rely on this
+- Needs updating to `@vue/vue3-jest`
+- [Documentation](https://github.com/vuejs/vue-jest?tab=readme-ov-file#installation) says `@vue/vue3-jest@28` for our version of jest
+- Ran tests but need to reinstall/update `@vue/test-utils` next in order for tests to work
+
+#### @vue/test-utils
+
+- Has V3 compatible version, but some breaking changes (migration guide here: https://test-utils.vuejs.org/migration/):
+  - Migrated `propsData` to `props`
+  - Removed `createLocalVue` usage: Both `clippingtool.spec.js` and `about.spec.js` no longer import or use `createLocalVue` or `VueRouter`, aligning with Vue Test Utils v3 where `createLocalVue` is removed.
+  - Migrated `mocks` to `global.mocks`
+  - Migrated `stubs` to `global.stubs`
+    - `about.spec.js` now uses `global.stubs`: `{ RouterLink: RouterLinkStub }` instead of a top-level stubs option.
+
+- Had to add a super basic `tsconfig.json` to stop Jest throwing warnings when running tests - shouldn't make any actual checks
+- Getting errors from vuetensils, which will be updated after this, so had to add a temp. fix:
+  - Stubbed VInput via global.stubs: { VInput: true } to avoid internal vuetensils runtime errors while still testing your own component’s behavior.
+  - @TODO: Undo this when vuetensils is up to date
