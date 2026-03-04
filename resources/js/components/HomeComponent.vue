@@ -99,7 +99,7 @@
 
 <script>
 import axios from 'axios';
-import vueWindowSizeMixin from 'vue-window-size';
+import { useWindowSize } from 'vue-window-size';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
@@ -114,7 +114,6 @@ export default {
     FeaturedCarouselSlide,
     Loader,
   },
-  mixins: [vueWindowSizeMixin],
   beforeRouteEnter(to, from, next) {
     const getData = function () {
       return new Promise((resolve) => {
@@ -141,6 +140,11 @@ export default {
         (vm) => Object.assign(vm.$data, data),
       );
     });
+  },
+  setup() {
+    const { width: windowWidth } = useWindowSize();
+
+    return { windowWidth };
   },
   data() {
     return {

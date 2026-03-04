@@ -125,7 +125,7 @@
 <script>
 import { saveAs } from 'file-saver';
 import scrollIntoView from 'scroll-into-view';
-import { vueWindowSizeMixin } from 'vue-window-size';
+import { useWindowSize } from 'vue-window-size';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
 import isIos from '../mixins/isIos';
@@ -137,7 +137,6 @@ export default {
     BackToTop,
     HighlightText,
   },
-  mixins: [vueWindowSizeMixin],
   props: {
     currentTimecode: {
       type: Number,
@@ -159,6 +158,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  setup() {
+    const { width: windowWidth, height: windowHeight } = useWindowSize();
+
+    return { windowWidth, windowHeight };
   },
   data() {
     return {
