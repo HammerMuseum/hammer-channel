@@ -413,3 +413,9 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Getting errors from vuetensils, which will be updated after this, so had to add a temp. fix:
   - Stubbed VInput via global.stubs: { VInput: true } to avoid internal vuetensils runtime errors while still testing your own component’s behavior.
   - @TODO: Undo this when vuetensils is up to date
+
+#### jest-serializer-vue
+
+- Used to serialise Vue components when using Jest's snapshot assertions, _however_, we are not currently using either `toMatchSnapshot` nor `toMatchInlineSnapshot`, so it looks like we don't need this at all.
+- I will remove it and check the tests still run as expected
+- Got errors re: typescript not being found - it seems `typescript` was a dependency of `jest-serializer-vue`, and `@vue/vue3-jest` requires it, so have installed it separately and now the tests work and pass.
