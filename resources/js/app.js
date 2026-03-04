@@ -1,4 +1,5 @@
 import 'intersection-observer';
+// import { createApp, configureCompat, h } from 'vue'; // This is for when we switch to V3 to replace below line
 import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import { createGtm } from '@gtm-support/vue-gtm';
@@ -84,6 +85,10 @@ const app = createApp({
     },
   },
   render: (h) => h(App),
+  // Below is for when we switch to V3 to replace above line
+  // render() {
+  //   return h(App);
+  // },
 });
 
 // Custom directive that replaces `vue-check-view` using IntersectionObserver.

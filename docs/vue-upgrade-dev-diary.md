@@ -419,3 +419,8 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Used to serialise Vue components when using Jest's snapshot assertions, _however_, we are not currently using either `toMatchSnapshot` nor `toMatchInlineSnapshot`, so it looks like we don't need this at all.
 - I will remove it and check the tests still run as expected
 - Got errors re: typescript not being found - it seems `typescript` was a dependency of `jest-serializer-vue`, and `@vue/vue3-jest` requires it, so have installed it separately and now the tests work and pass.
+
+#### vue-content-loader
+
+- This gives us the lighter grey boxes over the featured carousel before the content loads in
+- This has a V3 update, but as we're still running in Vue 2 mode, it doesn't work, so this will need to be updated when we switch over (@TODO) - but it should just work (have quickly tested by switching over temporarily)
