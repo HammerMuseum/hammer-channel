@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
+import VInput from '../lib/vuetensils/VInput.vue';
 import matchSorter from 'match-sorter';
 import stringifyQuery from '../mixins/stringifyQuery';
 

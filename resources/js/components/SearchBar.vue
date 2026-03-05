@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
+import VInput from '../lib/vuetensils/VInput.vue';
 import TagGroup from './TagGroup.vue';
 import { store, mutations } from '../store';
 

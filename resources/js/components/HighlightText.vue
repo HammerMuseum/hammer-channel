@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
+import VInput from '../lib/vuetensils/VInput.vue';
 import Mark from 'mark.js';
 import { store } from '../store';
 

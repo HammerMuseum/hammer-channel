@@ -359,9 +359,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-import debounce from 'lodash/debounce';
-import { VToggle, VInput } from 'vuetensils/src/components';
+ import axios from 'axios';
+ import debounce from 'lodash/debounce';
+ import { VToggle } from 'vuetensils/src/components';
+ import VInput from '../lib/vuetensils/VInput.vue';
 import AnimatedNumber from './AnimatedNumber.vue';
 import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';

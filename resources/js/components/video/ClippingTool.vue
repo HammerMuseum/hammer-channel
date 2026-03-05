@@ -149,7 +149,7 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
+import VInput from '../../lib/vuetensils/VInput.vue';
 import { convertTimeToSeconds, convertSecondsToTime } from '../../utils';
 import VideoMeta from '../VideoMeta.vue';
 import BaseIcon from '../base/BaseIcon.vue';
