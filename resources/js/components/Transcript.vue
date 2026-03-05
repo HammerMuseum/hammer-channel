@@ -160,9 +160,9 @@ export default {
     },
   },
   setup() {
-    const { width: windowWidth, height: windowHeight } = useWindowSize();
+    const { width: windowWidth } = useWindowSize();
 
-    return { windowWidth, windowHeight };
+    return { windowWidth };
   },
   data() {
     return {
