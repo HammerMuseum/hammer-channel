@@ -2,6 +2,7 @@
   <div class="related-content__wrapper">
     <Carousel
       v-if="items && items.length"
+      :key="carouselKey"
       id="related"
       :classes="['carousel--related-content']"
       :options="{}"
@@ -13,7 +14,7 @@
         v-for="item in items"
         :key="item.id"
         :item="item"
-        :heading-type="h3"
+        heading-type="h3"
         show-date
         class="ui-card--dark-mode"
       />
@@ -61,6 +62,11 @@ export default {
     CarouselSlide,
     VideoMeta,
   },
+  data() {
+    return {
+      carouselKey: 0,
+    };
+  },
   props: {
     items: {
       type: Array,
@@ -69,6 +75,16 @@ export default {
     tags: {
       type: Array,
       default: () => [],
+    },
+  },
+  watch: {
+    items: {
+      handler(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.carouselKey += 1;
+        }
+      },
+      deep: false,
     },
   },
 };

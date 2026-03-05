@@ -306,7 +306,7 @@ export default {
   position: absolute;
   width: 100%;
   top: 110px;
-  z-index: 1;
+  z-index: 10;
 }
 
 .carousel-controls .control {

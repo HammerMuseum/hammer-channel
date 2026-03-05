@@ -197,6 +197,7 @@
                 </h2>
               </template>
               <RelatedContent
+                :key="video.asset_id"
                 :items="relatedContent"
                 :tags="video.tags"
               />
