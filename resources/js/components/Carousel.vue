@@ -171,7 +171,7 @@ export default {
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.observer.disconnect();
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },

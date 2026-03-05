@@ -67,7 +67,7 @@ export default {
     this.throttledScrollListener = throttle(this.scrollListener, 600);
     this.init();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.scrollContainer.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {

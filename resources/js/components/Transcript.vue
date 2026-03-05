@@ -195,7 +195,7 @@ export default {
     this.toggleTranscriptInit();
     this.ios = isIos();
   },
-  destroyed() {
+  unmounted() {
     this.toggleTranscriptInit();
   },
   methods: {

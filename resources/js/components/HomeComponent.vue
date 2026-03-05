@@ -173,7 +173,7 @@ export default {
       virtualPageTitle: document.title,
     });
   },
-  destroyed() {
+  unmounted() {
     document.body.classList.remove('front');
   },
   methods: {

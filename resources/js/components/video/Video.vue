@@ -419,7 +419,7 @@ export default {
       this.onResize();
     });
   },
-  destroyed() {
+  unmounted() {
     document.body.classList.remove('vp');
     window.removeEventListener('resize', this.debouncedResizeListener);
     window.removeEventListener('scroll', this.throttledScrollListener);
