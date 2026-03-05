@@ -77,7 +77,7 @@ if (dev) {
 }
 
 if (!dev) {
-  mix.transpileNodeModules(['quick-score']);
+  mix.transpileNodeModules(['quick-score', 'vuetensils']);
   // Breaks tranpilation for IE11 for some reason...
   mix.version();
 }
