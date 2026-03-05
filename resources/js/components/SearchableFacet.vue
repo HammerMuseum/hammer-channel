@@ -126,6 +126,17 @@ export default {
       return `input-${Math.random().toString(12).substring(4, 8)}`;
     },
   },
+  watch: {
+    filteredItems(value) {
+      for (let i = 0; i < value.length; i += 1) {
+        if (value[i].items.length < 1) {
+          this.noResults = true;
+        } else {
+          this.noResults = false;
+        }
+      }
+    },
+  },
   mounted() {
     this.$nextTick(() => {
       const input = this.$refs.search && this.$refs.search.$refs
@@ -140,17 +151,6 @@ export default {
         this.placeholder = 'Search to filter list';
       });
     });
-  },
-  watch: {
-    filteredItems(value) {
-      for (let i = 0; i < value.length; i += 1) {
-        if (value[i].items.length < 1) {
-          this.noResults = true;
-        } else {
-          this.noResults = false;
-        }
-      }
-    },
   },
   methods: {
     handleClick(e) {
