@@ -21,22 +21,12 @@ mix.copy('resources/images/favicons', 'public/icons', false);
 mix.webpackConfig({
   resolve: {
     fallback: { fs: false },
-    alias: {
-      vue: '@vue/compat',
-    },
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        options: {
-          compilerOptions: {
-            compatConfig: {
-              MODE: 2,
-            },
-          },
-        },
       },
     ],
   },

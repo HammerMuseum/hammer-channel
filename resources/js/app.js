@@ -1,6 +1,6 @@
 import 'intersection-observer';
-// import { createApp, configureCompat, h } from 'vue'; // This is for when we switch to V3 to replace below line
-import { createApp, configureCompat } from 'vue';
+import { createApp,  h } from 'vue'; // This is for when we switch to V3 to replace below line
+// import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
@@ -8,22 +8,6 @@ import { VSkip } from 'vuetensils/src/components';
 import router from './router';
 import { store } from './store';
 import App from './components/App.vue';
-
-// Enable Vue 2 compatibility mode
-configureCompat({
-  MODE: 2, // Run in Vue 2 compatibility mode
-  GLOBAL_MOUNT: false, // Use createApp instead of new Vue
-});
-
-// /**
-//  * The following block of code may be used to automatically register your
-//  * Vue components. It will recursively scan this directory for the Vue
-//  * components and automatically register them with their "basename".
-//  *
-//  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
-//  */
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 const app = createApp({
   computed: {
@@ -84,11 +68,11 @@ const app = createApp({
       this.$el.focus();
     },
   },
-  render: (h) => h(App),
+  // render: (h) => h(App),
   // Below is for when we switch to V3 to replace above line
-  // render() {
-  //   return h(App);
-  // },
+  render() {
+    return h(App);
+  },
 });
 
 // Custom directive that replaces `vue-check-view` using IntersectionObserver.
@@ -150,7 +134,13 @@ app.use(VueProgressBar, {
   height: '2px',
 });
 
-// Auto-register components
+// /**
+//  * The following block of code may be used to automatically register your
+//  * Vue components. It will recursively scan this directory for the Vue
+//  * components and automatically register them with their "basename".
+//  *
+//  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+//  */
 const files = require.context('./', true, /\.vue$/i);
 files.keys().forEach((key) => {
   const component = files(key).default;
