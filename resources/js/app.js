@@ -4,7 +4,7 @@ import { createApp,  h } from 'vue'; // This is for when we switch to V3 to repl
 import VueAnnouncer from '@vue-a11y/announcer';
 import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
-import { VSkip } from 'vuetensils/src/components';
+import VSkip from './lib/vuetensils/VSkip.vue';
 import router from './router';
 import { store } from './store';
 import App from './components/App.vue';
@@ -147,7 +147,5 @@ files.keys().forEach((key) => {
   const name = key.split('/').pop().split('.')[0];
   app.component(name, component);
 });
-
-app.component('VSkip', VSkip);
 
 app.mount('#app');

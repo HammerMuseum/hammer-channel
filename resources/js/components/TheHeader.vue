@@ -178,7 +178,7 @@
 
 <script>
 import axios from 'axios';
-import { VDrawer } from 'vuetensils/src/components';
+import VDrawer from '../lib/vuetensils/VDrawer.vue';
 import SearchBar from './SearchBar.vue';
 import TheFooter from './TheFooter.vue';
 

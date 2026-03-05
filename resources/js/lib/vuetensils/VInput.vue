@@ -16,7 +16,7 @@
       :type="type"
       :class="inputClass"
     >
-    <!-- Optional description slot (used in ClippingTool) -->
+    <!-- Optional validation / help text area controlled by parent via slot -->
     <div
       v-if="$slots.description"
       :class="descriptionClass"
@@ -32,7 +32,8 @@
 <script>
 export default {
   name: 'VInput',
-  inheritAttrs: false, // we decide where $attrs go
+  // Don't auto-apply $attrs to root so we can bind them straight to <input>
+  inheritAttrs: false,
   props: {
     modelValue: {
       type: [String, Number],

@@ -109,8 +109,7 @@
     "vue": "3.5.27",
     "vue-content-loader": "^2.0.1",
     "vue-router": "^4.6.4",
-    "vue-window-size": "^2.0.0",
-    "vuetensils": "^0.13.3"
+    "vue-window-size": "^2.0.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -122,9 +121,6 @@
     "modulePaths": [
       "<rootDir>/resources/js",
       "<rootDir>/node_modules"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!vuetensils)"
     ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",

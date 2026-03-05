@@ -94,8 +94,8 @@
 </template>
 
 <script>
-import VInput from '../lib/vuetensils/VInput.vue';
 import Mark from 'mark.js';
+import VInput from '../lib/vuetensils/VInput.vue';
 import { store } from '../store';
 
 export default {
