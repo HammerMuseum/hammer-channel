@@ -259,9 +259,11 @@ export default {
     };
 
     getData(to).then((data) => {
-      next(
-        (vm) => Object.assign(vm.$data, data),
-      );
+      next((vm) => {
+        Object.assign(vm.$data, data);
+        // Always reset tabs to "Info" on initial enter
+        vm.tabIndex = 0;
+      });
     });
     // next((vm) => {
     //   vm.prevRoute = from;
