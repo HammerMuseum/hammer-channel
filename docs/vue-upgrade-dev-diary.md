@@ -427,6 +427,11 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
   - Stubbed VInput via global.stubs: { VInput: true } to avoid internal vuetensils runtime errors while still testing your own component’s behavior.
   - @TODO: Undo this when vuetensils is up to date
 
+### vue-window-size
+
+- Has a Vue 3 compatible version.  
+- Only used in `Transcript.vue` and `HomeComponent.vue`.
+- The mixin use is no longer supported in the new version so i've updated so these components use the plugin as a composable.  
 #### jest-serializer-vue
 
 - Used to serialise Vue components when using Jest's snapshot assertions, _however_, we are not currently using either `toMatchSnapshot` nor `toMatchInlineSnapshot`, so it looks like we don't need this at all.
