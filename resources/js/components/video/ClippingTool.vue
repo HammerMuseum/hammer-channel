@@ -28,7 +28,7 @@
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
                 root: 'clip-control__input-wrap',
-                text: 'visually-hidden',
+                label: 'visually-hidden',
                 input: 'clip__control__input',
                 description: 'clip-control__error'
               }"
@@ -67,7 +67,7 @@
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
                 root: 'clip-control__input-wrap',
-                text: 'visually-hidden',
+                label: 'visually-hidden',
                 input: 'clip__control__input',
                 description: 'clip-control__error'
               }"

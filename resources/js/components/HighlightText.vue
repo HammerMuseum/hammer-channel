@@ -18,7 +18,7 @@
               v-model="query"
               :classes="{
                 input: ['form__input', 'form__input--search', { 'has-focus': !blurred }],
-                text: 'visually-hidden',
+                label: 'visually-hidden',
               }"
               type="text"
               label="Search the transcript"

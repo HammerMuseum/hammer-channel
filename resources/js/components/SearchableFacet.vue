@@ -6,11 +6,9 @@
         v-model="searchTerm"
         :name="inputId"
         label="Type to filter list..."
-        :classes="{ text: 'visually-hidden', input: 'form__input form__input--search' }"
+        :classes="{ label: 'visually-hidden', input: 'form__input form__input--search' }"
         :placeholder="placeholder"
         autocomplete="new-password"
-        @focus="placeholder = 'Type something'"
-        @blur="placeholder = 'Search to filter list'"
       />
     </div>
     <div
@@ -77,7 +75,7 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils';
+import { VInput } from 'vuetensils/src/components';
 import matchSorter from 'match-sorter';
 import stringifyQuery from '../mixins/stringifyQuery';
 
@@ -127,6 +125,21 @@ export default {
     inputId() {
       return `input-${Math.random().toString(12).substring(4, 8)}`;
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const input = this.$refs.search && this.$refs.search.$refs
+        ? this.$refs.search.$refs.input
+        : null;
+      if (!input) return;
+
+      input.addEventListener('focus', () => {
+        this.placeholder = 'Type something';
+      });
+      input.addEventListener('blur', () => {
+        this.placeholder = 'Search to filter list';
+      });
+    });
   },
   watch: {
     filteredItems(value) {

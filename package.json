@@ -111,7 +111,7 @@
     "vue-content-loader": "^0.2.3",
     "vue-router": "^4.6.4",
     "vue-window-size": "^0.2.5",
-    "vuetensils": "^0.7.12"
+    "vuetensils": "^0.13.3"
   },
   "jest": {
     "moduleFileExtensions": [

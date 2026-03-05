@@ -383,6 +383,18 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 - Allows bottom nav bar on homepage to highlight which section you're on
 - Replaced with simple custom directive `v-view` in app.js using IntersectionObserver. No other changes needed.
 
+#### vuetensils
+
+- @TODO:  Verify Search bar and search page looks visually the same and functions correctly.  The search input text fields on the header search and on the search page should display 'search' when unfocused and 'Type something' when they have focus.   `Vskip` functions correctly (tabbing) on the homepage shows 'Skip to content' which skips to content.
+- Utility library - provides a bunch of preconfigured Vue components.  
+- Previously on version 0.7.12 - which did not support Vue 3.
+- Update to version 0.13.3 as versions above 0.10.0 provide Vue 3 support.
+- This new version slightly changes the DOM output for `VInput` elements but seems to function identically.
+  - The `text` property in the class prop for `VInput` previously targetted the element providing the label.  In the new version the name of this property has been changed to `label`.  We were using this in a few places to provide a `visually-hidden` label, mainly in search related elements and has been updated.  
+  - Because of the DOM changes - the focus and blur listeners attached directly to the `VInput` components no longer function as intended due to event bubbling so I have replaced these with custom event listeners on mount.
+- Re-enabled `VSkip` which functions identically.
+- The package itself still seems to be emitting some warnings due to prop order with `v-bind` being used after `class`.
+
 #### vue-flickity
 
 - Powers the carousels

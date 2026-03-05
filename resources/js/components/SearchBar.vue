@@ -12,7 +12,7 @@
           v-model="clonedTerm"
           :classes="{
             input: ['form__input', 'form__input--search', 'form__input--search-bar'],
-            text: 'visually-hidden'
+            label: 'visually-hidden'
           }"
           type="text"
           :name="inputId"
@@ -20,10 +20,7 @@
           aria-label="Search"
           :placeholder="placeholder"
           @keydown.enter.prevent="search"
-          @focus="placeholder = 'Type something'"
-          @blur="placeholder = 'Search'"
         />
-
         <div class="form__submit-wrapper">
           <button
             :class="['form__submit', 'button', 'button--icon']"
@@ -127,6 +124,10 @@ export default {
   mounted() {
     if (this.focus) {
       this.$nextTick(() => {
+        const input = this.$refs.input.$refs.input;
+        input.addEventListener('focus', () => { this.placeholder = 'Type something'; });
+        input.addEventListener('blur', () => { this.placeholder = 'Search'; });
+
         if (window.innerWidth > 840) {
           this.$refs.input.$refs.input.focus();
         }
