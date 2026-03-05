@@ -14,7 +14,7 @@
         class="carousel-controls"
       >
         <button
-          type="submit"
+          type="button"
           :class="[
             'control',
             'control--previous',
@@ -24,7 +24,8 @@
           ]"
           :aria-disabled="isFirstSlide"
           tabindex="-1"
-          @click="$refs.carousel.previous()"
+          @click.stop.prevent="onPrevClick"
+          @mousedown.stop.prevent
         >
           <BaseIcon
             width="36"
@@ -39,7 +40,7 @@
           </BaseIcon>
         </button>
         <button
-          type="submit"
+          type="button"
           :class="[
             'control',
             'control--next',
@@ -49,7 +50,8 @@
           ]"
           :aria-disabled="isFinalSlide"
           tabindex="-1"
-          @click="$refs.carousel.next()"
+          @click.stop.prevent="onNextClick"
+          @mousedown.stop.prevent
         >
           <BaseIcon
             width="36"
@@ -185,6 +187,23 @@ export default {
       }
       this.hasImagesLoaded = true;
     },
+    onPrevClick() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.previous();
+      }
+    },
+    onNextClick() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.next();
+      }
+    },
+    refresh() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.reloadCells();
+        this.$refs.carousel.resize();
+        this.setControlsPosition();
+      }
+    },
     initCarousel() {
       const carousel = this.$refs.carousel;
       this.totalSlides = carousel.cells().length - 1;
@@ -306,14 +325,14 @@ export default {
   position: absolute;
   width: 100%;
   top: 110px;
-  z-index: 10;
+  z-index: 20;
 }
 
 .carousel-controls .control {
   position: absolute;
 }
 
-.control[aria-disabled] {
+.control[aria-disabled="true"] {
   pointer-events: none;
 }
 

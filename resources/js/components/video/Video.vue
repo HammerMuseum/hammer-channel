@@ -177,7 +177,7 @@
 
             <BTab
               lazy
-              @click="jumpToLowerPanel"
+              @click="onRelatedTabClick"
             >
               <template #title>
                 <BaseIcon
@@ -198,6 +198,7 @@
               </template>
               <RelatedContent
                 :key="video.asset_id"
+                ref="relatedContent"
                 :items="relatedContent"
                 :tags="video.tags"
               />
@@ -431,6 +432,14 @@ export default {
       if (this.isSticky && !this.hasReachedSticky) {
         window.scrollTo(0, this.$refs.videoPlayer.offsetTop + 24);
       }
+    },
+    onRelatedTabClick() {
+      this.jumpToLowerPanel();
+      this.$nextTick(() => {
+        if (this.$refs.relatedContent && this.$refs.relatedContent.refreshCarousel) {
+          this.$refs.relatedContent.refreshCarousel();
+        }
+      });
     },
     onUpdateClip(start, end) {
       this.clipStart = start;

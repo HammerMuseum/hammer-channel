@@ -3,6 +3,7 @@
     <Carousel
       v-if="items && items.length"
       :key="carouselKey"
+      ref="carousel"
       id="related"
       :classes="['carousel--related-content']"
       :options="{}"
@@ -62,11 +63,6 @@ export default {
     CarouselSlide,
     VideoMeta,
   },
-  data() {
-    return {
-      carouselKey: 0,
-    };
-  },
   props: {
     items: {
       type: Array,
@@ -77,14 +73,26 @@ export default {
       default: () => [],
     },
   },
+  data() {
+    return {
+      carouselKey: 0,
+    };
+  },
   watch: {
-    items: {
-      handler(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          this.carouselKey += 1;
+    items(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.carouselKey += 1;
+        this.refreshCarousel();
+      }
+    },
+  },
+  methods: {
+    refreshCarousel() {
+      this.$nextTick(() => {
+        if (this.$refs.carousel && this.$refs.carousel.refresh) {
+          this.$refs.carousel.refresh();
         }
-      },
-      deep: false,
+      });
     },
   },
 };
