@@ -148,8 +148,6 @@
                       aria-label="Enter search query"
                       :placeholder="placeholder"
                       @keydown.enter.prevent="submitSearch"
-                      @focus="placeholder = 'Type something'"
-                      @blur="placeholder = 'Search'"
                     />
                     <div class="form__submit-wrapper">
                       <button
@@ -544,6 +542,12 @@ export default {
     this.showFilters = this.initialWidth >= 960;
     this.debouncedResize = debounce(this.handleResize, 200).bind(this);
     window.addEventListener('resize', this.debouncedResize, false);
+
+    this.$nextTick(() => {
+      const searchInput = this.$refs.searchInput.$refs.input;
+      searchInput.addEventListener('focus', () => { this.placeholder = 'Type something'; });
+      searchInput.addEventListener('blur', () => { this.placeholder = 'Search'; });
+    });
   },
   beforeDestroy() {
     window.addEventListener('resize', this.debouncedResize, false);
