@@ -82,18 +82,18 @@ export default {
   },
   methods: {
     collapse(el) {
-      el.style.blockSize = '0';
+      el.style.height = 0;
     },
     expand(el) {
       el.style.overflow = 'hidden';
-      el.style.blockSize = `${el.scrollHeight}px`;
-      // Force repaint
+      el.style.height = `${el.scrollHeight}px`;
+      // Force repaint to make sure the animation is triggered correctly.
       // eslint-disable-next-line no-unused-expressions
       el.scrollHeight;
     },
     resetHeight(el) {
       el.style.overflow = 'visible';
-      el.style.blockSize = '';
+      el.style.height = '';
     },
   },
 };
@@ -101,6 +101,6 @@ export default {
 
 <style>
 .vts-toggle__content {
-  transition: 300ms ease block-size;
+  transition: 300ms ease height;
 }
 </style>

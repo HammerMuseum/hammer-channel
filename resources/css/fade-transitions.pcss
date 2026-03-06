@@ -3,7 +3,10 @@
   transition: opacity var(--overlay-transition);
 }
 
-.fade-enter,
+.fade-enter-from {
+  opacity: 0;
+}
+
 .fade-leave-to {
   opacity: 0;
 }
@@ -13,7 +16,10 @@
   transition: opacity var(--fade-transition);
 }
 
-.fade-text-enter,
+.fade-text-enter-from {
+  opacity: 0;
+}
+
 .fade-text-leave-to {
   opacity: 0;
 }
