@@ -2,6 +2,7 @@ import 'intersection-observer';
 import { createApp,  h } from 'vue'; // This is for when we switch to V3 to replace below line
 // import { createApp, configureCompat } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
+import '@vue-a11y/announcer/dist/style.css';
 import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
 import VSkip from './lib/vuetensils/VSkip.vue';
