@@ -2,9 +2,9 @@
   <div class="related-content__wrapper">
     <Carousel
       v-if="items && items.length"
+      id="related"
       :key="carouselKey"
       ref="carousel"
-      id="related"
       :classes="['carousel--related-content']"
       :options="{}"
       title="Related content"

@@ -214,8 +214,6 @@
 import axios from 'axios';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import BTabs from '../../lib/Bootstrap/BTabs.vue';
-import BTab from '../../lib/Bootstrap/BTab.vue';
 import About from './About.vue';
 import ClippingTool from './ClippingTool.vue';
 import RelatedContent from '../RelatedContent.vue';
@@ -229,8 +227,6 @@ export default {
   name: 'VideoComponent',
   components: {
     About,
-    BTabs,
-    BTab,
     ClippingTool,
     RelatedContent,
     Share,

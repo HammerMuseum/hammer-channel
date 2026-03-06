@@ -178,7 +178,6 @@
 
 <script>
 import axios from 'axios';
-import VDrawer from '../lib/vuetensils/VDrawer.vue';
 import SearchBar from './SearchBar.vue';
 import TheFooter from './TheFooter.vue';
 
@@ -187,7 +186,6 @@ export default {
   components: {
     SearchBar,
     TheFooter,
-    VDrawer,
   },
   data() {
     return {

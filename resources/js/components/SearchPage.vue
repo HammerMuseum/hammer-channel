@@ -361,8 +361,6 @@
 <script>
 import axios from 'axios';
 import debounce from 'lodash/debounce';
-import VToggle from '../lib/vuetensils/VToggle.vue';
-import VInput from '../lib/vuetensils/VInput.vue';
 import AnimatedNumber from './AnimatedNumber.vue';
 import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
@@ -392,8 +390,6 @@ export default {
     Overlay,
     UiCard,
     UiGrid,
-    VInput,
-    VToggle,
   },
   beforeRouteEnter(to, from, next) {
     const getData = function () {
@@ -551,7 +547,8 @@ export default {
     });
   },
   beforeUnmount() {
-    window.addEventListener('resize', this.debouncedResize, false);
+    window.removeEventListener('resize', this.debouncedResize, false);
+    document.removeEventListener('keydown', this.toggleSearchFilters);
   },
   methods: {
     formatDate,

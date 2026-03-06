@@ -76,13 +76,9 @@
 
 <script>
 import matchSorter from 'match-sorter';
-import VInput from '../lib/vuetensils/VInput.vue';
 import stringifyQuery from '../mixins/stringifyQuery';
 
 export default {
-  components: {
-    VInput,
-  },
   props: {
     facetList: {
       type: Array,
