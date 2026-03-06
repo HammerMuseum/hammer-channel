@@ -316,11 +316,6 @@ export default {
 </script>
 
 <style>
-.carousel-wrapper {
-  position: relative;
-  overflow: hidden;
-}
-
 .carousel-controls {
   position: absolute;
   width: 100%;
