@@ -6,7 +6,7 @@
         v-model="searchTerm"
         :name="inputId"
         label="Type to filter list..."
-        :classes="{ label: 'visually-hidden', input: 'form__input form__input--search' }"
+        :classes="{ root: 'form__input-field', label: 'visually-hidden', input: 'form__input form__input--search' }"
         :placeholder="placeholder"
         autocomplete="new-password"
       />

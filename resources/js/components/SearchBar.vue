@@ -11,6 +11,7 @@
           ref="input"
           v-model="clonedTerm"
           :classes="{
+            root: 'form__input-field',
             input: ['form__input', 'form__input--search', 'form__input--search-bar'],
             label: 'visually-hidden'
           }"
@@ -120,17 +121,15 @@ export default {
     },
   },
   mounted() {
-    if (this.focus) {
-      this.$nextTick(() => {
-        const input = this.$refs.input.$refs.input;
-        input.addEventListener('focus', () => { this.placeholder = 'Type something'; });
-        input.addEventListener('blur', () => { this.placeholder = 'Search'; });
+    this.$nextTick(() => {
+      const input = this.$refs.input.$refs.input;
+      input.addEventListener('focus', () => { this.placeholder = 'Type something'; });
+      input.addEventListener('blur', () => { this.placeholder = 'Search'; });
 
-        if (window.innerWidth > 840) {
-          this.$refs.input.$refs.input.focus();
-        }
-      });
-    }
+      if (this.focus && window.innerWidth > 840) {
+        input.focus();
+      }
+    });
   },
   methods: {
     close() {

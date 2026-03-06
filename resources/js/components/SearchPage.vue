@@ -139,6 +139,7 @@
                       ref="searchInput"
                       v-model="clonedTerm"
                       :classes="{
+                        root: 'form__input-field',
                         input: ['form__input', 'form__input--search', 'form__input--light'],
                         label: 'visually-hidden'
                       }"

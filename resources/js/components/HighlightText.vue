@@ -17,6 +17,7 @@
               ref="input"
               v-model="query"
               :classes="{
+                root: 'form__input-field',
                 input: ['form__input', 'form__input--search', { 'has-focus': !blurred }],
                 label: 'visually-hidden',
               }"
