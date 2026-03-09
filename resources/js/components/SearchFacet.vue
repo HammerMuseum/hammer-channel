@@ -59,9 +59,6 @@ export default {
       required: true,
     },
   },
-  mounted() {
-    this.$refs.listChildren[0].firstChild.focus();
-  },
   methods: {
     handleClick(e) {
       const target = e.currentTarget;

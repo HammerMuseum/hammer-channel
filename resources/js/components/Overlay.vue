@@ -9,11 +9,13 @@
       <FocusTrap
         :active="true"
         :escape-deactivates="true"
+        initial-focus="'#overlay-close-button'"
       >
         <div
           class="overlay__inner"
         >
           <button
+            id="overlay-close-button"
             ref="close"
             class="button button--icon overlay__close-button"
             aria-label="Close filter options"
@@ -46,7 +48,6 @@ export default {
   },
   mounted() {
     document.addEventListener('keyup', this.onEscape);
-    this.$refs.close.focus();
   },
   unmounted() {
     document.removeEventListener('keyup', this.onEscape);

@@ -238,65 +238,42 @@
             @before-enter="setScrollPosition(false)"
             @enter="setElementHeight('.overlay__inner', '.overlay')"
           >
-            <div>
-              <Overlay
-                v-if="openFacetName === 'topics'"
-                id="topics"
-                key="topics"
+            <Overlay
+              v-if="openFacetName"
+              :id="openFacetName"
+              :key="openFacetName"
+              @close-panel="toggleFacetOverlay(null)"
+            >
+              <SearchableFacet
+                v-if="openFacetName === 'topics' && facets"
+                :active-facets="activeFacets"
+                :facet-list="topicsAndTags"
+                :panel-name="'topics'"
                 @close-panel="toggleFacetOverlay(null)"
-              >
-                <SearchableFacet
-                  v-if="facets"
-                  :active-facets="activeFacets"
-                  :facet-list="topicsAndTags"
-                  :panel-name="'topics'"
-                  @close-panel="toggleFacetOverlay(null)"
-                />
-              </Overlay>
+              />
 
-              <Overlay
-                v-if="openFacetName === 'people'"
-                id="people"
-                key="people"
+              <SearchableFacet
+                v-else-if="openFacetName === 'people' && facets"
+                :active-facets="activeFacets"
+                :facet-list="[facets.speakers]"
+                :panel-name="'people'"
                 @close-panel="toggleFacetOverlay(null)"
-              >
-                <SearchableFacet
-                  v-if="facets"
-                  :active-facets="activeFacets"
-                  :facet-list="[facets.speakers]"
-                  :panel-name="'people'"
-                  @close-panel="toggleFacetOverlay(null)"
-                />
-              </Overlay>
+              />
 
-              <Overlay
-                v-if="openFacetName === 'playlists'"
-                id="playlists"
-                key="playlists"
+              <SearchFacet
+                v-else-if="openFacetName === 'playlists' && facets"
+                :active-facets="activeFacets"
+                :facet="facets.in_playlists"
                 @close-panel="toggleFacetOverlay(null)"
-              >
-                <SearchFacet
-                  v-if="facets"
-                  :active-facets="activeFacets"
-                  :facet="facets.in_playlists"
-                  @close-panel="toggleFacetOverlay(null)"
-                />
-              </Overlay>
+              />
 
-              <Overlay
-                v-if="openFacetName === 'date'"
-                id="date"
-                key="date"
+              <SearchFacet
+                v-else-if="openFacetName === 'date' && facets"
+                :active-facets="activeFacets"
+                :facet="facets.date_recorded"
                 @close-panel="toggleFacetOverlay(null)"
-              >
-                <SearchFacet
-                  v-if="facets"
-                  :active-facets="activeFacets"
-                  :facet="facets.date_recorded"
-                  @close-panel="toggleFacetOverlay(null)"
-                />
-              </Overlay>
-            </div>
+              />
+            </Overlay>
           </transition>
 
           <span
