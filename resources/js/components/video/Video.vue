@@ -259,11 +259,10 @@ export default {
         Object.assign(vm.$data, data);
         // Always reset tabs to "Info" on initial enter
         vm.tabIndex = 0;
+        // Set prevRoute for breadcrumbs etc
+        vm.prevRoute = from;
       });
     });
-    // next((vm) => {
-    //   vm.prevRoute = from;
-    // });
   },
   beforeRouteUpdate(to, from, next) {
     if (to.path !== from.path) {
@@ -310,7 +309,8 @@ export default {
   },
   computed: {
     breadcrumb() {
-      const routeName = this.prevRoute.name === null || this.prevRoute.name === 'app' ? 'home' : this.prevRoute.name;
+      const name = this.prevRoute && this.prevRoute.name ? this.prevRoute.name : 'home';
+      const routeName = name === 'app' ? 'home' : name;
       return `Return to ${routeName} page`;
     },
     isValidClip() {
