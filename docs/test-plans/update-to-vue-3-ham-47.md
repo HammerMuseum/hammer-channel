@@ -21,7 +21,7 @@ https://dev.video.hammer.cogapp.com/
 
 ## Requirements to test
 
-Credentials (TBC)
+[Credentials](https://tpm.office.cogapp.com/index.php/pwd/view/665)
 
 ## Test script
 
@@ -48,34 +48,41 @@ The pages/components should look and behave exactly the same as the production s
 ##### /search
 
 - Search header/title/results #/facets selected/ etc
-- Sidebar
-- Search input
-- Filters
-- Filter facets pullout
-- Facets search input
+- Sidebar (NB: One difference here is that on production you should be able to swipe left to close the sidebar on mobile, but that feature has been removed in the update):
+  - Search input
+  - Filters:
+    - Filter facets pullout
+    - Facets search input
 - Results cards
 - Pagination
-- Sort dropdown
-- No results text
-- "Try" suggestions box
+- "Sort" dropdown
+- No results page:
+  - No results text
+  - "Try" suggestions box
 
 ##### /video/{id}/{slug}
 
 - Video embed
-- Breadcrumbs
-- Header bits
-- Tabbed panel
-- Info
-- Info box + text
-- Transcript
-- Timer links, transcript text, search form, download link, 'up' button
-- Clip
-- Start and end times buttons
-- Link + copy
-- Share
-- Share/cite buttons
-- Citation box w/ button
-- Related
-- Carousel
-- "try" suggestions box
-- Error
+  - Control buttons
+- Breadcrumb
+- Tabbed panel:
+  - Info
+    - Info box + text
+  - Transcript
+    - Timer links 
+    - Transcript text
+    - Search form + buttons
+    - Download link
+    - 'To top' button
+  - Clip
+    - Start and end time buttons
+    - Copy button
+    - Link generated after you create a clip - (clip cannot start at 0 as there is a bug currently to do with that)
+    - Test going to the link it gives you and check the clip information appears correctly under the video
+  - Share
+    - Share/cite buttons
+    - Citation box w/ button - after you click the 'cite' button
+  - Related
+    - Carousel
+    - "try" suggestions box
+
