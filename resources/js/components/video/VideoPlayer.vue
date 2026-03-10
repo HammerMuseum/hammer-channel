@@ -150,6 +150,7 @@ export default {
       defaultOptions: {
         autoplay: false,
         controlBar: {
+          subsCapsButton: true,
           muteToggle: false,
           pictureInPictureToggle: false,
           progressControl: {
@@ -245,6 +246,25 @@ export default {
       this.player.pause();
       this.reInit(newOptions.sources);
     },
+    track(newTrack) {
+      if (!newTrack || !newTrack.src) {
+        return;
+      }
+
+      // If the player is not yet initialised, re-init with the new track
+      // so Video.js sees captions at construction time.
+      if (!this.player) {
+        this.initVideoPlayer();
+        return;
+      }
+
+      // If already initialised, replace existing remote text tracks.
+      const textTracks = this.player.textTracks();
+      for (let i = 0; i < textTracks.length; i += 1) {
+        this.player.removeRemoteTextTrack(textTracks[i]);
+      }
+      this.player.addRemoteTextTrack(newTrack, true);
+    },
   },
   beforeUnmount() {
     if (this.player) {
@@ -288,7 +308,14 @@ export default {
       ];
 
       const self = this;
-      const options = this.playerOptions;
+      const options = { ...this.playerOptions };
+
+      // Ensure text tracks are present at init time so
+      // Video.js can correctly configure captions controls.
+      if (this.track && this.track.src) {
+        options.tracks = [this.track];
+      }
+
       this.player = videojs(this.$refs.videoPlayer, options, function () {
         // events
         const events = DEFAULT_EVENTS;
@@ -340,10 +367,6 @@ export default {
       }
 
       this.initOverlays();
-
-      this.player.ready(function () {
-        self.player.addRemoteTextTrack(self.track, true);
-      });
     },
     async onFullscreenChange() {
       if (this.player.isFullscreen()) {
