@@ -9,7 +9,6 @@
       <FocusTrap
         :active="true"
         :escape-deactivates="true"
-        initial-focus="'#overlay-close-button'"
       >
         <div
           class="overlay__inner"
