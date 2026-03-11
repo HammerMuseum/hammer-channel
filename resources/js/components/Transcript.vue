@@ -208,6 +208,11 @@ export default {
       // updated at this point, so measure on nextTick against this component's
       // own subtree rather than the global document.
       this.$nextTick(() => {
+        if (this.windowWidth < 840) {
+          this.scrollBarWidth = 0;
+          return;
+        }
+
         const scrollContainer = this.$el.querySelector('.video-meta__inner.video-meta__highlighted');
         if (scrollContainer) {
           const { offsetWidth, clientWidth } = scrollContainer;
