@@ -11,6 +11,13 @@
           :poster="poster"
           playsinline
         >
+          <track
+            v-if="track && track.src"
+            :src="track.src"
+            :kind="track.kind || 'captions'"
+            :srclang="track.language || 'en'"
+            :label="track.label || 'English'"
+          >
           <p class="vjs-no-js">
             To view this video please enable JavaScript, and consider upgrading to a
             web browser that
