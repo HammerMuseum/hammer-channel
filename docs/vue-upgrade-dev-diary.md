@@ -427,7 +427,7 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
   - Stubbed VInput via global.stubs: { VInput: true } to avoid internal vuetensils runtime errors while still testing your own component’s behavior.
   - @TODO: Undo this when vuetensils is up to date
 
-### vue-window-size
+#### vue-window-size
 
 - Has a Vue 3 compatible version.  
 - Only used in `Transcript.vue` and `HomeComponent.vue`.
@@ -442,3 +442,34 @@ NB: This error also coming from here: `The "data" option can no longer be a plai
 
 - This gives us the lighter grey boxes over the featured carousel before the content loads in
 - This has a V3 update, but as we're still running in Vue 2 mode, it doesn't work, so this will need to be updated when we switch over (@TODO) - but it should just work (have quickly tested by switching over temporarily)
+
+### Switching over to Vue 3 mode
+
+- Have switched over, updated `vue-content-loader`
+- Couple of errors remain on homepage - seem to be to do with vuetensils
+  - Have had to replace vuetensils components with custom components based off vuetensils ones, because although vuetensils was supposed to support Vue 3, it actually didn't and so was erroring/warninging.
+
+- Had a big issue with a) the carousel control buttons not working anymore and b) the video page related carousel not rendering on first mount if you navved from one video page to another (would render if you resized the window or refreshed the page). Went back through commits and isolated it to the commit where we just removed the Vue 2 compat module and started running only in Vue 3, even though nothing to do with the code for the carousels was touched, so these broke due to differences in how V2 and V3 work.
+
+- Had warning about not setting `__VUE_PROD_HYDRATION_MISMATCH_DETAILS__` with esm-bundler so added that and a couple of other flags to webpack.mix.js
+
+- Noticed the 'flickity dots'/pagination for the featured carousel were missing and the slides weren't the right height
+  - This was because some styles from flickity weren't copied over when we removed vue-flickity
+
+- Fixed `npm i` peer dependency issues, can now run `npm i` without the `--legacy-peer-deps` flag!
+
+- Fixed pre-existing issue with event listeners not being removed on unmount
+
+- Removed unneeded local imports (legacy from when we were importing `resources/js/lib` components from external libraries) as all local components are globally registered in app.js
+
+#### Vue 3 upgrade regressions and fixes
+
+- **Transitions (VDrawer, BackToTop, Share `#citation`, VToggle)**: Transition enter/leave animations broke after moving to Vue 3; fixed by updating shared transition CSS to Vue‑3 class names (`*-enter-from` / `*-leave-to`) and restoring VToggle’s JS/CSS to match the original Vuetensils 0.7.12 behaviour.
+- **Featured carousel loader sizing**: `vue-content-loader` SVG stayed at its intrinsic 400×153 size instead of filling the carousel area; fixed by giving the loader wrapper and SVG `width: 100%` / `height: auto` (within existing `max-*` constraints) so it scales with its container.
+- **Search text inputs (VInput)**: After swapping to Vuetensils `VInput`, the wrapper under `.form__input-wrapper--search-bar` lost the `width: 100%` rule; fixed by introducing `.form__input-field` and applying it via `VInput`’s `classes.root` wherever a full‑width text input is needed.
+- **SearchBar placeholder behavior**: Some SearchBar instances always showed placeholder “Search” and never “Type something” on focus; fixed by attaching the focus/blur placeholder listeners for every instance (the `focus` prop now only controls auto‑focus, not whether listeners are added).
+- **Live region announcer layout**: `#announcer` started taking up vertical space and pushing `#main` down on search/video pages; fixed by importing `@vue-a11y/announcer/dist/style.css` so its visually‑hidden styles apply instead of relying on the old Vue‑2 component’s scoped CSS.
+- **Vuetensils + Vue 3 warnings**: Vuetensils LIED and wasn't actually Vue 3 compatible, so components (VInput, VDrawer, VToggle, VSkip) still emitted compat warnings and mis‑handled attributes like `aria-label`/`placeholder`; fixed by replacing them with small local Vue‑3 components in `resources/js/lib/vuetensils` that preserve the same DOM/ARIA API but don’t forward `$attrs` as events or use Vue‑2 lifecycles.
+- **RouterLink `.native` and embed entrypoint**: After dropping compat, `@click.native` on `RouterLink` and the old `embed.js` (global `Vue` + `new VueRouter`) patterns no longer matched Vue 3 + vue‑router 4; fixed by switching to plain `@click` and rewriting `embed.js` to use `createApp` / `app.component` / `app.use(createGtm)` without a router.
+- **Video captions (subs/CC) button missing**: The `vjs-subs-caps-button` captions control appeared in the DOM but didn’t render on the upgraded build; fixed by (a) explicitly enabling `controlBar.subsCapsButton: true` in `VideoPlayer.vue` and (b) making text‑track attachment reactive (only adding a remote text track when `track.src` exists and re‑adding it in a watcher when `track` changes), so video.js always sees a valid captions track and keeps the button active.
+
