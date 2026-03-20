@@ -175,7 +175,7 @@ export default {
   },
   beforeUnmount() {
     this.observer.disconnect();
-    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    window.removeEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
     filterId,
