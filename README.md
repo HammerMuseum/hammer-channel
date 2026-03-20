@@ -10,7 +10,7 @@ You will also need to set this up to get access to data in the development envir
 ## Requirements
 
 - DDEV
-- NodeJS 14 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#intro))
+- NodeJS 24 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#intro))
 
 ## Getting started
 
