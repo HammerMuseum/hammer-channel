@@ -2,14 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { mount, createLocalVue, RouterLinkStub } from '@vue/test-utils';
-import VueRouter from 'vue-router';
+import { mount, RouterLinkStub } from '@vue/test-utils';
 import expect from 'expect';
 import About from '../../resources/js/components/video/About.vue';
-
-const localVue = createLocalVue();
-localVue.use(VueRouter);
-const router = new VueRouter();
 
 describe('Information tab', () => {
   const $route = {
@@ -23,14 +18,16 @@ describe('Information tab', () => {
   };
 
   const wrapper = mount(About, {
-    mocks: {
-      $route,
-      window,
+    global: {
+      mocks: {
+        $route,
+        window,
+      },
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     },
-    stubs: {
-      RouterLink: RouterLinkStub,
-    },
-    propsData: {
+    props: {
       topics: ['topic1', 'topic2'],
       people: ['people1', 'people2'],
       playlists: ['playlist1', 'playlist2'],

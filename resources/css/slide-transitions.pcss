@@ -3,12 +3,15 @@
   transition: transform var(--overlay-transition);
 }
 
-.slide-down-enter,
-.slide-down-leave-to {
+.slide-down-enter-from {
   transform: translateY(-100%);
 }
 
-.slide-down-leave,
-.slide-down-enter-to {
+.slide-down-enter-to,
+.slide-down-leave-from {
   transform: translateY(0);
+}
+
+.slide-down-leave-to {
+  transform: translateY(-100%);
 }

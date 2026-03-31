@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="loader">
     <ContentLoader
       class="content-loader"
       :height="153"
@@ -73,10 +73,23 @@ export default {
 </script>
 
 <style>
+  .loader {
+    width: 100%;
+  }
+
   .content-loader {
     display: block;
+    width: 100%;
+    height: auto;
     max-height: 342px;
     max-width: 1280px;
     margin: 0 auto;
+  }
+
+  /* Ensure the SVG scales when vue-content-loader puts the class on a wrapper */
+  .content-loader svg {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 </style>

@@ -14,6 +14,7 @@
     >
       Skip to content
     </VSkip>
+
     <header class="header">
       <div class="header__content">
         <div class="header__title">
@@ -105,7 +106,6 @@
               </BaseIcon>
             </button>
             <TheFooter
-              v-hammer:swipe.up="handleFooterClose"
               @close="overlay.footer = false"
             />
           </VDrawer>
@@ -162,7 +162,6 @@
               </BaseIcon>
             </button>
             <SearchBar
-              v-hammer:swipe.up="handleSearchClose"
               id-prefix="header"
               :classes="['search-bar--overlay']"
               focus
@@ -179,7 +178,6 @@
 
 <script>
 import axios from 'axios';
-import { VDrawer } from 'vuetensils/src/components';
 import SearchBar from './SearchBar.vue';
 import TheFooter from './TheFooter.vue';
 
@@ -188,7 +186,6 @@ export default {
   components: {
     SearchBar,
     TheFooter,
-    VDrawer,
   },
   data() {
     return {

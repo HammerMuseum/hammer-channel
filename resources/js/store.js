@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { reactive } from 'vue';
 import SiteCopy from './siteCopy';
 
-export const store = Vue.observable({
+export const store = reactive({
   searchOverlayActive: false,
   facetOverlayActive: false,
   footerActive: false,

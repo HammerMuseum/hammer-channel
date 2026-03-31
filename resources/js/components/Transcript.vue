@@ -1,6 +1,6 @@
 <template>
   <VideoMeta>
-    <template v-slot:highlighted>
+    <template #highlighted>
       <div
         class="video-meta__transcript"
       >
@@ -125,7 +125,7 @@
 <script>
 import { saveAs } from 'file-saver';
 import scrollIntoView from 'scroll-into-view';
-import { vueWindowSizeMixin } from 'vue-window-size';
+import { useWindowSize } from 'vue-window-size';
 import HighlightText from './HighlightText.vue';
 import BackToTop from './BackToTop.vue';
 import isIos from '../mixins/isIos';
@@ -137,7 +137,6 @@ export default {
     BackToTop,
     HighlightText,
   },
-  mixins: [vueWindowSizeMixin],
   props: {
     currentTimecode: {
       type: Number,
@@ -159,6 +158,11 @@ export default {
       type: String,
       default: '',
     },
+  },
+  setup() {
+    const { width: windowWidth } = useWindowSize();
+
+    return { windowWidth };
   },
   data() {
     return {
@@ -191,7 +195,7 @@ export default {
     this.toggleTranscriptInit();
     this.ios = isIos();
   },
-  destroyed() {
+  unmounted() {
     this.toggleTranscriptInit();
   },
   methods: {
@@ -199,11 +203,25 @@ export default {
       this.highlightControlsActive = !this.highlightControlsActive;
       const condition = (this.windowWidth < 840 || this.ios) && !this.highlightControlsActive;
       document.querySelector('html').classList.toggle('is-sticky', condition);
-      // Get the width of the scrollbar to make sure it isn't covered
-      const scrollContainer = document.querySelector('.video-meta__inner.video-meta__highlighted');
-      this.scrollBarWidth = scrollContainer
-        ? scrollContainer.offsetWidth - scrollContainer.clientWidth
-        : 16;
+      // Get the width of the scrollbar to make sure it isn't covered.
+      // In Vue 3 the DOM/layout for the transcript tab may not be fully
+      // updated at this point, so measure on nextTick against this component's
+      // own subtree rather than the global document.
+      this.$nextTick(() => {
+        if (this.windowWidth < 840) {
+          this.scrollBarWidth = 0;
+          return;
+        }
+
+        const scrollContainer = this.$el.querySelector('.video-meta__inner.video-meta__highlighted');
+        if (scrollContainer) {
+          const { offsetWidth, clientWidth } = scrollContainer;
+          const width = offsetWidth - clientWidth;
+          this.scrollBarWidth = width > 0 ? width : 16;
+        } else {
+          this.scrollBarWidth = 16;
+        }
+      });
       // Having to workaround iOS fixed positioning oddities
       // Only when closing the highlighter input.
       if (this.ios) {

@@ -10,7 +10,7 @@ You will also need to set this up to get access to data in the development envir
 ## Requirements
 
 - DDEV
-- NodeJS 14 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#intro))
+- NodeJS 24 (use [nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#intro))
 
 ## Getting started
 
@@ -80,3 +80,7 @@ become particularly annoying please feel free to suggest changes.
 Stylelint is currently enforcing a rule aimed at reducing nesting and encourages BEM
 style classes. [If you aren't familiar in writing BEM, you should read the
 supporting documentation](./docs/BEM.md).
+
+### resources/js/lib components
+
+During the migration from Vue 2 to Vue 3, we had to replace some components which were imported from external libraries with custom components which were based on the original components from these libraries (Bootstrap and vuetensils). These all live in this directory, hence the naming convention. 

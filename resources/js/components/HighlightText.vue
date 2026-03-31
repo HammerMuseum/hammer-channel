@@ -17,8 +17,9 @@
               ref="input"
               v-model="query"
               :classes="{
+                root: 'form__input-field',
                 input: ['form__input', 'form__input--search', { 'has-focus': !blurred }],
-                text: 'visually-hidden',
+                label: 'visually-hidden',
               }"
               type="text"
               label="Search the transcript"
@@ -94,14 +95,10 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
 import Mark from 'mark.js';
 import { store } from '../store';
 
 export default {
-  components: {
-    VInput,
-  },
   props: {
     showHighlighter: {
       type: Boolean,
@@ -110,7 +107,7 @@ export default {
     offsetRight: {
       type: Number,
       required: false,
-    }
+    },
   },
   data() {
     return {
@@ -142,7 +139,7 @@ export default {
     },
     style() {
       return `right: ${this.offsetRight}px`;
-    }
+    },
   },
   watch: {
     query() {

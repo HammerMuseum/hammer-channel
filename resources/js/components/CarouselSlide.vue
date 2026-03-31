@@ -13,14 +13,17 @@
             alt=""
           >
         </div>
-        <component :is="headingType" class="ui-card__title">
+        <component
+          :is="headingType"
+          class="ui-card__title"
+        >
           <span>{{ title }}</span>
         </component>
         <span
           v-if="showDate"
           class="ui-card__date"
         >
-          {{ new Date(item.date_recorded) | dateFormat('MMM D, YYYY') }}
+          {{ format(new Date(item.date_recorded), 'MMM d, yyyy') }}
         </span>
         <RichText
           :classes="['ui-card__description']"
@@ -35,6 +38,7 @@
 
 <script>
 import truncate from 'lodash/truncate';
+import { format } from 'date-fns';
 import RichText from './RichText.vue';
 import UiCard from './UiCard.vue';
 
@@ -80,6 +84,9 @@ export default {
     title() {
       return this.item.title;
     },
+  },
+  methods: {
+    format,
   },
 };
 </script>

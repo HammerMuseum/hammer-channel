@@ -11,8 +11,9 @@
           ref="input"
           v-model="clonedTerm"
           :classes="{
+            root: 'form__input-field',
             input: ['form__input', 'form__input--search', 'form__input--search-bar'],
-            text: 'visually-hidden'
+            label: 'visually-hidden'
           }"
           type="text"
           :name="inputId"
@@ -20,10 +21,7 @@
           aria-label="Search"
           :placeholder="placeholder"
           @keydown.enter.prevent="search"
-          @focus="placeholder = 'Type something'"
-          @blur="placeholder = 'Search'"
         />
-
         <div class="form__submit-wrapper">
           <button
             :class="['form__submit', 'button', 'button--icon']"
@@ -49,7 +47,7 @@
             :class="['link--text', 'link--text-secondary', 'link--tag']"
             :to="{ name: 'search', query: {} }"
             data-tracking-gtm="search menu links"
-            @click.native="close"
+            @click="close"
           >
             <span class="link--tag__text">show me everything</span>
           </RouterLink>
@@ -70,7 +68,6 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
 import TagGroup from './TagGroup.vue';
 import { store, mutations } from '../store';
 
@@ -78,7 +75,6 @@ export default {
   name: 'SearchBar',
   components: {
     TagGroup,
-    VInput,
   },
   props: {
     idPrefix: {
@@ -125,13 +121,15 @@ export default {
     },
   },
   mounted() {
-    if (this.focus) {
-      this.$nextTick(() => {
-        if (window.innerWidth > 840) {
-          this.$refs.input.$refs.input.focus();
-        }
-      });
-    }
+    this.$nextTick(() => {
+      const input = this.$refs.input.$refs.input;
+      input.addEventListener('focus', () => { this.placeholder = 'Type something'; });
+      input.addEventListener('blur', () => { this.placeholder = 'Search'; });
+
+      if (this.focus && window.innerWidth > 840) {
+        input.focus();
+      }
+    });
   },
   methods: {
     close() {

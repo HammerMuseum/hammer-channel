@@ -13,8 +13,7 @@
             v-show="total"
             :value="total"
             :duration="400"
-            :round="1"
-          /><span v-show="total"> {{ total > 1 ? 'results' : 'result' }}</span>
+          /><span v-show="total"> {{ total > 1 ? ' results' : ' result' }}</span>
           <div
             v-if="searchTerm"
             class="search-page__summary"
@@ -120,13 +119,11 @@
           >
             <div
               v-show="showFilters && hasFacets"
-              v-hammer:swipe.left="toggleSearchFilters"
               :class="['search__filters-overlay', {'search__filters-overlay--active': showFilters}]"
               @click.self="toggleSearchFilters"
             >
               <div
                 ref="searchFilters"
-                v-hammer:swipe.left="toggleSearchFilters"
                 :class="['search__filters']"
               >
                 <button
@@ -142,8 +139,9 @@
                       ref="searchInput"
                       v-model="clonedTerm"
                       :classes="{
+                        root: 'form__input-field',
                         input: ['form__input', 'form__input--search', 'form__input--light'],
-                        text: 'visually-hidden'
+                        label: 'visually-hidden'
                       }"
                       type="text"
                       :name="inputId"
@@ -151,8 +149,6 @@
                       aria-label="Enter search query"
                       :placeholder="placeholder"
                       @keydown.enter.prevent="submitSearch"
-                      @focus="placeholder = 'Type something'"
-                      @blur="placeholder = 'Search'"
                     />
                     <div class="form__submit-wrapper">
                       <button
@@ -243,57 +239,36 @@
             @enter="setElementHeight('.overlay__inner', '.overlay')"
           >
             <Overlay
-              v-if="openFacetName === 'topics'"
-              id="topics"
-              key="topics"
+              v-if="openFacetName"
+              :id="openFacetName"
+              :key="openFacetName"
               @close-panel="toggleFacetOverlay(null)"
             >
               <SearchableFacet
-                v-if="facets"
+                v-if="openFacetName === 'topics' && facets"
                 :active-facets="activeFacets"
                 :facet-list="topicsAndTags"
                 :panel-name="'topics'"
                 @close-panel="toggleFacetOverlay(null)"
               />
-            </Overlay>
 
-            <Overlay
-              v-if="openFacetName === 'people'"
-              id="people"
-              key="people"
-              @close-panel="toggleFacetOverlay(null)"
-            >
               <SearchableFacet
-                v-if="facets"
+                v-else-if="openFacetName === 'people' && facets"
                 :active-facets="activeFacets"
                 :facet-list="[facets.speakers]"
                 :panel-name="'people'"
                 @close-panel="toggleFacetOverlay(null)"
               />
-            </Overlay>
 
-            <Overlay
-              v-if="openFacetName === 'playlists'"
-              id="playlists"
-              key="playlists"
-              @close-panel="toggleFacetOverlay(null)"
-            >
               <SearchFacet
-                v-if="facets"
+                v-else-if="openFacetName === 'playlists' && facets"
                 :active-facets="activeFacets"
                 :facet="facets.in_playlists"
                 @close-panel="toggleFacetOverlay(null)"
               />
-            </Overlay>
 
-            <Overlay
-              v-if="openFacetName === 'date'"
-              id="date"
-              key="date"
-              @close-panel="toggleFacetOverlay(null)"
-            >
               <SearchFacet
-                v-if="facets"
+                v-else-if="openFacetName === 'date' && facets"
                 :active-facets="activeFacets"
                 :facet="facets.date_recorded"
                 @close-panel="toggleFacetOverlay(null)"
@@ -339,7 +314,7 @@
                     <span v-html="highlight(item)" />
                   </h2>
                   <div class="ui-card__date">
-                    {{ new Date(item.date_recorded) | dateFormat('MMM DD, YYYY') }}
+                    {{ formatDate(new Date(item.date_recorded), "MMM DD, YYYY") }}
                   </div>
                   <SearchSnippets
                     :snippets="item.snippets"
@@ -364,13 +339,11 @@
 <script>
 import axios from 'axios';
 import debounce from 'lodash/debounce';
-import AnimatedNumber from 'animated-number-vue';
-import { VToggle, VInput } from 'vuetensils/src/components';
+import AnimatedNumber from './AnimatedNumber.vue';
 import NoResults from './NoResults.vue';
 import UiCard from './UiCard.vue';
 import UiGrid from './UiGrid.vue';
 import SearchSnippets from './SearchSnippets.vue';
-import getRouteData from '../mixins/getRouteData';
 import stringifyQuery from '../mixins/stringifyQuery';
 import Pagination from './Pagination.vue';
 import CurrentSearch from './CurrentSearch.vue';
@@ -379,6 +352,7 @@ import SearchableFacet from './SearchableFacet.vue';
 import SearchPageHeader from './SearchPageHeader.vue';
 import Overlay from './Overlay.vue';
 import { store, mutations } from '../store';
+import { formatDate } from '../filters';
 
 export default {
   name: 'Search',
@@ -394,10 +368,34 @@ export default {
     Overlay,
     UiCard,
     UiGrid,
-    VInput,
-    VToggle,
   },
-  mixins: [getRouteData],
+  beforeRouteEnter(to, from, next) {
+    const getData = function () {
+      return new Promise((resolve) => {
+        const initialState = JSON.parse(window.INITIAL_STATE) || {};
+        if (!initialState.path || to.path !== initialState.path) {
+          // Check if the query object is empty
+          if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+            axios.get(`/api${to.path}`).then(({ data }) => {
+              resolve(data);
+            });
+          } else {
+            axios.get(`/api${to.path}`, { params: to.query }).then(({ data }) => {
+              resolve(data);
+            });
+          }
+        } else {
+          resolve(initialState);
+        }
+      });
+    };
+
+    getData(to).then((data) => {
+      next(
+        (vm) => Object.assign(vm.$data, data),
+      );
+    });
+  },
   props: {
     facetQuery: {
       type: String,
@@ -519,11 +517,19 @@ export default {
     this.showFilters = this.initialWidth >= 960;
     this.debouncedResize = debounce(this.handleResize, 200).bind(this);
     window.addEventListener('resize', this.debouncedResize, false);
+
+    this.$nextTick(() => {
+      const searchInput = this.$refs.searchInput.$refs.input;
+      searchInput.addEventListener('focus', () => { this.placeholder = 'Type something'; });
+      searchInput.addEventListener('blur', () => { this.placeholder = 'Search'; });
+    });
   },
-  beforeDestroy() {
-    window.addEventListener('resize', this.debouncedResize, false);
+  beforeUnmount() {
+    window.removeEventListener('resize', this.debouncedResize, false);
+    document.removeEventListener('keydown', this.toggleSearchFilters);
   },
   methods: {
+    formatDate,
     setSearchTerm: mutations.setSearchTerm,
     toggleFacetOverlayActive: mutations.toggleFacetOverlayActive,
     getPageData(params = '') {

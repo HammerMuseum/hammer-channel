@@ -2,14 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { shallowMount, createLocalVue } from '@vue/test-utils';
-import VueRouter from 'vue-router';
+import { mount } from '@vue/test-utils';
 import expect from 'expect';
 import ClippingTool from '../../resources/js/components/video/ClippingTool.vue';
-
-const localVue = createLocalVue();
-localVue.use(VueRouter);
-const router = new VueRouter();
 
 describe('Clipping Tool', () => {
   const $route = {
@@ -22,10 +17,15 @@ describe('Clipping Tool', () => {
     },
   };
 
-  const wrapper = shallowMount(ClippingTool, {
-    mocks: {
-      $route,
-      window,
+  const wrapper = mount(ClippingTool, {
+    global: {
+      mocks: {
+        $route,
+        window,
+      },
+      stubs: {
+        VInput: true,
+      },
     },
   });
 

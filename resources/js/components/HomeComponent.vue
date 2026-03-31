@@ -1,7 +1,7 @@
 <template>
   <div class="container container--full">
     <div
-    id="start-of-content"
+      id="start-of-content"
       class="page-wrapper page-wrapper--full"
     >
       <p class="strapline">
@@ -29,7 +29,10 @@
       </Carousel>
 
       <div class="carousels">
-        <template v-for="({id, label, count, hits}, idx) in videos">
+        <template
+          v-for="({id, label, count, hits}, idx) in videos"
+          :key="id"
+        >
           <div
             v-if="idx === 3"
             :key="`${id}-search`"
@@ -42,7 +45,6 @@
             </div>
           </div>
           <div
-            :key="id"
             v-view="viewHandler"
             :data-section-id="id"
           >
@@ -97,12 +99,11 @@
 
 <script>
 import axios from 'axios';
-import vueWindowSizeMixin from 'vue-window-size';
+import { useWindowSize } from 'vue-window-size';
 import Carousel from './Carousel.vue';
 import CarouselSlide from './CarouselSlide.vue';
 import FeaturedCarouselSlide from './FeaturedCarouselSlide.vue';
 import Loader from './Loader.vue';
-import mixin from '../mixins/getRouteData';
 import { store } from '../store';
 
 export default {
@@ -113,12 +114,38 @@ export default {
     FeaturedCarouselSlide,
     Loader,
   },
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
+  beforeRouteEnter(to, from, next) {
+    const getData = function () {
+      return new Promise((resolve) => {
+        const initialState = JSON.parse(window.INITIAL_STATE) || {};
+        if (!initialState.path || to.path !== initialState.path) {
+          // Check if the query object is empty
+          if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+            axios.get(`/api${to.path}`).then(({ data }) => {
+              resolve(data);
+            });
+          } else {
+            axios.get(`/api${to.path}`, { params: to.query }).then(({ data }) => {
+              resolve(data);
+            });
+          }
+        } else {
+          resolve(initialState);
+        }
+      });
+    };
+
+    getData(to).then((data) => {
+      next(
+        (vm) => Object.assign(vm.$data, data),
+      );
+    });
   },
-  mixins: [mixin, vueWindowSizeMixin],
+  setup() {
+    const { width: windowWidth } = useWindowSize();
+
+    return { windowWidth };
+  },
   data() {
     return {
       currentSectionInView: null,
@@ -136,7 +163,7 @@ export default {
   mounted() {
     this.getFeatured();
     document.body.classList.add('front');
-    // this.groupCells = this.windowWidth < 840 ? 1 : 2;
+    this.groupCells = this.windowWidth < 840 ? 1 : 2;
     const pageTitle = 'Hammer Channel | Hammer Museum';
     document.title = pageTitle;
 
@@ -146,7 +173,7 @@ export default {
       virtualPageTitle: document.title,
     });
   },
-  destroyed() {
+  unmounted() {
     document.body.classList.remove('front');
   },
   methods: {

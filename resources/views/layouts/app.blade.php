@@ -52,7 +52,7 @@
 </head>
 
 <body>
-  <div id="app" tabindex="-1">
+  <div id="app" data-id="vue-app">
     @include('includes.header')
 
     <div class="container script--disabled">

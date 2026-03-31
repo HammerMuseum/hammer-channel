@@ -53,21 +53,10 @@
 </template>
 
 <script>
-import Flickity from 'vue-flickity';
+import scrollIntoView from 'scroll-into-view';
 
 export default {
   name: 'NavigationBar',
-  components: {
-    Flickity,
-  },
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
-    anchorLink(value) {
-      return `#${value}`;
-    },
-  },
   props: {
     items: {
       type: Array,
@@ -109,12 +98,16 @@ export default {
   },
   methods: {
     scrollTo(id) {
-      const offset = -85;
-      this.$scrollTo(`#${id}`, 0, { offset });
+      const el = document.querySelector(`#${id}`);
+
+      if (el) {
+        scrollIntoView(el, { time: 0, align: { top: 0, topOffset: 85 } });
+      }
     },
     scrollToTop() {
       this.$refs.flickity.selectCell(0, false);
-      this.$scrollTo(`body`, 0);
+
+      window.scrollTo({ top: 0 });
     },
     selectNavigationItem(item) {
       this.$refs.flickity.selectCell(`[data-selector="${item}"]`, false);

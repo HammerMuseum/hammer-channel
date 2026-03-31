@@ -3,6 +3,8 @@
     <Carousel
       v-if="items && items.length"
       id="related"
+      :key="carouselKey"
+      ref="carousel"
       :classes="['carousel--related-content']"
       :options="{}"
       title="Related content"
@@ -13,7 +15,7 @@
         v-for="item in items"
         :key="item.id"
         :item="item"
-        :heading-type="h3"
+        heading-type="h3"
         show-date
         class="ui-card--dark-mode"
       />
@@ -69,6 +71,28 @@ export default {
     tags: {
       type: Array,
       default: () => [],
+    },
+  },
+  data() {
+    return {
+      carouselKey: 0,
+    };
+  },
+  watch: {
+    items(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.carouselKey += 1;
+        this.refreshCarousel();
+      }
+    },
+  },
+  methods: {
+    refreshCarousel() {
+      this.$nextTick(() => {
+        if (this.$refs.carousel && this.$refs.carousel.refresh) {
+          this.$refs.carousel.refresh();
+        }
+      });
     },
   },
 };

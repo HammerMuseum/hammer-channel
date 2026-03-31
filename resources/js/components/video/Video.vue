@@ -22,7 +22,9 @@
           v-show="video.date_recorded"
         >
           <span>Original program date: </span>
-          <span class="video-meta__date">{{ new Date(video.date_recorded) | dateFormat('MMM D, YYYY') }}</span>
+          <span class="video-meta__date">
+            {{ formatDate(new Date(video.date_recorded), "MMM D, YYYY") }}
+          </span>
         </div>
       </header>
       <div
@@ -60,13 +62,12 @@
           <BTabs
             v-model="tabIndex"
             class="vp__tabs"
-            lazy
           >
             <BTab
               active
               @click="jumpToLowerPanel"
             >
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -96,7 +97,7 @@
               class="tab--transcript"
               @click="jumpToLowerPanel"
             >
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -123,7 +124,7 @@
             </BTab>
 
             <BTab @click="jumpToLowerPanel">
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -151,7 +152,7 @@
             </BTab>
 
             <BTab @click="jumpToLowerPanel">
-              <template v-slot:title>
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -175,8 +176,11 @@
               />
             </BTab>
 
-            <BTab @click="jumpToLowerPanel">
-              <template v-slot:title>
+            <BTab
+              lazy
+              @click="onRelatedTabClick"
+            >
+              <template #title>
                 <BaseIcon
                   width="18"
                   height="18"
@@ -194,6 +198,8 @@
                 </h2>
               </template>
               <RelatedContent
+                :key="video.asset_id"
+                ref="relatedContent"
                 :items="relatedContent"
                 :tags="video.tags"
               />
@@ -207,10 +213,8 @@
 
 <script>
 import axios from 'axios';
-import { BTabs, BTab } from 'bootstrap-vue';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import getRouteData from '../../mixins/getRouteData';
 import About from './About.vue';
 import ClippingTool from './ClippingTool.vue';
 import RelatedContent from '../RelatedContent.vue';
@@ -218,20 +222,59 @@ import Transcript from '../Transcript.vue';
 import Share from './Share.vue';
 import VideoPlayer from './VideoPlayer.vue';
 import { store } from '../../store';
+import { formatDate } from '../../filters';
 
 export default {
   name: 'VideoComponent',
   components: {
     About,
-    BTabs,
-    BTab,
     ClippingTool,
     RelatedContent,
     Share,
     Transcript,
     VideoPlayer,
   },
-  mixins: [getRouteData],
+  beforeRouteEnter(to, from, next) {
+    const getData = function () {
+      return new Promise((resolve) => {
+        const initialState = JSON.parse(window.INITIAL_STATE) || {};
+        if (!initialState.path || to.path !== initialState.path) {
+          // Check if the query object is empty
+          if (Object.keys(to.query).length === 0 && to.query.constructor === Object) {
+            axios.get(`/api${to.path}`).then(({ data }) => {
+              resolve(data);
+            });
+          } else {
+            axios.get(`/api${to.path}`, { params: to.query }).then(({ data }) => {
+              resolve(data);
+            });
+          }
+        } else {
+          resolve(initialState);
+        }
+      });
+    };
+
+    getData(to).then((data) => {
+      next((vm) => {
+        Object.assign(vm.$data, data);
+        // Always reset tabs to "Info" on initial enter
+        vm.tabIndex = 0;
+        // Set prevRoute for breadcrumbs etc
+        vm.prevRoute = from;
+      });
+    });
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.path !== from.path) {
+      axios.get(`/api${to.path}`).then(({ data }) => {
+        this.setData(data);
+        next();
+      });
+    } else {
+      next();
+    }
+  },
   props: {
     id: {
       type: String,
@@ -267,7 +310,8 @@ export default {
   },
   computed: {
     breadcrumb() {
-      const routeName = this.prevRoute.name === null || this.prevRoute.name === 'app' ? 'home' : this.prevRoute.name;
+      const name = this.prevRoute && this.prevRoute.name ? this.prevRoute.name : 'home';
+      const routeName = name === 'app' ? 'home' : name;
       return `Return to ${routeName} page`;
     },
     isValidClip() {
@@ -363,21 +407,6 @@ export default {
       }
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.prevRoute = from;
-    });
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.path !== from.path) {
-      axios.get(`/api${to.path}`).then(({ data }) => {
-        this.setData(data);
-        next();
-      });
-    } else {
-      next();
-    }
-  },
   mounted() {
     document.body.classList.add('vp');
     this.debouncedResizeListener = debounce(this.onResize, 1000);
@@ -391,16 +420,25 @@ export default {
       this.onResize();
     });
   },
-  destroyed() {
+  unmounted() {
     document.body.classList.remove('vp');
     window.removeEventListener('resize', this.debouncedResizeListener);
     window.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
+    formatDate,
     jumpToLowerPanel() {
       if (this.isSticky && !this.hasReachedSticky) {
         window.scrollTo(0, this.$refs.videoPlayer.offsetTop + 24);
       }
+    },
+    onRelatedTabClick() {
+      this.jumpToLowerPanel();
+      this.$nextTick(() => {
+        if (this.$refs.relatedContent && this.$refs.relatedContent.refreshCarousel) {
+          this.$refs.relatedContent.refreshCarousel();
+        }
+      });
     },
     onUpdateClip(start, end) {
       this.clipStart = start;

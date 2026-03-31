@@ -38,7 +38,7 @@ export default {
     scrollAnchor: {
       type: String,
       required: true,
-    }
+    },
   },
   data() {
     return {
@@ -53,7 +53,7 @@ export default {
         'button',
         'button--to-top',
         ...(this.isIOS ? ['button--safe-area-bottom'] : []),
-        ...this.classes
+        ...this.classes,
       ];
     },
   },
@@ -67,7 +67,7 @@ export default {
     this.throttledScrollListener = throttle(this.scrollListener, 600);
     this.init();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.scrollContainer.removeEventListener('scroll', this.throttledScrollListener);
   },
   methods: {
@@ -91,7 +91,7 @@ export default {
         // scroll anchor element has gone above the viewport
         this.visible = orientation === 'landscape' && document.querySelector(this.scrollAnchor)
           ? document.querySelector(this.scrollAnchor).getBoundingClientRect().top < 0
-          : window.pageYOffset > 350
+          : window.pageYOffset > 350;
       }
     },
   },

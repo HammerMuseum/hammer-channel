@@ -1,32 +1,31 @@
 <template>
-  <div
-    :id="id | filterId"
-  >
+  <div :id="filterId(id)">
     <h2
       v-if="showHeading"
-      :id="headingId |filterId "
+      :id="filterId(headingId)"
       :class="['carousel__title']"
     >
       <slot name="heading" />
     </h2>
-    <div :class="['carousel-wrapper', {'carousel--full-width': fullWidth}]">
+    <div :class="['carousel-wrapper', { 'carousel--full-width': fullWidth }]">
       <div
-        v-if="controls"
+        v-if="controls && hasImagesLoaded"
         ref="controls"
         class="carousel-controls"
       >
         <button
-          type="submit"
+          type="button"
           :class="[
             'control',
             'control--previous',
             'button',
             'button--icon',
-            {'button--disabled': isFirstSlide}
+            { 'button--disabled': isFirstSlide },
           ]"
           :aria-disabled="isFirstSlide"
           tabindex="-1"
-          @click="$refs.carousel.previous()"
+          @click.stop.prevent="onPrevClick"
+          @mousedown.stop.prevent
         >
           <BaseIcon
             width="36"
@@ -41,17 +40,18 @@
           </BaseIcon>
         </button>
         <button
-          type="submit"
+          type="button"
           :class="[
             'control',
             'control--next',
             'button',
             'button--icon',
-            {'button--disabled': isFinalSlide}
+            { 'button--disabled': isFinalSlide },
           ]"
           :aria-disabled="isFinalSlide"
           tabindex="-1"
-          @click="$refs.carousel.next()"
+          @click.stop.prevent="onNextClick"
+          @mousedown.stop.prevent
         >
           <BaseIcon
             width="36"
@@ -80,22 +80,18 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import Flickity from 'vue-flickity';
-import imagesLoaded from 'vue-images-loaded';
+import imagesLoadedDirective from '../directives/imagesLoaded';
 import BaseIcon from './base/BaseIcon.vue';
 import NextWithCircleIcon from './icons/NextWithCircleIcon.vue';
+import { filterId } from '../filters';
 
 export default {
   components: {
     BaseIcon,
-    Flickity,
     NextWithCircleIcon,
   },
-  directives: { imagesLoaded },
-  filters: {
-    filterId(value) {
-      return value.replace(/[\s&]/gi, '').toLowerCase();
-    },
+  directives: {
+    imagesLoaded: imagesLoadedDirective,
   },
   props: {
     classes: {
@@ -147,6 +143,7 @@ export default {
       },
       observer: null,
       isFinalSlideVisible: false,
+      hasImagesLoaded: false,
     };
   },
   computed: {
@@ -159,7 +156,10 @@ export default {
       if (group && group > 1) {
         total = this.totalSlides / group;
       }
-      return !this.mergedOptions.wrapAround && (this.currentSlide === total || this.isFinalSlideVisible);
+      return (
+        !this.mergedOptions.wrapAround
+        && (this.currentSlide === total || this.isFinalSlideVisible)
+      );
     },
     isFirstSlide() {
       return !this.mergedOptions.wrapAround && this.currentSlide === 0;
@@ -173,15 +173,35 @@ export default {
     this.debouncedSetControlsPosition = debounce(this.setControlsPosition, 200);
     window.addEventListener('resize', this.debouncedSetControlsPosition, false);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.observer.disconnect();
-    window.addEventListener('resize', this.debouncedSetControlsPosition, false);
+    window.removeEventListener('resize', this.debouncedSetControlsPosition, false);
   },
   methods: {
+    filterId,
     imgsLoaded() {
       if (this.$refs.carousel) {
         this.$refs.carousel.reloadCells();
         this.$refs.carousel.resize();
+        this.setControlsPosition();
+      }
+      this.hasImagesLoaded = true;
+    },
+    onPrevClick() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.previous();
+      }
+    },
+    onNextClick() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.next();
+      }
+    },
+    refresh() {
+      if (this.$refs.carousel) {
+        this.$refs.carousel.reloadCells();
+        this.$refs.carousel.resize();
+        this.setControlsPosition();
       }
     },
     initCarousel() {
@@ -220,52 +240,72 @@ export default {
         }
 
         // Find the currently focused element in the array of links
-        const selectedLinkIndex = [...this.carouselLinks].indexOf(focusedElement)
+        const selectedLinkIndex = [...this.carouselLinks].indexOf(
+          focusedElement,
+        );
         if (selectedLinkIndex === -1) {
           return;
         }
 
         if (!event.shiftKey && this.carouselLinks[selectedLinkIndex + 1]) {
           targetLink = this.carouselLinks[selectedLinkIndex + 1];
-        } else if (event.shiftKey && this.carouselLinks[selectedLinkIndex - 1]) {
+        } else if (
+          event.shiftKey
+          && this.carouselLinks[selectedLinkIndex - 1]
+        ) {
           targetLink = this.carouselLinks[selectedLinkIndex - 1];
         }
 
         // Check whether
         // a) 'element.closest' is supported and
         // b) the target link is inside a carousel slide
-        const parentSlide = Element.prototype.closest && targetLink ? targetLink.closest('.carousel__slide') : null;
+        const parentSlide = Element.prototype.closest && targetLink
+          ? targetLink.closest('.carousel__slide')
+          : null;
         if (parentSlide) {
           event.preventDefault();
-          const index = [...parentSlide.parentNode.children].indexOf(parentSlide);
+          const index = [...parentSlide.parentNode.children].indexOf(
+            parentSlide,
+          );
           this.$refs.carousel.select(index, false, true);
           targetLink.focus();
         }
-      })
+      });
 
       this.setControlsPosition();
     },
     setControlsPosition() {
-      if (this.$refs.carousel) {
-        let top = 0;
-        if (this.id === 'featured') {
-          const carouselHeight = this.$refs.carousel.$el.offsetHeight;
-          // Half-way down minus half the height of the buttons
-          top = carouselHeight / 2 - 16;
-        } else {
-          const imageHeight = this.$refs.carousel.$el.querySelector('.ui-card__thumbnail-image').height;
-          top = imageHeight / 1.4;
-        }
-
-        this.$refs.controls.style.top = `${top}px`;
+      if (!this.$refs.carousel || !this.$refs.controls) {
+        return;
       }
+
+      let top = 0;
+      if (this.id === 'featured') {
+        const carouselHeight = this.$refs.carousel.$el.offsetHeight;
+        // Half-way down minus half the height of the buttons
+        top = carouselHeight / 2 - 16;
+      } else {
+        const image = this.$refs.carousel.$el.querySelector(
+          '.ui-card__thumbnail-image',
+        );
+
+        // Make sure images have loaded before calculating pos of controls
+        if (!image) {
+          return;
+        }
+        const imageHeight = image.height;
+        top = imageHeight / 1.4;
+      }
+
+      this.$refs.controls.style.top = `${top}px`;
     },
     setupObserver() {
-      const finalSlide = this.$refs.carousel.$el.querySelector('.carousel__slide:last-child');
-      this.observer = new IntersectionObserver(
-        this.observerCallback,
-        { threshold: [1] },
+      const finalSlide = this.$refs.carousel.$el.querySelector(
+        '.carousel__slide:last-child',
       );
+      this.observer = new IntersectionObserver(this.observerCallback, {
+        threshold: [1],
+      });
       this.observer.observe(finalSlide);
     },
     observerCallback(e) {
@@ -280,14 +320,14 @@ export default {
   position: absolute;
   width: 100%;
   top: 110px;
-  z-index: 1;
+  z-index: 20;
 }
 
 .carousel-controls .control {
   position: absolute;
 }
 
-.control[aria-disabled] {
+.control[aria-disabled="true"] {
   pointer-events: none;
 }
 

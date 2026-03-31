@@ -1,53 +1,21 @@
 import 'intersection-observer';
-import Vue from 'vue';
+import { createApp, h } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
-import VueCheckView from 'vue-check-view';
-import VueFilterDateFormat from 'vue-filter-date-format';
-import VueGtm from 'vue-gtm';
-import VueProgressBar from 'vue-progressbar';
-import VueScrollTo from 'vue-scrollto';
-import { VueHammer } from 'vue2-hammer';
-import { VSkip } from 'vuetensils/src/components';
+import '@vue-a11y/announcer/dist/style.css';
+import { createGtm } from '@gtm-support/vue-gtm';
+import VueProgressBar from '@aacassandra/vue3-progressbar';
 import router from './router';
 import { store } from './store';
 import App from './components/App.vue';
 
-// /**
-//  * The following block of code may be used to automatically register your
-//  * Vue components. It will recursively scan this directory for the Vue
-//  * components and automatically register them with their "basename".
-//  *
-//  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
-//  */
-const files = require.context('./', true, /\.vue$/i);
-files.keys().map((key) => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
-Vue.use(VueGtm, {
-  id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
-  defer: false,
-  enabled: process.env.MIX_PROD,
-  debug: false,
-  loadScript: true,
-});
-
-Vue.use(VueHammer);
-Vue.use(VueFilterDateFormat);
-Vue.use(VueAnnouncer, {}, router);
-Vue.use(VueCheckView);
-Vue.use(VueProgressBar, {
-  color: '#ee2a7b',
-  failedColor: 'red',
-  height: '2px',
-});
-Vue.use(VueScrollTo);
-
-Vue.component('VSkip', VSkip);
-
-const app = new Vue({ // eslint-disable-line
-  router,
+const app = createApp({
   computed: {
     overlayOpen() {
-      return store.searchOverlayActive || store.facetOverlayActive || store.footerActive;
+      return (
+        store.searchOverlayActive
+        || store.facetOverlayActive
+        || store.footerActive
+      );
     },
   },
   watch: {
@@ -72,7 +40,6 @@ const app = new Vue({ // eslint-disable-line
   created() {
     document.addEventListener('keydown', this.onKeyDown, true);
     document.addEventListener('mousedown', this.onPointerDown, true);
-    // See https://github.com/hilongjw/vue-progressbar for progress bar docs.
     this.$Progress.start();
     this.$router.beforeEach((to, from, next) => {
       if (from.hash !== to.hash) return;
@@ -83,7 +50,8 @@ const app = new Vue({ // eslint-disable-line
       this.$Progress.finish();
     });
   },
-  destroyed() {
+  unmounted() {
+    // changed from destroyed
     document.removeEventListener('keydown', this.onKeyDown, true);
     document.removeEventListener('mousedown', this.onPointerDown, true);
   },
@@ -99,5 +67,82 @@ const app = new Vue({ // eslint-disable-line
       this.$el.focus();
     },
   },
-  render: (h) => h(App),
-}).$mount('#app');
+  render() {
+    return h(App);
+  },
+});
+
+// Custom directive that replaces `vue-check-view` using IntersectionObserver.
+app.directive('view', {
+  mounted(el, binding) {
+    const callback = binding.value;
+    if (typeof callback !== 'function') return;
+
+    const observer = new IntersectionObserver(
+      // Iterate over IntersectionObserverEntries
+      (entries) => {
+        entries.forEach((entry) => {
+          const rect = entry.boundingClientRect;
+          /* Normalised intersection ratio (0–1), used by handlers to decide when
+          a section is "active". */
+          const percentInView = entry.intersectionRatio;
+
+          // Run callback when el in view
+          callback({
+            percentInView,
+            target: {
+              element: el,
+              rect,
+            },
+          });
+        });
+      },
+      {
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      },
+    );
+
+    /* Keep a reference on the element so we can disconnect the observer when
+    the element is unmounted. */
+    el.__viewObserver__ = observer;
+    observer.observe(el);
+  },
+  unmounted(el) {
+    if (el.__viewObserver__) {
+      el.__viewObserver__.disconnect();
+      delete el.__viewObserver__;
+    }
+  },
+});
+
+// Register plugins
+app.use(router);
+app.use(createGtm({
+  id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
+  defer: false,
+  enabled: process.env.MIX_PROD,
+  debug: false,
+  loadScript: true,
+}));
+app.use(VueAnnouncer, {}, router);
+app.use(VueProgressBar, {
+  color: '#ee2a7b',
+  failedColor: 'red',
+  height: '2px',
+});
+
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
+const files = require.context('./', true, /\.vue$/i);
+files.keys().forEach((key) => {
+  const component = files(key).default;
+  const name = key.split('/').pop().split('.')[0];
+  app.component(name, component);
+});
+
+app.mount('#app');

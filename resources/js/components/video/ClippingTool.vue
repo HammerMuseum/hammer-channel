@@ -1,6 +1,6 @@
 <template>
   <VideoMeta>
-    <template v-slot:highlighted>
+    <template #highlighted>
       <div class="clip">
         <p>{{ tips }}</p>
         <div class="clip__controls">
@@ -21,14 +21,14 @@
               {{ `Start time set to ${clipStartTime}` }}
             </div>
             <VInput
-              name="clipStartTime"
               ref="startInput"
               v-model="clipStartTime"
+              name="clipStartTime"
               label="Set clip start time"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
                 root: 'clip-control__input-wrap',
-                text: 'visually-hidden',
+                label: 'visually-hidden',
                 input: 'clip__control__input',
                 description: 'clip-control__error'
               }"
@@ -60,14 +60,14 @@
               {{ `End time set to ${clipEndTime}` }}
             </div>
             <VInput
-              name="clipEndTime"
               ref="endInput"
               v-model="clipEndTime"
+              name="clipEndTime"
               label="Set clip end time"
               pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
               :classes="{
                 root: 'clip-control__input-wrap',
-                text: 'visually-hidden',
+                label: 'visually-hidden',
                 input: 'clip__control__input',
                 description: 'clip-control__error'
               }"
@@ -120,7 +120,7 @@
         </div>
       </div>
     </template>
-    <template v-slot:content>
+    <template #content>
       <p
         v-if="hasActiveClip"
         class="video-meta__description cliptool--remove"
@@ -149,7 +149,6 @@
 </template>
 
 <script>
-import { VInput } from 'vuetensils/src/components';
 import { convertTimeToSeconds, convertSecondsToTime } from '../../utils';
 import VideoMeta from '../VideoMeta.vue';
 import BaseIcon from '../base/BaseIcon.vue';
@@ -162,7 +161,6 @@ export default {
     BaseIcon,
     CloseIcon,
     CopyIcon,
-    VInput,
     VideoMeta,
   },
   mixins: [CopyTo],

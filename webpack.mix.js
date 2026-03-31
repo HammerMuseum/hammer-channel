@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 require('laravel-mix-transpile-node-modules');
 
@@ -20,9 +21,22 @@ mix.copy('resources/images/favicons', 'public/icons', false);
 
 mix.webpackConfig({
   resolve: {
-    fallback: { fs: false }
+    fallback: { fs: false },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+    ],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
+    }),
     new StyleLintPlugin({
       files: '**/*.pcss',
       context: 'resources/css',
@@ -34,8 +48,8 @@ mix.webpackConfig({
   ],
 });
 
-mix.js('resources/js/app.js', 'public/js/app.js').vue({ version: 2 });
-mix.js('resources/js/embed.js', 'public/js/embed.js').vue({ version: 2 });
+mix.js('resources/js/app.js', 'public/js/app.js').vue({ version: 3 });
+mix.js('resources/js/embed.js', 'public/js/embed.js').vue({ version: 3 });
 mix.postCss('resources/css/app.pcss', 'public/css', [
   require('autoprefixer'),
   require('postcss-import'),
@@ -59,7 +73,7 @@ if (dev) {
 }
 
 if (!dev) {
-  mix.transpileNodeModules(['bootstrap-vue', 'vue-flickity', 'quick-score', 'vuetensils']);
+  mix.transpileNodeModules(['quick-score']);
   // Breaks tranpilation for IE11 for some reason...
   mix.version();
 }
