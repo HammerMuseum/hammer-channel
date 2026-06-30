@@ -281,9 +281,19 @@ export default {
 
       let top = 0;
       if (this.id === 'featured') {
-        const carouselHeight = this.$refs.carousel.$el.offsetHeight;
-        // Half-way down minus half the height of the buttons
-        top = carouselHeight / 2 - 16;
+        const carouselEl = this.$refs.carousel.$el;
+        const thumbnail = carouselEl.querySelector('.ui-card__thumbnail');
+
+        if (window.innerWidth < 470 && thumbnail) {
+          // Below 470px, vertically center the controls within the thumbnail
+          const carouselTop = carouselEl.getBoundingClientRect().top;
+          const thumbnailRect = thumbnail.getBoundingClientRect();
+          top = thumbnailRect.top - carouselTop + thumbnailRect.height / 2 - 16;
+        } else {
+          const carouselHeight = carouselEl.offsetHeight;
+          // Half-way down minus half the height of the buttons
+          top = carouselHeight / 2 - 16;
+        }
       } else {
         const image = this.$refs.carousel.$el.querySelector(
           '.ui-card__thumbnail-image',
