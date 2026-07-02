@@ -262,12 +262,13 @@ export default {
         const parentSlide = Element.prototype.closest && targetLink
           ? targetLink.closest('.carousel__slide')
           : null;
+
         if (parentSlide) {
           event.preventDefault();
-          const index = [...parentSlide.parentNode.children].indexOf(
-            parentSlide,
-          );
-          this.$refs.carousel.select(index, false, true);
+          // Select the slide by element so Flickity resolves the correct
+          // group. Passing a cell index to select() breaks when groupCells
+          // (and contain) are set, as cell index !== group index.
+          this.$refs.carousel.selectCell(parentSlide, false, true);
           targetLink.focus();
         }
       });
