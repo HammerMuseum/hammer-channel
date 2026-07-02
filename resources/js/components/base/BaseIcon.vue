@@ -5,10 +5,12 @@
     :width="width"
     :height="height"
     :viewBox="viewBox"
-    :aria-labelledby="iconName"
+    :aria-labelledby="title ? iconName : null"
+    :aria-hidden="title ? null : 'true'"
     role="img"
   >
     <title
+      v-if="title"
       :id="iconName"
       lang="en"
     >{{ title }}</title>
