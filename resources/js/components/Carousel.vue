@@ -262,12 +262,13 @@ export default {
         const parentSlide = Element.prototype.closest && targetLink
           ? targetLink.closest('.carousel__slide')
           : null;
+
         if (parentSlide) {
           event.preventDefault();
-          const index = [...parentSlide.parentNode.children].indexOf(
-            parentSlide,
-          );
-          this.$refs.carousel.select(index, false, true);
+          // Select the slide by element so Flickity resolves the correct
+          // group. Passing a cell index to select() breaks when groupCells
+          // (and contain) are set, as cell index !== group index.
+          this.$refs.carousel.selectCell(parentSlide, false, true);
           targetLink.focus();
         }
       });
@@ -281,9 +282,19 @@ export default {
 
       let top = 0;
       if (this.id === 'featured') {
-        const carouselHeight = this.$refs.carousel.$el.offsetHeight;
-        // Half-way down minus half the height of the buttons
-        top = carouselHeight / 2 - 16;
+        const carouselEl = this.$refs.carousel.$el;
+        const thumbnail = carouselEl.querySelector('.ui-card__thumbnail');
+
+        if (window.innerWidth < 470 && thumbnail) {
+          // Below 470px, vertically center the controls within the thumbnail
+          const carouselTop = carouselEl.getBoundingClientRect().top;
+          const thumbnailRect = thumbnail.getBoundingClientRect();
+          top = thumbnailRect.top - carouselTop + thumbnailRect.height / 2 - 16;
+        } else {
+          const carouselHeight = carouselEl.offsetHeight;
+          // Half-way down minus half the height of the buttons
+          top = carouselHeight / 2 - 16;
+        }
       } else {
         const image = this.$refs.carousel.$el.querySelector(
           '.ui-card__thumbnail-image',

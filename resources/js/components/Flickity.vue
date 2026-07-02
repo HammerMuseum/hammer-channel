@@ -42,8 +42,8 @@ export default {
     select(index, isWrapped, isInstant) {
       if (this.flkty) this.flkty.select(index, isWrapped, isInstant);
     },
-    selectCell(cell, isWrapped) {
-      if (this.flkty) this.flkty.selectCell(cell, isWrapped);
+    selectCell(cell, isWrapped, isInstant) {
+      if (this.flkty) this.flkty.selectCell(cell, isWrapped, isInstant);
     },
     resize() {
       if (this.flkty) this.flkty.resize();
