@@ -9,11 +9,17 @@
         :extra-classes="['heading', 'heading--primary', 'heading--search']"
       >
         <template #summary>
-          <AnimatedNumber
+          <span
             v-show="total"
-            :value="total"
-            :duration="400"
-          /><span v-show="total"> {{ total > 1 ? ' results' : ' result' }}</span>
+            class="search-page__count"
+            :aria-label="`${total} ${total === 1 ? 'result' : 'results'}`"
+          >
+            <AnimatedNumber
+              :value="total"
+              :duration="400"
+              aria-hidden="true"
+            /><span aria-hidden="true"> {{ total === 1 ? ' result' : ' results' }}</span>
+          </span>
           <div
             v-if="searchTerm"
             class="search-page__summary"
@@ -469,28 +475,35 @@ export default {
       immediate: true,
       handler(to) {
         if (to.query) {
-          this.getPageData(stringifyQuery(to.query));
           let pageTitle = `Search | Hammer Channel | Hammer Museum`;
+          const term = to.query.term;
 
-          if (to.query.term) {
-            const term = to.query.term;
+          if (term) {
             this.setSearchTerm(term);
-            this.$announcer.set(`Search results for ${term}. Page loaded with ${this.total} results.`);
             pageTitle = `Search results for ${term} | Hammer Channel | Hammer Museum`;
-            this.$gtm.trackEvent({
-              event: 'videoSearch',
-              searchTerm: term,
-              searchResults: this.total,
-              searchTopic: this.activeFacets.topics ? [this.activeFacets.topics].join() : null,
-              searchTag: this.activeFacets.tags ? [this.activeFacets.tags].join() : null,
-              searchPeople: this.activeFacets.speakers ? [this.activeFacets.speakers].join() : null,
-              searchDate: this.activeFacets.date_recorded ? [this.activeFacets.date_recorded].join() : null,
-              searchPlaylist: this.activeFacets.in_playlists ? [this.activeFacets.in_playlists].join() : null,
-            });
           } else {
             this.setSearchTerm('');
-            this.$announcer.set(`Search results page loaded`);
           }
+
+          // Announce and track only once the data has loaded, so `this.total`
+          // reflects this search's count rather than the previous one.
+          this.getPageData(stringifyQuery(to.query)).then(() => {
+            if (term) {
+              this.$announcer.set(`Search results for ${term}. Page loaded with ${this.total} results.`);
+              this.$gtm.trackEvent({
+                event: 'videoSearch',
+                searchTerm: term,
+                searchResults: this.total,
+                searchTopic: this.activeFacets.topics ? [this.activeFacets.topics].join() : null,
+                searchTag: this.activeFacets.tags ? [this.activeFacets.tags].join() : null,
+                searchPeople: this.activeFacets.speakers ? [this.activeFacets.speakers].join() : null,
+                searchDate: this.activeFacets.date_recorded ? [this.activeFacets.date_recorded].join() : null,
+                searchPlaylist: this.activeFacets.in_playlists ? [this.activeFacets.in_playlists].join() : null,
+              });
+            } else {
+              this.$announcer.set(`Search results page loaded`);
+            }
+          });
 
           document.title = pageTitle;
           this.$gtm.trackEvent({
@@ -535,7 +548,7 @@ export default {
     getPageData(params = '') {
       this.videos = null;
       this.loading = true;
-      axios
+      return axios
         .get(`/api/search${params}`)
         .then((response) => {
           this.setVars(response);
