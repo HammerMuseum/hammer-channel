@@ -23,6 +23,23 @@
   z-index: 0;
 }
 
+.ui-card__link {
+  position: relative;
+}
+
+[data-interaction-mode="keyboard"] .ui-card__link:focus {
+  outline: none;
+}
+
+[data-interaction-mode="keyboard"] .ui-card__link:focus::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  border: 4px solid var(--highlight-primary);
+  z-index: 1;
+  pointer-events: none;
+}
+
 .carousel__title {
   margin: 36px 0 24px 0;
   font-family: var(--font-family--heading);

@@ -4,6 +4,7 @@
   >
     <UiCard>
       <RouterLink
+        class="ui-card__link"
         :to="{name: 'video', params: {id: id, slug: slug }}"
       >
         <div class="ui-card__thumbnail">
