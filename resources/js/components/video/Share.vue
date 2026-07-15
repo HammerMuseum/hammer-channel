@@ -40,7 +40,7 @@
         </a>
         <button
           class="share-button button button--icon"
-          aria-label="Get citation for video"
+          aria-label="Cite this video"
           aria-controls="citation"
           data-tracking-gtm="video page links"
           @click="showCitation = !showCitation"
