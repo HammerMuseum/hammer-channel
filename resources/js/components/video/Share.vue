@@ -42,8 +42,9 @@
           class="share-button button button--icon"
           aria-label="Get citation for video"
           aria-controls="citation"
+          :aria-expanded="showCitation ? 'true' : 'false'"
           data-tracking-gtm="video page links"
-          @click="showCitation = !showCitation"
+          @click="toggleCitation"
         >
           <BaseIcon
             width="36"
@@ -87,7 +88,9 @@
                 mode="out-in"
                 :duration="100"
               >
-                <span :key="copied">{{ copied ? 'Copied' : 'Copy citation to clipboard' }}</span>
+                <span :key="copied">
+                  {{ copied ? 'Citation Copied' : 'Copy citation to clipboard' }}
+                </span>
               </transition>
             </button>
           </div>
@@ -152,6 +155,12 @@ export default {
     },
     facebook() {
       return this.providers.facebook.replace(':u', encodeURIComponent(this.url)).replace(':title', encodeURIComponent(this.text));
+    },
+  },
+  methods: {
+    toggleCitation() {
+      this.showCitation = !this.showCitation;
+      this.$announcer.set(this.showCitation ? 'Citation opened' : 'Citation closed');
     },
   },
 };
