@@ -78,6 +78,12 @@
             target="_blank"
             rel="noopener noreferrer"
           >Terms of Use</a>
+          <a
+            class="link link--pink"
+            href="https://www.ucla.edu/accessibility"
+            target="_blank"
+            rel="noopener noreferrer"
+          >UCLA Accessibility</a>
         </div>
       </div>
     </div>
