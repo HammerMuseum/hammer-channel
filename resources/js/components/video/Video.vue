@@ -146,6 +146,7 @@
                 :clip-end="clipEnd"
                 :has-active-clip="isClip && isValidClip"
                 :current-timecode="currentTimecode"
+                :duration="video.duration"
                 @update-clip="onUpdateClip"
                 @remove-clip="onRemoveClip"
               />
@@ -317,7 +318,7 @@ export default {
     isValidClip() {
       const start = this.clipStart;
       const end = this.clipEnd;
-      if (this.duration === null || (Number.isNaN(end) || Number.isNaN(start)) || start === 0 || end < start || end > this.duration) {
+      if (this.duration === null || (Number.isNaN(end) || Number.isNaN(start)) || end < start || end > this.duration) {
         return false;
       }
       return true;

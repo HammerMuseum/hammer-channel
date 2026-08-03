@@ -81,3 +81,4 @@ if (!dev) {
 if (process.env.NODE_ENV !== 'test') {
   mix.extract();
 }
+
