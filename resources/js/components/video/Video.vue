@@ -394,7 +394,7 @@ export default {
       this.updateVideo();
       this.$announcer.set(`The page for video titled: ${this.video.title}, has loaded`);
       document.title = `${this.video.title} | Hammer Channel | Hammer Museum`;
-      this.$gtm.trackEvent({
+      window.dataLayer.push({
         event: 'virtualPageView',
         virtualPageURL: this.$route.fullPath,
         virtualPageTitle: document.title,
@@ -549,11 +549,11 @@ export default {
         });
     },
     dataLayerPush(type, time) {
-      this.$gtm.trackEvent({
+      window.dataLayer.push({
         event: 'Video',
-        category: 'VideoJS',
+        target: 'VideoJS',
         action: type,
-        label: 'video',
+        'target-properties': 'video',
         videoCurrentTime: Math.ceil(parseInt(time, 10)),
       });
     },

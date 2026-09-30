@@ -167,7 +167,7 @@ export default {
     const pageTitle = 'Hammer Channel | Hammer Museum';
     document.title = pageTitle;
 
-    this.$gtm.trackEvent({
+    window.dataLayer.push({
       event: 'virtualPageView',
       virtualPageURL: this.$route.fullPath,
       virtualPageTitle: document.title,
