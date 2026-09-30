@@ -30,4 +30,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'gtm' => [
+        'enabled' => env('GTM_ENABLED', false),
+        'container_id' => env('GTM_CONTAINER_ID', 'GTM-TN3WHM'),
+    ],
+
+    'syrenis' => [
+        'enabled' => env('SYRENIS_ENABLED', false),
+        'license' => env('SYRENIS_LICENSE'),
+        'banner' => env('SYRENIS_BANNER'),
+    ],
+
 ];
