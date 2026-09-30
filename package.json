@@ -80,7 +80,6 @@
   },
   "dependencies": {
     "@aacassandra/vue3-progressbar": "^1.0.3",
-    "@gtm-support/vue-gtm": "^3.2.0",
     "@vue-a11y/announcer": "^3.1.5",
     "axios": "^1.11.0",
     "core-js": "^3.45.0",

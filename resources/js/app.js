@@ -2,7 +2,6 @@ import 'intersection-observer';
 import { createApp, h } from 'vue';
 import VueAnnouncer from '@vue-a11y/announcer';
 import '@vue-a11y/announcer/dist/style.css';
-import { createGtm } from '@gtm-support/vue-gtm';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
 import router from './router';
 import { store } from './store';
@@ -117,13 +116,6 @@ app.directive('view', {
 
 // Register plugins
 app.use(router);
-app.use(createGtm({
-  id: process.env.MIX_GTM_ID ? process.env.MIX_GTM_ID : 'GTM-XXXXXXX',
-  defer: false,
-  enabled: process.env.MIX_PROD,
-  debug: false,
-  loadScript: true,
-}));
 app.use(VueAnnouncer, {}, router);
 app.use(VueProgressBar, {
   color: '#ee2a7b',
