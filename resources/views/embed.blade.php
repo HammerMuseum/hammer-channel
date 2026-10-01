@@ -23,8 +23,6 @@
   <link rel="preconnect" href="https://p.typekit.net">
   <link rel="preconnect" href="https://use.typekit.net">
 
-  @include('includes.tag-manager', ['syrenis' => false])
-
   @meta
 
   <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png">
