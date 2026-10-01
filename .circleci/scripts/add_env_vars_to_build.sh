@@ -25,6 +25,5 @@ fi
 
 if [ "$CIRCLE_BRANCH" = "master" ]; then
     echo "MIX_DATASTORE_URL=https://datastore.hammer.ucla.edu/api/" > .env
-    echo "MIX_GTM_ID=GTM-TN3WHM" >> .env
     echo "MIX_PROD=true" >> .env
 fi

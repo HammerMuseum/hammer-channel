@@ -490,7 +490,7 @@ export default {
           this.getPageData(stringifyQuery(to.query)).then(() => {
             if (term) {
               this.$announcer.set(`Search results for ${term}. Page loaded with ${this.total} results.`);
-              this.$gtm.trackEvent({
+              window.dataLayer.push({
                 event: 'videoSearch',
                 searchTerm: term,
                 searchResults: this.total,
@@ -506,7 +506,7 @@ export default {
           });
 
           document.title = pageTitle;
-          this.$gtm.trackEvent({
+          window.dataLayer.push({
             event: 'virtualPageView',
             virtualPageURL: to.fullPath,
             virtualPageTitle: document.title,
